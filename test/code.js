@@ -89,29 +89,113 @@ cy.on('taphold', 'node', function(){
 });
 
 
-
-//taphold
-$('#merge').mousedown(function (evt) {
-    var selectedElements = cy.$(':selected')
-    console.log("you want to merge " + selectedElements);
-        
-    var eleNeu = cy.add({
-        group: "nodes",
-        data: { id: 'neu' }
-    });
-    
-
-    selectedElements.forEach(function(ele){
-            console.log(ele);
-            console.log(ele.$id());
-       cy.add ({
-            group: "edges",
-            data: { source: ele.data('id'), target: 'neu' }
-        });
-    });
-        
-    cy.$(':selected').unselect();
+//Tooltip
+cy.nodes().each(function(ele){
+    ele.qtip({
+  content: 'Hello I am ' + ele.data('id'),
+  position: {
+    my: 'top center',
+    at: 'bottom center'
+  },
+  style: {
+    classes: 'qtip-bootstrap',
+    tip: {
+      width: 16,
+      height: 8
+    }
+  }
 });
+});
+//TODO:
+/*
+// qTip2 call below will grab this JSON and use the firstName as the content
+$('.selector').qtip({
+    content: {
+        text: function(event, api) {
+            $.ajax({
+                url: '/path/to/json/output', // URL to the JSON file
+                type: 'GET', // POST or GET
+                dataType: 'json', // Tell it we're retrieving JSON
+                data: {
+                    id: $(this).attr('id') // Pass through the ID of the current element matched by '.selector'
+                },
+            })
+            .then(function(data) {
+                //Process the retrieved JSON object Retrieve a specific attribute from our parsed JSON string and set the tooltip content.
+                var content = 'My name is ' + data.person.firstName;
+
+                // Now we set the content manually (required!)
+                api.set('content.text', content);
+            }, function(xhr, status, error) {
+                // Upon failure... set the tooltip content to the status and error value
+                api.set('content.text', status + ': ' + error);
+            });
+
+            return 'Loading...', // Set some initial loading text
+        }
+    }
+});
+*/
+
+
+var findOptimalPosition = function(elements){
+    var xPositions = [];
+    var yPositions = [];
+    elements.each(function(ele){
+       xPositions.push(ele.position('x'));
+       yPositions.push(ele.position('y')); 
+    });
+    return [Math.min(...xPositions)+(Math.max(...xPositions)-Math.min(...xPositions))/2, Math.max(...yPositions)+75];    
+}
+
+var getNextId = function(){
+    // Abfrage am Server, der neue Node einträgt.
+    //Vorerst machen wir was zufaelliges
+    return 100+ Math.floor(Math.random()*5000);
+}
+
+
+$('#merge').mousedown(function (evt) {
+  //  if (cy.selectionType = 'single'){
+     //   cy.selectionType = 'additive';
+        var selectedElements = cy.$(':selected')
+        
+        if (selectedElements.length > 0){          
+            console.log(selectedElements);
+
+            var positions = findOptimalPosition(selectedElements);
+
+            var eleNeu = cy.add({
+                group: "nodes",
+                data: { id: 'n'+getNextId() },
+                position: { x: positions[0], y: positions[1] }
+            });
+
+            selectedElements.forEach(function(ele){
+               cy.add ({
+                    group: "edges",
+                    data: { source: ele.data('id'), target: eleNeu.data('id') }
+                });
+            });
+
+            cy.$(':selected').unselect();              
+        }
+
+ //   }
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
