@@ -1,13 +1,32 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n staticfiles %}
+
+{%block css %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static "css/home.css" %}">
+{% endblock %}
 
 
 {% block content %}
 
-<h1>Create new project</h1>
 
-<button>Create new</button>
 
-<button>Open existing</button>
+<div class="jumbotron vertical-center">
+    <div class="container text-center">
+    <h1>smerge</h1>
+
+    <div>
+        <button id="open-btn" name="open" class="btn btn-primary btn-lg center-block">
+            Open
+        </button>
+        <button id="new-btn" name="new" class="btn btn-primary btn-lg center-block">
+            Create New
+        </button>
+    </div>
+
+    </div>
+
+
+</div>
 
 {% endblock %}
