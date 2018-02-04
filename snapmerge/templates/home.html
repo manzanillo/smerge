@@ -16,17 +16,18 @@
     <h1>smerge</h1>
 
     <div>
+
         <button id="open-btn" name="open" class="btn btn-primary btn-lg center-block">
             Open
         </button>
-        <button id="new-btn" name="new" class="btn btn-primary btn-lg center-block">
-            Create New
-        </button>
-    </div>
+
+        <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn btn-primary btn-lg center-block">
+            Create new
+        </a>
 
     </div>
 
-
+    </div>
 </div>
 
 {% endblock %}
