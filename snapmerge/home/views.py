@@ -21,3 +21,10 @@ class ProjectView(View):
             'proj_id' : proj_id
         }
         return render(request, 'proj.html', context)
+
+class CreateProjectView(View):
+    def get(self, request):
+        context = {
+
+        }
+        return render(request, 'create_proj.html', context)
