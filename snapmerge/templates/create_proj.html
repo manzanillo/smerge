@@ -8,22 +8,16 @@
 
 
 {% block content %}
-
-
-
-<div class="container">
-<form>
-  <div class="form-group">
-    <label for="inputProjectName">Choose a project name</label>
-    <input type="text" class="form-control" id="inputProjectName" aria-describedby="name" placeholder="Enter Project Name">
+<div class="jumbotron vertical-center">
+  <div class="container text-center">
+    <h1> Create a new Project</h1>
+    <form action="{% url 'create_proj' %}" method="post" enctype="multipart/form-data">
+      {% for form in forms %}
+        {% csrf_token %}
+        {{ form.as_p }}
+      {% endfor %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
   </div>
-  <div class="form-group">
-      <!-- TODO: ensure XML-file? -->
-    <label for="inputXml">Example file input</label>
-    <input type="file" class="form-control-file" id="inputXml">
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 </div>
-
 {% endblock %}
