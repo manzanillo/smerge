@@ -22,7 +22,6 @@ class ProjectView(View):
         if proj is None:
             raise Http404
         files = [obj.as_dict() for obj in SnapFile.objects.filter(project = proj_id)]
-        print(files[0]['ancestors'])
         context = {
             'proj_id': proj_id,
             'files': files

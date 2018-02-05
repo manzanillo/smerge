@@ -40,11 +40,11 @@
   ],
 
 
-
+// #open: lokale links funktionieren wohl nicht
   elements: {
     nodes: [
     {% for ele in files  %}
-    { data: { id: '{{ele.id}}' , href: 'http://snap.berkeley.edu/snapsource/snap.html#open:https://127.0.0.1:8000{{ele.file_url}}', description: '{{ele.description}}' } },
+    { data: { id: '{{ele.id}}' , href: 'http://snap.berkeley.edu/snapsource/snap.html#open:http://127.0.0.1:8000{{ele.file_url}}', description: '{{ele.description}}' } },
     {% endfor %}
     ],
     edges: [
@@ -163,8 +163,5 @@ $('#merge').mousedown(function (evt) {
  //   }
 
 });
-
-// #open: link an snap hinten dran und schon öffnet sich ds Projekt, dafür brauchen wir DB wo die XML drin sind die wir ausliefern.
-
 
 </script>
