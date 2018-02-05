@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
@@ -31,6 +32,8 @@ class File(models.Model):
     project = models.ForeignKey(Project, on_delete ="cascade")
     # https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.ManyToManyField.symmetrical
     ancestors = models.ManyToManyField("self", symmetrical=False)
+    description = models.CharField(_("Description"), max_length=200,
+                                   null=True, blank=True)
 
 
     class Meta:
@@ -44,8 +47,8 @@ class SnapFile(File):
 
 
     @classmethod
-    def create_and_save(cls, project, file, ancestors=None, user=None):
-        snap = cls.objects.create(project=project, file=file, user=user)
+    def create_and_save(cls, project, file, ancestors=None, user=None, description=None):
+        snap = cls.objects.create(project=project, file=file, user=user, description=description)
         if (ancestors):
             snap.ancestors.set(ancestors)
         snap.save()
@@ -54,3 +57,15 @@ class SnapFile(File):
     class Meta:
         verbose_name = _("SnapFile")
         verbose_name_plural = _("SnapFiles")
+
+
+
+class ProjectForm(ModelForm):
+    class Meta:
+        model = Project
+        fields = ['name', 'description']
+
+class SnapFileForm(ModelForm):
+    class Meta:
+        model = SnapFile
+        fields = ['file']
