@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 # Create your models here.
 
@@ -53,6 +54,17 @@ class SnapFile(File):
             snap.ancestors.set(ancestors)
         snap.save()
         return snap
+
+    def as_dict(self):
+        ancestor_ids = [x.id for x in self.ancestors.all()]
+        file_url = settings.MEDIA_URL + str(self.file)
+
+        return {
+            'id': self.id,
+            'description': self.description,
+            'ancestors': ancestor_ids,
+            'file_url': file_url
+        }
 
     class Meta:
         verbose_name = _("SnapFile")

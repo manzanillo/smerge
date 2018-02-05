@@ -3,7 +3,9 @@ from django.views.generic import View
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from . import models
-from .models import ProjectForm, SnapFileForm, SnapFile
+from .models import ProjectForm, SnapFileForm, SnapFile, Project
+import json
+
 
 # Create your views here.
 
@@ -16,11 +18,14 @@ class HomeView(View):
 
 class ProjectView(View):
     def get(self, request, proj_id):
-        proj = models.Project.objects.filter(id=proj_id).first()
+        proj = Project.objects.filter(id=proj_id).first()
         if proj is None:
             raise Http404
+        files = [obj.as_dict() for obj in SnapFile.objects.filter(project = proj_id)]
+        print(files[0]['ancestors'])
         context = {
-            'proj_id' : proj_id
+            'proj_id': proj_id,
+            'files': files
         }
         return render(request, 'proj.html', context)
 

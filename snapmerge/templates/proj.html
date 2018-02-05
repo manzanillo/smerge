@@ -32,6 +32,7 @@
 
 
 {% block js %}
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.8/cytoscape.js"></script>
 
@@ -45,5 +46,6 @@
 <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-qtip/2.7.0/cytoscape-qtip.js"></script>
 
 <!-- Load appplication code at the end to ensure DOM is loaded -->
-<script src="{% static "js/code.js" %}"></script>
+<!--script src="{% static "js/code.js" %}"></script>-->
+{% include "tree/cytoscape.html" %}
 {% endblock %}
