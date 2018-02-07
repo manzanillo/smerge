@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.urls import reverse
-from . import models
 from .models import ProjectForm, SnapFileForm, SnapFile, Project
+from .forms import OpenProjectForm
 import json
 
 
@@ -45,4 +44,22 @@ class CreateProjectView(View):
             proj_instance = proj_form.save()
             SnapFile.create_and_save(file=request.FILES['file'], project=proj_instance)
             #TODO: validate well formed xml
+            #TODO: error message
             return redirect('proj', proj_id=proj_instance.id)
+
+
+class OpenProjectView(View):
+    def get(self, request):
+        form = OpenProjectForm()
+        context = {
+            'form' : form
+        }
+        return render(request, 'open_proj.html', context)
+
+    def post(self, request):
+        proj_id = request.POST['project']
+        if(Project.objects.filter(id = proj_id)):
+            return redirect('proj', proj_id=proj_id)
+        else:
+            #TODO: error message
+            return redirect('open_proj')
