@@ -3,6 +3,7 @@ from django.views.generic import View
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from .models import ProjectForm, SnapFileForm, SnapFile, Project
 from .forms import OpenProjectForm
+from xml.etree import ElementTree as ET
 import json
 
 
@@ -41,12 +42,23 @@ class CreateProjectView(View):
         proj_form = ProjectForm(request.POST, request.FILES)
         print(request.FILES)
         if snap_form.is_valid() and proj_form.is_valid():
+            # verify xml
+            file = request.FILES['file']
+            try:
+                ET.fromstring(file.read())
+
+            except ET.ParseError:
+                # TODO: error message
+                return HttpResponse('invalid xml', status=501)
+
             proj_instance = proj_form.save()
-            SnapFile.create_and_save(file=request.FILES['file'], project=proj_instance)
-            #TODO: validate well formed xml
-            #TODO: error message
+            SnapFile.create_and_save(file=file, project=proj_instance)
+
             return redirect('proj', proj_id=proj_instance.id)
 
+        else:
+            # TODO: error message
+            return HttpResponse('unvalid data', status=501)
 
 class OpenProjectView(View):
     def get(self, request):
@@ -62,4 +74,4 @@ class OpenProjectView(View):
             return redirect('proj', proj_id=proj_id)
         else:
             #TODO: error message
-            return redirect('open_proj')
+            return HttpResponse('no such project', status=501)
