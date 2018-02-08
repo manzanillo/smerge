@@ -61,7 +61,7 @@ class CreateProjectView(View):
 
         else:
             # TODO: error message
-            return HttpResponse('unvalid data', status=501)
+            return HttpResponse('invalid data', status=501)
 
 class OpenProjectView(View):
     def get(self, request):
@@ -72,9 +72,14 @@ class OpenProjectView(View):
         return render(request, 'open_proj.html', context)
 
     def post(self, request):
-        proj_id = request.POST['project']
-        if(Project.objects.filter(id = proj_id)):
-            return redirect('proj', proj_id=proj_id)
+        form = OpenProjectForm(request.POST)
+        if form.is_valid():
+            proj_id = request.POST['project']
+            if(Project.objects.filter(id = proj_id)):
+                return redirect('proj', proj_id=proj_id)
+            else:
+                #TODO: error message
+                return HttpResponse('no such project', status=501)
         else:
-            #TODO: error message
-            return HttpResponse('no such project', status=501)
+            # TODO: error message
+            return HttpResponse('invalid data ', status=501)
