@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse
+from django.utils.translation import ugettext as _
 from .models import ProjectForm, SnapFileForm, SnapFile, Project
 from .forms import OpenProjectForm
 from xml.etree import ElementTree as ET
 import json
-
+from .xmltools import merge
 
 # Create your views here.
 
@@ -27,6 +28,28 @@ class ProjectView(View):
             'files': files
         }
         return render(request, 'proj.html', context)
+
+
+class MergeView(View):
+    def get(self, request, proj_id):
+        file_ids = request.GET.getlist('file')
+        proj = Project.objects.get(id=proj_id)
+        files = list(SnapFile.objects.filter(id__in=file_ids, project=proj_id))
+        if len(files)>1:
+            new_file = SnapFile.create_and_save(project=proj, ancestors=file_ids, file='')
+            new_file.file = str(new_file.id) + '.xml'
+            new_file.save()
+
+            merge(files.pop().get_media_path(), files.pop().get_media_path(),  new_file.get_media_path())
+            for file in files:
+                print('!!!')
+                merge(new_file.get_media_path(), file.get_media_path(), new_file.get_media_path())
+
+            return JsonResponse(new_file.as_dict())
+
+        else:
+            return JsonResponse({'message': _('Something went wrong')})
+
 
 
 class CreateProjectView(View):
@@ -62,6 +85,7 @@ class CreateProjectView(View):
         else:
             # TODO: error message
             return HttpResponse('invalid data', status=501)
+
 
 class OpenProjectView(View):
     def get(self, request):

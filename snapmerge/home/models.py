@@ -68,6 +68,9 @@ class SnapFile(File):
             'file_url': file_url
         }
 
+    def get_media_path(self):
+        return settings.MEDIA_URL + str(self.file)
+
     class Meta:
         verbose_name = _("SnapFile")
         verbose_name_plural = _("SnapFiles")
