@@ -82,4 +82,4 @@ class ProjectForm(ModelForm):
 class SnapFileForm(ModelForm):
     class Meta:
         model = SnapFile
-        fields = ['file']
+        fields = ['file', 'description']

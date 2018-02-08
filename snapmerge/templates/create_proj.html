@@ -12,10 +12,11 @@
   <div class="container text-center">
     <h1> Create a new Project</h1>
     <form action="{% url 'create_proj' %}" method="post" enctype="multipart/form-data">
-      {% for form in forms %}
+      {% csrf_token %}
+      {{ proj_form.as_p }}
+      <h1>Starting Snap! File</h1>
         {% csrf_token %}
-        {{ form.as_p }}
-      {% endfor %}
+        {{ file_form.as_p }}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>

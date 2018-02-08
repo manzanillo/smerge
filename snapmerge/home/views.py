@@ -31,9 +31,12 @@ class ProjectView(View):
 
 class CreateProjectView(View):
     def get(self, request):
-        forms = ProjectForm(), SnapFileForm()
+        file_form = SnapFileForm()
+        proj_form = ProjectForm()
         context = {
-            'forms' : forms
+            'file_form' : file_form,
+            'proj_form' : proj_form
+
         }
         return render(request, 'create_proj.html', context)
 
