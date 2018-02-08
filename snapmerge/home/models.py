@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 # Create your models here.
 
@@ -42,7 +43,8 @@ class File(models.Model):
 
 
 class SnapFile(File):
-    file = models.FileField(_("File"))
+    # validates only naming of file
+    file = models.FileField(_("File"), validators=[FileExtensionValidator(['xml', 'XML'])])
     # thumbnail = models.ImageField(_("Thumbnail"), null=True, blank=True)
     user = models.CharField(_("user"), max_length=30, null=True)
 
