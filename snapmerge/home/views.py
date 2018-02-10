@@ -41,15 +41,15 @@ class MergeView(View):
             new_file.file = str(new_file.id) + '.xml'
             new_file.save()
 
-          #  try:
-            merge(files.pop().get_media_path(), files.pop().get_media_path(),  new_file.get_media_path())
-            for file in files:
-                merge(new_file.get_media_path(), file.get_media_path(), new_file.get_media_path())
-            return JsonResponse(new_file.as_dict())
+            try:
+                merge(files.pop().get_media_path(), files.pop().get_media_path(),  new_file.get_media_path())
+                for file in files:
+                    merge(new_file.get_media_path(), file.get_media_path(), new_file.get_media_path())
+                return JsonResponse(new_file.as_dict())
 
-  #          except Exception:
-        #        new_file.delete()
-         #       return JsonResponse({'message': _('Something went wrong')})
+            except Exception:
+                new_file.delete()
+                return JsonResponse({'message': _('Something went wrong')})
 
         else:
             return JsonResponse({'message': _('Something went wrong')})
