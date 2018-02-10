@@ -142,22 +142,44 @@ $('#merge').mousedown(function (evt) {
         if (selectedElements.length > 0){
             console.log(selectedElements);
 
-            var positions = findOptimalPosition(selectedElements);
-
-            var eleNeu = cy.add({
-                group: "nodes",
-                data: { id: 'n'+getNextId() },
-                position: { x: positions[0], y: positions[1] }
-            });
-
+            var merge_url = 'merge/{{proj_id}}';
+            var first = true;
             selectedElements.forEach(function(ele){
-               cy.add ({
-                    group: "edges",
-                    data: { source: ele.data('id'), target: eleNeu.data('id') }
-                });
+                if (first){
+                    merge_url += '?';
+                    first = false;
+                }
+                else {
+                    merge_url += '&';
+                }
+                merge_url += 'file='+ele.data('id');
             });
+
+            var merged_node;
+            $.ajax({
+                url: merge_url,
+                cache: false
+            })
+            .done(function(new_node) {
+
+                var positions = findOptimalPosition(selectedElements);
+
+                var eleNeu = cy.add({
+                    group: "nodes",
+                    data: { id: new_node.id, href: new_node.file_url },
+                    position: { x: positions[0], y: positions[1] }
+                });
+
+                selectedElements.forEach(function(ele){
+                   cy.add ({
+                        group: "edges",
+                        data: { source: ele.data('id'), target: new_node.id }
+                    });
+                });
 
             cy.$(':selected').unselect();
+
+            });
         }
 
  //   }

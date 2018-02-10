@@ -1,5 +1,7 @@
 import xml.etree.ElementTree as ET
 from hashlib import sha1
+import os
+from django.conf import settings
 
 
 def element_hash(ele):
@@ -55,11 +57,11 @@ def merge(file1, file2, output):
     :param output: output path for newly created XML document
     :return: 
     """
-    ref = ET.parse(file1)
+    ref = ET.parse(settings.BASE_DIR + file1)
     ref_root = ref.getroot()
-    subject = ET.parse(file2)
+    subject = ET.parse(settings.BASE_DIR + file2)
     subject_root = subject.getroot()
     xml_merge(ref_root, subject_root)
-    ref.write(output)
+    ref.write(open(settings.BASE_DIR + output, 'wb'))
 
 
