@@ -59,20 +59,18 @@
 
 cy.on('taphold', 'node', function(){
     if (this.data('href')){
-        //TODO pass raw data in right way
-       // $.get(this.data('href')).done(function(file){
-         //          var url = 'http://snap.berkeley.edu/snapsource/snap.html#run:'+
-           //             new XMLSerializer().serializeToString(file.documentElement);
+       $.get(this.data('href')).done(function(file){
+                   var url = 'http://snap.berkeley.edu/snapsource/snap.html#open:data:text/xml,'+
+                       encodeURIComponent( new XMLSerializer().serializeToString(file.documentElement));
                         console.log(url);
-                    var url = 'http://snap.berkeley.edu/snapsource/snap.html#open:http://127.0.0.1:8000'+this.data('href')
             try { // your browser may block popups
                 window.open(url);
             } catch(e){ // fall back on url change
                 window.location.href = url;
             }
+       });
 
-
-    }
+   }
 });
 
 
