@@ -6,7 +6,7 @@ from .models import ProjectForm, SnapFileForm, SnapFile, Project
 from .forms import OpenProjectForm
 from xml.etree import ElementTree as ET
 import json
-from .xmltools import merge
+from .xmltools import merge, include_sync_button
 
 # Create your views here.
 
@@ -55,8 +55,8 @@ class MergeView(View):
             return JsonResponse({'message': _('Something went wrong')})
 
 
-
 class CreateProjectView(View):
+
     def get(self, request):
         file_form = SnapFileForm()
         proj_form = ProjectForm()
@@ -82,7 +82,9 @@ class CreateProjectView(View):
                 return HttpResponse('invalid xml', status=501)
 
             proj_instance = proj_form.save()
-            SnapFile.create_and_save(file=file, project=proj_instance)
+            file = SnapFile.create_and_save(file=file, project=proj_instance)
+
+            include_sync_button(file.get_media_path(), proj_instance.id, ancestor= file.id)
 
             return redirect('proj', proj_id=proj_instance.id)
 
