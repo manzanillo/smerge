@@ -55,6 +55,33 @@ class MergeView(View):
             return JsonResponse({'message': _('Something went wrong')})
 
 
+class SyncView(View):
+    def post(self, request, proj_id):
+        ancestor = request.GET.get('ancestor')
+        proj = Project.objects.get(id=proj_id)
+        files = list(SnapFile.objects.filter(id=ancestor, project=proj_id))
+
+        data = request.data
+        print(data)
+
+        new_file = SnapFile.create_and_save(project=proj, ancestors=ancestor, file='')
+        new_file.file = str(new_file.id) + '.xml'
+        new_file.save()
+
+        include_sync_button(new_file.get_media_path(), proj.id, me=new_file.id)
+
+        response = self.render_json_response({'data': 'ok'})
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+
+        return response
+
+
+
+
+
+
+
 class CreateProjectView(View):
 
     def get(self, request):
@@ -84,7 +111,7 @@ class CreateProjectView(View):
             proj_instance = proj_form.save()
             file = SnapFile.create_and_save(file=file, project=proj_instance)
 
-            include_sync_button(file.get_media_path(), proj_instance.id, ancestor= file.id)
+            include_sync_button(file.get_media_path(), proj_instance.id, me= file.id)
 
             return redirect('proj', proj_id=proj_instance.id)
 
