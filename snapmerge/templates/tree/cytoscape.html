@@ -57,21 +57,43 @@
   },
 });
 
-cy.on('taphold', 'node', function(){
-    if (this.data('href')){
-       $.get(this.data('href')).done(function(file){
-                   var url = 'http://snap.berkeley.edu/snapsource/snap.html#open:data:text/xml,'+
-                       encodeURIComponent( new XMLSerializer().serializeToString(file.documentElement));
-                        console.log(url);
-            try { // your browser may block popups
-                window.open(url);
-            } catch(e){ // fall back on url change
-                window.location.href = url;
-            }
-       });
 
-   }
+var tappedBefore;
+var tappedTimeout;
+cy.on('tap', 'node', function(event) {
+  var tappedNow = event.cyTarget;
+  if (tappedTimeout && tappedBefore) {
+    clearTimeout(tappedTimeout);
+  }
+  if(tappedBefore === tappedNow) {
+    this.trigger('dblclick', event.target);
+    tappedBefore = null;
+  } else {
+    tappedTimeout = setTimeout(function(){ tappedBefore = null; }, 300);
+    tappedBefore = tappedNow;
+  }
 });
+
+
+var open = function(){
+    if (this.data('href')){
+       $.get(this.data('href')).done(
+            function(file){
+                       var url = 'http://snap.berkeley.edu/snapsource/snap.html#open:data:text/xml,'+
+                           encodeURIComponent( new XMLSerializer().serializeToString(file.documentElement));
+                            console.log(url);
+                try { // your browser may block popups
+                    window.open(url,'_blank');
+                } catch(e){ // fall back on url change
+                    window.location.href = url;
+                }
+            }
+       );
+    }
+}
+
+cy.on('dblclick', 'node', open);
+cy.on('taphold', 'node', open);
 
 
 //Tooltip
