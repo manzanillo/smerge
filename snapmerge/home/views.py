@@ -66,9 +66,9 @@ class SyncView(View):
         return super(SyncView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, proj_id):
-        ancestor = request.GET.get('ancestor')
+        ancestor_id = request.GET.get('ancestor')
         proj = Project.objects.get(id=proj_id)
-        files = list(SnapFile.objects.filter(id=ancestor, project=proj_id))
+        ancestor = list(SnapFile.objects.filter(id=ancestor_id, project=proj_id))
 
         print(request)
 
