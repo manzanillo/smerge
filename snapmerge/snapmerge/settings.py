@@ -85,6 +85,15 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 
+#CORS_REPLACE_HTTPS_REFERER = True
+
+#CORS_ALLOW_CREDENTIALS
+
+CSRF_COOKIE_DOMAIN = 'faui20q.cs.fau.de/smerge'
+
+CSRF_TRUSTED_ORIGINS = ['snap.berkeley.edu', 'berkeley.edu']
+
+
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
