@@ -25,7 +25,7 @@ SECRET_KEY = '+c1*qsr7yut0f)ncvbuxlr@o(japh!(x&)-)0l9j=p7!7x1w@u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'faui20q.cs.fau.de', 'faui20q.informatik.uni-erlangen.de']
 
 
 # Application definition
@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'home',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -73,6 +75,14 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 WSGI_APPLICATION = 'snapmerge.wsgi.application'
+
+#cors
+CORS_ORIGIN_WHITELIST = (
+    'snap.berkeley.edu',
+    'berkeley.edu',
+    'localhost:8000',
+    '127.0.0.1:9000'
+)
 
 
 # Database
