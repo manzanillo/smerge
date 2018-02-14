@@ -7,6 +7,10 @@ from .forms import OpenProjectForm
 from xml.etree import ElementTree as ET
 import json
 from .xmltools import merge, include_sync_button
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.conf import settings
+
 
 # Create your views here.
 
@@ -55,26 +59,31 @@ class MergeView(View):
             return JsonResponse({'message': _('Something went wrong')})
 
 
+
 class SyncView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(SyncView, self).dispatch(request, *args, **kwargs)
+
     def post(self, request, proj_id):
         ancestor = request.GET.get('ancestor')
         proj = Project.objects.get(id=proj_id)
         files = list(SnapFile.objects.filter(id=ancestor, project=proj_id))
 
-        data = request.data
+        print(request)
+
+        data = request.body
         print(data)
 
         new_file = SnapFile.create_and_save(project=proj, ancestors=ancestor, file='')
+        with open(settings.MEDIA_ROOT + '/'  + str(new_file.id) + '.xml', 'wb') as f:
+        	f.write(data)
         new_file.file = str(new_file.id) + '.xml'
         new_file.save()
 
         include_sync_button(new_file.get_media_path(), proj.id, me=new_file.id)
 
-        response = self.render_json_response({'data': 'ok'})
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-
-        return response
+        return JsonResponse({'message': _('OK')})
 
 
 
