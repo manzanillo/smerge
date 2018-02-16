@@ -79,7 +79,7 @@ var open = function(){
     if (this.data('href')){
        $.get(this.data('href')).done(
             function(file){
-                       var url = 'http://snap.berkeley.edu/snapsource/snap.html#open:data:text/xml,'+
+                       var url = 'https://snap.berkeley.edu/snapsource/snap.html#open:data:text/xml,'+
                            encodeURIComponent( new XMLSerializer().serializeToString(file.documentElement));
                             console.log(url);
                 try { // your browser may block popups
