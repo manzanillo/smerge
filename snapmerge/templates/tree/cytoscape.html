@@ -77,18 +77,15 @@ cy.on('tap', 'node', function(event) {
 
 var open = function(){
     if (this.data('href')){
-       $.get(this.data('href')).done(
-            function(file){
-                       var url = 'https://snap.berkeley.edu/snapsource/snap.html#open:data:text/xml,'+
-                           encodeURIComponent( new XMLSerializer().serializeToString(file.documentElement));
+    //ADJUST FOR CERTAIN SERVERSETTINGS
+        var url = 'https://snap.berkeley.edu/snapsource/snap.html#open:' + window.location.origin + '/smerge'+ this.data('href')
+                           ;
                             console.log(url);
-                try { // your browser may block popups
-                    window.open(url,'_blank');
-                } catch(e){ // fall back on url change
-                    window.location.href = url;
-                }
-            }
-       );
+        try { // your browser may block popups
+             window.open(url,'_blank');
+        } catch(e){ // fall back on url change
+             window.location.href = url;
+        }
     }
 }
 
