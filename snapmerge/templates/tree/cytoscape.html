@@ -40,7 +40,7 @@
   ],
 
 
-// #open: lokale links funktionieren wohl nicht
+// #open: locale media doesn't work
   elements: {
     nodes: [
     {% for ele in files  %}
@@ -58,6 +58,7 @@
 });
 
 
+// Doubleclick
 var tappedBefore;
 var tappedTimeout;
 cy.on('tap', 'node', function(event) {
@@ -75,22 +76,19 @@ cy.on('tap', 'node', function(event) {
 });
 
 
-var open = function(){
-    if (this.data('href')){
-    //ADJUST FOR CERTAIN SERVERSETTINGS
-        var url = 'https://snap.berkeley.edu/snapsource/snap.html#open:' + window.location.origin + '/smerge'+ this.data('href')
-                           ;
-                            console.log(url);
-        try { // your browser may block popups
-             window.open(url,'_blank');
-        } catch(e){ // fall back on url change
-             window.location.href = url;
+// Open in Snap on longtap or doubleclick in new tab
+cy.on('taphold dblclick', 'node', function(evt){
+        if (this.data('href')){
+        //ADJUST FOR CERTAIN SERVERSETTINGS
+            var url = 'https://snap.berkeley.edu/snapsource/snap.html#open:' + window.location.origin + '/smerge'+ this.data('href');
+            try { // your browser may block popups
+                window.open(url,'_blank');
+            } catch(e){ // fall back on url change
+                window.location.href = url;
+            }
         }
     }
-}
-
-//cy.on('dblclick', 'node', open);
-cy.on('taphold', 'node', open);
+);
 
 
 //Tooltip
