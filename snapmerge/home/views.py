@@ -67,15 +67,14 @@ class SyncView(View):
 
     def post(self, request, proj_id):
         ancestor_id = request.GET.get('ancestor')
+        commit_message = str(request.GET.get('message'))
         proj = Project.objects.get(id=proj_id)
         ancestor = list(SnapFile.objects.filter(id=ancestor_id, project=proj_id))
 
-        print(request)
 
         data = request.body
-        print(data)
 
-        new_file = SnapFile.create_and_save(project=proj, ancestors=ancestor, file='')
+        new_file = SnapFile.create_and_save(project=proj, ancestors=ancestor, file='', description=commit_message)
         with open(settings.MEDIA_ROOT + '/'  + str(new_file.id) + '.xml', 'wb') as f:
         	f.write(data)
         new_file.file = str(new_file.id) + '.xml'
