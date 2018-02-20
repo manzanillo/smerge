@@ -2,7 +2,7 @@
     var cy = window.cy = cytoscape({
   container: document.getElementById('cy'),
     minZoom: 0.5,
-    maxZoom: 24,
+    maxZoom: 8,
   autounselectify: false,
     selectionType: 'additive',
   layout: {
@@ -14,13 +14,13 @@
       selector: 'node',
       style: {
         'content': 'data(id)',
+        'text-margin-x': 2,
         'text-opacity': 0.5,
         'text-valign': 'center',
         'text-halign': 'right',
         'background-color': '#11479e'
       }
     },
-
     {
       selector: 'edge',
       style: {
