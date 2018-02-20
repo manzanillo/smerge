@@ -83,7 +83,9 @@ class SyncView(View):
 
         include_sync_button(new_file.get_media_path(), proj.id, me=new_file.id)
 
-        return JsonResponse({'message': _('OK')})
+        new_url = 'https://faui20q.cs.fau.de/smerge/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
+
+        return JsonResponse({'message': _('OK'), 'url': new_url})
 
 
 
