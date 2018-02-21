@@ -4,7 +4,7 @@
     minZoom: 0.5,
     maxZoom: 8,
   autounselectify: false,
-    selectionType: 'additive',
+    selectionType: 'single',
   layout: {
     name: 'dagre'
   },
@@ -93,20 +93,20 @@ cy.on('taphold dblclick', 'node', function(evt){
 
 //Tooltip
 cy.nodes().each(function(ele){
-    ele.qtip({
-  content: 'Hello I am ' + ele.data('id'),
-  position: {
-    my: 'top center',
-    at: 'bottom center'
-  },
-  style: {
-    classes: 'qtip-bootstrap',
-    tip: {
-      width: 16,
-      height: 8
-    }
-  }
-});
+   ele.qtip({
+      content: 'Hello I am ' + ele.data('id'),
+      position: {
+        my: 'top center',
+        at: 'bottom center'
+      },
+      style: {
+        classes: 'qtip-bootstrap',
+        tip: {
+          width: 16,
+          height: 8
+        }
+      }
+   });
 });
 //TODO:
 /*
@@ -158,9 +158,14 @@ var getNextId = function(){
 
 
 $('#merge').mousedown(function (evt) {
-  //  if (cy.selectionType = 'single'){
-     //   cy.selectionType = 'additive';
-        var selectedElements = cy.$(':selected')
+
+    if (cy.selectionType() == 'single'){
+        cy._private. selectionType = 'additive';
+        $("#merge").toggleClass('red green');
+        $("#merge>i").text('done');
+    }
+    else {
+        var selectedElements = cy.$(':selected');
 
         if (selectedElements.length > 0){
             console.log(selectedElements);
@@ -181,31 +186,34 @@ $('#merge').mousedown(function (evt) {
             var merged_node;
             $.ajax({
                 url: merge_url,
-                cache: false
-            })
-            .done(function(new_node) {
+                cache: false,
+                success: function(new_node) {
 
-                var positions = findOptimalPosition(selectedElements);
+                    var positions = findOptimalPosition(selectedElements);
 
-                var eleNeu = cy.add({
-                    group: "nodes",
-                    data: { id: new_node.id, href: new_node.file_url },
-                    position: { x: positions[0], y: positions[1] }
-                });
-
-                selectedElements.forEach(function(ele){
-                   cy.add ({
-                        group: "edges",
-                        data: { source: ele.data('id'), target: new_node.id }
+                    var eleNeu = cy.add({
+                        group: "nodes",
+                        data: { id: new_node.id, href: new_node.file_url },
+                        position: { x: positions[0], y: positions[1] }
                     });
-                });
 
-            cy.$(':selected').unselect();
+                    selectedElements.forEach(function(ele){
+                       cy.add ({
+                            group: "edges",
+                            data: { source: ele.data('id'), target: new_node.id }
+                        });
+                    });
 
+                    cy.$(':selected').unselect();
+                }
             });
         }
 
- //   }
+        cy._private. selectionType = 'single';
+        $("#merge").toggleClass('green red');
+        $("#merge>i").text('call_merge');
+    }
+
 
 });
 
