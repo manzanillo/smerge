@@ -62,7 +62,8 @@ def merge(file1, file2, output):
     subject = ET.parse(settings.BASE_DIR + file2)
     subject_root = subject.getroot()
     xml_merge(ref_root, subject_root)
-    ref.write(open(settings.BASE_DIR + output, 'wb'))
+    with open(settings.BASE_DIR + output, 'wb') as f:
+        ref.write(f)
 
 
 def include_sync_button(file, proj_id, me):
