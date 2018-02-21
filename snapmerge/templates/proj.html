@@ -4,15 +4,14 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static "css/cytoscape.css" %}">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{% static "css/proj.css" %}">
 {% endblock %}
 
 
 {% block content %}
 
-<h1>Project {{proj_id}}</h1>
+<h1 class="project-heading">Project {{proj_id}}</h1>
 <div id="cy" style="height:500px"></div>
 
 <div class="fixed-action-btn" style="z-index:9999">
@@ -20,7 +19,7 @@
         <i class="large material-icons">close</i>
     </a>
 
-    <a id="merge" class="btn-floating waves-effect waves-light btn-large red">
+    <a id="merge" class="btn-floating waves-effect waves-light btn-large">
         <i class="large material-icons">call_merge</i>
     </a>
 </div>
