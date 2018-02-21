@@ -205,6 +205,9 @@ $('#merge').mousedown(function (evt) {
                     });
 
                     cy.$(':selected').unselect();
+                },
+                error: function(){
+                    console.log('merge did not work');
                 }
             });
         }
