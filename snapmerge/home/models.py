@@ -50,7 +50,7 @@ class SnapFile(File):
 
 
     @classmethod
-    def create_and_save(cls, project, file, ancestors=None, user=None, description=None):
+    def create_and_save(cls, project, file, ancestors=None, user=None, description=''):
         snap = cls.objects.create(project=project, file=file, user=user, description=description)
         if (ancestors):
             snap.ancestors.set(ancestors)
