@@ -59,7 +59,7 @@
 
 
 // Doubleclick
-var tappedBefore;
+var tappedBefore = false;
 var tappedTimeout;
 cy.on('tap', 'node', function(event) {
   var tappedNow = event.cyTarget;
