@@ -62,12 +62,10 @@ typings/
 .idea
 
 # python
-__pycache__
+**/__pycache__/**
 
 #media
 snapmerge/media/
 
 #db
-snapmerge/db.sqlite3
-*.sqlite3
-
+**/db.sqlite3
