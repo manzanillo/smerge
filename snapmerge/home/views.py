@@ -119,7 +119,7 @@ class CreateProjectView(View):
                 return HttpResponse('invalid xml', status=501)
 
             proj_instance = proj_form.save()
-            file = SnapFile.create_and_save(file=file, project=proj_instance)
+            file = SnapFile.create_and_save(file=file, project=proj_instance, description=request.POST['description'])
 
             include_sync_button(file.get_media_path(), proj_instance.id, me= file.id)
 
