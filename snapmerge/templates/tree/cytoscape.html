@@ -150,19 +150,30 @@ var findOptimalPosition = function(elements){
     return [Math.min(...xPositions)+(Math.max(...xPositions)-Math.min(...xPositions))/2, Math.max(...yPositions)+75];
 }
 
-var getNextId = function(){
-    // Abfrage am Server, der neue Node einträgt.
-    //Vorerst machen wir was zufaelliges
-    return 100+ Math.floor(Math.random()*5000);
-}
 
-
-$('#merge').mousedown(function (evt) {
+var toggleMerge = function(){
 
     if (cy.selectionType() == 'single'){
         cy._private. selectionType = 'additive';
         $("#merge").toggleClass('red green');
         $("#merge>i").text('done');
+        $("#cancel-merge").toggleClass('hide');
+    }
+    else {
+        cy._private. selectionType = 'single';
+        $("#merge").toggleClass('green red');
+        $("#merge>i").text('call_merge');
+        $("#cancel-merge").toggleClass('hide');
+        cy.$(':selected').unselect();
+
+    }
+
+}
+
+$('#merge').mousedown(function (evt) {
+
+    if (cy.selectionType() == 'single'){
+        toggleMerge();
     }
     else {
         var selectedElements = cy.$(':selected');
@@ -203,8 +214,6 @@ $('#merge').mousedown(function (evt) {
                             data: { source: ele.data('id'), target: new_node.id }
                         });
                     });
-
-                    cy.$(':selected').unselect();
                 },
                 error: function(){
                     console.log('merge did not work');
@@ -212,12 +221,10 @@ $('#merge').mousedown(function (evt) {
             });
         }
 
-        cy._private. selectionType = 'single';
-        $("#merge").toggleClass('green red');
-        $("#merge>i").text('call_merge');
+        toggleMerge();
     }
-
-
 });
+
+$('#cancel-merge').mousedown(toggleMerge);
 
 </script>
