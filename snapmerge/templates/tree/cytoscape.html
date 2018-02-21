@@ -91,10 +91,10 @@ cy.on('taphold dblclick', 'node', function(evt){
 );
 
 
-//Tooltip
-cy.nodes().each(function(ele){
-   ele.qtip({
-      content: 'id: ' + ele.data('id') + '<br/>' + 'smerged: ' + timeago().format(ele.data('timestamp')),
+// Show tooltip on hover
+cy.on('mouseover', 'node', function(evt){
+  this.qtip({
+      content: 'id: ' + this.data('id') + '<br/>' + 'smerged: ' + timeago().format(this.data('timestamp')),
       position: {
         my: 'top center',
         at: 'bottom center'
@@ -105,9 +105,19 @@ cy.nodes().each(function(ele){
           width: 16,
           height: 8
         }
-      }
-   });
+      },
+      show: {
+            event: event.type,
+            ready: true,
+            solo: true
+         },
+         hide: {
+            event: 'mouseout unfocus'
+         }
+  });
+
 });
+
 
 var findOptimalPosition = function(elements){
     var xPositions = [];
