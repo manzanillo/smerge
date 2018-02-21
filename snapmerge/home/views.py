@@ -53,10 +53,10 @@ class MergeView(View):
 
             except Exception:
                 new_file.delete()
-                return JsonResponse({'message': _('Something went wrong')})
+                return HttpResponse('invalid data ', status=400)
 
         else:
-            return JsonResponse({'message': _('Something went wrong')})
+            return HttpResponse('invalid data ', status=400)
 
 
 
