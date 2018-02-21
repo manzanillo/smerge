@@ -65,7 +65,8 @@ class SnapFile(File):
             'id': self.id,
             'description': self.description,
             'ancestors': ancestor_ids,
-            'file_url': file_url
+            'file_url': file_url,
+            'timestamp': str(self.timestamp)
         }
 
     def get_media_path(self):

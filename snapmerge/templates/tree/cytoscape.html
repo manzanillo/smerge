@@ -1,10 +1,10 @@
 <script>
-    var cy = window.cy = cytoscape({
+var cy = window.cy = cytoscape({
   container: document.getElementById('cy'),
-    minZoom: 0.5,
-    maxZoom: 8,
+  minZoom: 0.5,
+  maxZoom: 8,
   autounselectify: false,
-    selectionType: 'single',
+  selectionType: 'single',
   layout: {
     name: 'dagre'
   },
@@ -44,7 +44,7 @@
   elements: {
     nodes: [
     {% for ele in files  %}
-    { data: { id: '{{ele.id}}' , href: '{{ele.file_url}}', description: '{{ele.description}}' } },
+    { data: { id: '{{ele.id}}' , href: '{{ele.file_url}}', description: '{{ele.description}}', timestamp : '{{ele.timestamp}}' } },
     {% endfor %}
     ],
     edges: [
@@ -94,7 +94,7 @@ cy.on('taphold dblclick', 'node', function(evt){
 //Tooltip
 cy.nodes().each(function(ele){
    ele.qtip({
-      content: 'Hello I am ' + ele.data('id'),
+      content: 'id: ' + ele.data('id') + '<br/>' + 'smerged: ' + timeago().format(ele.data('timestamp')),
       position: {
         my: 'top center',
         at: 'bottom center'
@@ -108,37 +108,6 @@ cy.nodes().each(function(ele){
       }
    });
 });
-//TODO:
-/*
-// qTip2 call below will grab this JSON and use the firstName as the content
-$('.selector').qtip({
-    content: {
-        text: function(event, api) {
-            $.ajax({
-                url: '/path/to/json/output', // URL to the JSON file
-                type: 'GET', // POST or GET
-                dataType: 'json', // Tell it we're retrieving JSON
-                data: {
-                    id: $(this).attr('id') // Pass through the ID of the current element matched by '.selector'
-                },
-            })
-            .then(function(data) {
-                //Process the retrieved JSON object Retrieve a specific attribute from our parsed JSON string and set the tooltip content.
-                var content = 'My name is ' + data.person.firstName;
-
-                // Now we set the content manually (required!)
-                api.set('content.text', content);
-            }, function(xhr, status, error) {
-                // Upon failure... set the tooltip content to the status and error value
-                api.set('content.text', status + ': ' + error);
-            });
-
-            return 'Loading...', // Set some initial loading text
-        }
-    }
-});
-*/
-
 
 var findOptimalPosition = function(elements){
     var xPositions = [];
