@@ -10,7 +10,8 @@ from .xmltools import merge, include_sync_button
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
-
+from django.contrib import messages
+from django.urls import reverse
 
 # Create your views here.
 
@@ -115,8 +116,8 @@ class CreateProjectView(View):
                 ET.fromstring(file.read())
 
             except ET.ParseError:
-                # TODO: error message
-                return HttpResponse('invalid xml', status=501)
+                messages.warning(request, 'No valid xml.')
+                return HttpResponseRedirect(reverse('create_proj'))
 
             proj_instance = proj_form.save()
             file = SnapFile.create_and_save(file=file, project=proj_instance, description=request.POST['description'])
@@ -126,8 +127,8 @@ class CreateProjectView(View):
             return redirect('proj', proj_id=proj_instance.id)
 
         else:
-            # TODO: error message
-            return HttpResponse('invalid data', status=501)
+            messages.warning(request, 'Invalid Data.')
+            return HttpResponseRedirect(reverse('create_proj'))
 
 
 class OpenProjectView(View):
@@ -145,8 +146,8 @@ class OpenProjectView(View):
             if(Project.objects.filter(id = proj_id)):
                 return redirect('proj', proj_id=proj_id)
             else:
-                #TODO: error message
-                return HttpResponse('no such project', status=501)
+                messages.warning(request, 'No such project.')
         else:
-            # TODO: error message
-            return HttpResponse('invalid data ', status=501)
+            messages.warning(request, 'Invalid Data.')
+
+        return HttpResponseRedirect(reverse('open_proj'))
