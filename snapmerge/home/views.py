@@ -47,9 +47,20 @@ class MergeView(View):
             new_file.save()
 
             try:
-                merge(files.pop().get_media_path(), files.pop().get_media_path(),  new_file.get_media_path())
+                file1 = files.pop()
+                file2  = files.pop()
+                merge(file1= file1.get_media_path(),
+                      file2= file2.get_media_path(),
+                      output= new_file.get_media_path(),
+                      file1_description= file1.description,
+                      file2_description= file2.description)
                 for file in files:
-                    merge(new_file.get_media_path(), file.get_media_path(), new_file.get_media_path())
+                    merge(file1= new_file.get_media_path(),
+                          file2= file.get_media_path(),
+                          output= new_file.get_media_path(),
+                          file1_description= file1.description,
+                          file2_description= file2.description
+                        )
                 return JsonResponse(new_file.as_dict())
 
             except Exception:
