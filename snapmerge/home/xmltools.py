@@ -13,7 +13,6 @@ def element_hash(ele):
     for hash comparison.
     """
     hash_string = u'{0}'.format(ele.tag)
-    print(ele)
     attribute_keys = sorted(ele.keys())
     for attr_key in attribute_keys:
         hash_string += u'{0}{1}'.format(attr_key, ele.get(attr_key))
@@ -57,24 +56,22 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
             elif ref_tag == 'scripts' and subject_tag == 'scripts':
 
                 # add comment
-                get_first_child(reference_child).append(
-                                  ET.fromstring('<comment collapsed = "false"'+
-                                  'w = ' + len(ref_description)*3 + ' >'+
-                                  'from commit: ' +
-                                  ref_description +
-                                  '</comment>'))
+                ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
+                        ' from commit: ' + ref_description + ' </comment>'
+                get_first_child(reference_child).append(ET.fromstring(ref_comment))
 
-                get_first_child(subject_child).append(
-                                  ET.fromstring('<comment collapsed = "false"'+
-                                  'from commit: ' +
-                                  'w = ' + len(subject_description)*3 + ' >'+
-                                  subject_description +
-                                  '</comment>'))
+                subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
+                                  '" >' +' from commit: ' + subject_description + '</comment>'
+                get_first_child(subject_child).append(ET.fromstring(subject_comment))
+
+                # change position of subject_child so that they are not on top of each other
+                x_pos = int(subject_child.get('x'))
+                subject_child.set('x', str(x_pos+200))
 
                 reference_element.append(subject_child)
 
             else:
-                xml_merge(reference_child, subject_child)
+                xml_merge(reference_child, subject_child, ref_description, subject_description)
         else:
             reference_element.append(subject_child)
     return
