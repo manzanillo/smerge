@@ -83,7 +83,6 @@ class SyncView(View):
         proj = Project.objects.get(id=proj_id)
         ancestor = list(SnapFile.objects.filter(id=ancestor_id, project=proj_id))
 
-
         data = request.body
 
         new_file = SnapFile.create_and_save(project=proj, ancestors=ancestor, file='', description=commit_message)
@@ -94,7 +93,7 @@ class SyncView(View):
 
         include_sync_button(new_file.get_media_path(), proj.id, me=new_file.id)
 
-        new_url = 'https://faui20q.cs.fau.de/smerge/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
+        new_url = settings.URL + '/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
 
         return JsonResponse({'message': _('OK'), 'url': new_url})
 
