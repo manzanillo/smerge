@@ -88,7 +88,7 @@ class SyncView(View):
 
         new_file = SnapFile.create_and_save(project=proj, ancestors=ancestor, file='', description=commit_message)
         with open(settings.MEDIA_ROOT + '/'  + str(new_file.id) + '.xml', 'wb') as f:
-        	f.write(data)
+            f.write(data)
         new_file.file = str(new_file.id) + '.xml'
         new_file.save()
 
