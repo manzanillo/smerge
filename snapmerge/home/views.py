@@ -47,9 +47,20 @@ class MergeView(View):
             new_file.save()
 
             try:
-                merge(files.pop().get_media_path(), files.pop().get_media_path(),  new_file.get_media_path())
+                file1 = files.pop()
+                file2  = files.pop()
+                merge(file1= file1.get_media_path(),
+                      file2= file2.get_media_path(),
+                      output= new_file.get_media_path(),
+                      file1_description= file1.description,
+                      file2_description= file2.description)
                 for file in files:
-                    merge(new_file.get_media_path(), file.get_media_path(), new_file.get_media_path())
+                    merge(file1= new_file.get_media_path(),
+                          file2= file.get_media_path(),
+                          output= new_file.get_media_path(),
+                          file1_description= file1.description,
+                          file2_description= file2.description
+                        )
                 return JsonResponse(new_file.as_dict())
 
             except Exception:
@@ -72,7 +83,6 @@ class SyncView(View):
         proj = Project.objects.get(id=proj_id)
         ancestor = list(SnapFile.objects.filter(id=ancestor_id, project=proj_id))
 
-
         data = request.body
 
         new_file = SnapFile.create_and_save(project=proj, ancestors=ancestor, file='', description=commit_message)
@@ -83,7 +93,7 @@ class SyncView(View):
 
         include_sync_button(new_file.get_media_path(), proj.id, me=new_file.id)
 
-        new_url = 'https://faui20q.cs.fau.de/smerge/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
+        new_url = settings.URL + '/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
 
         return JsonResponse({'message': _('OK'), 'url': new_url})
 
