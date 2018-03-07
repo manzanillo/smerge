@@ -13,7 +13,6 @@ def element_hash(ele):
     for hash comparison.
     """
     hash_string = u'{0}'.format(ele.tag)
-    print(ele)
     attribute_keys = sorted(ele.keys())
     for attr_key in attribute_keys:
         hash_string += u'{0}{1}'.format(attr_key, ele.get(attr_key))
@@ -31,7 +30,10 @@ def element_hash_children(ele):
     return child_dict
 
 
-def xml_merge(reference_element, subject_element):
+def get_first_child(ele): return ele[0] if len(ele) else None
+
+
+def xml_merge(reference_element, subject_element, ref_description='', subject_description=''):
     """
     Recursively traverses a subject XML tree and a reference tree, merging the
     subject tree Elements into the reference tree if the subject Element is
@@ -39,17 +41,43 @@ def xml_merge(reference_element, subject_element):
     """
     hashed_elements = element_hash_children(reference_element)
 
+    ref_tag = reference_element.tag
+    subject_tag = subject_element.tag
+
     for subject_child in list(subject_element):
         subject_hash = element_hash(subject_child)
         if subject_hash in hashed_elements:
             reference_child = hashed_elements[subject_hash]
-            xml_merge(reference_child, subject_child)
+
+            if ref_tag == 'scripts' and subject_tag == 'scripts' \
+                    and ET.tostring(reference_element) == ET.tostring(subject_element):
+                # both scripts are identical
+                pass
+            elif ref_tag == 'scripts' and subject_tag == 'scripts':
+
+                # add comment
+                ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
+                        ' from commit: ' + ref_description + ' </comment>'
+                get_first_child(reference_child).append(ET.fromstring(ref_comment))
+
+                subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
+                                  '" >' +' from commit: ' + subject_description + '</comment>'
+                get_first_child(subject_child).append(ET.fromstring(subject_comment))
+
+                # change position of subject_child so that they are not on top of each other
+                x_pos = int(subject_child.get('x'))
+                subject_child.set('x', str(x_pos+200))
+
+                reference_element.append(subject_child)
+
+            else:
+                xml_merge(reference_child, subject_child, ref_description, subject_description)
         else:
             reference_element.append(subject_child)
     return
 
 
-def merge(file1, file2, output):
+def merge(file1, file2, output, file1_description, file2_description):
     """
     
     :param file1: first XML document path
@@ -61,7 +89,7 @@ def merge(file1, file2, output):
     ref_root = ref.getroot()
     subject = ET.parse(settings.BASE_DIR + file2)
     subject_root = subject.getroot()
-    xml_merge(ref_root, subject_root)
+    xml_merge(ref_root, subject_root, ref_description= file1_description, subject_description= file2_description)
     with open(settings.BASE_DIR + output, 'wb') as f:
         ref.write(f)
 
@@ -70,7 +98,7 @@ def include_sync_button(file, proj_id, me):
 
     with open(settings.BASE_DIR + '/static/snap/sync_block.xml', 'r') as f:
         sync_file = f.read()
-        sync_file = sync_file.replace('{{url}}', 'https://faui20q.cs.fau.de/smerge/sync/'+str(proj_id) + '?ancestor='+str(me))
+        sync_file = sync_file.replace('{{url}}', settings.URL + '/sync/'+str(proj_id) + '?ancestor='+str(me))
         sync_button = ET.fromstring(sync_file)
 
         target = ET.parse(settings.BASE_DIR + file)
