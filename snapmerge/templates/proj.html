@@ -11,7 +11,11 @@
 
 {% block content %}
 
-<h1 class="project-heading">Project {{proj_id}}</h1>
+<h1 class="project-heading">
+    {{proj_name}}
+    <br/>
+    <div class="project-description"> {{proj_description}}</div>
+</h1>
 <div id="cy" style="height:500px"></div>
 
 <div class="fixed-action-btn" style="z-index:9999">
