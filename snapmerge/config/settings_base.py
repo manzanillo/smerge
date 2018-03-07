@@ -75,7 +75,8 @@ CORS_ORIGIN_WHITELIST = (
     'snap.berkeley.edu',
     'berkeley.edu',
     'localhost:8000',
-    '127.0.0.1:9000'
+    '127.0.0.1:9000',
+    'smerge.org'
 )
 
 
