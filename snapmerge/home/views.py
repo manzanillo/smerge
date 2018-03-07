@@ -29,7 +29,8 @@ class ProjectView(View):
             raise Http404
         files = [obj.as_dict() for obj in SnapFile.objects.filter(project = proj_id)]
         context = {
-            'proj_id': proj_id,
+            'proj_name': proj.name,
+            'proj_description' : proj.description,
             'files': files
         }
         return render(request, 'proj.html', context)
