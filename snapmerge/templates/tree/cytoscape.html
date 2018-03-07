@@ -49,7 +49,9 @@ var cy = window.cy = cytoscape({
               description: '{{ele.description}}',
               timestamp : '{{ele.timestamp}}',
               number_scripts : {{ele.number_scripts}},
-              number_sprites : {{ele.number_sprites}}
+              number_sprites : {{ele.number_sprites}},
+              ancestors : {{ele.ancestors}}
+
              }
      },
     {% endfor %}
@@ -102,15 +104,37 @@ cy.on('taphold dblclick', 'node', function(evt){
 cy.on('click', 'node', function(evt){
   node = evt.target;
 
+  //calculate difference to parent node
+  var diff_sprites = 0;
+  var diff_scripts = 0;
+  // arrow_drop_up und arrow_drop_down als materialize icons
+  if (node.data('ancestors').length === 1){
+    var parent = cy.$("[id='" + node.data('ancestors')[0] +"']")
+    diff_sprites = this.data('number_sprites') - parent.data('number_sprites')
+    diff_scripts = this.data('number_scripts') - parent.data('number_scripts')
+  }
+
+  diff_sprites_string = (diff_sprites === 0) ? '-' :
+        ( diff_sprites > 0 ? '<div style="color:green"> <i class="trend-indicator material-icons">arrow_drop_up</i>'   + diff_sprites + '</div>'
+                           : '<div style="color:red">   <i class="trend-indicator material-icons">arrow_drop_down</i>' + diff_sprites*(-1)  + '</div>'
+        )
+  diff_scripts_string = (diff_scripts === 0) ? '-' :
+        ( diff_scripts > 0 ? '<div style="color:green"> <i class="trend-indicator material-icons">arrow_drop_up</i>'+ diff_scripts + '</div>'
+                           : '<div style="color:red">   <i class="trend-indicator material-icons">arrow_drop_down</i>' + diff_scripts*(-1) + '</div>'
+        )
+
+
   tooltip = '<table>' +
     '<tbody>' +
         '<tr>' +
           '<td>sprites</td>' +
           '<td>' + node.data('number_sprites') + '</td>' +
+          '<td>' + diff_sprites_string + '</td>' +
         '</tr>' +
         '<tr>' +
           '<td>scripts</td>' +
-          '<td>' + node.data('number_scripts') + '</td>' +
+          '<td>' + node.data('number_scripts') + diff_scripts + '</td>' +
+          '<td>' + diff_scripts_string + '</td>' +
         '</tr>' +
         '<tr>' +
           '<td>' + 'smerged ' + timeago().format(node.data('timestamp')) + '</td>' +
