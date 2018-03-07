@@ -100,12 +100,26 @@ cy.on('taphold dblclick', 'node', function(evt){
 
 // Show tooltip on hover
 cy.on('click', 'node', function(evt){
-  this.qtip({
-      content: 'sprites: ' + this.data('number_sprites') + '\t' + 1
-                + '<br/>'
-                + 'scripts: ' + this.data('number_scripts')
-                + '<br/>'
-                + 'smerged: ' + timeago().format(this.data('timestamp')),
+  node = evt.target;
+
+  tooltip = '<table>' +
+    '<tbody>' +
+        '<tr>' +
+          '<td>sprites</td>' +
+          '<td>' + node.data('number_sprites') + '</td>' +
+        '</tr>' +
+        '<tr>' +
+          '<td>scripts</td>' +
+          '<td>' + node.data('number_scripts') + '</td>' +
+        '</tr>' +
+        '<tr>' +
+          '<td>' + 'smerged ' + timeago().format(node.data('timestamp')) + '</td>' +
+        '</tr>' +
+    '</tbody>' +
+  '</table>'
+
+  node.qtip({
+      content: tooltip,
       position: {
         my: 'top center',
         at: 'bottom center'
