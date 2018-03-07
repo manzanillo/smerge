@@ -92,7 +92,7 @@ cy.on('taphold dblclick', 'node', function(evt){
 
 
 // Show tooltip on hover
-cy.on('mouseover', 'node', function(evt){
+cy.on('click', 'node', function(evt){
   this.qtip({
       content: 'id: ' + this.data('id') + '<br/>' + 'smerged: ' + timeago().format(this.data('timestamp')),
       position: {
@@ -105,15 +105,7 @@ cy.on('mouseover', 'node', function(evt){
           width: 16,
           height: 8
         }
-      },
-      show: {
-            event: evt.type,
-            ready: true,
-            solo: true
-         },
-         hide: {
-            event: 'mouseout unfocus'
-         }
+      }
   });
 
 });
