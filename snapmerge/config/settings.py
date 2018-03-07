@@ -25,7 +25,7 @@ SECRET_KEY = '+c1*qsr7yut0f)ncvbuxlr@o(japh!(x&)-)0l9j=p7!7x1w@u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'faui20q.cs.fau.de', 'faui20q.informatik.uni-erlangen.de']
+ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', '131.188.32.88']
 
 
 # Application definition
