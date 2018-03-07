@@ -44,7 +44,14 @@ var cy = window.cy = cytoscape({
   elements: {
     nodes: [
     {% for ele in files  %}
-    { data: { id: '{{ele.id}}' , href: '{{ele.file_url}}', description: '{{ele.description}}', timestamp : '{{ele.timestamp}}' } },
+    { data: { id: '{{ele.id}}' ,
+              href: '{{ele.file_url}}',
+              description: '{{ele.description}}',
+              timestamp : '{{ele.timestamp}}',
+              number_scripts : {{ele.number_scripts}},
+              number_sprites : {{ele.number_sprites}}
+             }
+     },
     {% endfor %}
     ],
     edges: [
@@ -94,7 +101,11 @@ cy.on('taphold dblclick', 'node', function(evt){
 // Show tooltip on hover
 cy.on('click', 'node', function(evt){
   this.qtip({
-      content: 'id: ' + this.data('id') + '<br/>' + 'smerged: ' + timeago().format(this.data('timestamp')),
+      content: 'sprites: ' + this.data('number_sprites') + '\t' + 1
+                + '<br/>'
+                + 'scripts: ' + this.data('number_scripts')
+                + '<br/>'
+                + 'smerged: ' + timeago().format(this.data('timestamp')),
       position: {
         my: 'top center',
         at: 'bottom center'

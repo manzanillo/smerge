@@ -110,3 +110,11 @@ def include_sync_button(file, proj_id, me):
         with open(settings.BASE_DIR + file, 'wb') as x:
             target.write(x)
 
+
+def analyze_file(file):
+
+    ref = ET.parse(settings.BASE_DIR + file)
+    root = ref.getroot()
+    scripts = len(root.findall(".//script")) - 1 # without sync block
+    sprites = len(root.findall(".//sprite"))
+    return [scripts, sprites]
