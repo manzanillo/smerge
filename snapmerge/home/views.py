@@ -6,7 +6,7 @@ from .models import ProjectForm, SnapFileForm, SnapFile, Project
 from .forms import OpenProjectForm
 from xml.etree import ElementTree as ET
 import json
-from .xmltools import merge, include_sync_button
+from .xmltools import merge
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -92,16 +92,10 @@ class SyncView(View):
         new_file.file = str(new_file.id) + '.xml'
         new_file.save()
 
-        include_sync_button(new_file.get_media_path(), proj.id, me=new_file.id)
+        new_file.xml_job()
 
         new_url = settings.URL + '/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
-
         return JsonResponse({'message': _('OK'), 'url': new_url})
-
-
-
-
-
 
 
 class CreateProjectView(View):
@@ -133,7 +127,7 @@ class CreateProjectView(View):
             proj_instance = proj_form.save()
             file = SnapFile.create_and_save(file=file, project=proj_instance, description=request.POST['description'])
 
-            include_sync_button(file.get_media_path(), proj_instance.id, me= file.id)
+            file.xml_job()
 
             return redirect('proj', proj_id=proj_instance.id)
 
