@@ -5,11 +5,9 @@ URL = 'https://smerge.org'
 
 SECRET_PATH = '/var/secrets/secrets.smerge.json'
 
-#with  open(SECRET_PATH).read() as secrets_file:
-#    secrets = json.loads(secrets_file)
-#    SECRET_KEY = secrets["SECRET_KEY"]
-
-SECRET_KEY = '3s!+bjs7d(n^p#8-2^015h$mb=yb^7_o2%35ggw8z3vcfcg%n*'
+secret_file = open(SECRET_PATH).read()
+secrets = json.loads(secret_file)
+SECRET_KEY = secrets["SECRET_KEY"]
 
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', 'smerge.org']
