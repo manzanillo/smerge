@@ -50,7 +50,7 @@ class MergeView(View):
 
             try:
                 file1 = files.pop()
-                file2  = files.pop()
+                file2 = files.pop()
                 merge(file1= file1.get_media_path(),
                       file2= file2.get_media_path(),
                       output= new_file.get_media_path(),
@@ -62,7 +62,8 @@ class MergeView(View):
                           output= new_file.get_media_path(),
                           file1_description= file1.description,
                           file2_description= file2.description
-                        )
+                         )
+                    new_file.xml_job()
                 return JsonResponse(new_file.as_dict())
 
             except Exception as e:
@@ -72,7 +73,6 @@ class MergeView(View):
 
         else:
             return HttpResponse('invalid data ', status=400)
-
 
 
 class SyncView(View):

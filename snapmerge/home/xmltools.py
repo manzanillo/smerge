@@ -75,8 +75,7 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
         else:
             if subject_child.tag == 'sprite':
                 for reference_child in list(reference_element):
-                    if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name') \
-                                                       and subject_child.get('idx') == reference_child.get('idx'):
+                    if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
                         xml_merge(reference_child, subject_child, ref_description, subject_description)
             else:
                 reference_element.append(subject_child)
