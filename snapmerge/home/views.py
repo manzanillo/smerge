@@ -65,7 +65,8 @@ class MergeView(View):
                         )
                 return JsonResponse(new_file.as_dict())
 
-            except Exception:
+            except Exception as e:
+                print (e)
                 new_file.delete()
                 return HttpResponse('invalid data ', status=400)
 
