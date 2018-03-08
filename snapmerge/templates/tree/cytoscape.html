@@ -120,7 +120,7 @@ cy.on('click', 'node', function(evt){
         )
   diff_scripts_string = (diff_scripts === 0) ? '-' :
         ( diff_scripts > 0 ? '<div style="color:green"> <i class="trend-indicator material-icons">arrow_drop_up</i>'+ diff_scripts + '</div>'
-                           : '<div style="color:red">   <i class="trend-indicator material-icons">arrow_drop_down</i>' + diff_scripts*(-1) + '</div>'
+                           : '<div style="color:red">   <i class="trend-indicator   material-icons">arrow_drop_down</i>' + diff_scripts*(-1) + '</div>'
         )
 
 
@@ -133,7 +133,7 @@ cy.on('click', 'node', function(evt){
         '</tr>' +
         '<tr>' +
           '<td>scripts</td>' +
-          '<td>' + node.data('number_scripts') + diff_scripts + '</td>' +
+          '<td>' + node.data('number_scripts') + '</td>' +
           '<td>' + diff_scripts_string + '</td>' +
         '</tr>' +
         '<tr>' +
@@ -178,6 +178,16 @@ var toggleMerge = function(){
 
 }
 
+var findOptimalPosition = function(elements){
+    var xPositions = [];
+    var yPositions = [];
+    elements.each(function(ele){
+       xPositions.push(ele.position('x'));
+       yPositions.push(ele.position('y'));
+    });
+    return [Math.min(...xPositions)+(Math.max(...xPositions)-Math.min(...xPositions))/2, Math.max(...yPositions)+75];
+}
+
 $('#merge').mousedown(function (evt) {
 
     if (cy.selectionType() == 'single'){
@@ -208,9 +218,12 @@ $('#merge').mousedown(function (evt) {
                 cache: false,
                 success: function(new_node) {
 
+                    var positions = findOptimalPosition(selectedElements);
+
                     var eleNeu = cy.add({
                         group: "nodes",
-                        data: { id: new_node.id, href: new_node.file_url }
+                        data: { id: new_node.id, href: new_node.file_url },
+                        position: { x: positions[0], y: positions[1] }
                     });
 
                     selectedElements.forEach(function(ele){
@@ -219,11 +232,6 @@ $('#merge').mousedown(function (evt) {
                             data: { source: ele.data('id'), target: new_node.id }
                         });
                     });
-
-                    var layout = cy.layout({
-                        name: 'dagre'
-                    });
-                    layout.run();
 
                 },
                 error: function(){
