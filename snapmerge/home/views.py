@@ -30,7 +30,8 @@ class ProjectView(View):
         files = [obj.as_dict() for obj in SnapFile.objects.filter(project = proj_id)]
         context = {
             'proj_name': proj.name,
-            'proj_description' : proj.description,
+            'proj_description': proj.description,
+            'proj_id' : proj.id,
             'files': files
         }
         return render(request, 'proj.html', context)
