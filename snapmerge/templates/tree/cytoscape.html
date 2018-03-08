@@ -51,7 +51,6 @@ var cy = window.cy = cytoscape({
               number_scripts : {{ele.number_scripts}},
               number_sprites : {{ele.number_sprites}},
               ancestors : {{ele.ancestors}}
-
              }
      },
     {% endfor %}
@@ -222,7 +221,15 @@ $('#merge').mousedown(function (evt) {
 
                     var eleNeu = cy.add({
                         group: "nodes",
-                        data: { id: new_node.id, href: new_node.file_url },
+                        data: {
+                            id: new_node.id,
+                            href: new_node.file_url,
+                            description: new_node.description,
+                            timestamp : new_node.timestamp,
+                            number_scripts : new_node.number_scripts,
+                            number_sprites : new_node.number_sprites,
+                            ancestors : new_node.ancestors
+                        },
                         position: { x: positions[0], y: positions[1] }
                     });
 
