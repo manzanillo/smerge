@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
+from shutil import copyfile
 
 # Create your views here.
 
@@ -117,19 +118,35 @@ class CreateProjectView(View):
         proj_form = ProjectForm(request.POST, request.FILES)
         print(request.FILES)
         if snap_form.is_valid() and proj_form.is_valid():
-            # verify xml
-            file = request.FILES['file']
-            try:
-                ET.fromstring(file.read())
-
-            except ET.ParseError:
-                messages.warning(request, 'No valid xml.')
-                return HttpResponseRedirect(reverse('create_proj'))
 
             proj_instance = proj_form.save()
-            file = SnapFile.create_and_save(file=file, project=proj_instance, description=request.POST['description'])
 
-            file.xml_job()
+            # verify xml if a snap file is given, else insert blank snap file
+            if request.FILES:
+
+                snap_file = request.FILES['file']
+                snap_description = request.POST['description']
+
+                try:
+                    ET.fromstring(snap_file.read())
+
+                except ET.ParseError:
+                    messages.warning(request, 'No valid xml.')
+                    return HttpResponseRedirect(reverse('create_proj'))
+
+                snap_file = SnapFile.create_and_save(file=snap_file, project=proj_instance,
+                                                     description=snap_description)
+
+            # blank snap file
+            else:
+                snap_description = 'blank project'
+                snap_file = SnapFile.create_and_save(project=proj_instance, description=snap_description, file='')
+                snap_file.file = str(snap_file.id) + '.xml'
+                copyfile(settings.BASE_DIR + '/static/snap/blank_proj.xml', settings.BASE_DIR + snap_file.get_media_path())
+                snap_file.save()
+
+            snap_file.xml_job()
+
 
             return redirect('proj', proj_id=proj_instance.id)
 

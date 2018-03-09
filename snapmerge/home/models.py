@@ -45,7 +45,7 @@ class File(models.Model):
 
 class SnapFile(File):
     # validates only naming of file
-    file = models.FileField(_("File"), validators=[FileExtensionValidator(['xml', 'XML'])])
+    file = models.FileField(_("File"), blank=True, validators=[FileExtensionValidator(['xml', 'XML'])])
     # thumbnail = models.ImageField(_("Thumbnail"), null=True, blank=True)
     user = models.CharField(_("user"), max_length=30, null=True)
 
