@@ -104,8 +104,8 @@ class SyncView(View):
 class CreateProjectView(View):
 
     def get(self, request):
-        file_form = SnapFileForm()
-        proj_form = ProjectForm()
+        file_form = SnapFileForm(prefix='snap_form')
+        proj_form = ProjectForm(prefix='proj_form')
         context = {
             'file_form' : file_form,
             'proj_form' : proj_form
@@ -114,9 +114,9 @@ class CreateProjectView(View):
         return render(request, 'create_proj.html', context)
 
     def post(self, request):
-        snap_form = SnapFileForm(request.POST, request.FILES)
-        proj_form = ProjectForm(request.POST, request.FILES)
-        print(request.FILES)
+        snap_form = SnapFileForm(request.POST, request.FILES, prefix='snap_form')
+        proj_form = ProjectForm(request.POST, request.FILES, prefix='proj_form')
+        print(request.POST)
         if snap_form.is_valid() and proj_form.is_valid():
 
             proj_instance = proj_form.save()
@@ -124,8 +124,8 @@ class CreateProjectView(View):
             # verify xml if a snap file is given, else insert blank snap file
             if request.FILES:
 
-                snap_file = request.FILES['file']
-                snap_description = request.POST['description']
+                snap_file = request.FILES['snap_form-file']
+                snap_description = request.POST['snap_form-description']
 
                 try:
                     ET.fromstring(snap_file.read())
