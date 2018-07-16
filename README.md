@@ -2,15 +2,21 @@
 Smerge is a merge tool for school environments and Snap!. It is based on a lot of open source projects including cytoscape.js or Django. A live demo can be found at [smerge.org](https://smerge.org)
 
 Rules
-#1 Simple
-#2 beautiful
-#3 fast
+* Simple
+* beautiful
+* fast
 
 
 # Install
 You will need pip and Python 3 for installing smerge on your server.
-We recommend using pipenv for local deployment. Use pipenv install and then the make run command.
-
+We recommend using pipenv for local deployment. Use 
+```
+pipenv install
+```
+and then the command
+```
+make run
+```
 
 # Contributing
 Thank you for considering contributing to smerge! It's as easy as creating a pull request.
