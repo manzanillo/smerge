@@ -19,6 +19,7 @@ function upload(evt) {
     evt.stopPropagation();
     evt.preventDefault();
 
+    console.log(evt)
     $('#drop-info').hide()
 
     // getFirst (and only) file from FileList
@@ -27,7 +28,6 @@ function upload(evt) {
 
     var formData = new FormData();
     formData.append("file", files[0]);
-    console.log(formData)
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/add/"+ $("h1.project-heading").attr("data-proj-id"), true);
     xhttp.setRequestHeader("X-CSRFToken", csrftoken);
@@ -35,10 +35,23 @@ function upload(evt) {
 
     xhttp.onreadystatechange = function() {
     if (xhttp.readyState === 4) {
-      console.log(xhttp.responseText);
-      //TODO Include Node in Graph w/o reloading
-          //var response = JSON.parse(xhttp.responseText);
-    //console.log(response)
+      new_node = xhttp.responseText;
+      // Include Node in Graph w/o reloading
+
+      var eleNeu = window.cy.add({
+            group: "nodes",
+            data: {
+                id: new_node.id,
+                href: new_node.file_url,
+                description: new_node.description,
+                timestamp : new_node.timestamp,
+                number_scripts : new_node.number_scripts,
+                number_sprites : new_node.number_sprites,
+                ancestors : new_node.ancestors
+            },
+        });
+
+        window.cy.layout({name: 'breadthfirst'}).run()
     }
   }
 
