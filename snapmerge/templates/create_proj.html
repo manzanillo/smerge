@@ -13,7 +13,7 @@
     <form action="{% url 'create_proj' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{ proj_form.as_p }}
-      <h1> Optional invividual starting Snap! File</h1>
+      <h4> Optional invividual starting Snap! File</h4>
         <p>If you don't upload a file, a standard blank snap project will be your starting point</p>
         <p> If you have already done something and want to continue working on it in smerge, or if you want to provide
             your students with a template, custom blocks or something like that, upload your individual starting
