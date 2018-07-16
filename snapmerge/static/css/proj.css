@@ -15,3 +15,23 @@
 .trend-indicator {
     float: left;
 }
+
+
+.info-message {
+    padding: 10%;
+}
+
+#drop-info {
+    display: none;
+    position: absolute;
+    text-align: center;
+    top: 37.5%;
+    left: 25%;
+    font-size: 50px;
+    color: gray;
+    border-style: dashed;
+    width: 50%;
+    height: 25%;
+    z-index: 1000;
+    border-radius: 20px;
+}

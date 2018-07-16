@@ -175,3 +175,30 @@ class OpenProjectView(View):
             messages.warning(request, 'Invalid Data.')
 
         return HttpResponseRedirect(reverse('open_proj'))
+
+
+
+class AddFileToProjectView(View):
+
+    def post(self, request, proj_id):
+        proj = Project.objects.get(id=proj_id)
+
+        # verify xml if a snap file is given
+        if request.FILES:
+            snap_file = request.FILES['file']
+            snap_description = ''
+            print(snap_file)
+
+            try:
+                ET.fromstring(snap_file.read())
+
+            except ET.ParseError:
+                 messages.warning(request, 'No valid xml.')
+                 return JsonResponse({'message': _('no valid xml')})
+
+            snap_file = SnapFile.create_and_save(file=snap_file, project=proj, description='')
+            snap_file.xml_job()
+
+            return JsonResponse(snap_file.as_dict()) #redirect('proj', proj_id=proj.id)
+        else:
+            return JsonResponse({'message': _('no valid xml')})

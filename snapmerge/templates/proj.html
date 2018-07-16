@@ -11,13 +11,17 @@
 
 {% block content %}
 
-<h1 class="project-heading">
+<h1 class="project-heading" data-proj-id={{proj_id}}>
     {{proj_name}}
     <br/>
     <div class="project-description"> {{proj_description}}</div>
 </h1>
-<div id="cy" style="height:500px"></div>
-
+<div id="drop-zone">
+    <div id="drop-info">
+        <p class="info-message">Drop here!</p>
+    </div>
+    <div id="cy" style="height:500px"></div>
+</div>
 <div class="fixed-action-btn" style="z-index:9999">
     <a id="cancel-merge" class="btn-floating waves-effect waves-light btn-large red hide">
         <i class="large material-icons">close</i>
@@ -38,6 +42,7 @@
 {% block js %}
 
 <script src="{% static "js/dist/timeago.min.js" %}"></script>
+<script src="{% static "js/drag-n-drop.js" %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.8/cytoscape.js"></script>
 
@@ -52,4 +57,6 @@
 
 <!-- Load appplication code at the end to ensure DOM is loaded -->
 {% include "tree/cytoscape.html" %}
+
+
 {% endblock %}
