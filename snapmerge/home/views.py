@@ -64,7 +64,7 @@ class MergeView(View):
                           file1_description= file1.description,
                           file2_description= file2.description
                          )
-                    new_file.xml_job()
+                new_file.xml_job()
                 return JsonResponse(new_file.as_dict())
 
             except Exception as e:
