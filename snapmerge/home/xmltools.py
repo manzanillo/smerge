@@ -66,9 +66,26 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
 
                 # change position of subject_child so that they are not on top of each other
                 x_pos = int(subject_child.get('x'))
-                subject_child.set('x', str(x_pos+200))
 
-                reference_element.append(subject_child)
+                x_delta = 250
+                duplicate = False
+                found_place = False
+
+                while not found_place:
+                    for other_script in list(reference_element):
+                        found_place = True
+                        # script is already copied somewhere else
+                        if ''.join(ET.tostring(e, 'unicode') for e in subject_child.iter()) \
+                                == ''.join(ET.tostring(e, 'unicode') for e in other_script.iter()):
+                            duplicate = True
+                        # there is another script here
+                        if int(other_script.get('x')) == x_pos + x_delta and other_script.get('y') == subject_child.get('y'):
+                            found_place = False
+                            x_delta += 250
+
+                if not duplicate:
+                    subject_child.set('x', str(x_pos + x_delta))
+                    reference_element.append(subject_child)
 
             else:
                 xml_merge(reference_child, subject_child, ref_description, subject_description)
