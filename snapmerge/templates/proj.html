@@ -18,16 +18,16 @@
 </h1>
 <div id="drop-zone">
     <div id="drop-info">
-        <p class="info-message">Drop here!</p>
+        <p class="info-message">{% trans "Drop here!" %}</p>
     </div>
     <div id="cy" style="height:500px"></div>
 </div>
 <div class="fixed-action-btn" style="z-index:9999">
-    <a id="cancel-merge" class="btn-floating waves-effect waves-light btn-large red hide">
+    <a id="cancel-merge" title="{% trans "cancel merge" %}" class="btn-floating waves-effect waves-light btn-large red hide">
         <i class="large material-icons">close</i>
     </a>
 
-    <a id="merge" class="btn-floating waves-effect waves-light btn-large">
+    <a id="merge" title="{% trans "merge" %}" class="btn-floating waves-effect waves-light btn-large">
         <i class="large material-icons">call_merge</i>
     </a>
 </div>

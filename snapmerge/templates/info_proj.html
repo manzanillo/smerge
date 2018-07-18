@@ -11,22 +11,22 @@
   <div class="col card hoverable s10 pull-s1 m6 pull-m3 l4 pull-l4">
       <div class="card-content">
       <p>  {% if proj_password != none %}
-        This are your PIN and password, which you need to open your smerge-project. It might be a good idea to keep
-        them somewhere, so you wont forget them!
+        {% trans "This are your PIN and password, which you need to open your smerge-project. It might be a good idea to keep
+        them somewhere, so you wont forget them!" %}
 
         {% else %}
-        This is your PIN, which you need to open your smerge-project. It might be a good idea to keep
-        it somewhere, so you wont forget it! If you wan't to have a password as well, you can change this later on.
+        {% trans "This is your PIN, which you need to open your smerge-project. It might be a good idea to keep
+        it somewhere, so you wont forget it! If you wan't to have a password as well, you can change this later on." %}
 
         {% endif %}
       </p>
       <div class="center">
       <p>
-         PIN: {{proj_pin}}
+         {% trans "PIN:" %} {{proj_pin}}
       </p>
       {% if proj_password != none %}
       <p>
-          Password: {{proj_password}}
+          {% trans "Password:" %} {{proj_password}}
       </p>
       {% endif %}
       </div>

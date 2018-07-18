@@ -143,7 +143,7 @@ class CreateProjectView(View):
                     ET.fromstring(snap_file.read())
 
                 except ET.ParseError:
-                    messages.warning(request, 'No valid xml.')
+                    messages.warning(request, _('No valid xml.'))
                     return HttpResponseRedirect(reverse('create_proj'))
 
                 snap_file = SnapFile.create_and_save(file=snap_file, project=proj_instance,
@@ -163,7 +163,7 @@ class CreateProjectView(View):
             return redirect('info', proj_id=proj_instance.id)
 
         else:
-            messages.warning(request, 'Invalid Data.')
+            messages.warning(request, _('Invalid Data.'))
             return HttpResponseRedirect(reverse('create_proj'))
 
 
@@ -200,15 +200,15 @@ class OpenProjectView(View):
                 proj = Project.objects.get(pin=proj_pin)
 
             except Project.DoesNotExist:
-                messages.warning(request, 'No such project or wrong password')
+                messages.warning(request, _('No such project or wrong password'))
                 return HttpResponseRedirect(reverse('open_proj'))
 
             if proj.password and proj.password != proj_password:
-                messages.warning(request, 'No such project or wrong password')
+                messages.warning(request, _('No such project or wrong password'))
             else:
                 return redirect('proj', proj_id=proj.id)
         else:
-            messages.warning(request, 'Invalid Data.')
+            messages.warning(request, _('Invalid Data.'))
 
         return HttpResponseRedirect(reverse('open_proj'))
 
@@ -229,7 +229,7 @@ class AddFileToProjectView(View):
                 ET.fromstring(snap_file.read())
 
             except ET.ParseError:
-                 messages.warning(request, 'No valid xml.')
+                 messages.warning(request, _('No valid xml.'))
                  return JsonResponse({'message': _('no valid xml')})
 
             snap_file = SnapFile.create_and_save(file=snap_file, project=proj, description='')
