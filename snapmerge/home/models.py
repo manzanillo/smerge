@@ -37,7 +37,7 @@ class Project(models.Model):
 class File(models.Model):
     # Format: YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True, auto_now=False)
-    project = models.ForeignKey(Project, on_delete ="cascade")
+    project = models.ForeignKey(Project, on_delete =models.CASCADE)
     # https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.ManyToManyField.symmetrical
     ancestors = models.ManyToManyField("self", symmetrical=False)
     description = models.CharField(_("Description"), max_length=200,

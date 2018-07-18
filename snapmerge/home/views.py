@@ -43,6 +43,7 @@ class ProjectView(View):
             'proj_name': proj.name,
             'proj_description': proj.description,
             'proj_id' : proj.id,
+            'proj_pin' : proj.pin,
             'files': files
         }
         return render(request, 'proj.html', context)
@@ -232,9 +233,67 @@ class AddFileToProjectView(View):
                  messages.warning(request, _('No valid xml.'))
                  return JsonResponse({'message': _('no valid xml')})
 
-            snap_file = SnapFile.create_and_save(file=snap_file, project=proj, description='')
+            snap_file = SnapFile.create_and_save(file=snap_file, project=proj, description=snap_description)
             snap_file.xml_job()
 
-            return JsonResponse(snap_file.as_dict()) #redirect('proj', proj_id=proj.id)
+            return JsonResponse(snap_file.as_dict())
         else:
             return JsonResponse({'message': _('no valid xml')})
+
+
+class ChangePasswordView(View):
+
+    def post(self, request, proj_id):
+
+        old_password = request.POST.get('old-password', None)
+        new_password = request.POST.get('new-password', None)
+
+        if new_password != None:
+            try:
+                proj = Project.objects.get(id=proj_id)
+                actual_password = proj.password
+
+            except Project.DoesNotExist:
+                messages.warning(request, _('No such project or wrong password'))
+                return HttpResponseRedirect(reverse('open_proj'))
+
+            if (actual_password and actual_password == old_password) or actual_password == None:
+                proj.password = new_password
+                proj.save()
+                messages.success(request, _('Password changed'))
+                return redirect('proj', proj_id=proj.id) #JsonResponse({'message': _('Password changed')})
+
+            else:
+                messages.warning(request, _('Wrong password'))
+                return redirect('proj', proj_id=proj.id) #JsonResponse({'message': _('Something went wrong')})
+
+        return JsonResponse({'message': _('something went wrong')})
+
+
+
+
+class DeleteProjectView(View):
+
+    def post(self, request, proj_id):
+
+        password = request.POST.get('password', None)
+
+        if password != None:
+            try:
+                proj = Project.objects.get(id=proj_id)
+                actual_password = proj.password
+
+            except Project.DoesNotExist:
+                messages.warning(request, _('No such project or wrong password'))
+                return HttpResponseRedirect(reverse('open_proj'))
+
+            if (actual_password and actual_password == password) or actual_password == None:
+                proj.delete()
+                messages.success(request, _('Project deleted'))
+                return redirect('home') #JsonResponse({'message': _('Password changed')})
+
+            else:
+                messages.warning(request, _('Wrong password'))
+                return redirect('proj', proj_id=proj.id) #JsonResponse({'message': _('Something went wrong')})
+
+        return JsonResponse({'message': _('something went wrong')})

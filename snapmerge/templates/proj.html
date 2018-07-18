@@ -20,7 +20,7 @@
     <div id="drop-info">
         <p class="info-message">{% trans "Drop here!" %}</p>
     </div>
-    <div id="cy" style="height:500px"></div>
+    <div id="cy" style="z-index:400"></div>
 </div>
 <div class="fixed-action-btn" style="z-index:9999">
     <a id="cancel-merge" title="{% trans "cancel merge" %}" class="btn-floating waves-effect waves-light btn-large red hide">
@@ -31,6 +31,79 @@
         <i class="large material-icons">call_merge</i>
     </a>
 </div>
+
+
+
+
+<!-- MENU -->
+<div class="smerge-menu-btn">
+    <a href="#menu" class="modal-trigger">
+        <i class="medium material-icons">menu</i>
+    </a>
+</div>
+
+
+<!-- MENU Modal Structure -->
+<div id="menu" class="modal" style="z-index:1003">
+    <div class="modal-content">
+        <h4>{% trans "Project Settings" %}</h4>
+        <p>
+            <p>{% trans "Project Pin" %}</p>
+            <div class="row">
+                    <div class="col s3"></div>
+                    <div class="smerge-digit-field col s1">{{proj_pin.0}}</div>
+                    <div class="smerge-digit-field col s1">{{proj_pin.1}}</div>
+                    <div class="smerge-digit-field col s1">{{proj_pin.2}}</div>
+                    <div class="smerge-digit-field col s1">{{proj_pin.3}}</div>
+                    <div class="smerge-digit-field col s1">{{proj_pin.4}}</div>
+                    <div class="smerge-digit-field col s1">{{proj_pin.5}}</div>
+                    <div class="col s3"></div>
+            </div>
+            <p>{% trans "Password" %}</p>
+            <form class="col s12" action="{% url 'change_passwd' proj_id=proj_id %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                <div class="input-field col s4">
+                    <input id="old-password" name="old-password" type="password" class="validate">
+                    <label class="active" for="old-password">{% trans "Old Password" %}</label>
+                </div>
+
+                <div class="input-field col s4">
+                    <input id="new-password" name="new-password" type="password" class="validate">
+                    <label class="active" for="new-password">{% trans "New Password" %}</label>
+                </div>
+                <div class="input-field col s4">
+                    <input type ="submit" class ="btn waves-effect waves-light" value = "{% trans "Change" %}"/>
+                </div>
+                </div>
+            </form>
+            <div class="divider smerge-modal-divider"></div>
+
+            <p>Delete Project</p>
+            <form class="col s12" action="{% url 'delete_proj' proj_id=proj_id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                <div class="col s4">{% trans "Insert your password to delete this project." %} </div>
+                <div class="input-field col s4">
+                    <input id="password" name="password" type="password" class="validate">
+                    <label class="active" for="password">{% trans "Password" %}</label>
+                </div>
+                <div class="input-field col s4">
+                    <input type ="submit" class ="btn waves-effect waves-light" value = "{% trans "Delete" %}"/>
+                </div>
+
+                </div>
+                </form>
+
+        </p>
+    </div>
+    <div class="smerge-menu-modal-footer modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">{% trans "Close" %}</a>
+    </div>
+</div>
+
+<script>$('#menu').modal()</script>
+
 
 {% endblock %}
 

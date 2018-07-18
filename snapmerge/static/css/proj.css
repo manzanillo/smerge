@@ -35,3 +35,32 @@
     z-index: 1000;
     border-radius: 20px;
 }
+
+
+
+
+.smerge-menu-btn {
+    z-index: 1050;
+    position: fixed;
+    right: 23px;
+    top: 23px;
+    padding-top: 15px;
+    margin-bottom: 0;
+}
+
+.smerge-menu-btn > a {
+    color: gray;
+}
+
+
+.smerge-modal-divider {
+    margin-bottom: 10px;
+}
+
+#menu {
+    background-color: #fff;
+}
+
+.smerge-menu-modal-footer {
+    background-color: #fff !important;
+}
