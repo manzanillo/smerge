@@ -15,15 +15,15 @@
       {{ proj_form.as_p }}
         <ul class="collapsible">
             <li>
-                <div class="collapsible-header"><i class="material-icons">add</i>Optional invividual starting Snap! File</div>
+                <div class="collapsible-header"><i class="material-icons">add</i>{% trans "Optional invividual starting Snap! File" %}</div>
                 <div class="collapsible-body">
 
             {% csrf_token %}
             {{ file_form.as_p }}
             <p> {% trans "If you don't upload a file, a standard blank snap project will be your starting point." %}</p>
-            <p> {% trans "If you have already done something and want to continue working on it in smerge, or if you want to provide
+            <p> {% blocktrans %} If you have already done something and want to continue working on it in smerge, or if you want to provide
             your students with a template, custom blocks or something like that, upload your individual starting
-            point here (You get this file through "File > Export project" in Snap!)." %} </p>
+            point here (You get this file through File - Export project in Snap!). {% endblocktrans %} </p>
             <p> {% trans "You can add further initial nodes via drag and drop afterwards." %}</p></div>
             </li>
         </ul>
