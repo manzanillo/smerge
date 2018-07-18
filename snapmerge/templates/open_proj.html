@@ -16,7 +16,12 @@
             <span class="card-title">Open an existing project</span>
             <div class="row">
                 <div class="input-field col s12">
-                    {{ form }}
+                    {{ form.pin.label_tag }}
+                    {{ form.pin }}
+                </div>
+                <div class="input-field col s12">
+                    {{ form.password.label_tag }}
+                    {{ form.password }}
                 </div>
             </div>
         </div>
