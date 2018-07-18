@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+
+{%block css %}
+<link rel="stylesheet" href="{% static "css/home.css" %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="valign-wrapper row open-box">
+  <div class="col card hoverable s10 pull-s1 m6 pull-m3 l4 pull-l4">
+      <div class="card-content">
+      <p>
+        This are your PIN and password, which you need to open your smerge-projects. It might be a good idea to keep
+        them somewhere, so you wont forget them!
+      </p>
+      <div class="center">
+      <p>
+         PIN: {{proj_pin}}
+      </p>
+      <p>
+          Password: {{proj_password}}
+      </p>
+      </div>
+      <div class="right-align">
+            <a class="waves-effect waves-light btn align-right", href="{% url 'proj' proj_id=proj_id %}">Ok</a>
+      </div>
+      </div>
+  </div>
+</div>
+
+
+{% endblock %}

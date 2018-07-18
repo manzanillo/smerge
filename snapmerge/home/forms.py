@@ -1,4 +1,5 @@
 from django import forms
 
 class OpenProjectForm(forms.Form):
-    project = forms.IntegerField(label='Project Identifier')
+    pin = forms.CharField(label='PIN', max_length=6)
+    password = forms.CharField(label='password')
