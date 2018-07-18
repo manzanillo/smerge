@@ -4,6 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from .xmltools import analyze_file, include_sync_button
+import uuid
+
 
 
 class Project(models.Model):
@@ -11,10 +13,14 @@ class Project(models.Model):
     picture = models.FileField(_("Picture"), null=True, blank=True)
     description = models.CharField(_("Description"), max_length=200,
                                    null=True, blank=True)
+    password = models.CharField(_("Password"), max_length=50)
+    pin = models.CharField(_("PIN"), max_length=6, unique=True)
+    id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
+
 
     @classmethod
     def create_and_save(cls, name, picture, description):
-        proj = cls.objects.create(name=name, picture=picture, description=description)
+        proj = cls.objects.create(name=name, picture=picture, description=description, password=password)
         proj.save()
         return proj
 
@@ -93,7 +99,7 @@ class SnapFile(File):
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'description']
+        fields = ['name', 'description', 'password']
 
 class SnapFileForm(ModelForm):
     class Meta:

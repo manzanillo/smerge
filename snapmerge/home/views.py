@@ -13,9 +13,18 @@ from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 from shutil import copyfile
+import random, string
+
+
+def generate_unique_PIN():
+    size = 6
+    pin = ''.join(random.choice(string.digits) for _ in range(size))
+    if Project.objects.filter(pin=pin):
+        return generate_unique_PIN()
+    return pin
+
 
 # Create your views here.
-
 class HomeView(View):
     def get(self, request):
         context = {
@@ -119,7 +128,9 @@ class CreateProjectView(View):
         print(request.POST)
         if snap_form.is_valid() and proj_form.is_valid():
 
-            proj_instance = proj_form.save()
+            proj_instance = proj_form.save(commit=False)
+            proj_instance.pin = generate_unique_PIN()
+            proj_instance.save()
 
             # verify xml if a snap file is given, else insert blank snap file
             if request.FILES:
@@ -148,11 +159,25 @@ class CreateProjectView(View):
             snap_file.xml_job()
 
 
-            return redirect('proj', proj_id=proj_instance.id)
+            return redirect('info', proj_id=proj_instance.id)
 
         else:
             messages.warning(request, 'Invalid Data.')
             return HttpResponseRedirect(reverse('create_proj'))
+
+
+
+class InfoView(View):
+    def get(self, request, proj_id):
+        proj = Project.objects.filter(id=proj_id).first()
+        if proj is None:
+            raise Http404
+        context = {
+            'proj_pin': proj.pin,
+            'proj_password': proj.password,
+            'proj_id': proj.id
+        }
+        return render(request, 'info_proj.html', context)
 
 
 class OpenProjectView(View):
@@ -166,11 +191,14 @@ class OpenProjectView(View):
     def post(self, request):
         form = OpenProjectForm(request.POST)
         if form.is_valid():
-            proj_id = request.POST['project']
-            if(Project.objects.filter(id = proj_id)):
-                return redirect('proj', proj_id=proj_id)
+            proj_pin = request.POST['pin']
+            proj_password = request.POST['password']
+            proj = Project.objects.get(pin=proj_pin)
+            print(proj)
+            if(proj and proj.password == proj_password):
+                return redirect('proj', proj_id=proj.id)
             else:
-                messages.warning(request, 'No such project.')
+                messages.warning(request, 'No such project or wrong password')
         else:
             messages.warning(request, 'Invalid Data.')
 
