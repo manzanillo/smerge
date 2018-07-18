@@ -9,7 +9,7 @@
 {% block content %}
 <div class="jumbotron vertical-center">
   <div class="container text-center">
-    <h1> Create a new Project</h1>
+    <h1> {% trans "Create a new Project" %}</h1>
     <form action="{% url 'create_proj' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{ proj_form.as_p }}
@@ -20,11 +20,11 @@
 
             {% csrf_token %}
             {{ file_form.as_p }}
-            <p>If you don't upload a file, a standard blank snap project will be your starting point.</p>
-            <p> If you have already done something and want to continue working on it in smerge, or if you want to provide
+            <p> {% trans "If you don't upload a file, a standard blank snap project will be your starting point." %}</p>
+            <p> {% trans "If you have already done something and want to continue working on it in smerge, or if you want to provide
             your students with a template, custom blocks or something like that, upload your individual starting
-            point here (You get this file through "File > Export project" in Snap!). </p>
-            <p> You can add further initial nodes via drag and drop afterwards.</p></div>
+            point here (You get this file through "File > Export project" in Snap!)." %} </p>
+            <p> {% trans "You can add further initial nodes via drag and drop afterwards." %}</p></div>
             </li>
         </ul>
 

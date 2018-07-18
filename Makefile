@@ -18,5 +18,11 @@ migrate:
 test:
 	pipenv run python $(BASE)/manage.py test $(APPNAME) --settings=$(SETTINGS)
 
+translation_DE:
+	pipenv run python $(BASE)/manage.py makemessages -l de --settings=$(SETTINGS)
+
+compile_translations:
+	pipenv run python $(BASE)/manage.py compilemessages --settings=$(SETTINGS)
+
 
 

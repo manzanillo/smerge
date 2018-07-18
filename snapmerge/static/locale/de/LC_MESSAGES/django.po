@@ -1,0 +1,169 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-07-18 14:24+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: snapmerge/home/forms.py:5 snapmerge/home/models.py:17
+msgid "PIN"
+msgstr "PIN"
+
+#: snapmerge/home/forms.py:6
+msgid "password (optional)"
+msgstr "Passwort (optional)"
+
+#: snapmerge/home/models.py:12
+msgid "Name"
+msgstr "Name"
+
+#: snapmerge/home/models.py:13
+msgid "Picture"
+msgstr "Bild"
+
+#: snapmerge/home/models.py:14 snapmerge/home/models.py:43
+msgid "Description"
+msgstr "Beschreibung"
+
+#: snapmerge/home/models.py:16
+msgid "Password"
+msgstr "Passwort"
+
+#: snapmerge/home/models.py:18
+msgid "Id"
+msgstr "Id"
+
+#: snapmerge/home/models.py:31
+msgid "Project"
+msgstr "Projekt"
+
+#: snapmerge/home/models.py:32
+msgid "Projects"
+msgstr "Projekte"
+
+#: snapmerge/home/models.py:39
+msgid "Timestamp"
+msgstr "Zeitstempel"
+
+#: snapmerge/home/models.py:45
+msgid "number_scripts"
+msgstr "Anzahl Skripte"
+
+#: snapmerge/home/models.py:46
+msgid "number_sprites"
+msgstr "Anzahl Sprites"
+
+#: snapmerge/home/models.py:54
+msgid "File"
+msgstr "Datei"
+
+#: snapmerge/home/models.py:56
+msgid "user"
+msgstr "Benutzer"
+
+#: snapmerge/home/models.py:94
+msgid "SnapFile"
+msgstr "SnapDatei"
+
+#: snapmerge/home/models.py:95
+msgid "SnapFiles"
+msgstr "SnapDateien"
+
+#: snapmerge/home/models.py:104 snapmerge/home/models.py:115
+msgid "Description (optional)"
+msgstr "Beschreibung (optional)"
+
+#: snapmerge/home/models.py:105
+msgid "Password (optional)"
+msgstr "Passwort (optional"
+
+#: snapmerge/home/models.py:114
+msgid "File (optional)"
+msgstr "Datei (optional)"
+
+#: snapmerge/home/views.py:111
+msgid "OK"
+msgstr "OK"
+
+#: snapmerge/home/views.py:146 snapmerge/home/views.py:232
+msgid "No valid xml."
+msgstr "Ungültiges XML"
+
+#: snapmerge/home/views.py:166 snapmerge/home/views.py:211
+msgid "Invalid Data."
+msgstr "Ungültige Daten"
+
+#: snapmerge/home/views.py:203 snapmerge/home/views.py:207
+msgid "No such project or wrong password"
+msgstr "Es existiert kein Projekt mit dieser PIN oder falsches Passwort"
+
+#: snapmerge/home/views.py:233 snapmerge/home/views.py:240
+msgid "no valid xml"
+msgstr "Ungültiges XML"
+
+#: snapmerge/templates/create_proj.html:12
+msgid "Create a new Project"
+msgstr "Erstelle ein neues Projekt"
+
+#: snapmerge/templates/create_proj.html:23
+msgid ""
+"If you don't upload a file, a standard blank snap project will be your "
+"starting point."
+msgstr "Wenn du keine Datei hochlädst, wird ein leeres Snap-Projekt als Ausgangspunkt verwendet."
+
+#: snapmerge/templates/create_proj.html:27
+msgid "You can add further initial nodes via drag and drop afterwards."
+msgstr "Weitere Startpunkte kannst du später via drag and drop hinzufügen"
+
+#: snapmerge/templates/home.html:19
+msgid "Open existing"
+msgstr "Projekt öffnen"
+
+#: snapmerge/templates/home.html:23
+msgid "Create new"
+msgstr "Projekt erstellen"
+
+#: snapmerge/templates/info_proj.html:25
+msgid "PIN:"
+msgstr "PIN:"
+
+#: snapmerge/templates/info_proj.html:29
+msgid "Password:"
+msgstr "Passwort:"
+
+#: snapmerge/templates/open_proj.html:16
+msgid "Open an existing project"
+msgstr "Öffne ein existierendes Projekt"
+
+#: snapmerge/templates/open_proj.html:29
+msgid "Back"
+msgstr "Zurück"
+
+#: snapmerge/templates/open_proj.html:30
+msgid "Submit"
+msgstr "Los"
+
+#: snapmerge/templates/proj.html:21
+msgid "Drop here!"
+msgstr "Hier ablegen!"
+
+#: snapmerge/templates/proj.html:26
+msgid "cancel merge"
+msgstr "merge abbrechen"
+
+#: snapmerge/templates/proj.html:30
+msgid "merge"
+msgstr "mergen"

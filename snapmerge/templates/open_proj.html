@@ -13,7 +13,7 @@
         {% csrf_token %}
 
         <div class="card-content">
-            <span class="card-title">Open an existing project</span>
+            <span class="card-title">{% trans "Open an existing project" %}</span>
             <div class="row">
                 <div class="input-field col s12">
                     {{ form.pin.label_tag }}
@@ -26,8 +26,8 @@
             </div>
         </div>
         <div class="card-action right-align">
-            <a onclick="history.back();" class="btn-flat grey-text waves-effect">Back</a>
-            <input type="submit" class="btn waves-effect waves-light" value="Submit">
+            <a onclick="history.back();" class="btn-flat grey-text waves-effect">{% trans "Back" %}</a>
+            <input type="submit" class="btn waves-effect waves-light" value="{% trans "Submit" %}">
         </div>
     </form>
   </div>
