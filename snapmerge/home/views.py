@@ -34,8 +34,9 @@ class HomeView(View):
 
 class ProjectView(View):
     def get(self, request, proj_id):
-        proj = Project.objects.filter(id=proj_id).first()
-        if proj is None:
+        try:
+            proj = Project.objects.get(id=proj_id)
+        except Project.DoesNotExist:
             raise Http404
         files = [obj.as_dict() for obj in SnapFile.objects.filter(project = proj_id)]
         context = {
@@ -169,8 +170,9 @@ class CreateProjectView(View):
 
 class InfoView(View):
     def get(self, request, proj_id):
-        proj = Project.objects.filter(id=proj_id).first()
-        if proj is None:
+        try:
+            proj = Project.objects.get(id=proj_id)
+        except Project.DoesNotExist:
             raise Http404
         context = {
             'proj_pin': proj.pin,
@@ -193,12 +195,18 @@ class OpenProjectView(View):
         if form.is_valid():
             proj_pin = request.POST['pin']
             proj_password = request.POST['password']
-            proj = Project.objects.get(pin=proj_pin)
-            print(proj)
-            if(proj and proj.password == proj_password):
-                return redirect('proj', proj_id=proj.id)
-            else:
+
+            try:
+                proj = Project.objects.get(pin=proj_pin)
+
+            except Project.DoesNotExist:
                 messages.warning(request, 'No such project or wrong password')
+                return HttpResponseRedirect(reverse('open_proj'))
+
+            if proj.password and proj.password != proj_password:
+                messages.warning(request, 'No such project or wrong password')
+            else:
+                return redirect('proj', proj_id=proj.id)
         else:
             messages.warning(request, 'Invalid Data.')
 
