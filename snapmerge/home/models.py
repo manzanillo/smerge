@@ -13,7 +13,7 @@ class Project(models.Model):
     picture = models.FileField(_("Picture"), null=True, blank=True)
     description = models.CharField(_("Description"), max_length=200,
                                    null=True, blank=True)
-    password = models.CharField(_("Password"), max_length=50)
+    password = models.CharField(_("Password"), max_length=50, null=True, blank=True)
     pin = models.CharField(_("PIN"), max_length=6, unique=True)
     id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -100,8 +100,17 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'description', 'password']
+        labels = {
+            'description': _('Description (optional)'),
+            'password': _('Password (optional)'),
+        }
+
 
 class SnapFileForm(ModelForm):
     class Meta:
         model = SnapFile
         fields = ['file', 'description']
+        labels = {
+            'file': _('File (optional)'),
+            'description': _('Description (optional)'),
+        }
