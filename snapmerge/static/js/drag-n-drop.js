@@ -19,7 +19,6 @@ function upload(evt) {
     evt.stopPropagation();
     evt.preventDefault();
 
-    console.log(evt)
     $('#drop-info').hide()
 
     // getFirst (and only) file from FileList
@@ -34,7 +33,7 @@ function upload(evt) {
     xhttp.send(formData);
 
     xhttp.onreadystatechange = function() {
-    if (xhttp.readyState === 4) {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
       new_node = xhttp.responseText;
       // Include Node in Graph w/o reloading
 
@@ -62,10 +61,12 @@ function upload(evt) {
 function handleDragOver(evt) {
     evt.stopPropagation();
     evt.preventDefault();
-    $('#drop-info').show()
+    $('#drop-info').show();
 }
 
 // Initialisiere Drag&Drop EventListener
-var dropZone = document.getElementById('drop-zone');
-dropZone.addEventListener('dragover', handleDragOver);
+var dropZone = document.getElementById('drop-info');
+document.body.addEventListener('dragover', handleDragOver);
+document.body.addEventListener('drop', function(evt){ evt.stopPropagation(); evt.preventDefault(); $('#drop-info').hide();});
+
 dropZone.addEventListener('drop', upload);

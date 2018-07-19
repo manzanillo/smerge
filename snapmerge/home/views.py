@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from .models import ProjectForm, SnapFileForm, SnapFile, Project
 from .forms import OpenProjectForm
@@ -231,21 +231,19 @@ class AddFileToProjectView(View):
         if request.FILES:
             snap_file = request.FILES['file']
             snap_description = ''
-            print(snap_file)
 
             try:
                 ET.fromstring(snap_file.read())
 
             except ET.ParseError:
-                 messages.warning(request, _('No valid xml.'))
-                 return JsonResponse({'message': _('no valid xml')})
+                 return HttpResponseBadRequest({'message': _('no valid xml')})
 
             snap_file = SnapFile.create_and_save(file=snap_file, project=proj, description=snap_description)
             snap_file.xml_job()
 
             return JsonResponse(snap_file.as_dict())
         else:
-            return JsonResponse({'message': _('no valid xml')})
+            return HttpResponseBadRequest({'message': _('no valid xml')})
 
 
 class ChangePasswordView(View):
