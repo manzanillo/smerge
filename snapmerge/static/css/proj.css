@@ -9,6 +9,7 @@
     margin-left: 2px;
     font-size: 1.2rem;
     width: 30%;
+    margin-top:10px;
 
 }
 
@@ -59,5 +60,5 @@
 
 .smerge-menu-modal-footer {
     background-color: #fff !important;
-    margin-top: -10px
+    margin-top: -10px;
 }
