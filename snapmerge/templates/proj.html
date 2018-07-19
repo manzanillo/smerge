@@ -77,13 +77,44 @@
                 </div>
                 </div>
             </form>
-            <div class="divider smerge-modal-divider"></div>
 
-            <p>Delete Project</p>
-            <form class="col s12" action="{% url 'delete_proj' proj_id=proj_id %}" method="post" enctype="multipart/form-data">
+            <p>{% trans "Change Project Name" %}</p>
+            <form class="col s12" action="{% url 'change_name' proj_id=proj_id %}" method="post">
                 {% csrf_token %}
                 <div class="row">
-                <div class="col s4">{% trans "Insert your password to delete this project." %} </div>
+
+                <div class="input-field col s8">
+                    <input id="name" name="name" type="text" value="{{ proj_name }}" class="validate">
+                    <label class="active" for="name">{% trans "Title" %}</label>
+                </div>
+                <div class="input-field col s4">
+                    <input type ="submit" class ="btn waves-effect waves-light" value = "{% trans "Change" %}"/>
+                </div>
+                </div>
+            </form>
+
+
+
+            <p>{% trans "Change Project Description" %}</p>
+            <form class="col s12" action="{% url 'change_description' proj_id=proj_id %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+
+                <div class="input-field col s8">
+                    <input id="descr" name="descr" type="text" value="{{ proj_description }}" class="validate">
+                    <label class="active" for="descr">{% trans "Description" %}</label>
+                </div>
+                <div class="input-field col s4">
+                    <input type ="submit" class ="btn waves-effect waves-light" value = "{% trans "Change" %}"/>
+                </div>
+                </div>
+            </form>
+
+            <p>{% trans "Delete Project" %}</p>
+            <form class="col s12" action="{% url 'delete_proj' proj_id=proj_id %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                <div class="col s4 input-field">{% trans "Insert your password to delete this project." %} </div>
                 <div class="input-field col s4">
                     <input id="password" name="password" type="password" class="validate">
                     <label class="active" for="password">{% trans "Password" %}</label>

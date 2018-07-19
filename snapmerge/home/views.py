@@ -271,6 +271,56 @@ class ChangePasswordView(View):
 
 
 
+class ChangeNameView(View):
+
+    def post(self, request, proj_id):
+
+        name = request.POST.get('name', None)
+
+        if name != None:
+
+            try:
+                proj = Project.objects.get(id=proj_id)
+                proj.name = name
+                proj.save()
+
+            except:
+                messages.warning(request, _('Invalid Data.'))
+                return HttpResponseRedirect(reverse('proj'))
+
+            messages.success(request, _('Project Name changed'))
+            return redirect('proj', proj_id=proj.id) #JsonResponse({'message': _('Password changed')})
+
+        else:
+            messages.warning(request, _('Invalid Data.'))
+            return HttpResponseRedirect(reverse('proj'))
+
+
+class ChangeDescriptionView(View):
+
+    def post(self, request, proj_id):
+
+        descr = request.POST.get('descr', None)
+
+        if descr != None:
+
+            try:
+                proj = Project.objects.get(id=proj_id)
+                proj.description = descr
+                proj.save()
+
+            except:
+                messages.warning(request, _('Invalid Data.'))
+                return HttpResponseRedirect(reverse('proj'))
+
+            messages.success(request, _('Description changed'))
+            return redirect('proj', proj_id=proj.id)  # JsonResponse({'message': _('Password changed')})
+
+        else:
+            messages.warning(request, _('Invalid Data.'))
+            return HttpResponseRedirect(reverse('proj'))
+
+
 
 class DeleteProjectView(View):
 

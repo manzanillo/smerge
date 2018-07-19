@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^sync/(?P<proj_id>[-\w]+)$', views.SyncView.as_view(), name='sync'),
     url(r'add/(?P<proj_id>[-\w]+)$',views.AddFileToProjectView.as_view(), name='add'),
     url(r'change_password/(?P<proj_id>[-\w]+)$', views.ChangePasswordView.as_view(), name='change_passwd'),
+    url(r'change_name/(?P<proj_id>[-\w]+)$', views.ChangeNameView.as_view(), name='change_name'),
+    url(r'change_description/(?P<proj_id>[-\w]+)$', views.ChangeDescriptionView.as_view(), name='change_description'),
     url(r'delete_proj/(?P<proj_id>[-\w]+)$', views.DeleteProjectView.as_view(), name='delete_proj')
 ]

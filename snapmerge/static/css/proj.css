@@ -53,14 +53,11 @@
 }
 
 
-.smerge-modal-divider {
-    margin-bottom: 10px;
-}
-
 #menu {
     background-color: #fff;
 }
 
 .smerge-menu-modal-footer {
     background-color: #fff !important;
+    margin-top: -10px
 }
