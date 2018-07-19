@@ -2,3 +2,34 @@ html, body, .open-box {
   height: 100%;
 }
 
+.smerge-image {
+    display: none;
+    height: 250px;
+    position: absolute;
+
+}
+
+@media only screen and (min-width: 600px) {
+    .smerge-image {
+        right: 0%;
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .smerge-image {
+        right: 10%;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .smerge-image {
+        right: 15%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .smerge-image {
+        right: 30%;
+    }
+}
