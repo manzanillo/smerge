@@ -32,6 +32,13 @@ class HomeView(View):
         return render(request, 'home.html', context)
 
 
+class HowToView(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'how_to.html', context)
+
+
 class ProjectView(View):
     def get(self, request, proj_id):
         try:
