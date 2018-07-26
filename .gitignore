@@ -65,7 +65,8 @@ typings/
 **/__pycache__/**
 
 #media
-snapmerge/media/
+snapmerge/media/*
 
 #db
 **/db.sqlite3
+*.sqlite3
