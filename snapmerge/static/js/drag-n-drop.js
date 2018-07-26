@@ -50,7 +50,7 @@ function upload(evt) {
             },
         });
 
-        window.cy.layout({name: 'breadthfirst'}).run()
+        window.cy.layout({name: 'dagre'}).run()
     }
   }
 
