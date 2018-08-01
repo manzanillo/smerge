@@ -3,8 +3,9 @@ from django.views.generic import View
 from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from .models import ProjectForm, SnapFileForm, SnapFile, Project
-from .forms import OpenProjectForm
+from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
+from django.template.loader import render_to_string
 import json
 from .xmltools import merge
 from django.views.decorators.csrf import csrf_exempt
@@ -12,6 +13,7 @@ from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
+from django.core.mail import send_mail
 from shutil import copyfile
 import random, string
 
@@ -134,7 +136,7 @@ class CreateProjectView(View):
     def post(self, request):
         snap_form = SnapFileForm(request.POST, request.FILES, prefix='snap_form')
         proj_form = ProjectForm(request.POST, request.FILES, prefix='proj_form')
-        print(request.POST)
+
         if snap_form.is_valid() and proj_form.is_valid():
 
             proj_instance = proj_form.save(commit=False)
@@ -220,6 +222,48 @@ class OpenProjectView(View):
 
         return HttpResponseRedirect(reverse('open_proj'))
 
+
+
+class RestoreInfoView(View):
+    def get(self, request):
+        form = RestoreInfoForm()
+        context = {
+            'form' : form
+        }
+        return render(request, 'restore_info.html', context)
+
+    def post(self, request):
+        form = RestoreInfoForm(request.POST)
+        email = request.POST['email']
+        if form.is_valid():
+            projects = Project.objects.filter(email=email)
+
+            content_text = render_to_string('mail/mail.txt', {'projects': projects})
+            content_html = render_to_string('mail/mail.html', {'projects': projects})
+
+            try:
+                send_mail(
+                    _('Your smerge.org projects'),
+                    content_text,
+                    'noreply@smerge.org',
+                    [email],
+                    fail_silently=False,
+                    html_message=content_html,
+                )
+
+            except Exception as e:
+                print(e)
+                messages.warning(request, _('Something went wrong, please try again or contact us'))
+                return HttpResponseRedirect(reverse('restore_info'))
+
+
+            messages.success(request, _('Mail sent'))
+            return HttpResponseRedirect(reverse('open_proj'))
+
+        else:
+            messages.warning(request, _('Invalid Data.'))
+
+        return HttpResponseRedirect(reverse('restore_info'))
 
 
 class AddFileToProjectView(View):

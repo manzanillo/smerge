@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^open_project/$', views.OpenProjectView.as_view(), name='open_proj'),
+    url(r'^restore_info/$', views.RestoreInfoView.as_view(), name='restore_info'),
     url(r'^how_to/$', views.HowToView.as_view(), name='how_to'),
     url(r'^create_project/$', views.CreateProjectView.as_view(), name='create_proj'),
     url(r'^(?P<proj_id>[-\w]+)$', views.ProjectView.as_view(), name='proj'),

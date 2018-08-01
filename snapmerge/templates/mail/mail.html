@@ -1,0 +1,40 @@
+
+{% load i18n staticfiles %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+
+
+<p>
+
+
+<p>{% trans "Hello," %}</p>
+<p>{% trans "you forgot one of your passwords or PINs of the smerge-projects you are registered with this mail-address. In the following you find all your projects and the corresponding information you need to login." %}  </p>
+
+        {% for entry in projects %}
+            <p>
+    <table style="text-align: left;">
+      <tr>
+        <th>{% trans "Project" %}</th>         <td>{{ entry.name }}</td>
+      </tr>
+      <tr>
+        <th>{% trans "Description" %}</th>         <td>{{ entry.description }}</td>
+      </tr>
+      <tr>
+        <th>{% trans "PIN" %}</th>          <td>{{ entry.pin }}</td>
+      </tr>
+      <tr>
+        <th>{% trans "Password" %}</th>        <td>{{ entry.password }}</td>
+      </tr>
+    </table>
+            </p>
+
+       {% endfor %}
+
+<p> {% trans "So what are you waiting for? Smerge on on smerge.org!" %} </p>
+
+
+</body>
+</html>

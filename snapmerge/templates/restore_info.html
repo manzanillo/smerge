@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+
+{%block css %}
+<link rel="stylesheet" href="{% static "css/home.css" %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="valign-wrapper row open-box">
+  <div class="col card hoverable s10 pull-s1 m6 pull-m3 l4 pull-l4">
+    <form action="{% url 'restore_info' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="card-content">
+            <span class="card-title">{% trans "Enter your email to restore all you're projects passwords or PINs" %}</span>
+            <div class="row">
+                <div class="input-field col s12">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                </div>
+            </div>
+        </div>
+        <div class="card-action right-align">
+            <a onclick="history.back()" class="btn-flat grey-text waves-effect">{% trans "Back" %}</a>
+            <input type="submit" class="btn waves-effect waves-light" value="{% trans "Submit" %}">
+        </div>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -16,6 +16,7 @@ class Project(models.Model):
     password = models.CharField(_("Password"), max_length=50, null=True, blank=True)
     pin = models.CharField(_("PIN"), max_length=6, unique=True)
     id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(_("Email"), null=True, blank=True)
 
 
     @classmethod
@@ -99,10 +100,11 @@ class SnapFile(File):
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'description', 'password']
+        fields = ['name', 'description', 'password', 'email']
         labels = {
             'description': _('Description (optional)'),
             'password': _('Password (optional)'),
+            'email': _('email (optional), for restoring password and pin'),
         }
 
 

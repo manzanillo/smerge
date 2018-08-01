@@ -1,0 +1,16 @@
+{% load i18n staticfiles %}
+{% trans "Hello," %}
+{% trans "you forgot one of your passwords or PINs of the smerge-projects you are registered with this mail-address. In the following you find all your projects and the corresponding information you need to login." %}
+
+{% for entry in projects %}
+
+{% trans "Project: " %}{{ entry.name }}
+{% trans "Description: " %}{{ entry.description }}
+{% trans "PIN: " %}{{ entry.pin }}
+{% trans "Password: " %}{{ entry.password }}
+
+{% endfor %}
+
+{% trans "So what are you waiting for? Smerge on on smerge.org!" %}
+
+
