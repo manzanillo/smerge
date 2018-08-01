@@ -118,7 +118,7 @@ def merge(file1, file2, output, file1_description, file2_description):
 
 def include_sync_button(file, proj_id, me):
 
-    with open(settings.BASE_DIR + '/static/snap/sync_block.xml', 'r') as f:
+    with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
         sync_file = f.read()
         sync_file = sync_file.replace('{{url}}', settings.URL + '/sync/'+str(proj_id) + '?ancestor='+str(me))
         sync_button = ET.fromstring(sync_file)
