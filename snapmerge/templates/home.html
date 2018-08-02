@@ -11,25 +11,33 @@
 
 <div class="vertical-center">
   <div class="row">
-    <h1 class="col s12 center-align">smerge</h1>
-      <img class="smerge-image" src="{% static "icon/icon.png" %}" />
+      <div class="col s0 m1 l3 xl3"></div>
+      <div class="col s12 m7 l4 xl4">
+        <h1 class="center-align">smerge</h1>
 
-    <div class="center-align">
+        <div class="center-align">
 
-        <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
-            {% trans "Open existing" %}
-        </a>
+            <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
+                {% trans "Open existing" %}
+            </a>
 
-        <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn waves-effect waves-light">
-            {% trans "Create new" %}
-        </a>
+            <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn waves-effect waves-light">
+                {% trans "Create new" %}
+            </a>
 
-    </div>
-    <div class="center-align">
-        <a href="{% url 'how_to' %}" id="howto-btn" name="how_to" class="waves-effect btn-flat">
-            {% trans "How to smerge..." %}
-        </a>
-    </div>
+        </div>
+        <div class="center-align">
+            <a href="{% url 'how_to' %}" id="howto-btn" name="how_to" class="waves-effect btn-flat">
+                {% trans "How to smerge..." %}
+            </a>
+        </div>
+          
+          
+      </div>
+      <div class="col s0 m3 l2 xl3">
+        <img class="smerge-image" src="{% static "icon/icon.png" %}" />
+      </div>
+
   </div>
 </div>
 

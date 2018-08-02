@@ -3,9 +3,8 @@ html, body, .open-box {
 }
 
 .smerge-image {
-    display: none;
     height: 250px;
-    position: absolute;
+    display:  block;
 
 }
 
@@ -15,27 +14,8 @@ html, body, .open-box {
     margin-top: .5em;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (max-width: 600px) {
     .smerge-image {
-        right: 0%;
-        display: block;
-    }
-}
-
-@media only screen and (min-width: 800px) {
-    .smerge-image {
-        right: 10%;
-    }
-}
-
-@media only screen and (min-width: 1000px) {
-    .smerge-image {
-        right: 15%;
-    }
-}
-
-@media only screen and (min-width: 1200px) {
-    .smerge-image {
-        right: 20%;
+        display: none;
     }
 }
