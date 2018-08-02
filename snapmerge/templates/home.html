@@ -9,7 +9,7 @@
 {% block content %}
 
 
-<div class="vertical-center">
+<div class="vertical-center ">
   <div class="row">
     <h1 class="col s12 center-align">smerge</h1>
       <img class="smerge-image" src="{% static "icon/icon.png" %}" />
@@ -31,6 +31,22 @@
         </a>
     </div>
   </div>
+
+
+
+
 </div>
 
+<footer>
+<p>
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge" title="{% trans "Find us on GitHub" %}">    <i class="tiny material-icons">explore</i> {%  trans  "Find us on GitHub" %}</a>
+
+        <a href="mailto:smerge@i2.cs.fau.de" title="{% trans "Contact us" %}"> <i class="tiny material-icons">email</i> {% trans "Contact us" %}</a>
+</p>
+</footer>
+
 {% endblock %}
+
+
+
+
