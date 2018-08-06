@@ -57,11 +57,11 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
 
                 # add comment
                 ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
-                        ' from commit: ' + ref_description + ' </comment>'
+                        ' from post: ' + ref_description + ' </comment>'
                 get_first_child(reference_child).append(ET.fromstring(ref_comment))
 
                 subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
-                                  '" >' +' from commit: ' + subject_description + '</comment>'
+                                  '" >' +' from post: ' + subject_description + '</comment>'
                 get_first_child(subject_child).append(ET.fromstring(subject_comment))
 
                 # change position of subject_child so that they are not on top of each other
