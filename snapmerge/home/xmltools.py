@@ -91,9 +91,13 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                 xml_merge(reference_child, subject_child, ref_description, subject_description)
         else:
             if subject_child.tag == 'sprite':
+                print(subject_child.get('name'))
+                print('\n\n\n\n')
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
                         xml_merge(reference_child, subject_child, ref_description, subject_description)
+                        return
+                reference_element.append(subject_child)
             else:
                 reference_element.append(subject_child)
     return
@@ -124,9 +128,9 @@ def include_sync_button(file, proj_id, me):
         sync_button = ET.fromstring(sync_file)
 
         target = ET.parse(settings.BASE_DIR + file)
-        if target.find(".//block-definition[@s='sync']") != None:
+        if target.find(".//block-definition[@s='Post to smerge...']") != None:
             for block_definition in target.findall(".//blocks"):
-                for sync_block in block_definition.findall(".//block-definition[@s='sync']"):
+                for sync_block in block_definition.findall(".//block-definition[@s='Post to smerge...']"):
                     block_definition.remove(sync_block)
         target.find('blocks').append(sync_button)
         with open(settings.BASE_DIR + file, 'wb') as x:
