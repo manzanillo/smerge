@@ -14,7 +14,7 @@
 <h1 class="project-heading" data-proj-id={{proj_id}}>
     {{proj_name}}
     <br/>
-    <div class="project-description"> {{proj_description}}</div>
+    <div class="project-description"> {{proj_description | default_if_none:""}}</div>
 </h1>
 <div id="drop-zone">
     <div id="drop-info">
@@ -101,7 +101,7 @@
                 <div class="row">
 
                 <div class="input-field col s8">
-                    <input id="descr" name="descr" type="text" value="{{ proj_description }}" class="validate">
+                    <input id="descr" name="descr" type="text" value="{{ proj_description | default_if_none:"" }}" class="validate">
                     <label class="active" for="descr">{% trans "Description" %}</label>
                 </div>
                 <div class="input-field col s4">
