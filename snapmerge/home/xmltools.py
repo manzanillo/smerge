@@ -50,11 +50,10 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
             reference_child = hashed_elements[subject_hash]
 
             if ref_tag == 'scripts' and subject_tag == 'scripts' \
-                    and ET.tostring(reference_element) == ET.tostring(subject_element):
+                    and ET.tostring(reference_child) == ET.tostring(subject_child):
                 # both scripts are identical
                 pass
             elif ref_tag == 'scripts' and subject_tag == 'scripts':
-
                 # add comment
                 ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
                         ' from post: ' + ref_description + ' </comment>'
@@ -91,8 +90,6 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                 xml_merge(reference_child, subject_child, ref_description, subject_description)
         else:
             if subject_child.tag == 'sprite':
-                print(subject_child.get('name'))
-                print('\n\n\n\n')
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
                         xml_merge(reference_child, subject_child, ref_description, subject_description)
