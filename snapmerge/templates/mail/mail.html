@@ -20,13 +20,13 @@
         <th>{% trans "Project" %}</th>         <td>{{ entry.name }}</td>
       </tr>
       <tr>
-        <th>{% trans "Description" %}</th>         <td>{{ entry.description }}</td>
+        <th>{% trans "Description" %}</th>         <td>{{ entry.description | default_if_none:"" }}</td>
       </tr>
       <tr>
-        <th>{% trans "PIN" %}</th>          <td>{{ entry.pin }}</td>
+        <th>{% trans "PIN" %}</th>          <td>{{ entry.pin  }}</td>
       </tr>
       <tr>
-        <th>{% trans "Password" %}</th>        <td>{{ entry.password }}</td>
+        <th>{% trans "Password" %}</th>        <td>{{ entry.password | default_if_none:"" }}</td>
       </tr>
     </table>
             </p>

@@ -5,9 +5,9 @@
 {% for entry in projects %}
 
 {% trans "Project: " %}{{ entry.name }}
-{% trans "Description: " %}{{ entry.description }}
+{% trans "Description: " %}{{ entry.description | default_if_none:"" }}
 {% trans "PIN: " %}{{ entry.pin }}
-{% trans "Password: " %}{{ entry.password }}
+{% trans "Password: " %}{{ entry.password | default_if_none:"" }}
 
 {% endfor %}
 
