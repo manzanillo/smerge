@@ -33,7 +33,7 @@ def element_hash_children(ele):
 def get_first_child(ele): return ele[0] if len(ele) else None
 
 
-def xml_merge(reference_element, subject_element, ref_description='', subject_description=''):
+def xml_merge(reference_element, subject_element, ref_description='', subject_description='', ancestor=None):
     """
     Recursively traverses a subject XML tree and a reference tree, merging the
     subject tree Elements into the reference tree if the subject Element is
@@ -100,7 +100,7 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
     return
 
 
-def merge(file1, file2, output, file1_description, file2_description):
+def merge(file1, file2, output, file1_description, file2_description, ancestor= None):
     """
     
     :param file1: first XML document path
@@ -112,7 +112,18 @@ def merge(file1, file2, output, file1_description, file2_description):
     ref_root = ref.getroot()
     subject = ET.parse(settings.BASE_DIR + file2)
     subject_root = subject.getroot()
-    xml_merge(ref_root, subject_root, ref_description= file1_description, subject_description= file2_description)
+
+    if ancestor != None:
+        with open(settings.BASE_DIR + ancestor ,'r') as ancestor_file:
+            xml_merge(ref_root,
+                      subject_root,
+                      ref_description= file1_description,
+                      subject_description= file2_description,
+                      ancestor= ancestor_file.read()
+            )
+    else:
+        xml_merge(ref_root, subject_root, ref_description=file1_description, subject_description=file2_description)
+
     with open(settings.BASE_DIR + output, 'wb') as f:
         ref.write(f)
 
