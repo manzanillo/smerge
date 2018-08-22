@@ -78,31 +78,30 @@ class MergeView(View):
                 file1 = files.pop()
                 file2 = files.pop()
                 ancestor_id = gca(file1.id, file2.id, parents=parents)
-                print(ancestor_id)
                 ancestor = None
                 if ancestor_id != None:
-                    ancestor = SnapFile.objects.get(id=ancestor_id)
+                    ancestor = SnapFile.objects.get(id=ancestor_id).get_media_path()
 
                 merge(file1= file1.get_media_path(),
                       file2= file2.get_media_path(),
                       output= new_file.get_media_path(),
                       file1_description= file1.description,
                       file2_description= file2.description,
-                      ancestor= ancestor.get_media_path()
+                      ancestor= ancestor
                       )
                 for file in files:
                     ancestor_id = gca(ancestor_id, file.id, parents=parents)
                     print(ancestor_id)
                     ancestor = None
                     if ancestor_id != None:
-                        ancestor = SnapFile.objects.get(id=ancestor_id)
+                        ancestor = SnapFile.objects.get(id=ancestor_id).get_media_path()
 
                     merge(file1= new_file.get_media_path(),
                           file2= file.get_media_path(),
                           output= new_file.get_media_path(),
                           file1_description= file1.description,
                           file2_description= file2.description,
-                          ancestor= ancestor.get_media_path()
+                          ancestor= ancestor
                           )
                 new_file.xml_job()
                 return JsonResponse(new_file.as_dict())

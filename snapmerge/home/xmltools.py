@@ -34,6 +34,8 @@ def get_first_child(ele): return ele[0] if len(ele) else None
 
 
 def xml_merge(reference_element, subject_element, ref_description='', subject_description='', ancestor=None):
+
+
     """
     Recursively traverses a subject XML tree and a reference tree, merging the
     subject tree Elements into the reference tree if the subject Element is
@@ -54,45 +56,54 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                 # both scripts are identical
                 pass
             elif ref_tag == 'scripts' and subject_tag == 'scripts':
-                # add comment
-                ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
-                        ' from post: ' + ref_description + ' </comment>'
-                get_first_child(reference_child).append(ET.fromstring(ref_comment))
 
-                subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
-                                  '" >' +' from post: ' + subject_description + '</comment>'
-                get_first_child(subject_child).append(ET.fromstring(subject_comment))
-
-                # change position of subject_child so that they are not on top of each other
-                x_pos = int(subject_child.get('x'))
-
-                x_delta = 250
-                duplicate = False
-                found_place = False
-
-                while not found_place:
-                    for other_script in list(reference_element):
-                        found_place = True
-                        # script is already copied somewhere else
-                        if ''.join(ET.tostring(e, 'unicode') for e in subject_child.iter()) \
-                                == ''.join(ET.tostring(e, 'unicode') for e in other_script.iter()):
-                            duplicate = True
-                        # there is another script here
-                        if int(other_script.get('x')) == x_pos + x_delta and other_script.get('y') == subject_child.get('y'):
-                            found_place = False
-                            x_delta += 250
-
-                if not duplicate:
-                    subject_child.set('x', str(x_pos + x_delta))
+                if ancestor is not None and ET.tostring(reference_child) in ET.tostring(ancestor):
+                    reference_element.remove(reference_child)
                     reference_element.append(subject_child)
+                else:
+                    # add comment
+                    ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
+                                  ' from post: ' + ref_description + ' </comment>'
+                    get_first_child(reference_child).append(ET.fromstring(ref_comment))
+
+                    subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
+                                      '" >' + ' from post: ' + subject_description + '</comment>'
+                    get_first_child(subject_child).append(ET.fromstring(subject_comment))
+
+                    # change position of subject_child so that they are not on top of each other
+                    x_pos = int(subject_child.get('x'))
+
+                    x_delta = 250
+                    duplicate = False
+                    found_place = False
+
+                    while not found_place:
+                        for other_script in list(reference_element):
+                            found_place = True
+                            # script is already copied somewhere else
+                            if ''.join(ET.tostring(e, 'unicode') for e in subject_child.iter()) \
+                                    == ''.join(ET.tostring(e, 'unicode') for e in other_script.iter()):
+                                duplicate = True
+                            # there is another script here
+                            if int(other_script.get('x')) == x_pos + x_delta and other_script.get(
+                                    'y') == subject_child.get('y'):
+                                found_place = False
+                                x_delta += 250
+
+                    if not duplicate:
+                        subject_child.set('x', str(x_pos + x_delta))
+                        reference_element.append(subject_child)
+
+                    # the files have a common ancestor
+
 
             else:
-                xml_merge(reference_child, subject_child, ref_description, subject_description)
+                xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
         else:
             if subject_child.tag == 'sprite':
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
-                        xml_merge(reference_child, subject_child, ref_description, subject_description)
+                        xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
                         return
                 reference_element.append(subject_child)
             else:
@@ -113,13 +124,15 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor= 
     subject = ET.parse(settings.BASE_DIR + file2)
     subject_root = subject.getroot()
 
-    if ancestor != None:
-        with open(settings.BASE_DIR + ancestor ,'r') as ancestor_file:
-            xml_merge(ref_root,
-                      subject_root,
-                      ref_description= file1_description,
-                      subject_description= file2_description,
-                      ancestor= ancestor_file.read()
+    if ancestor is not None:
+
+        ancestor = ET.parse(settings.BASE_DIR + ancestor)
+        ancestor_root = ancestor.getroot()
+        xml_merge(ref_root,
+                  subject_root,
+                  ref_description= file1_description,
+                  subject_description= file2_description,
+                  ancestor= ancestor_root
             )
     else:
         xml_merge(ref_root, subject_root, ref_description=file1_description, subject_description=file2_description)
