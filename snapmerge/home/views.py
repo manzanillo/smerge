@@ -16,7 +16,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from shutil import copyfile
 import random, string
-
+from .ancestors import gca
 
 def generate_unique_PIN():
     size = 6
@@ -63,7 +63,12 @@ class MergeView(View):
         file_ids = request.GET.getlist('file')
         proj = Project.objects.get(id=proj_id)
         files = list(SnapFile.objects.filter(id__in=file_ids, project=proj_id))
-        if len(files)>1:
+        all_files = list(SnapFile.objects.filter(project = proj_id))
+        parents = { all_files[i].id :
+                    [ anc.id for anc in list(all_files[i].ancestors.all()) ]
+                          for i in range(len(all_files)) }
+
+        if len(files) > 1:
 
             new_file = SnapFile.create_and_save(project=proj, ancestors=file_ids, file='')
             new_file.file = str(new_file.id) + '.xml'
@@ -72,18 +77,32 @@ class MergeView(View):
             try:
                 file1 = files.pop()
                 file2 = files.pop()
+                ancestor_id = gca(file1.id, file2.id, parents=parents)
+                ancestor = None
+                if ancestor_id != None:
+                    ancestor = SnapFile.objects.get(id=ancestor_id).get_media_path()
+
                 merge(file1= file1.get_media_path(),
                       file2= file2.get_media_path(),
                       output= new_file.get_media_path(),
                       file1_description= file1.description,
-                      file2_description= file2.description)
+                      file2_description= file2.description,
+                      ancestor= ancestor
+                      )
                 for file in files:
+                    ancestor_id = gca(ancestor_id, file.id, parents=parents)
+                    print(ancestor_id)
+                    ancestor = None
+                    if ancestor_id != None:
+                        ancestor = SnapFile.objects.get(id=ancestor_id).get_media_path()
+
                     merge(file1= new_file.get_media_path(),
                           file2= file.get_media_path(),
                           output= new_file.get_media_path(),
                           file1_description= file1.description,
-                          file2_description= file2.description
-                         )
+                          file2_description= file2.description,
+                          ancestor= ancestor
+                          )
                 new_file.xml_job()
                 return JsonResponse(new_file.as_dict())
 
