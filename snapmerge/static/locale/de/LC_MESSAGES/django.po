@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-18 15:23+0000\n"
+"POT-Creation-Date: 2019-04-10 09:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: snapmerge/home/forms.py:5 snapmerge/home/models.py:17
+#: snapmerge/templates/mail/mail.html:26
 msgid "PIN"
 msgstr "PIN"
 
-#: snapmerge/home/forms.py:6 snapmerge/home/models.py:105
+#: snapmerge/home/forms.py:6 snapmerge/home/models.py:106
 msgid "Password (optional)"
 msgstr "Passwort (optional)"
+
+#: snapmerge/home/forms.py:10 snapmerge/home/models.py:19
+msgid "Email"
+msgstr "Email"
 
 #: snapmerge/home/models.py:12
 msgid "Name"
@@ -34,11 +39,13 @@ msgstr "Name"
 msgid "Picture"
 msgstr "Bild"
 
-#: snapmerge/home/models.py:14 snapmerge/home/models.py:43
+#: snapmerge/home/models.py:14 snapmerge/home/models.py:44
+#: snapmerge/templates/mail/mail.html:23 snapmerge/templates/proj.html:105
 msgid "Description"
 msgstr "Beschreibung"
 
-#: snapmerge/home/models.py:16
+#: snapmerge/home/models.py:16 snapmerge/templates/mail/mail.html:29
+#: snapmerge/templates/proj.html:62 snapmerge/templates/proj.html:120
 msgid "Password"
 msgstr "Passwort"
 
@@ -46,69 +53,121 @@ msgstr "Passwort"
 msgid "Id"
 msgstr "Id"
 
-#: snapmerge/home/models.py:31
+#: snapmerge/home/models.py:32 snapmerge/templates/mail/mail.html:20
 msgid "Project"
 msgstr "Projekt"
 
-#: snapmerge/home/models.py:32
+#: snapmerge/home/models.py:33
 msgid "Projects"
 msgstr "Projekte"
 
-#: snapmerge/home/models.py:39
+#: snapmerge/home/models.py:40
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: snapmerge/home/models.py:45
+#: snapmerge/home/models.py:46
 msgid "number_scripts"
 msgstr "Anzahl Skripte"
 
-#: snapmerge/home/models.py:46
+#: snapmerge/home/models.py:47
 msgid "number_sprites"
 msgstr "Anzahl Sprites"
 
-#: snapmerge/home/models.py:54
+#: snapmerge/home/models.py:55
 msgid "File"
 msgstr "Datei"
 
-#: snapmerge/home/models.py:56
+#: snapmerge/home/models.py:57
 msgid "user"
 msgstr "Benutzer"
 
-#: snapmerge/home/models.py:94
+#: snapmerge/home/models.py:95
 msgid "SnapFile"
 msgstr "SnapDatei"
 
-#: snapmerge/home/models.py:95
+#: snapmerge/home/models.py:96
 msgid "SnapFiles"
 msgstr "SnapDateien"
 
-#: snapmerge/home/models.py:104 snapmerge/home/models.py:115
+#: snapmerge/home/models.py:105 snapmerge/home/models.py:117
 msgid "Description (optional)"
 msgstr "Beschreibung (optional)"
 
-#: snapmerge/home/models.py:114
+#: snapmerge/home/models.py:107
+msgid "email (optional), for restoring password and pin"
+msgstr "Email (optional), zur Wiederherstellung von Zugangsdaten"
+
+#: snapmerge/home/models.py:116
 msgid "File (optional)"
 msgstr "Datei (optional)"
 
-#: snapmerge/home/views.py:111
+#: snapmerge/home/views.py:140
 msgid "OK"
 msgstr "OK"
 
-#: snapmerge/home/views.py:146 snapmerge/home/views.py:232
+#: snapmerge/home/views.py:175
 msgid "No valid xml."
 msgstr "Ungültiges XML"
 
-#: snapmerge/home/views.py:166 snapmerge/home/views.py:211
+#: snapmerge/home/views.py:195 snapmerge/home/views.py:240
+#: snapmerge/home/views.py:283 snapmerge/home/views.py:356
+#: snapmerge/home/views.py:363 snapmerge/home/views.py:381
+#: snapmerge/home/views.py:388
 msgid "Invalid Data."
 msgstr "Ungültige Daten"
 
-#: snapmerge/home/views.py:203 snapmerge/home/views.py:207
+#: snapmerge/home/views.py:232 snapmerge/home/views.py:236
+#: snapmerge/home/views.py:325 snapmerge/home/views.py:405
 msgid "No such project or wrong password"
 msgstr "Es existiert kein Projekt mit dieser PIN oder falsches Passwort"
 
-#: snapmerge/home/views.py:233 snapmerge/home/views.py:240
+#: snapmerge/home/views.py:265
+msgid "Your smerge.org projects"
+msgstr "Deine smerge.org Projekte"
+
+#: snapmerge/home/views.py:275
+msgid "Something went wrong, please try again or contact us"
+msgstr "Etwas ist schief gelaufen, versuche es erneut oder kontaktiere uns"
+
+#: snapmerge/home/views.py:279
+msgid "Mail sent"
+msgstr "Mail gesendet"
+
+#: snapmerge/home/views.py:302 snapmerge/home/views.py:309
 msgid "no valid xml"
 msgstr "Ungültiges XML"
+
+#: snapmerge/home/views.py:331
+#, fuzzy
+#| msgid "Password"
+msgid "Password changed"
+msgstr "Passwort geändert"
+
+#: snapmerge/home/views.py:335 snapmerge/home/views.py:414
+#, fuzzy
+#| msgid "Password"
+msgid "Wrong password"
+msgstr "Falsches Passwort"
+
+#: snapmerge/home/views.py:338 snapmerge/home/views.py:417
+msgid "something went wrong"
+msgstr "Etwas ist schief gelaufen"
+
+#: snapmerge/home/views.py:359
+msgid "Project Name changed"
+msgstr "Projektname geändert"
+
+#: snapmerge/home/views.py:384
+#, fuzzy
+#| msgid "Description"
+msgid "Description changed"
+msgstr "Beschreibung geändert"
+
+#: snapmerge/home/views.py:410
+#, fuzzy
+#| msgid "Project"
+msgid "Project deleted"
+msgstr "Projekt gelöschht"
 
 #: snapmerge/templates/create_proj.html:12
 msgid "Create a new Project"
@@ -134,20 +193,308 @@ msgid ""
 "that, upload your individual starting\n"
 "            point here (You get this file through File - Export project in "
 "Snap!). "
-msgstr "Wenn du an einem bestehenden Projekt weiterarbeiten möchtest, oder deinen Schülerinnen und Schülern eine Vorlage zur Vefügung (z.B. mit eigenen Blöcken o.ä.)"
-" stellen willst, lade die entsprechende Snap-Datei hier hoch. Diese Datei erhälst du via Datei - Projekt exportieren aus Snap! "
+msgstr ""
+"Wenn du an einem bestehenden Projekt weiterarbeiten möchtest, oder deinen "
+"Schülerinnen und Schülern eine Vorlage zur Vefügung (z.B. mit eigenen "
+"Blöcken o.ä.) stellen willst, lade die entsprechende Snap-Datei hier hoch. "
+"Diese Datei erhälst du via Datei - Projekt exportieren aus Snap! "
 
 #: snapmerge/templates/create_proj.html:27
 msgid "You can add further initial nodes via drag and drop afterwards."
 msgstr "Weitere Startpunkte kannst du später via drag and drop hinzufügen"
 
-#: snapmerge/templates/home.html:19
+#: snapmerge/templates/home.html:21
 msgid "Open existing"
 msgstr "Projekt öffnen"
 
-#: snapmerge/templates/home.html:23
+#: snapmerge/templates/home.html:25
 msgid "Create new"
 msgstr "Projekt erstellen"
+
+#: snapmerge/templates/home.html:31
+msgid "How to smerge..."
+msgstr "How to smerge"
+
+#: snapmerge/templates/home.html:50
+msgid "Find us on GitHub"
+msgstr "Auf Github öffnen"
+
+#: snapmerge/templates/home.html:52 snapmerge/templates/how_to.html:1211
+msgid "Contact us"
+msgstr "Kontaktiere uns"
+
+#: snapmerge/templates/how_to.html:1108
+msgid "How to Smerge..."
+msgstr "How to Smerge..."
+
+#: snapmerge/templates/how_to.html:1112
+msgid ""
+"\n"
+"            Smerge is a version control system for the block-based language "
+"<em>Snap!</em>, which enables collaboration\n"
+"            and tinkering in the classroom. It&#39;s tailored to novice "
+"programmers and therefore easy to use for\n"
+"            teachers\n"
+"            and students. What we wanted to avoid was making a feature-"
+"overloaded git clone.\n"
+"        "
+msgstr ""
+"\n"
+"            Smerge ist ein Versionskontrollsystem für die blockbasierte "
+"Sprache <em>Snap!</em>, die Kollaboration\n"
+"            und Tinkering im Klassenzimmer ermöglicht. Smerge ist an die "
+"Bedürfnisse von Programmeieranfängerinnen und -anfänger angepasst und "
+"            dementsprechend leicht zu nutzen von Schuelerinnen und Schülern "
+"            wie Lehrkräften. Wir wollten es vermeiden, eine überladene Kopie "
+"von git zu erstellen.\n"
+"        "
+
+#: snapmerge/templates/how_to.html:1122
+msgid "Our Badger&#39;s sett"
+msgstr "Unser Dachsbau"
+
+#: snapmerge/templates/how_to.html:1123
+msgid ""
+"\n"
+"        <p>A Badger works on his sett, containing a lot of tunnels and "
+"chambers, with all his family members and is\n"
+"            gradually expanding it over years.</p>\n"
+"        <p>We proceed in exactly the same way while programming: our "
+"progress and the further development of the program\n"
+"            from version to version we can also present as a &quot;"
+"badger&#39;s sett&quot;. In this example, we are\n"
+"            developing asteroids, the game in which you have to destroy all "
+"asteroids with your starship before they hit\n"
+"            the\n"
+"            ship.</p>\n"
+"    "
+msgstr ""
+"\n"
+"        <p>Ein Dachs arbeitet an seinem Bau, der viele Tunnel und Kammern "
+"enthält, nicht alleine, sondern zusammen mit all seinen Familienmitgliedern."
+"            So bauen sie den Bau über Jahre immer weiter aus.</p>\n"
+"        <p>Beim Programmieren gehen wir genau so vor: "
+"Den Fortschritt und die Weiterentwicklung unseres Programms "
+" von Version zu Version können wir uns auch als &quot;"
+"Dachsbau&quot; vorstellen. Im Beispiel im Bild entwickeln wir "
+"            Asteroids, das Spiel, bei dem alle Asteroiden "
+"zerstört werden müssen, bevor diese das Raumschiff treffen."
+"            "
+"</p>"
+""
+
+#: snapmerge/templates/how_to.html:1133
+msgid ""
+"\n"
+"        <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? We "
+"can open any of the versions directly in\n"
+"            <em>Snap!</em>\n"
+"            with a double click. Then we can work on our project, as we are "
+"used to.</p>\n"
+"        <p> To save the changes in <em>Snap!</em>, we have to &quot;"
+"post&quot; them to our badgers sett. This is done\n"
+"            via the\n"
+"            corresponding block post to &quot;smerge...&quot; under "
+"Variables. We can summarize what we have done; this\n"
+"            way,\n"
+"            we will find this particular version of your project later "
+"again. Then we can find them in our badgers sett\n"
+"            on\n"
+"            smerge.org.</p>\n"
+"    "
+msgstr ""
+"\n"
+"        <p>Aber wie kommen wir zu so einem „Dachsbau“? "
+"Wir können jede der Versionen direkt in Snap! mit einem Doppelklick öffnen."
+"Dann können wir an unserem Projekt arbeiten, wie wir es gewohnt sind.\n "
+"Um die Änderungen in Snap! zu speichern, müssen wir sie in unserem Dachsbau"
+" &quot;posten&quot;. Dies geschieht über den entsprechenden "
+" &quot;Post to smerge….“ Block unter Variablen. Wir können dann "
+" zusammenfassen, was wir getan haben. So werden wir diese spezielle "
+" Version in unserem Projekt später auf smerge.org wiederfinden."
+
+#: snapmerge/templates/how_to.html:1146
+msgid "Working alone is boring..."
+msgstr "Alleine zu arbeiten ist langweilig..."
+
+#: snapmerge/templates/how_to.html:1147
+msgid ""
+"\n"
+"        <p>A badger does not work alone on his construction, but with the "
+"whole family. Everyone digs their own\n"
+"            tunnel.</p>\n"
+"        <p>It&#39;s the same with us when we work collaboratively. We split "
+"the work: You work on making the spaceship\n"
+"            able\n"
+"            to shoot, while a friend or team member handles the asteroids "
+"flying through space.</p>\n"
+"    "
+msgstr ""
+"\n"
+"Ein Dachs arbeitet nicht allein an seinem Bau, sondern mit der ganzen "
+"Familie. Jeder gräbt seinen eigenen Tunnel. \n Bei uns ist es genauso, "
+"wenn wir gemeinsam arbeiten. Wir teilen die Arbeit auf: "
+"Du arbeitest daran, das Raumschiff schussfähig zu machen, während ein Freund "
+"oder Teammitglied die Asteroiden durch den Weltraum fliegt."
+
+
+#: snapmerge/templates/how_to.html:1155
+msgid ""
+"\n"
+"        <p>As you see, everyone is working is his own &quot;tunnels&quot;!</"
+"p>\n"
+"        <p>At a certain point the badger wants to meet up with his family "
+"members. In the same way, we want to merge our\n"
+"            changes to the project. Eventually we want to play the game, "
+"don&#39;t we?</p>\n"
+"        <p>Therefore we simply click the &quot;merge&quot;-Button in the "
+"bottom right, tick all the versions we would\n"
+"            like\n"
+"            to merge, and click yes to confirm.</p>\n"
+"    "
+msgstr ""
+"\n"
+"Wie du siehst, arbeitet jeder wie sein eigener &quot;Tunnel&quot;!\n"
+"An einem bestimmten Punkt will sich der Dachs mit seinen Familienmitgliedern "
+" treffen. Ebenso wollen wir unsere Änderungen im Projekt zusammenführen. "
+"Irgendwann wollen wir das Spiel ja auch spielen, nicht wahr? \n \n"
+" Dazu klicken wir einfach auf den „Merge“-Button unten rechts, kreuzen alle "
+"Versionen an, die wir zusammenführen möchten, und bestätigen mit Ja."
+
+#: snapmerge/templates/how_to.html:1164
+msgid ""
+"\n"
+"        <p>Now we will find a new version, with all changes merged. But what "
+"happens if more than one made changes to\n"
+"            the\n"
+"            same script? If such a situation occurs, we will have to "
+"manually choose with version we want to keep:</p>\n"
+"    "
+msgstr ""
+"\n"
+"Wie du siehst, arbeitet jeder wie sein eigener &quot;Tunnel&quot;! \n"
+" An einem bestimmten Punkt will sich der Dachs mit seinen Familienmitgliedern "
+"treffen. Ebenso wollen wir unsere Änderungen im Projekt zusammenführen. "
+"Irgendwann wollen wir das Spiel ja auch spielen, nicht wahr?\n "
+"Dazu klicken wir einfach auf den „Merge“-Button unten rechts, "
+"kreuzen alle Versionen an, die wir zusammenführen möchten, "
+" und bestätigen mit Ja."
+
+#: snapmerge/templates/how_to.html:1170
+msgid "Go back if you made a mistake"
+msgstr "Gehe zurück, wenn du einen Fehler gemacht hast"
+
+#: snapmerge/templates/how_to.html:1171
+msgid ""
+"\n"
+"        <p>Sometimes the badger abandons one tunnel, e.g. due to a lack of "
+"stability. He then has to go back and up in\n"
+"            his\n"
+"            sett, and work on from a different chamber. In the same way, "
+"sometimes we have to go back to an older\n"
+"            version,\n"
+"            e.g. because we made some mistakes or tried something that "
+"didn&#39;t really work out. In order to do so, we\n"
+"            simply open the version we want to rever to, open it in <em>Snap!"
+"</em> by double-clicking, and work on from\n"
+"            there. This way, we will get a new &quot;tunnel&quot;.</p>\n"
+"    "
+msgstr ""
+"\n"
+"Manchmal verlässt der Dachs einen Tunnel, z.B. wegen mangelnder Stabilität."
+" Dann muss er in seinem Bau hin und her gehen und von einer anderen Kammer "
+"aus weiterarbeiten. Auf die gleiche Weise müssen wir manchmal auf eine ältere"
+" Version zurückgreifen, z.B. weil wir einige Fehler gemacht oder etwas "
+"ausprobiert haben, was nicht wirklich funktioniert hat. "
+"Dazu öffnen wir einfach die Version, auf die wir zurückgehen möchten, "
+"öffnen sie in Snap! durch Doppelklick und arbeiten von dort aus weiter."
+" Auf diese Weise erhalten wir einen neuen &quot;Tunnel&quot;."
+
+#: snapmerge/templates/how_to.html:1181
+msgid "Built for teachers and the classroom"
+msgstr "Entwickelt für Lehrpersonen und das Klassenzimmer"
+
+#: snapmerge/templates/how_to.html:1182
+msgid ""
+"\n"
+"        <p>What does Smerge offer you and how it can help with teaching?</"
+"p>\n"
+"        <ul>\n"
+"            <li>enabling collaboration for project-based learning with "
+"<em>Snap!</em></li>\n"
+"            <li>all the data is always available and automatically backed "
+"up, so no more &quot;I forgot my stuff at home&quot;\n"
+"                or &quot;my partner is ill, i can&#39;t work&quot; from your "
+"students.\n"
+"            </li>\n"
+"            <li>set up templates in the sense of &quot;code skeletons&quot;, "
+"where you can supply your students with\n"
+"                custom\n"
+"                blocks, some code pieces already in place, ...\n"
+"                You can even add further templates via drag and drop.\n"
+"            </li>\n"
+"            <li>the development process is always visible, to your students "
+"as well as to you. This allows for assessing\n"
+"                individual contribution and giving individual feedback.\n"
+"            </li>\n"
+"            <li>you see the version history and are able to revert changes "
+"and go back to old versions, which enables\n"
+"                tinkering and playing around in a risk-free enviroment.\n"
+"            </li>\n"
+"        </ul>\n"
+"    "
+msgstr ""
+"\n"
+"<p>Was bietet Smerge und wie kann es beim Unterrichten helfen?</p>\n"
+"<ul>\n"
+"<li>Smerge ermöglicht die Zusammenarbeit für projektbasiertes Lernen mit Snap!"
+"</li>\n"
+"<li>Alle Daten sind immer verfügbar und werden automatisch gesichert, "
+"so dass es kein &quot;Ich habe meine Sachen zu Hause vergessen&quot; oder "
+"&quot;Mein Partner ist krank, ich kann nicht arbeiten&quot; mehr von Seiten "
+"der Schülerinnen und Schülern gibt. </li> \n"
+"<li>Es können Vorlagen im Sinne von &quot;Codeskeletten&quot; einrichten, "
+"mit denen Sie Ihre Schülerinnen und Schülern mit benutzerdefinierten Blöcken, "
+"einigen bereits vorhandenen Codeteilen, usw. zur Verfügung gestellt werden "
+"können. </li>\n"
+"<li>Weitere Vorlagen können sogar via Drag & Drop hinzugefügt werden.</li>\n"
+"<li>Der Entwicklungsprozess ist immer sichtbar, sowohl für Ihre Schülerinnen "
+"und Schüler als auch für Sie. Dies ermöglicht es, den individuellen Beitrag "
+"zu bewerten und individuelles Feedback zu geben.</li>\n"
+"<li>Sie sehen die Versionshistorie und können Änderungen rückgängig machen "
+"und zu alten Versionen zurückkehren, was das Basteln und Tinkern in einer "
+"risikofreien Umgebung ermöglicht.</li>\n"
+"</ul>\n"
+"    "
+
+#: snapmerge/templates/how_to.html:1202
+msgid "Login and User Management"
+msgstr "Login und User Management"
+
+#: snapmerge/templates/how_to.html:1203
+msgid ""
+"\n"
+"        <p>We deliberatly have no dedicated user accounts or management. "
+"Instead, to secure your projects, you will get\n"
+"            a\n"
+"            PIN on the time of project creation, and can set a password. If "
+"you add your e-mail at project creation, you\n"
+"            can\n"
+"            retrieve your PIN and password for all your projects if you "
+"forgot them.</p>\n"
+"    "
+msgstr ""
+"\n"
+"Wir haben bewusst keine eigenen Benutzerkonten oder ein eigenes "
+"Usermanagement. Um Ihre Projekte zu sichern, erhalten Sie stattdessen bei "
+"der Projekterstellung eine PIN und können ein Passwort festlegen. Wenn "
+"Sie Ihre E-Mail bei der Projekterstellung hinterlegen, können Sie bei "
+"Bedarf PIN und Passwort für all Ihre Projekte abrufen, falls Sie diese "
+"vergessen haben."
+
+#: snapmerge/templates/how_to.html:1210
+msgid "Want to know more or need help?"
+msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
 
 #: snapmerge/templates/info_proj.html:14
 msgid ""
@@ -178,15 +525,57 @@ msgstr "PIN:"
 msgid "Password:"
 msgstr "Passwort:"
 
+#: snapmerge/templates/mail/mail.html:13 snapmerge/templates/mail/mail.txt:2
+msgid "Hello,"
+msgstr "Hallo,"
+
+#: snapmerge/templates/mail/mail.html:14 snapmerge/templates/mail/mail.txt:3
+msgid ""
+"you forgot one of your passwords or PINs of the smerge-projects you are "
+"registered with this mail-address. In the following you find all your "
+"projects and the corresponding information you need to login."
+msgstr "Du hast das Passwort oder die Punk deiner Smerge-Projekte vergessen?"
+"Im Folgenden findest du all deine Projekte"
+" und die dazugehörigen Login Informationen."
+
+#: snapmerge/templates/mail/mail.html:36 snapmerge/templates/mail/mail.txt:14
+msgid "So what are you waiting for? Smerge on on smerge.org!"
+msgstr "Worauf wartest du? Leg los auf smerge.org!"
+
+#: snapmerge/templates/mail/mail.txt:7
+#, fuzzy
+#| msgid "Project"
+msgid "Project: "
+msgstr "Projekt: "
+
+#: snapmerge/templates/mail/mail.txt:8
+#, fuzzy
+#| msgid "Description"
+msgid "Description: "
+msgstr "Beschreibung: "
+
+#: snapmerge/templates/mail/mail.txt:9
+#, fuzzy
+#| msgid "PIN:"
+msgid "PIN: "
+msgstr "PIN: "
+
+#: snapmerge/templates/mail/mail.txt:10
+#, fuzzy
+#| msgid "Password:"
+msgid "Password: "
+msgstr "Passwort: "
+
 #: snapmerge/templates/open_proj.html:16
 msgid "Open an existing project"
 msgstr "Öffne ein existierendes Projekt"
 
 #: snapmerge/templates/open_proj.html:29
-msgid "Back"
-msgstr "Zurück"
+msgid "I forgot my Password or PIN"
+msgstr "Ich habe Passwort oder PIN vergessen"
 
 #: snapmerge/templates/open_proj.html:30
+#: snapmerge/templates/restore_info.html:26
 msgid "Submit"
 msgstr "Los"
 
@@ -201,6 +590,75 @@ msgstr "merge abbrechen"
 #: snapmerge/templates/proj.html:30
 msgid "merge"
 msgstr "mergen"
+
+#: snapmerge/templates/proj.html:49
+#, fuzzy
+#| msgid "Projects"
+msgid "Project Settings"
+msgstr "Projekte"
+
+#: snapmerge/templates/proj.html:51
+#, fuzzy
+#| msgid "Project"
+msgid "Project Pin"
+msgstr "Projekt Pin"
+
+#: snapmerge/templates/proj.html:68
+#, fuzzy
+#| msgid "Password"
+msgid "Old Password"
+msgstr "Altes Passwort"
+
+#: snapmerge/templates/proj.html:73
+#, fuzzy
+#| msgid "Password"
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: snapmerge/templates/proj.html:76 snapmerge/templates/proj.html:91
+#: snapmerge/templates/proj.html:108
+msgid "Change"
+msgstr "Ändern"
+
+#: snapmerge/templates/proj.html:81
+#, fuzzy
+#| msgid "Create a new Project"
+msgid "Change Project Name"
+msgstr "Erstelle ein neues Projekt"
+
+#: snapmerge/templates/proj.html:88
+msgid "Title"
+msgstr "Titel"
+
+#: snapmerge/templates/proj.html:98
+msgid "Change Project Description"
+msgstr "Ändere Projektbeschreibung"
+
+#: snapmerge/templates/proj.html:113
+#, fuzzy
+#| msgid "Project"
+msgid "Delete Project"
+msgstr "Lösche Projekt"
+
+#: snapmerge/templates/proj.html:117
+msgid "Insert your password to delete this project."
+msgstr "Gib dein Passwort ein, um dieses Projekt zu löschen."
+
+#: snapmerge/templates/proj.html:123
+msgid "Delete"
+msgstr "Löschen"
+
+#: snapmerge/templates/proj.html:132
+msgid "Close"
+msgstr "Schließen"
+
+#: snapmerge/templates/restore_info.html:16
+msgid "Enter your email to restore all you're projects passwords or PINs"
+msgstr "Gib deine Emailadresse ein, um deine Projektpasswörter und PINs wiederzuerlangen."
+
+#: snapmerge/templates/restore_info.html:25
+msgid "Back"
+msgstr "Zurück"
 
 #~ msgid "password (optional)"
 #~ msgstr "Passwort (optional)"
