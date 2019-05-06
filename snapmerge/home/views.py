@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
-from .models import ProjectForm, SnapFileForm, SnapFile, Project
+from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
@@ -415,3 +415,15 @@ class DeleteProjectView(View):
                 return redirect('proj', proj_id=proj.id) #JsonResponse({'message': _('Something went wrong')})
 
         return JsonResponse({'message': _('something went wrong')})
+
+class ToggleColorView(View):
+    def get(self, request, proj_id, file_id):
+        file = SnapFile.objects.get(id=file_id, project=proj_id)
+        if file.color == default_color():
+            new_color = '#FF0000'
+        else:
+            new_color = default_color()
+        file.color = new_color
+        file.save()
+        print(new_color)
+        return HttpResponse(new_color)
