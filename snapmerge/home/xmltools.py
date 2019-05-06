@@ -98,6 +98,7 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
             else:
                 xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
         else:
+            # there is a difference
             if subject_child.tag == 'stage':
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'stage':
@@ -107,8 +108,14 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                                                           + ' other stage name was: ' + subject_child.get('name') \
                                                           + '</comment>'
                         reference_child.find('scripts').append(ET.fromstring(different_name_of_stage_comment))
-
-            if subject_child.tag == 'sprite':
+            elif subject_child.tag == 'watcher':
+                already_exists = False
+                for reference_child in list(reference_element):
+                    if reference_child.tag == 'watcher' and subject_child.get('var') == reference_child.get('var'):
+                            already_exists = True
+                if not already_exists:
+                    reference_element.append(subject_child)
+            elif subject_child.tag == 'sprite':
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
                         xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
