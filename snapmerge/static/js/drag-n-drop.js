@@ -32,7 +32,8 @@ function upload(evt) {
                 timestamp : new_node.timestamp,
                 number_scripts : new_node.number_scripts,
                 number_sprites : new_node.number_sprites,
-                ancestors : new_node.ancestors
+                ancestors : new_node.ancestors,
+                color: new_node.color
             },
         });
         window.cy.layout({name: 'dagre'}).run()

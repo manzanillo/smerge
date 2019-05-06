@@ -93,8 +93,7 @@ class SnapFile(File):
             'timestamp': str(self.timestamp),
             'number_scripts' : self.number_scripts,
             'number_sprites': self.number_sprites,
-            'color': self.color,
-            'default_color': default_color()
+            'color': self.color
         }
 
     def get_media_path(self):

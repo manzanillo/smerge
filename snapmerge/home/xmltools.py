@@ -62,14 +62,18 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                     # add comment
                     ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
                                   ' from post: ' + ref_description + ' </comment>'
-                    get_first_child(reference_child).append(ET.fromstring(ref_comment))
+
+                    if reference_child.tag != 'comment':
+                        get_first_child(reference_child).append(ET.fromstring(ref_comment))
+
 
                     subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
                                       '" >' + ' from post: ' + subject_description + '</comment>'
-                    get_first_child(subject_child).append(ET.fromstring(subject_comment))
+                    if reference_child.tag != 'comment':
+                        get_first_child(subject_child).append(ET.fromstring(subject_comment))
 
                     # change position of subject_child so that they are not on top of each other
-                    x_pos = int(subject_child.get('x'))
+                    x_pos = int(float(subject_child.get('x')))
 
                     x_delta = 250
                     duplicate = False
@@ -83,7 +87,7 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                                     == ''.join(ET.tostring(e, 'unicode') for e in other_script.iter()):
                                 duplicate = True
                             # there is another script here
-                            if int(other_script.get('x')) == x_pos + x_delta and other_script.get(
+                            if int(float(other_script.get('x'))) == x_pos + x_delta and other_script.get(
                                     'y') == subject_child.get('y'):
                                 found_place = False
                                 x_delta += 250

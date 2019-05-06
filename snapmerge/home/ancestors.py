@@ -58,6 +58,9 @@ def generations(vertex, depth, parentcache):
 def gca(a, b, parents):
     pfunc = lambda x: parents[x]
 
+    if a is None or b is None:
+        return None
+
     depth, parentcache = depthf(a, b, pfunc)
 
     x = generations(a, depth, parentcache)
