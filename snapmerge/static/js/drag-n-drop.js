@@ -34,7 +34,7 @@ function upload(evt) {
 
     xhttp.onreadystatechange = function() {
     if (xhttp.readyState === 4 && xhttp.status === 200) {
-      new_node = xhttp.responseText;
+      new_node = JSON.parse(xhttp.responseText);
       // Include Node in Graph w/o reloading
 
       var eleNeu = window.cy.add({
@@ -49,7 +49,6 @@ function upload(evt) {
                 ancestors : new_node.ancestors
             },
         });
-
         window.cy.layout({name: 'dagre'}).run()
     }
   }
