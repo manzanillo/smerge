@@ -144,10 +144,12 @@
 
 
 {% block js %}
-
-<script src="{% static "js/dist/timeago.min.js" %}"></script>
-<script src="{% static "js/drag-n-drop.js" %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.8/cytoscape.js"></script>
+<script src="{% static "js/dist/cytoscape-cxtmenu.js" %}"></script>
+<script src="{% static "js/dist/timeago.min.js" %}"></script>
+<script src="{% static "js/cookie.js" %}"></script>
+<script src="{% static "js/drag-n-drop.js" %}"></script>
+<script src="{% static "js/right-click-menu.js" %}"></script>
 
 <!-- for testing with local version of cytoscape.js -->
 <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->

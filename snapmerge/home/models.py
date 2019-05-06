@@ -7,6 +7,9 @@ from .xmltools import analyze_file, include_sync_button
 import uuid
 
 
+def default_color():
+    return '#386561'
+
 
 class Project(models.Model):
     name = models.CharField(_("Name"), max_length=100)
@@ -45,9 +48,12 @@ class File(models.Model):
                                    null=True, blank=True)
     number_scripts = models.IntegerField(_("number_scripts"), default=0)
     number_sprites = models.IntegerField(_("number_sprites"), default=0)
+    color = models.CharField(_("color"), max_length=7, default=default_color())
+
 
     class Meta:
         abstract = True
+
 
 
 class SnapFile(File):
@@ -74,6 +80,7 @@ class SnapFile(File):
 
         self.save()
 
+
     def as_dict(self):
         ancestor_ids = [x.id for x in self.ancestors.all()]
         file_url = settings.MEDIA_URL + str(self.file)
@@ -85,7 +92,9 @@ class SnapFile(File):
             'file_url': file_url,
             'timestamp': str(self.timestamp),
             'number_scripts' : self.number_scripts,
-            'number_sprites': self.number_sprites
+            'number_sprites': self.number_sprites,
+            'color': self.color,
+            'default_color': default_color()
         }
 
     def get_media_path(self):

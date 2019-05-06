@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'change_password/(?P<proj_id>[-\w]+)$', views.ChangePasswordView.as_view(), name='change_passwd'),
     url(r'change_name/(?P<proj_id>[-\w]+)$', views.ChangeNameView.as_view(), name='change_name'),
     url(r'change_description/(?P<proj_id>[-\w]+)$', views.ChangeDescriptionView.as_view(), name='change_description'),
-    url(r'delete_proj/(?P<proj_id>[-\w]+)$', views.DeleteProjectView.as_view(), name='delete_proj')
+    url(r'delete_proj/(?P<proj_id>[-\w]+)$', views.DeleteProjectView.as_view(), name='delete_proj'),
+    url(r'^toggle_color/(?P<proj_id>[-\w]+)/(?P<file_id>[-\w]+)$', views.ToggleColorView.as_view(), name='toggle_color'),
 ]
