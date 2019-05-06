@@ -34,8 +34,6 @@ def get_first_child(ele): return ele[0] if len(ele) else None
 
 
 def xml_merge(reference_element, subject_element, ref_description='', subject_description='', ancestor=None):
-
-
     """
     Recursively traverses a subject XML tree and a reference tree, merging the
     subject tree Elements into the reference tree if the subject Element is
@@ -100,6 +98,16 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
             else:
                 xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
         else:
+            if subject_child.tag == 'stage':
+                for reference_child in list(reference_element):
+                    if reference_child.tag == 'stage':
+                        # we are only allowed to have one stage
+                        xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
+                        different_name_of_stage_comment = '<comment collapsed = "false"' + ' w = "150" >' \
+                                                          + ' other stage name was: ' + subject_child.get('name') \
+                                                          + '</comment>'
+                        reference_child.find('scripts').append(ET.fromstring(different_name_of_stage_comment))
+
             if subject_child.tag == 'sprite':
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
@@ -111,7 +119,7 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
     return
 
 
-def merge(file1, file2, output, file1_description, file2_description, ancestor= None):
+def merge(file1, file2, output, file1_description, file2_description, ancestor=None):
     """
     
     :param file1: first XML document path
@@ -130,10 +138,10 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor= 
         ancestor_root = ancestor.getroot()
         xml_merge(ref_root,
                   subject_root,
-                  ref_description= file1_description,
-                  subject_description= file2_description,
-                  ancestor= ancestor_root
-            )
+                  ref_description=file1_description,
+                  subject_description=file2_description,
+                  ancestor=ancestor_root
+                  )
     else:
         xml_merge(ref_root, subject_root, ref_description=file1_description, subject_description=file2_description)
 
@@ -142,10 +150,9 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor= 
 
 
 def include_sync_button(file, proj_id, me):
-
     with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
         sync_file = f.read()
-        sync_file = sync_file.replace('{{url}}', settings.URL + '/sync/'+str(proj_id) + '?ancestor='+str(me))
+        sync_file = sync_file.replace('{{url}}', settings.URL + '/sync/' + str(proj_id) + '?ancestor=' + str(me))
         sync_button = ET.fromstring(sync_file)
 
         target = ET.parse(settings.BASE_DIR + file)
@@ -159,9 +166,8 @@ def include_sync_button(file, proj_id, me):
 
 
 def analyze_file(file):
-
     ref = ET.parse(settings.BASE_DIR + file)
     root = ref.getroot()
-    scripts = len(root.findall(".//script")) - 1 # without sync block
+    scripts = len(root.findall(".//script")) - 1  # without sync block
     sprites = len(root.findall(".//sprite"))
     return [scripts, sprites]
