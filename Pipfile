@@ -9,6 +9,8 @@ verify_ssl = true
 
 django = "*"
 django-cors-headers = "*"
+django-compressor = "*"
+django-compressor-toolkit = "*"
 
 
 [dev-packages]
