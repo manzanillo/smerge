@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'home',
+    'compressor',
+    'compressor_toolkit',
 ]
 
 MIDDLEWARE = [
@@ -76,13 +78,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 WSGI_APPLICATION = 'config.wsgi.application'
 
 #cors
-CORS_ORIGIN_WHITELIST = (
-    'snap.berkeley.edu',
-    'berkeley.edu',
-    'localhost:8000',
-    '127.0.0.1:9000',
-    'smerge.org'
-)
+CORS_ORIGIN_WHITELIST = [
+    'https://snap.berkeley.edu',
+    'https://berkeley.edu',
+    'http://localhost:8000',
+    'http://127.0.0.1:9000',
+    'https://smerge.org'
+]
 
 
 #CORS_REPLACE_HTTPS_REFERER = True
@@ -166,11 +168,6 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
-INSTALLED_APPS += (
-    'compressor',
-    'compressor_toolkit',
-)
 
 STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
