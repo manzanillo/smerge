@@ -64,7 +64,6 @@ class MergeView(View):
         file_ids = request.GET.getlist('file')
         proj = Project.objects.get(id=proj_id)
         files = list(SnapFile.objects.filter(id__in=file_ids, project=proj_id))
-        print(files)
         all_files = list(SnapFile.objects.filter(project = proj_id))
         parents = { all_files[i].id :
                     [ anc.id for anc in list(all_files[i].ancestors.all()) ]

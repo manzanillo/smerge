@@ -46,7 +46,16 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
 
     for subject_child in list(subject_element):
         subject_hash = element_hash(subject_child)
-        if subject_hash in hashed_elements:
+
+        if subject_child.tag == 'costumes' or subject_child.tag == 'sounds':
+            for reference_child in list(reference_element):
+                if subject_child.tag == 'costumes' and reference_child.tag == 'costumes':
+                    # costumes are only allowed to have one list containg items containg costumes
+                    xml_merge_props(reference_child, subject_child, 'costumes')
+                elif subject_child.tag == 'sounds' and reference_child.tag == 'sounds':
+                    xml_merge_props(reference_child, subject_child, 'sounds')
+
+        elif subject_hash in hashed_elements:
             reference_child = hashed_elements[subject_hash]
 
             if ref_tag == 'scripts' and subject_tag == 'scripts' \
@@ -128,6 +137,31 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
             else:
                 reference_element.append(subject_child)
     return
+
+
+def xml_merge_props(reference_element, subject_element, type="costumes"):
+    data_type = 'image'
+    if type == 'sounds':
+        data_type = 'sound'
+    props_into = reference_element[0]# 'list'
+    props_from = subject_element[0] #'list'
+    if props_from.get('struct') == 'atomic':
+        return
+    if props_into.get('struct') == 'atomic':
+        reference_element.remove(props_into)
+        reference_element.append(props_from)
+    else:
+        # we need to merge the two lists
+        # first: collect image data from into:
+        prop_data = []
+        for prop in props_into:
+            prop_data.append(prop[0].get(data_type))
+
+        # now iterate over props_from and append missing ones to props into
+        for prop in props_from:
+            if prop[0].get(data_type) not in prop_data:
+                props_into.append(prop)
+
 
 
 def merge(file1, file2, output, file1_description, file2_description, ancestor=None):
