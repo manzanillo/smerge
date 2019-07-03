@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  django:
+    container_name: django_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smerge_docker
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./snapmerge/media:/var/www/snapmerge/snapmerge/media
+      - ./snapmerge/db.sqlite3:/var/www/snapmerge/snapmerge/db.sqlite3
+    ports:
+      - "80:8000"
