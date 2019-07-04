@@ -1,7 +1,9 @@
 var projectRoom = document.querySelector(".project-heading").getAttribute("data-proj-id");
 
+var websocketProtocol = location.protocol === 'https:' ? 'wss://' : 'ws://'
+
 var socket = new WebSocket(
-    'ws://' + window.location.host +
+    websocketProtocol + window.location.host +
     '/ws/' + projectRoom + '/');
 
 socket.onmessage = function(e) {
