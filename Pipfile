@@ -11,6 +11,7 @@ django = "*"
 django-cors-headers = "*"
 django-compressor = "*"
 django-compressor-toolkit = "*"
+channels = "*"
 
 
 [dev-packages]

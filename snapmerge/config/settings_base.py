@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'channels',
     'home',
     'compressor',
     'compressor_toolkit',
@@ -172,6 +173,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
+
+
+ASGI_APPLICATION = "routing.application"
+
 
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',
