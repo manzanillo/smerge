@@ -6,9 +6,37 @@ var socket = new WebSocket(
 
 socket.onmessage = function(e) {
     var data = JSON.parse(e.data);
-    var message = data['message'];
-    console.log(message)
-    //document.querySelector('#chat-log').value += (message + '\n');
+    var new_node = data['node'];
+
+    window.cy.add({
+                        group: "nodes",
+                        data: {
+                            id: new_node.id,
+                            href: new_node.file_url,
+                            description: new_node.description,
+                            timestamp : new_node.timestamp,
+                            number_scripts : new_node.number_scripts,
+                            number_sprites : new_node.number_sprites,
+                            ancestors : new_node.ancestors,
+                            color: new_node.color,
+                        }
+                    });
+    if (new_node.ancestors){
+        // add new edges for the new node
+        new_node.ancestors.forEach(function(ancestorId){
+        console.log(ancestorId)
+                           cy.add ({
+                                group: "edges",
+                                data: { source: ancestorId, target: new_node.id }
+                            });
+                        });
+
+        // refresh the layout of the nodes
+        window.cy.layout({name: 'dagre'}).run()
+
+    }
+
+
 };
 
 socket.onclose = function(e) {
@@ -16,9 +44,6 @@ socket.onclose = function(e) {
 };
 
 socket.onopen = function(e){
-    var message = "hi"
-    socket.send(JSON.stringify({
-        'message': message
-    }));
+    console.log('websocket connection established')
 }
 

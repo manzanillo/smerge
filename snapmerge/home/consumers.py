@@ -26,22 +26,22 @@ class SmergeConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        new_node = text_data_json['node']
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'chat_message',
-                'message': message
+                'type': 'upload_message',
+                'node': new_node
             }
         )
 
     # Receive message from room group
-    def chat_message(self, event):
-        message = event['message']
+    def upload_message(self, event):
+        new_node = event['node']
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
-            'message': message
+            'node': new_node
         }))

@@ -6,7 +6,6 @@ from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
-import json
 from .xmltools import merge
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -18,6 +17,9 @@ from shutil import copyfile
 import random, string
 import os
 from .ancestors import gca
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
 
 def generate_unique_PIN():
     size = 6
@@ -25,6 +27,11 @@ def generate_unique_PIN():
     if Project.objects.filter(pin=pin):
         return generate_unique_PIN()
     return pin
+
+
+def notify_room(proj_id, new_node):
+    layer = get_channel_layer()
+    async_to_sync(layer.group_send)('session_%s' % proj_id, {'type': 'upload_message', 'node': new_node})
 
 
 # Create your views here.
@@ -104,6 +111,7 @@ class MergeView(View):
                           ancestor= ancestor
                           )
                 new_file.xml_job()
+                notify_room(proj.id, new_file.as_dict())
                 return JsonResponse(new_file.as_dict())
 
             except Exception as e:
@@ -135,6 +143,8 @@ class SyncView(View):
         new_file.save()
 
         new_file.xml_job()
+
+        notify_room(proj.id, new_file.as_dict())
 
         new_url = settings.URL + '/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
         return JsonResponse({'message': _('OK'), 'url': new_url})
