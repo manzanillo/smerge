@@ -29,9 +29,13 @@ def generate_unique_PIN():
     return pin
 
 
-def notify_room(proj_id, new_node):
+def notify_room(proj_id, new_node, event_type="commit"):
     layer = get_channel_layer()
-    async_to_sync(layer.group_send)('session_%s' % proj_id, {'type': 'upload_message', 'node': new_node})
+    async_to_sync(layer.group_send)('session_%s' % proj_id, {
+        'type': 'upload_message',
+        'event': event_type,
+        'node': new_node
+    })
 
 
 # Create your views here.
@@ -111,7 +115,7 @@ class MergeView(View):
                           ancestor= ancestor
                           )
                 new_file.xml_job()
-                notify_room(proj.id, new_file.as_dict())
+                notify_room(proj.id, new_file.as_dict(), "merge")
                 return JsonResponse(new_file.as_dict())
 
             except Exception as e:
@@ -144,7 +148,7 @@ class SyncView(View):
 
         new_file.xml_job()
 
-        notify_room(proj.id, new_file.as_dict())
+        notify_room(proj.id, new_file.as_dict(), "commit")
 
         new_url = settings.URL + '/sync/'+str(proj.id) + '?ancestor='+str(new_file.id)
         return JsonResponse({'message': _('OK'), 'url': new_url})

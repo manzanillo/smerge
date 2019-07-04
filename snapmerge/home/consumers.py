@@ -40,8 +40,11 @@ class SmergeConsumer(WebsocketConsumer):
     # Receive message from room group
     def upload_message(self, event):
         new_node = event['node']
+        event_type = event['event']
+
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
+            'event': event_type,
             'node': new_node
         }))
