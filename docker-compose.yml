@@ -13,3 +13,5 @@ services:
       - ./snapmerge/db.sqlite3:/var/www/snapmerge/snapmerge/db.sqlite3
     ports:
       - "80:8000"
+  redis:
+    image: "redis:alpine"
