@@ -13,9 +13,14 @@ def element_hash(ele):
     for hash comparison.
     """
     hash_string = u'{0}'.format(ele.tag)
-    attribute_keys = sorted(ele.keys())
+    if ele.tag == 'sprite':
+        attribute_keys = ele.get('name')
+    else:
+        attribute_keys = sorted(ele.keys())
+
     for attr_key in attribute_keys:
         hash_string += u'{0}{1}'.format(attr_key, ele.get(attr_key))
+
     return int(sha1(hash_string.encode('utf-8')).hexdigest(), 16)
 
 
@@ -41,6 +46,7 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
     """
     hashed_elements = element_hash_children(reference_element)
 
+#    print(subject_child.tag, subject_child.attrib)
     ref_tag = reference_element.tag
     subject_tag = subject_element.tag
 
@@ -132,7 +138,6 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
                         xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
-                        return
                 reference_element.append(subject_child)
             else:
                 reference_element.append(subject_child)
