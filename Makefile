@@ -24,6 +24,9 @@ translation_DE:
 compile_translations:
 	pipenv run python $(BASE)/manage.py compilemessages --settings=$(SETTINGS)
 
+shell:
+	pipenv run python $(BASE)/manage.py shell --settings=$(SETTINGS)
+
 compress:
 	npm install && pipenv run python $(BASE)/manage.py compress --settings=$(SETTINGS)
 
