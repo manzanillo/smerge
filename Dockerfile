@@ -28,7 +28,7 @@ RUN npm install
 # Server
 EXPOSE 8000
 STOPSIGNAL SIGINT
+RUN chmod +x ./entrypoint.sh
+RUN ./entrypoint.sh
 ENTRYPOINT ["python", "snapmerge/manage.py"]
-CMD ["migrate"]
-CMD ["compress"]
 CMD ["runserver", "0.0.0.0:8000", "--settings=config.settings_docker"]
