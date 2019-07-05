@@ -1,4 +1,5 @@
 from .settings_base import *
+import json
 
 #URL = 'http://127.0.0.1:80'
 URL = 'https://smerge.org'

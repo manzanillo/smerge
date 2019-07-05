@@ -74,7 +74,7 @@ var connect = function(){
 
     socket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
-        setTimeout(connect, 1000);
+        setTimeout(connect, 5000);
     };
 
     socket.onopen = function(e){
