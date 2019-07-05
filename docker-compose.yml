@@ -10,7 +10,7 @@ services:
     tty: true
     volumes:
       - ./snapmerge/media:/var/www/snapmerge/snapmerge/media
-      - ./snapmerge/db.sqlite3:/var/www/snapmerge/snapmerge/db.sqlite3
+      - ./snapmerge/database:/var/www/snapmerge/snapmerge/database
     ports:
       - "80:8000"
   redis:
