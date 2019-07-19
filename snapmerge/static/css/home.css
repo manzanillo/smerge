@@ -8,6 +8,10 @@ html, body, .open-box {
 
 }
 
+h1 {
+font-family: 'Titillium Web', sans-serif;
+}
+
 
 #howto-btn {
     text-transform: none;
