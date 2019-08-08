@@ -9,13 +9,19 @@ Rules
 
 # Install
 You will need pip and Python 3 for installing smerge on your server.
-We recommend using pipenv for local deployment. Use 
+We recommend using pipenv and npm for local deployment. Use 
 ```
 pipenv install
+npm install
 ```
 and then the command
 ```
 make run
+```
+
+In case, you have unapplied migrations, first run:
+```
+make migrate
 ```
 
 # Contributing
