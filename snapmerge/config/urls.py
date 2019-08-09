@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.conf.urls import url, include, handler404, handler500
 from django.conf.urls.static import static
 from django.conf import settings
-from . import error_handler as eh
+from . import error_handler
 
 urlpatterns = [
     url('admin/', admin.site.urls),
@@ -26,5 +26,5 @@ urlpatterns = [
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-handler404 = eh.error_404
-handler500 = eh.error_500
+handler404 = error_handler.error_404
+handler500 = error_handler.error_500
