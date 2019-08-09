@@ -1,28 +1,52 @@
-{% load i18n staticfiles compress %}
-
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
-        <!-- additional css for each side in css block -->
-        {%block css %}
+<head>
+<style>
+body {
+  background: #ffffff url("../static/icon/icon.png") no-repeat right top fixed;
+  background-size: contain;
+}
+h1{ 
+  text-align: left;
+  color: lightSeaGreen;
+  text-transform:  uppercase;
+  text-indent: 50px; 
+  border: 2px solid lightSeaGreen;
+  border-radius: 5px;
+}
 
-        {% endblock %}
+h2, p {
+  text-align: left;
+  color: #000000;
+}
+a:link, a:visited {
+  background-color: lightSeaGreen;
+  color: white;
+  padding: 14px 25px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block;
+}
+back{
+  background-color: lightSeaGreen;
+  color: white;
+  padding: 14px 25px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block;
+}
+
+</style>
+</head>
 
 
-        <title>smerge</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-        <link rel="icon" href="{%  static 'icon/favicon.ico' %}" sizes="16x16">
-        <link rel="icon" type="image/png" href="{%  static 'icon/favicon-32x32.png' %}" sizes="32x32">
-        <link rel="icon" type="image/png" href="{%  static 'icon/favicon-96x96.png' %}" sizes="96x96">
+<body>
 
+<h1>404 Page not found</h1>
+<p>Es scheint so, als ob du dich verlaufen hättest :-(
+<p>Wir wissen zwar nicht genau wo du hin wolltest, aber wir können dir vielleicht weiter helfen:</p>
+<a href="http://127.0.0.1:8000/">Home</a>
+<!--TODO: Back Button, How does it work Button, Game Button -->
 
-
-    </head>
-
-    <body>
-        Hello World
-    </body>
+</body>
 </html>
