@@ -72,5 +72,7 @@ int main(int argc, char* argv[]) {
         fclose(f);
         fclose(time_tracker);
         printf("logout successfull\n");
+    } else {
+        printf("[USAGE]: %s [-login|-i|-logout|-o|]",argv[0]);
     }
 }
