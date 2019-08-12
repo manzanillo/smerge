@@ -30,6 +30,15 @@ shell:
 compress:
 	npm install && pipenv run python $(BASE)/manage.py compress --settings=$(SETTINGS)
 
+#for tracking time spend on project :)
+CFLAGS = -g -std=c11 -pedantic -Wall -Werror -D_XOPEN_SOURCE=700 
+CC = gcc
+time: time.o
+	$(CC) $(CFLAGS) -o time time_track.o
+time.o:
+	$(CC) $(CFLAGS) -c time_track.c
+clear: 
+	rm -f time time_track.o .tmp.time
 
 
 
