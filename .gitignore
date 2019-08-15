@@ -70,3 +70,6 @@ snapmerge/media/*
 #db
 **/db.sqlite3
 *.sqlite3
+
+#time management
+.time
