@@ -1,52 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-body {
-  background: #ffffff url("../static/icon/icon.png") no-repeat right top fixed;
-  background-size: contain;
-}
-h1{ 
-  text-align: left;
-  color: lightSeaGreen;
-  text-transform:  uppercase;
-  text-indent: 50px; 
-  border: 2px solid lightSeaGreen;
-  border-radius: 5px;
-}
+{% extends "base.html" %}
+{% load i18n staticfiles %}
 
-h2, p {
-  text-align: left;
-  color: #000000;
-}
-a:link, a:visited {
-  background-color: lightSeaGreen;
-  color: white;
-  padding: 14px 25px;
-  text-align: center; 
-  text-decoration: none;
-  display: inline-block;
-}
-back{
-  background-color: lightSeaGreen;
-  color: white;
-  padding: 14px 25px;
-  text-align: center; 
-  text-decoration: none;
-  display: inline-block;
-}
-
-</style>
-</head>
+{%block css %}
+<link rel="stylesheet" href="{% static "css/error.css" %}">
+{% endblock %}
 
 
-<body>
+{% block content %}
+  
+  <h1>404 Page not found</h1>
+  <p>Es scheint so, als ob du dich verlaufen hättest :-(
+  <p>Wir wissen zwar nicht genau wo du hin wolltest, aber wir können dir vielleicht weiter helfen:</p>
+  <!--TODO: Back Button, How does it work Button, Game Button -->
+  
 
-<h1>404 Page not found</h1>
-<p>Es scheint so, als ob du dich verlaufen hättest :-(
-<p>Wir wissen zwar nicht genau wo du hin wolltest, aber wir können dir vielleicht weiter helfen:</p>
-<a href="http://127.0.0.1:8000/">Home</a>
-<!--TODO: Back Button, How does it work Button, Game Button -->
+  <div class="center-align">
 
-</body>
-</html>
+    <a href="{% url 'home' %}" id="home-btn" name="home" class="btn waves-effect waves-light">
+        {% trans "Home" %}
+    </a>
+
+    <a id="back-btn" name="back" class="btn waves-effect waves-light"  onclick="window.history.back()">
+        {% trans "Back" %}
+    </a>
+    <div class="col s0 m3 l2 xl3">
+      <img class="smerge-image" src="{% static "icon/icon.png" %}" />
+    </div>
+  </div>
+
+  <footer>
+  <p>
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge" title="{% trans "Find us on GitHub" %}">    <i class="tiny material-icons">explore</i> {%  trans  "Find us on GitHub" %}</a>
+
+    <a href="mailto:ddi-smerge@fau.de" title="{% trans "Contact us" %}"> <i class="tiny material-icons">email</i> {% trans "Contact us" %}</a>
+  </p>
+  </footer>
+
+{% endblock %}
