@@ -8,12 +8,10 @@ html, body, .open-box {
 }
 
 h2 {
-    text-align: left;
-    color: lightSeaGreen;
+    color: black;
     text-transform: uppercase;
     text-indent: 50px;
-    border: 2px solid lightSeaGreen;
-    border-radius: 5px;
+    font-family: 'Titillium Web', sans-serif;
 }
 
 h1 {
