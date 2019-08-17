@@ -31,7 +31,7 @@ static time_t getTime(char prefix, FILE*f){
 
 int main(int argc, char* argv[]) {
     if(argc != 2){ 
-        printf("[USAGE]: %s [-login|-i|-logout|-o|]",argv[0]);
+        printf("[USAGE]: %s [-login|-i|-logout|-o|]\n",argv[0]);
     }else if(strcmp(argv[1],"-login") == 0 || strcmp(argv[1],"-i") == 0){
         time_t start = time(NULL);
         FILE* f = fopen(".tmp.time","a+");
@@ -73,6 +73,6 @@ int main(int argc, char* argv[]) {
         fclose(time_tracker);
         printf("logout successfull\n");
     } else {
-        printf("[USAGE]: %s [-login|-i|-logout|-o|]",argv[0]);
+        printf("[USAGE]: %s [-login|-i|-logout|-o|]\n",argv[0]);
     }
 }
