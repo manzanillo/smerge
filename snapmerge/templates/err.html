@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n staticfiles %}
+
+{%block css %}
+<!--<link rel="stylesheet" href="{% static "css/error.css" %}">-->
+  <link rel="stylesheet" href="{% static "css/home.css" %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!--<p>Es scheint so, als ob du dich verlaufen hättest :-(
+  <p>Wir wissen zwar nicht genau wo du hin wolltest, aber wir können dir vielleicht weiter helfen:</p>
+  TODO: Back Button, How does it work Button, Game Button -->
+
+<div class="vertical-center ">
+  <div class="rows">
+    <div class="col s0 m1 l3 xl3"></div>
+    <div class="col s12 m7 l4 xl4">
+      <h2 class="center-align">404 not Found</h2>
+
+      <div class="center-align">
+        <a href="{% url 'home' %}" id="home-btn" name="home" class="btn waves-effect waves-light">
+          {% trans "Home" %}
+        </a>
+
+        <a id="back-btn" name="back" class="btn waves-effect waves-light" onclick="window.history.back()">
+          {% trans "Back" %}
+        </a>
+
+      </div>
+
+      <div class="col s5 m5 l5 x5">
+        <img class="smerge-image" src="{% static "icon/icon.png" %}" />
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge"
+      title="{% trans "Find us on GitHub" %}"> <i class="tiny material-icons">explore</i>
+      {%  trans  "Find us on GitHub" %}</a>
+
+    <a href="mailto:ddi-smerge@fau.de" title="{% trans "Contact us" %}"> <i class="tiny material-icons">email</i>
+      {% trans "Contact us" %}</a>
+  </p>
+</footer>
+
+{% endblock %}

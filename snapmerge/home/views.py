@@ -45,6 +45,12 @@ class HomeView(View):
         }
         return render(request, 'home.html', context)
 
+# TODO: del (just for testing purpose)
+class ErrView(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'err.html', context)
 
 class HowToView(View):
     def get(self, request):
