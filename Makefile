@@ -3,6 +3,8 @@ SETTINGS = config.settings_local
 
 .PHONY: run startapp makemigrations migrate test
 
+crun:
+	npm install && pipenv run python $(BASE)/manage.py compress --settings=$(SETTINGS) ; pipenv run python $(BASE)/manage.py runserver --settings=$(SETTINGS)
 run:
 	pipenv run python $(BASE)/manage.py runserver --settings=$(SETTINGS)
 
