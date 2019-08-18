@@ -47,10 +47,11 @@ int main(int argc, char* argv[]) {
         time_t end = time(NULL);
         long long all = (long long) (end - t1);
         long long s = all % 60;
-        all = (all - s)/60;
+        all = (all - s) / 60;
         long long m = all % 60;
-        all = (all - m) % 60;
+        all = (all - m) / 60;
         long long h = all;
+        printf("LOGIN : %lld\nLOGOUT: %lld",t1,end);
         printf("Worked:%lld::%lld::%lld\n",h,m,s);
         // remove .tmp.time
         int status = remove(".tmp.time");
