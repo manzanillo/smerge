@@ -72,4 +72,4 @@ snapmerge/media/*
 *.sqlite3
 
 #time management
-.time
+*.time
