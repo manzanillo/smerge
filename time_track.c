@@ -26,14 +26,20 @@ static time_t getTime(char prefix, FILE*f){
     if(feof(f)){
         perror("EOF");
     }
-    return -1;    
+    return -1;
 }
 
 int main(int argc, char* argv[]) {
     if(argc != 2){ 
-        printf("[USAGE]: %s [-login|-i|-logout|-o|]\n",argv[0]);
+        printf("[USAGE]: %s [-login|-i|-logout|-o]\n",argv[0]);
     }else if(strcmp(argv[1],"-login") == 0 || strcmp(argv[1],"-i") == 0){
         time_t start = time(NULL);
+        FILE* ft = fopen(".tmp.time","a");
+        if(ft != NULL){
+            fprintf(stderr,"[WARNING]: You are currently logged in (.tmp.time) exists. Fix it manually befor trying to login!\n");
+            fprintf(stderr,"[WARNING]: Try logging out first and/or delete the File\n");
+            exit(EXIT_FAILURE);
+        }
         FILE* f = fopen(".tmp.time","a+");
         if(f == NULL)
             die("fopen");
@@ -74,6 +80,6 @@ int main(int argc, char* argv[]) {
         fclose(time_tracker);
         printf("logout successfull\n");
     } else {
-        printf("[USAGE]: %s [-login|-i|-logout|-o|]\n",argv[0]);
+        printf("[USAGE]: %s [-login|-i|-logout|-o]\n",argv[0]);
     }
 }
