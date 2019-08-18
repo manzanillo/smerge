@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
         long long m = all % 60;
         all = (all - m) / 60;
         long long h = all;
-        printf("LOGIN : %lld\nLOGOUT: %lld",t1,end);
+        printf("LOGIN : %ld\nLOGOUT: %ld",t1,end);
         printf("Worked:%lld::%lld::%lld\n",h,m,s);
         // remove .tmp.time
         int status = remove(".tmp.time");
