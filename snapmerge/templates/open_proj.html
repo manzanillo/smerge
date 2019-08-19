@@ -8,7 +8,7 @@
 
 {% block content %}
 <div class="valign-wrapper row open-box">
-  <div class="col card hoverable s10 pull-s1 m6 pull-m3 l4 pull-l4">
+  <div class="col card hoverable">
     <form action="{% url 'open_proj' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 

@@ -1,0 +1,8 @@
+body {
+    display: flex;
+}
+
+.vertical-center {
+    align-self: center;
+    width: 100%;
+}
