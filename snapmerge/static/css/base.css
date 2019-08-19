@@ -1,5 +1,6 @@
 body {
     display: flex;
+    background-image: url("../icon/bg_blue3.png");
 }
 
 .vertical-center {
