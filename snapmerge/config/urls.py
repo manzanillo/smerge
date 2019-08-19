@@ -16,15 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url, include, handler404, handler500
 from django.conf.urls.static import static
+from django.views.static import serve
 from django.conf import settings
 from . import error_handler
 
 urlpatterns = [
     url('admin/', admin.site.urls),
     url(r'', include('home.urls')),
-
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 handler404 = error_handler.error_404
 handler500 = error_handler.error_500
+
+
+
+
