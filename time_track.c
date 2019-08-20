@@ -49,15 +49,18 @@ int main(int argc, char* argv[]) {
         printf("login successfull\n");
     } else if(strcmp(argv[1],"-logout") == 0 || strcmp(argv[1],"-o") == 0){
         FILE* f = fopen(".tmp.time","r");
-        time_t t1 = getTime('>',f);
+        time_t start = getTime('>',f);
         time_t end = time(NULL);
-        long long all = (long long) (end - t1);
+        long long all = (long long) (end - start);
         long long s = all % 60;
         all = (all - s) / 60;
         long long m = all % 60;
         all = (all - m) / 60;
         long long h = all;
-        printf("LOGIN : %ld\nLOGOUT: %ld",t1,end);
+        struct tm tm_start = *localtime(&start);
+        struct tm tm_end = *localtime(&end);
+        printf("LOGIN: %d-%d-%d:\t\t%lld::%lld::%lld \n",tm_start.tm_year + 1900, tm_start.tm_mon + 1, tm_start.tm_mday,tm_start.tm_hour, tm_start.tm_min, tm_start.tm_sec);
+        printf("LOGOUT: %d-%d-%d:\t\t%lld::%lld::%lld \n",tm_end.tm_year + 1900, tm_end.tm_mon + 1, tm_end.tm_mday,tm_end.tm_hour, tm_end.tm_min, tm_end.tm_sec);
         printf("Worked:%lld::%lld::%lld\n",h,m,s);
         // remove .tmp.time
         int status = remove(".tmp.time");
