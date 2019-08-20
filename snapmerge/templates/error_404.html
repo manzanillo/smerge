@@ -7,33 +7,54 @@
 
 
 {% block content %}
-  
-  <h1>404 Page not found</h1>
-  <p>Es scheint so, als ob du dich verlaufen hättest :-(
-  <p>Wir wissen zwar nicht genau wo du hin wolltest, aber wir können dir vielleicht weiter helfen:</p>
-  <!--TODO: Back Button, How does it work Button, Game Button -->
-  
 
-  <div class="center-align">
+<div class="card vertical-center ">
+  <div class="row">
+      <div class="col s0 m1 l1 xl1"></div>
+      <div class="col s12 m6 l7 xl7">
+        <h1 class="center-align">Seite nicht gefunden!</h1>
+        <div class=" text-block">
+          <p>Deine Seite konnte nicht gefunden werden. Das kann verschiedene Gründe haben:</p>
+          <dl>
+            <li>Deine Seite gibt es nicht, oder</li>
+            <li>deine Seite ist umgezogen, oder</li>
+            <li>deine Seite wurde gelöscht</li>
+          </dl>
+          <p>Vielleicht helfen dir diese Links weiter:</p>
+        </div>
+      </div>
 
-    <a href="{% url 'home' %}" id="home-btn" name="home" class="btn waves-effect waves-light">
-        {% trans "Home" %}
-    </a>
-
-    <a id="back-btn" name="back" class="btn waves-effect waves-light"  onclick="window.history.back()">
-        {% trans "Back" %}
-    </a>
-    <div class="col s0 m3 l2 xl3">
-      <img class="smerge-image" src="{% static "icon/icon.png" %}" />
+      <div class="col s0 m5 l4 xl4">
+        <img class="smerge-image" src="{% static "icon/icon.png" %}" />
+      </div>
+    </div>
+    <div class="center-align">
+      <a href="{% url 'home' %}" class="btn waves-effect waves-light">
+        Startseite
+      </a>
+      <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
+        {% trans "Open existing" %}
+      </a>
+      <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn waves-effect waves-light">
+        {% trans "Create new" %}
+      </a>
+      <a class="btn waves-effect waves-light" onclick="window.history.back()">
+        Zurück
+      </a>
     </div>
   </div>
+</div>
 
-  <footer>
+
+<footer>
   <p>
-    <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge" title="{% trans "Find us on GitHub" %}">    <i class="tiny material-icons">explore</i> {%  trans  "Find us on GitHub" %}</a>
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge"
+      title="{% trans "Find us on GitHub" %}"> <i class="tiny material-icons">explore</i>
+      {%  trans  "Find us on GitHub" %}</a>
 
-    <a href="mailto:ddi-smerge@fau.de" title="{% trans "Contact us" %}"> <i class="tiny material-icons">email</i> {% trans "Contact us" %}</a>
+    <a href="mailto:ddi-smerge@fau.de" title="{% trans "Contact us" %}"> <i class="tiny material-icons">email</i>
+      {% trans "Contact us" %}</a>
   </p>
-  </footer>
+</footer>
 
 {% endblock %}

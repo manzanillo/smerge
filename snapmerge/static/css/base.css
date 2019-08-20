@@ -32,7 +32,7 @@ h1 {
 
 @media only screen and (min-width: 1200px) {
     .smerge-image {
-        height: 380px;
+        height: 350px;
         right: 20%;
     }
 }

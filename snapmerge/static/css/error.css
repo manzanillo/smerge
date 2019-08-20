@@ -1,15 +1,33 @@
-html, body, .open-box {
+html, body {
     height: 100%;
 }
 
-body{
-    display: block;
+ul.dots {
+    list-style-type: circle;
 }
 
-h1 {
-    text-indent: 50px;
-    padding-bottom: 0.3em;
-    line-height: 1.2;
-    border-bottom: 1px solid rgb(238, 238, 238);
-    font-size: 2rem;
+.text-block {
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.btn {
+    margin: 1rem;
+    margin-top: 0.2rem;
+    border: 5px;
+    border-color: white;
+}
+
+.vertical-center{
+    width: 90%;
+    left: 5%;
+}
+.card{
+    position: relative;
+    margin: .5rem 0 1rem 0;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 2px 4px rgba(0,0,0,0.14);
+    border-radius: 25px;
 }
