@@ -1,9 +1,5 @@
-html, body, .open-box {
+.open-box {
     height: 100%;
-}
-
-h1 {
-    font-family: 'Titillium Web', sans-serif;
 }
 
 #howto-btn {

@@ -1,10 +1,21 @@
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     display: flex;
     background-image: url("../icon/bg_final.png");
 }
 
+h1 {
+    font-weight: 900;
+    font-family: 'Titillium Web', sans-serif;
+}
+
 .vertical-center {
     align-self: center;
+    margin-top: -10%;
     width: 100%;
 }
 
@@ -21,6 +32,7 @@ body {
 
 @media only screen and (min-width: 1200px) {
     .smerge-image {
+        height: 380px;
         right: 20%;
     }
 }
