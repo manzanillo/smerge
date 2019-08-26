@@ -1,31 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-body {
-  background: #ffffff url("../static/icon/icon.png") no-repeat right top fixed;
-  background-size: contain;
-}
-h1{ 
-  text-align: left;
-  color: lightSeaGreen;
-  text-transform:  uppercase;
-  text-indent: 50px;
-}
+{% extends "base.html" %}
+{% load i18n staticfiles %}
 
-h2, p {
-  text-align: left;
-  color: lightSeaGreen;
-}
-</style>
-</head>
+{%block css %}
+<link rel="stylesheet" href="{% static "css/error.css" %}">
+{% endblock %}
 
 
-<body>
+{% block content %}
 
-<h1>500 internal error</h1>
-<p>Es scheint so, als ob du dich verlaufen hättest :-(
-<p>Wir wissen zwar nicht genau wo du hin wolltest, aber wir können dir vielleicht weiter helfen:</p>
+<div class="card vertical-center ">
+  <div class="row">
+      <div class="col s0 m1 l1 xl1"></div>
+      <div class="col s12 m6 l7 xl7">
+        <h2 class="center-align">In unserem Server ist etwas kaputt...</h2>
+        <div class=" text-block">
+          <p>Einige Dachstunnel sind eingestürzt. Noch ist unklar, wie lange dies andauern wird.
+          Vielleicht sind andere Seiten noch erreichbar:</p>
+        </div>
+        <div class="center-align">
+          <a href="{% url 'home' %}" class="btn waves-effect waves-light">
+            Startseite
+          </a>
+          <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
+            {% trans "Open existing" %}
+          </a>
+          <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn waves-effect waves-light">
+            {% trans "Create new" %}
+          </a>
+          <a class="btn waves-effect waves-light" onclick="window.history.back()">
+            Zurück
+          </a>
+        </div>
+      </div>
 
-</body>
-</html>
+      <div class="col s0 m5 l4 xl4">
+        <img class="smerge-image" src="{% static "icon/icon.png" %}" />
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+<footer>
+  <p>
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge"
+      title="{% trans "Find us on GitHub" %}"> <i class="tiny material-icons">explore</i>
+      {%  trans  "Find us on GitHub" %}</a>
+
+    <a href="mailto:ddi-smerge@fau.de" title="{% trans "Contact us" %}"> <i class="tiny material-icons">email</i>
+      {% trans "Contact us" %}</a>
+  </p>
+</footer>
+
+{% endblock %}
