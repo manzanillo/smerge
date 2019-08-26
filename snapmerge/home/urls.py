@@ -4,7 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
-    url(r'^err/$', views.ErrView.as_view(), name='err'), # TODO: del (just for testing purpose)
     url(r'^open_project/$', views.OpenProjectView.as_view(), name='open_proj'),
     url(r'^restore_info/$', views.RestoreInfoView.as_view(), name='restore_info'),
     url(r'^howto/$', views.HowToView.as_view(), name='howto'),
