@@ -1,0 +1,22 @@
+header {    
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    padding-bottom: .5em
+}
+
+header::after{
+    content:'';
+    display: table;
+    clear: right;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.navbar {
+    float: right;
+    margin-right: 5%;
+}
