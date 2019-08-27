@@ -1,51 +1,8 @@
-html, body, .open-box {
-  height: 100%;
+.open-box {
+    height: 100%;
 }
-
-.smerge-image {
-    height: 250px;
-    display:  block;
-
-}
-
-h1 {
-font-family: 'Titillium Web', sans-serif;
-}
-
 
 #howto-btn {
     text-transform: none;
     margin-top: .5em;
 }
-
-@media only screen and (max-width: 600px) {
-    .smerge-image {
-        display: none;
-    }
-}
-
-@media only screen and (min-width: 1200px) {
-    .smerge-image {
-        right: 20%;
-    }
-}
-
-footer{
-     text-align: center;
-     border: 1px solid #BFBFBF;
-     background-color: #FBFBFB;
-     width: 100%;
-     bottom: 0;
-     position: fixed;
-     padding-top: .5em;
-}
-
-footer>p>a:link, footer>p>a:visited{
-    color: black;
-    padding-left: 1em;
-}
-
-footer>p>a>i{
-    vertical-align: middle;
-}
-
