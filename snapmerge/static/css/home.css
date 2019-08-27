@@ -6,3 +6,9 @@
     text-transform: none;
     margin-top: .5em;
 }
+
+body {
+    height: 100%;
+    display: flex;
+    background-image: url("../icon/bg_final.png");
+}
