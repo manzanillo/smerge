@@ -8,60 +8,25 @@
 
 
 {% block content %}
-<!-- following the tutorial: https://www.youtube.com/watch?v=FEmysQARWFU&ab_channel=KevinPowell -->
-<header>
-  <div class="container">
-    <nav>
-      <ul class="navbar">
-        <li><a href="#">Home</a> </li>
-        <li><a href="#">About</a> </li>
-        <li><a href="#">Pricing</a> </li>
-        <li><a href="#">Blog</a> </li>
-        <li><a href="#">Contact</a> </li>
-      </ul>
-    </nav>
+<nav>
+  <div class="logo">
+    smerge
   </div>
-</header>
-<div class="vertical-center ">
-  <div class="row">
-      <div class="col s0 m1 l3 xl3"></div>
-      <div class="col s12 m7 l4 xl4">
-        <h1 class="center-align">smerge</h1>
-
-        <div class="center-align">
-
-            <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
-                {% trans "Open existing" %}
-            </a>
-
-            <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn waves-effect waves-light">
-                {% trans "Create new" %}
-            </a>
-
-        </div>
-        <div class="center-align">
-            <a href="{% url 'howto' %}" id="howto-btn" name="how_to" class="waves-effect btn-flat">
-                {% trans "How to smerge..." %}
-            </a>
-        </div>
-          
-          
-      </div>
-      <div class="col s0 m3 l2 xl3">
-        <img class="smerge-image" src="{% static "icon/icon.png" %}" />
-      </div>
-
+  <ul>
+    <div class="navlinks">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Pricing</a> </li>
+      <li><a href="#">Blog</a> </li>
+      <li><a href="#">Contact</a> </li>
+    </div>
+  </ul>
+  <div class="burger">
+    <div class="line1"></div>
+    <div class="line2"></div>
+    <div class="line3"></div>
   </div>
-</div>
-<footer>
-  <p>
-    <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge"
-      title="{% trans "Find us on GitHub" %}"> <i class="tiny material-icons">explore</i>
-      {%  trans  "Find us on GitHub" %}</a>
+</nav>
 
-    <a href="mailto:ddi-smerge@fau.de" title="{% trans "Contact us" %}"> <i class="tiny material-icons">email</i>
-      {% trans "Contact us" %}</a>
-  </p>
-</footer>
-
+<script type="module" src="{% static 'js/nav-slide.js' %}"></script>
 {% endblock %}
