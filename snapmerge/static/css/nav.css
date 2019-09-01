@@ -1,5 +1,5 @@
 :root {
-    --nav-heigth: 40px;
+    --nav-heigth: 60px;
 }
 
 * {
@@ -15,6 +15,7 @@ nav {
     align-items: center;
     border-bottom: 1px solid rgba(4, 82, 82, 0.767);
     background-color: rgb(30, 80, 80);
+    position: relative;
 }
 
 .logo {
@@ -23,6 +24,13 @@ nav {
     color: white;
     font-size: 1.25em;
     letter-spacing: 0.15em;
+    position: absolute;
+    left: 10%
+}
+
+nav ul {
+    position: absolute;
+    right: 5%;
 }
 
 .navlinks {
@@ -39,6 +47,8 @@ nav a {
 .burger {
     display: none;
     cursor: pointer;
+    position: absolute;
+    right: 5%;
 }
 
 .burger div {
@@ -53,6 +63,15 @@ nav a {
     body {
         overflow-x: hidden;
     }
+
+    nav {
+        position: static;
+    }
+
+    nav ul{
+        position: static;
+    }
+
     .navlinks {
         position: absolute;
         right: 0;
