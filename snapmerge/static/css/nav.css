@@ -2,12 +2,6 @@
     --nav-heigth: 60px;
 }
 
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
 nav {
     height: var(--nav-heigth);
     display: flex;
@@ -81,7 +75,7 @@ nav a {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: rgba(4, 82, 82, 0.767);
+        background-color: rgba(4, 82, 82, 0.95);
         transform: translateX(100%);
         transition: transform 0.5s ease-in;
     }
