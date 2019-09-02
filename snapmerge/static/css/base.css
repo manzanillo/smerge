@@ -2,6 +2,17 @@ html {
     height: 100%;
 }
 
+body {
+    height: 100%;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background-image: url("../icon/bg_final.png");
+}
+
 h1 {
     font-weight: 900;
     font-family: 'Titillium Web', sans-serif;
@@ -33,7 +44,7 @@ h1 {
 
 footer {
     text-align: center;
-    border-top: 1px solid #BFBFBF;
+    border: 1px solid #BFBFBF;
     background-color: #FBFBFB;
     width: 100%;
     bottom: 0;
