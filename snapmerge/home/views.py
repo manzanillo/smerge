@@ -59,6 +59,12 @@ class HowToView(View):
         }
         return render(request, 'how_to.html', context)
 
+class ImpresumView(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'impresum.html', context)
+
 
 class ProjectView(View):
     def get(self, request, proj_id):
