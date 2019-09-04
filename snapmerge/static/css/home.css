@@ -6,3 +6,54 @@
     text-transform: none;
     margin-top: .5em;
 }
+
+#logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#logo path:nth-child(2) {
+    stroke-dasharray: 384px;
+    stroke-dashoffset: 384px;
+    animation: line-anim 5s ease-in 1s forwards;
+}
+
+#logo path:nth-child(3) {
+    stroke-dasharray: 572px;
+    stroke-dashoffset: 572px;
+    animation: line-anim 3s ease-in 3s forwards;
+}
+
+#logo path:nth-child(4) {
+    stroke-dasharray: 374px;
+    stroke-dashoffset: 374px;
+    animation: line-anim 3s ease-in 3.6s forwards;
+
+}
+
+#logo path:nth-child(5) {
+    stroke-dasharray: 409px;
+    stroke-dashoffset: 409px;
+    animation: line-anim 2.7s ease-in 3.9s forwards;
+}
+
+#logo path:nth-child(6) {
+    stroke-dasharray: 403px;
+    stroke-dashoffset: 404px;
+    animation: line-anim 2.5s ease-in 4.1s forwards;
+}
+
+#logo path:nth-child(7) {
+    stroke-dasharray: 374px;
+    stroke-dashoffset: 374px;
+    animation: line-anim 2.4s ease-in 4.2s forwards;
+}
+
+
+@keyframes line-anim{
+    to{
+        stroke-dashoffset: 0px;
+    }
+}
