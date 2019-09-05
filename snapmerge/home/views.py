@@ -59,11 +59,11 @@ class HowToView(View):
         }
         return render(request, 'how_to.html', context)
 
-class ImpresumView(View):
+class ImpressumView(View):
     def get(self, request):
         context = {
         }
-        return render(request, 'impresum.html', context)
+        return render(request, 'impressum.html', context)
 
 
 class ProjectView(View):
