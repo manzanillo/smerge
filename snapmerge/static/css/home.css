@@ -8,47 +8,45 @@
 }
 
 #logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin-bottom: 5%;
+    justify-content: center
 }
 
 #logo path:nth-child(2) {
     stroke-dasharray: 384px;
     stroke-dashoffset: 384px;
-    animation: line-anim 5s ease-in 1s forwards;
+    animation: line-anim 2.5s ease 0.5s forwards;
 }
 
 #logo path:nth-child(3) {
     stroke-dasharray: 572px;
     stroke-dashoffset: 572px;
-    animation: line-anim 3s ease-in 3s forwards;
+    animation: line-anim 1.5s ease-in-out 1.5s forwards;
 }
 
 #logo path:nth-child(4) {
     stroke-dasharray: 374px;
     stroke-dashoffset: 374px;
-    animation: line-anim 3s ease-in 3.6s forwards;
+    animation: line-anim 1.4s ease-in-out 1.7s forwards;
 
 }
 
 #logo path:nth-child(5) {
     stroke-dasharray: 409px;
     stroke-dashoffset: 409px;
-    animation: line-anim 2.7s ease-in 3.9s forwards;
+    animation: line-anim 1.3s ease-in-out 1.9s forwards;
 }
 
 #logo path:nth-child(6) {
     stroke-dasharray: 403px;
     stroke-dashoffset: 404px;
-    animation: line-anim 2.5s ease-in 4.1s forwards;
+    animation: line-anim 1.2s ease-in-out 2.1s forwards;
 }
 
 #logo path:nth-child(7) {
     stroke-dasharray: 374px;
     stroke-dashoffset: 374px;
-    animation: line-anim 2.4s ease-in 4.2s forwards;
+    animation: line-anim 1.1s ease-in-out 2.3s forwards;
 }
 
 
