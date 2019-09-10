@@ -1,5 +1,5 @@
 :root {
-    --nav-heigth: 60px;
+    --nav-heigth: 64px;
 }
 
 nav {
@@ -9,7 +9,6 @@ nav {
     align-items: center;
     border-bottom: 1px solid rgba(4, 82, 82, 0.767);
     background-color: rgb(30, 80, 80);
-    position: relative;
 }
 
 .logo {

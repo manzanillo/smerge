@@ -4,13 +4,12 @@ html {
 
 body {
     height: 100%;
-    display: flex;
     flex-direction: column;
 }
 
 main {
     width: 100%;
-    flex-grow: 1;
+    min-height: calc(100% - 60px - 60px);
     display: flex;
     background-image: url("../icon/bg_final.png");
 }
@@ -48,8 +47,7 @@ footer {
     border: 1px solid #BFBFBF;
     background-color: #FBFBFB;
     width: 100%;
-    bottom: 0;
-    position: fixed;
+    height: 60px;
     padding-top: .5em;
 }
 
