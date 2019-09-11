@@ -45,12 +45,25 @@ class HomeView(View):
         }
         return render(request, 'home.html', context)
 
+# TODO: del (helps following a guid)
+class NavView(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'nav.html', context)
+
 
 class HowToView(View):
     def get(self, request):
         context = {
         }
         return render(request, 'how_to.html', context)
+
+class ImpressumView(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'impressum.html', context)
 
 
 class ProjectView(View):

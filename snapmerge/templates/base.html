@@ -2,50 +2,82 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
-        <!-- additional css for each side in css block -->
 
-       <link rel="stylesheet" href="{% static 'css/base.css' %}">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+    <!-- additional css for each side in css block -->
 
-        {%block css %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
 
-        {% endblock %}
-
-
-        <title>smerge</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-        <link rel="icon" href="{%  static 'icon/favicon.ico' %}" sizes="16x16">
-        <link rel="icon" type="image/png" href="{%  static 'icon/favicon-32x32.png' %}" sizes="32x32">
-        <link rel="icon" type="image/png" href="{%  static 'icon/favicon-96x96.png' %}" sizes="96x96">
-
-
-
-    </head>
-
-    <body>
-    {% compress js %}
-        <script type="module" src="{% static 'js/main.js' %}"></script>
-    {% endcompress %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-
-
-    {%block content %}
+    {%block css %}
 
     {% endblock %}
 
 
+    <title>smerge</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="icon" href="{%  static 'icon/favicon.ico' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{%  static 'icon/favicon-32x32.png' %}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{%  static 'icon/favicon-96x96.png' %}" sizes="96x96">
+
+
+
+</head>
+
+<body>
+    {% compress js %}
+    <script type="module" src="{% static 'js/main.js' %}"></script>
+    {% endcompress %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <nav>
+        <div class="logo">
+            smerge
+        </div>
+        <ul>
+            <div class="navlinks">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'howto' %}">How To Smerge</a> </li>
+                <li><a href="{% url 'impressum' %}">Impressum</a> </li>
+                <li><a onclick="window.history.back()">Back</a> </li>
+            </div>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+    <script type="module" src="{% static 'js/nav-slide.js' %}"></script>
+    <main>
+        {%block content %}
+
+        {% endblock %}
+    </main>
+
+
+    <footer>
+        <p>
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/manzanillo/smerge"
+                title="{% trans "Find us on GitHub" %}"> <i class="tiny material-icons">explore</i>
+                {%  trans  "Find us on GitHub" %}</a>
+
+            <a href="mailto:ddi-smerge@fau.de" title="{% trans "Contact us" %}"> <i
+                    class="tiny material-icons">email</i> {% trans "Contact us" %}</a>
+        </p>
+    </footer>
 
     {% block messages %}
-        {% if messages %}
-            {% for message in messages %}
-              <script>
-                  Materialize.toast('{{ message }}', 4000);
-              </script>
-            {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        Materialize.toast('{{ message }}', 4000);
+    </script>
+    {% endfor %}
+    {% endif %}
     {% endblock %}
 
     {%block js %}
@@ -53,5 +85,6 @@
     {% endblock %}
 
 
-    </body>
+</body>
+
 </html>

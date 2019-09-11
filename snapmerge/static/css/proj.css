@@ -1,5 +1,6 @@
-body {
-    background: rgb(255,255,255);
+main {
+    background: white;
+
 }
 
 .project-heading{
@@ -48,7 +49,7 @@ body {
     z-index: 1050;
     position: fixed;
     right: 23px;
-    top: 23px;
+    top: var(--nav-heigth);
     padding-top: 15px;
     margin-bottom: 0;
 }
