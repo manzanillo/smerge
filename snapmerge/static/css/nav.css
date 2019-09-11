@@ -85,6 +85,7 @@ nav a {
     }
 
     .burger {
+        background-color: rgba(4, 82, 82, 0.95);
         display: block;
     }
 }
@@ -96,6 +97,11 @@ nav a {
         height: calc(100% - var(--nav-heigth));
         z-index: 2;
         width: 100%;
+    }
+
+    nav ul a {
+        padding: 1rem;
+        font-size: 2rem;
     }
 }
 
