@@ -3,6 +3,10 @@ main {
 
 }
 
+footer {
+    display: none;
+}
+
 .project-heading{
     margin-left: 10px;
     font-size: 4.2rem;
