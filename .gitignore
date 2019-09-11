@@ -73,3 +73,7 @@ snapmerge/media/*
 
 #time management
 *.time
+
+
+#Compiled css and js
+snapmerge/static/CACHE/**
