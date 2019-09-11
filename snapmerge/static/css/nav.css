@@ -74,12 +74,14 @@ nav a {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: rgba(4, 82, 82, 0.95);
+        background-color: rgba(30, 80, 80, 0.95);
         transform: translateX(100%);
         transition: transform 0.5s ease-in;
     }
     .navlinks li {
         opacity: 0;
+        width: 100%;
+        text-align: center;
     }
 
     .burger {
