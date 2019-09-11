@@ -1,3 +1,7 @@
+main {
+    background: white;
+}
+
 .project-heading{
     margin-left: 10px;
     font-size: 4.2rem;
@@ -44,7 +48,7 @@
     z-index: 1050;
     position: fixed;
     right: 23px;
-    top: 23px;
+    top: var(--nav-heigth);
     padding-top: 15px;
     margin-bottom: 0;
 }
