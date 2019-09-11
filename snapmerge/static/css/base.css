@@ -9,7 +9,7 @@ body {
 
 main {
     width: 100%;
-    min-height: calc(100% - 60px - 60px);
+    min-height: calc(100% - 64px - 60px);
     display: flex;
     background-image: url("../icon/bg_final.png");
 }
