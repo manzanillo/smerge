@@ -69,7 +69,7 @@ nav a {
         position: absolute;
         right: 0;
         top: var(--nav-heigth);
-        height: 90%;
+        height: calc(100% - var(--nav-heigth));
         width: 30%;
         display: flex;
         flex-direction: column;
