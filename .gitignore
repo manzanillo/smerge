@@ -74,6 +74,9 @@ snapmerge/media/*
 #time management
 *.time
 
+#exclude local media but commit media folder
+snapmerge/media/*
+!snapmerge/media/.gitkeep
 
 #Compiled css and js
 snapmerge/static/CACHE/**

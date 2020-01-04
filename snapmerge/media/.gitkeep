@@ -1,0 +1,3 @@
+empty file to keep the "empty" media folder
+==> otherwise django crashes during a creation of a new project
+==> but we do not want to upload all of our data :)
