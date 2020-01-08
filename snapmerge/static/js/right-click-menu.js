@@ -27,9 +27,12 @@ let defaults = {
             content: '<i class="material-icons">edit</i>', // html/text content to be displayed in the menu
             contentStyle: {}, // css key:value pairs to set the command's css in js if you want
             select: function (ele) { // a function to execute when the command is selected
-                console.log(ele.id()) // `ele` holds the reference to the active element
+                //console.log(ele.id()) // `ele` holds the reference to the active element
+                const commitmsg = document.querySelectorAll(".commit-block")[0];
+                console.log(commitmsg);
+                commitmsg.classList.toggle('commit-toggle');
             },
-            enabled: false // whether the command is selectable
+            enabled: true // whether the command is selectable
         },
         { // fav
             fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item

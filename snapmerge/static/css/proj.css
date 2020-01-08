@@ -46,9 +46,6 @@ footer {
     border-radius: 20px;
 }
 
-
-
-
 .smerge-menu-btn {
     z-index: 1050;
     position: fixed;
@@ -70,4 +67,15 @@ footer {
 .smerge-menu-modal-footer {
     background-color: #fff !important;
     margin-top: -10px;
+}
+
+.commit-block {
+    position: relative;
+    top: 30%;
+    left: 50%;
+}
+
+.commit-toggle { 
+    visibility: visible;
+    z-index: 1000;
 }
