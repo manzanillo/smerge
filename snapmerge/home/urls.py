@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'change_description/(?P<proj_id>[-\w]+)$', views.ChangeDescriptionView.as_view(), name='change_description'),
     url(r'delete_proj/(?P<proj_id>[-\w]+)$', views.DeleteProjectView.as_view(), name='delete_proj'),
     url(r'^toggle_color/(?P<proj_id>[-\w]+)/(?P<file_id>[-\w]+)$', views.ToggleColorView.as_view(), name='toggle_color'),
+    url(r'^change_commit_msg/(?P<proj_id>[-\w]+)/(?P<file_id>[-\w]+)/(?P<new_description>[-\w]+)$', views.ChangeCommitMsgView.as_view(), name='change_commit_msg'),
 ]

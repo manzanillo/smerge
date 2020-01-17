@@ -1,3 +1,9 @@
+const change_commit_block = document.querySelectorAll(".commit-block")[0];
+const change_commit_btn = document.getElementsByName("commit-btn")[0];
+const change_commit_input_field = document.getElementsByName("commtit_input_field")[0];
+
+var curr_ele = 0;
+
 // the default values of each option are outlined below:
 let defaults = {
     menuRadius: 100, // the radius of the circular menu in pixels
@@ -27,10 +33,11 @@ let defaults = {
             content: '<i class="material-icons">edit</i>', // html/text content to be displayed in the menu
             contentStyle: {}, // css key:value pairs to set the command's css in js if you want
             select: function (ele) { // a function to execute when the command is selected
-                //console.log(ele.id()) // `ele` holds the reference to the active element
-                const commitmsg = document.querySelectorAll(".commit-block")[0];
-                console.log(commitmsg);
-                commitmsg.classList.toggle('commit-toggle');
+                // `ele` holds the reference to the active element
+                change_commit_block.classList.toggle('commit-toggle');
+                curr_ele = ele;
+                clog('change Commmit msg of:' + ele.id());
+                console.log(curr_ele);
             },
             enabled: true // whether the command is selectable
         },
@@ -48,7 +55,7 @@ let defaults = {
                     cache: false,
                     method: 'get',
                     success: function (new_color) {
-                        ele.data('color', new_color)
+                        ele.data('color', new_color);
                         },
                     error: function () {
                         console.log('fav did not work');
@@ -81,3 +88,37 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 //cloud_download file_download edit star favorite
+
+
+function onClickCommitMsg() {
+    clog('btn was clicked');
+    var my_ele = curr_ele; //could prevent race conditions, if toggle would be changed
+    var new_commit_msg = change_commit_input_field.value;
+    clog(new_commit_msg);
+    var change_commit_msg_url = 'change_commit_msg/' + $("h1.project-heading").attr("data-proj-id") + '/' + curr_ele.id() +  '/' + new_commit_msg;
+
+    $.ajax({
+        url: change_commit_msg_url,
+        cache: false,
+        method: 'get',
+        success: function (recived_commit_msg) {
+            clog('changed commit msg of ' + my_ele.id() + ' to c_msg=' + recived_commit_msg);
+            clog(my_ele);
+            my_ele.data('description',recived_commit_msg);
+            },
+        error: function () {
+            clog('change_commit_msg did not work');
+        }
+    });
+}
+
+function initChangeCommitButton(){
+    change_commit_btn.addEventListener('click',onClickCommitMsg);+
+    console.log("EventListener for ChangeCommitMsg added");
+}
+
+function clog(log_msg){
+    console.log('[Change_Commit_Msg]: ' + log_msg);
+}
+
+initChangeCommitButton();
