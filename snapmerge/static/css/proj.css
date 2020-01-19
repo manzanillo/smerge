@@ -76,7 +76,7 @@ footer {
     visibility: hidden;
 }
 
-.commit-toggle { 
+.commit-visible { 
     visibility: visible;
     z-index: 1000;
 }

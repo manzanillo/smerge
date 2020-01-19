@@ -34,7 +34,7 @@ let defaults = {
             contentStyle: {}, // css key:value pairs to set the command's css in js if you want
             select: function (ele) { // a function to execute when the command is selected
                 // `ele` holds the reference to the active element
-                change_commit_block.classList.toggle('commit-toggle');
+                change_commit_block.classList.add('commit-visible');
                 curr_ele = ele;
                 clog('change Commmit msg of:' + ele.id());
                 console.log(curr_ele);
@@ -96,7 +96,7 @@ function onClickCommitMsg() {
     var new_commit_msg = change_commit_input_field.value;
     clog(new_commit_msg);
     var change_commit_msg_url = 'change_commit_msg/' + $("h1.project-heading").attr("data-proj-id") + '/' + curr_ele.id() +  '/' + new_commit_msg;
-
+    change_commit_block.classList.remove('commit-visible');
     $.ajax({
         url: change_commit_msg_url,
         cache: false,
@@ -122,3 +122,9 @@ function clog(log_msg){
 }
 
 initChangeCommitButton();
+
+$("#commit-msg").on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        onClickCommitMsg()
+    }
+});
