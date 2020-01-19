@@ -50,7 +50,7 @@ footer {
     z-index: 1050;
     position: fixed;
     right: 23px;
-    top: var(--nav-heigth);
+    top: var(--nav-height);
     padding-top: 15px;
     margin-bottom: 0;
 }
