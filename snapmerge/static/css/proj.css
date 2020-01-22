@@ -77,6 +77,8 @@ footer {
     margin-bottom: 10px;
     width: 80%;
     visibility: hidden;
+    border: 1px solid grey;
+    border-radius: 5px;
 }
 
 .commit-visible { 
