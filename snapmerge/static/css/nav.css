@@ -67,6 +67,7 @@ nav a {
     }
 
     .navlinks {
+        z-index: 1051;
         position: absolute;
         right: 0;
         top: var(--nav-height);
@@ -94,9 +95,9 @@ nav a {
 
 @media screen and (max-width:600px) {
     .navlinks {
+        z-index: 1051;
         background-color: rgb(30, 80, 80);
         height: calc(100% - var(--nav-height));
-        z-index: 2;
         width: 100%;
     }
 
