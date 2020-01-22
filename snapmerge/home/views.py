@@ -458,9 +458,12 @@ class ToggleColorView(View):
 
 
 class ChangeCommitMsgView(View):
-    def get(self, request, proj_id, file_id, new_description):
-        file = SnapFile.objects.get(id=file_id, project=proj_id)
-        file.description = new_description
-        print('changed description to: '+ new_description)
-        file.save()
-        return HttpResponse(new_description)
+    def get(self, request, proj_id, file_id):
+        new_description = request.GET.get('newdescription', None)
+        if new_description != None:
+            file = SnapFile.objects.get(id=file_id, project=proj_id)
+            file.description = new_description
+            print('changed description to: '+ new_description)
+            file.save()
+            return HttpResponse(new_description)
+        return HttpResponse(False)
