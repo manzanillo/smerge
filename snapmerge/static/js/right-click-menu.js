@@ -95,7 +95,7 @@ function onClickCommitMsg() {
     var my_ele = curr_ele; //could prevent race conditions, if toggle would be changed
     var new_commit_msg = change_commit_input_field.value;
     clog(new_commit_msg);
-    var change_commit_msg_url = 'change_commit_msg/' + $("h1.project-heading").attr("data-proj-id") + '/' + curr_ele.id() +  '/' + new_commit_msg;
+    var change_commit_msg_url = 'change_commit_msg/' + $("h1.project-heading").attr("data-proj-id") + '/' + curr_ele.id() +  '/?newdescription=' + new_commit_msg;
     change_commit_block.classList.remove('commit-visible');
     $.ajax({
         url: change_commit_msg_url,
