@@ -34,10 +34,15 @@ let defaults = {
             contentStyle: {}, // css key:value pairs to set the command's css in js if you want
             select: function (ele) { // a function to execute when the command is selected
                 // `ele` holds the reference to the active element
+                if (change_commit_block.classList.contains("commit-visible") === false){
                 change_commit_block.classList.add('commit-visible');
                 curr_ele = ele;
                 clog('change Commmit msg of:' + ele.id());
                 console.log(curr_ele);
+                }
+                else {
+                    change_commit_block.classList.remove('commit-visible');
+                }
             },
             enabled: true // whether the command is selectable
         },
