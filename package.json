@@ -32,7 +32,7 @@
     "cytoscape-cxtmenu": "^3.1.0",
     "cytoscape-dagre": "^2.2.2",
     "cytoscape-qtip": "^2.7.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "materialize-css": "^1.0.0-rc.2",
     "timeago.js": "^4.0.0-beta.2"
   }
