@@ -71,17 +71,13 @@ TEMPLATES = [
     },
 ]
 
-
-
-
-
-#fileupload
+# fileupload
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-#cors
+# cors
 CORS_ORIGIN_WHITELIST = [
     'https://snap.berkeley.edu',
     'https://berkeley.edu',
@@ -93,7 +89,7 @@ CORS_ORIGIN_WHITELIST = [
 
 #CORS_REPLACE_HTTPS_REFERER = True
 
-#CORS_ALLOW_CREDENTIALS
+# CORS_ALLOW_CREDENTIALS
 
 #CSRF_COOKIE_DOMAIN = 'faui20q.cs.fau.de/smerge'
 
@@ -153,12 +149,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-#locale
+# locale
 LOCALE_PATHS = [
-	os.path.join(BASE_DIR, 'static/locale'),
+    os.path.join(BASE_DIR, 'static/locale'),
 ]
 
-#mail
+# mail
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'apikey'
@@ -192,3 +188,4 @@ COMPRESS_PRECOMPILERS = (
 )
 COMPRESS_ENABLED = True
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
