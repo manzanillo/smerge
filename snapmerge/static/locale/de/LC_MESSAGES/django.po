@@ -415,13 +415,13 @@ msgid "Built for teachers and the classroom"
 msgstr "Entwickelt für Lehrpersonen und das Klassenzimmer"
 
 #: snapmerge/templates/how_to.html:1182
-msgid ""
-"\n"
-"        <p>What does Smerge offer you and how it can help with teaching?</"
-"p>\n"
-"        <ul>\n"
-"            <li>enabling collaboration for project-based learning with "
-"<em>Snap!</em></li>\n"
+msgid "What does Smerge offer you and how it can help with teaching?"
+msgstr ""
+
+
+msgid "enabling collaboration for project-based learning with <em>Snap!</em>"
+
+
 "            <li>all the data is always available and automatically backed "
 "up, so no more &quot;I forgot my stuff at home&quot;\n"
 "                or &quot;my partner is ill, i can&#39;t work&quot; from your "
@@ -442,7 +442,6 @@ msgid ""
 "                tinkering and playing around in a risk-free enviroment.\n"
 "            </li>\n"
 "        </ul>\n"
-"    "
 msgstr ""
 "\n"
 "<p>Was bietet Smerge und wie kann es beim Unterrichten helfen?</p>\n"
@@ -465,32 +464,14 @@ msgstr ""
 "und zu alten Versionen zurückkehren, was das Basteln und Tinkern in einer "
 "risikofreien Umgebung ermöglicht.</li>\n"
 "</ul>\n"
-"    "
 
 #: snapmerge/templates/how_to.html:1202
 msgid "Login and User Management"
 msgstr "Login und User Management"
 
 #: snapmerge/templates/how_to.html:1203
-msgid ""
-"\n"
-"        <p>We deliberatly have no dedicated user accounts or management. "
-"Instead, to secure your projects, you will get\n"
-"            a\n"
-"            PIN on the time of project creation, and can set a password. If "
-"you add your e-mail at project creation, you\n"
-"            can\n"
-"            retrieve your PIN and password for all your projects if you "
-"forgot them.</p>\n"
-"    "
-msgstr ""
-"\n"
-"Wir haben bewusst keine eigenen Benutzerkonten oder ein eigenes "
-"Usermanagement. Um Ihre Projekte zu sichern, erhalten Sie stattdessen bei "
-"der Projekterstellung eine PIN und können ein Passwort festlegen. Wenn "
-"Sie Ihre E-Mail bei der Projekterstellung hinterlegen, können Sie bei "
-"Bedarf PIN und Passwort für all Ihre Projekte abrufen, falls Sie diese "
-"vergessen haben."
+msgid "We deliberatly have no dedicated user accounts or management. Instead, to secure your projects, you will get a PIN on the time of project creation, and can set a password. If you add your e-mail at project creation, you can retrieve your PIN and password for all your projects if you forgot them."
+msgstr "Wir haben bewusst keine eigenen Benutzerkonten oder ein eigenes Usermanagement. Um Ihre Projekte zu sichern, erhalten Sie stattdessen bei der Projekterstellung eine PIN und können ein Passwort festlegen. Wenn Sie Ihre E-Mail bei der Projekterstellung hinterlegen, können Sie bei Bedarf PIN und Passwort für all Ihre Projekte abrufen, falls Sie diese vergessen haben."
 
 #: snapmerge/templates/how_to.html:1210
 msgid "Want to know more or need help?"
@@ -585,7 +566,7 @@ msgstr "Hier ablegen!"
 
 #: snapmerge/templates/proj.html:26
 msgid "cancel merge"
-msgstr "merge abbrechen"
+msgstr "Merge abbrechen"
 
 #: snapmerge/templates/proj.html:30
 msgid "merge"

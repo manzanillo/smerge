@@ -984,3 +984,8 @@ footer {
 .typora-export .footnote-line {
   white-space: normal;
 }
+
+li {
+  list-style-type: initial !important;
+  margin-left: 16px;
+}
