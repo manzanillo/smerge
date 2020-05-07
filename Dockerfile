@@ -19,11 +19,8 @@ ARG PROJECT=snapmerge
 ARG PROJECT_DIR=/var/www/${PROJECT}
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
-#COPY Pipfile Pipfile.lock ./
 COPY . .
-RUN pip install -U pipenv
-# --skip-lock is needed for now due to a conflict of asgiref, channels_redis, and channels
-RUN pipenv install --system --skip-lock
+RUN pip install -r requirements.txt
 RUN npm install
 # Server
 EXPOSE 8000
