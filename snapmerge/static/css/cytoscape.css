@@ -1,4 +1,4 @@
-body {
+main {
   font-family: helvetica;
   font-size: 14px;
 }
@@ -17,4 +17,3 @@ h1 {
   opacity: 0.5;
   font-size: 1em;
 }
-

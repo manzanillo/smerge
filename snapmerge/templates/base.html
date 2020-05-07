@@ -23,26 +23,18 @@
     <link rel="icon" type="image/png" href="{%  static 'icon/favicon-32x32.png' %}" sizes="32x32">
     <link rel="icon" type="image/png" href="{%  static 'icon/favicon-96x96.png' %}" sizes="96x96">
 
-
-
 </head>
 
 <body>
-    {% compress js %}
-    <script type="module" src="{% static 'js/main.js' %}"></script>
-    {% endcompress %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-
     <nav>
         <a href="{% url 'home' %}" class="logo">
             smerge
         </a>
         <ul>
             <div class="navlinks">
-                <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'howto' %}">How To Smerge</a> </li>
                 <li><a href="{% url 'impressum' %}">Impressum</a> </li>
-                <li><a onclick="window.history.back()">Back</a> </li>
+                <li><a onclick="window.history.back()">{% trans "Back" %}</a> </li>
             </div>
         </ul>
         <div class="burger">
@@ -51,6 +43,13 @@
             <div class="line3"></div>
         </div>
     </nav>
+
+
+    {% compress js %}
+    <script type="module" src="{% static 'js/main.js' %}"></script>
+    {% endcompress %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
     <script type="module" src="{% static 'js/nav-slide.js' %}"></script>
     <main>
         {%block content %}
