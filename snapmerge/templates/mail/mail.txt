@@ -1,4 +1,4 @@
-{% load i18n staticfiles %}
+{% load i18n static %}
 {% trans "Hello," %}
 {% trans "you forgot one of your passwords or PINs of the smerge-projects you are registered with this mail-address. In the following you find all your projects and the corresponding information you need to login." %}
 

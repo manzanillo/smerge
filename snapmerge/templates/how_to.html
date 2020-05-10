@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n staticfiles %}
+{% load i18n static %}
 
 {%block css %}
 
@@ -52,61 +52,33 @@
             {% endblocktrans %}
             <p><img src="{% static "howto/2.png" %}" alt='img' alt='img' referrerPolicy='no-referrer'/></p>
             <h2><a name='header-n21' class='md-header-anchor '></a>{% trans "Working alone is boring..." %}</h2>
-            {% blocktrans %}
-                <p>A badger does not work alone on his construction, but with the whole family. Everyone digs their own
-                    tunnel.</p>
-                <p>It&#39;s the same with us when we work collaboratively. We split the work: You work on making the spaceship
-                    able
-                    to shoot, while a friend or team member handles the asteroids flying through space.</p>
-            {% endblocktrans %}
+                <p>{% trans "A badger does not work alone on his construction, but with the whole family. Everyone digs their own tunnel." %}</p>
+                <p>{% trans "It&#39;s the same with us when we work collaboratively. We split the work: You work on making the spaceship able to shoot, while a friend or team member handles the asteroids flying through space." %}</p>
             <p><img src="{% static "howto/3.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-            {% blocktrans %}
-                <p>As you see, everyone is working is his own &quot;tunnels&quot;!</p>
-                <p>At a certain point the badger wants to meet up with his family members. In the same way, we want to merge our
-                    changes to the project. Eventually we want to play the game, don&#39;t we?</p>
-                <p>Therefore we simply click the &quot;merge&quot;-Button in the bottom right, tick all the versions we would
-                    like
-                    to merge, and click yes to confirm.</p>
-            {% endblocktrans %}
+                <p>{% trans "As you see, everyone is working is his own &quot;tunnels&quot;!" %}</p>
+                <p>{% trans "At a certain point the badger wants to meet up with his family members. In the same way, we want to merge our changes to the project. Eventually we want to play the game, don&#39;t we?" %}</p>
+                <p>{% trans "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, tick all the versions we would like to merge, and click yes to confirm." %}</p>
+            
             <p><img src="{% static "howto/4.gif" %}" alt='img' referrerPolicy='no-referrer'/></p>
-            {% blocktrans %}
-                <p>Now we will find a new version, with all changes merged. But what happens if more than one made changes to
-                    the
-                    same script? If such a situation occurs, we will have to manually choose with version we want to keep:</p>
-            {% endblocktrans %}
+                <p>{% trans "Now we will find a new version, with all changes merged. But what happens if more than one made changes to the same script? If such a situation occurs, we will have to manually choose with version we want to keep:" %}</p>
             <p><img src="{% static "howto/5.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
             <h2><a name='header-n42' class='md-header-anchor '></a>{% trans "Go back if you made a mistake" %}</h2>
-            {% blocktrans %}
-                <p>Sometimes the badger abandons one tunnel, e.g. due to a lack of stability. He then has to go back and up in
-                    his
-                    sett, and work on from a different chamber. In the same way, sometimes we have to go back to an older
-                    version,
-                    e.g. because we made some mistakes or tried something that didn&#39;t really work out. In order to do so, we
-                    simply open the version we want to rever to, open it in <em>Snap!</em> by double-clicking, and work on from
-                    there. This way, we will get a new &quot;tunnel&quot;.</p>
-            {% endblocktrans %}
+                <p>{% trans "Sometimes the badger abandons one tunnel, e.g. due to a lack of stability. He then has to go back and up in his sett, and work on from a different chamber. In the same way, sometimes we have to go back to an older version, e.g. because we made some mistakes or tried something that didn&#39;t really work out. In order to do so, we simply open the version we want to rever to, open it in <em>Snap!</em> by double-clicking, and work on from there. This way, we will get a new &quot;tunnel&quot;." %}</p>
             <hr/>
             <h2><a name='header-n54' class='md-header-anchor '></a>{% trans "Built for teachers and the classroom" %}</h2>
-            {% blocktrans %}
-                <p>What does Smerge offer you and how it can help with teaching?</p>
+
+                <p>{% trans "What does Smerge offer you and how it can help with teaching?" %}</p>
                 <ul>
-                    <li>enabling collaboration for project-based learning with <em>Snap!</em></li>
-                    <li>all the data is always available and automatically backed up, so no more &quot;I forgot my stuff at home&quot;
-                        or &quot;my partner is ill, I can&#39;t work&quot; from your students.
+                    <li>{% trans "enabling collaboration for project-based learning with <em>Snap!</em>" %}</li>
+                    <li>{% trans "all the data is always available and automatically backed up, so no more &quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;t work&quot; from your students." %}</li>
+                    <li>
+                        {% trans "set up templates in the sense of &quot;code skeletons&quot;, where you can supply your students with custom blocks, some code pieces already in place, ... You can even add further templates via drag and drop." %}
                     </li>
-                    <li>set up templates in the sense of &quot;code skeletons&quot;, where you can supply your students with
-                        custom
-                        blocks, some code pieces already in place, ...
-                        You can even add further templates via drag and drop.
+                    <li>{% trans "the development process is always visible, to your students as well as to you. This allows for assessing individual contribution and giving individual feedback." %}
                     </li>
-                    <li>the development process is always visible, to your students as well as to you. This allows for assessing
-                        individual contribution and giving individual feedback.
-                    </li>
-                    <li>you see the version history and are able to revert changes and go back to old versions, which enables
-                        tinkering and playing around in a risk-free enviroment.
+                    <li>{% trans "you see the version history and are able to revert changes and go back to old versions, which enables tinkering and playing around in a risk-free enviroment." %}
                     </li>
                 </ul>
-            {% endblocktrans %}
             <h2><a name='header-n60' class='md-header-anchor '></a>{% trans "Login and User Management" %}</h2>
            
             <p>{% trans "We deliberatly have no dedicated user accounts or management. Instead, to secure your projects, you will get a PIN on the time of project creation, and can set a password. If you add your e-mail at project creation, you can retrieve your PIN and password for all your projects if you forgot them." %}</p>

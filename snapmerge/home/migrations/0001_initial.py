@@ -14,10 +14,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Project',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100, verbose_name='Name')),
-                ('picture', models.FileField(blank=True, null=True, upload_to='', verbose_name='Picture')),
-                ('description', models.CharField(blank=True, max_length=200, null=True, verbose_name='Description')),
+                ('picture', models.FileField(blank=True,
+                                             null=True, upload_to='', verbose_name='Picture')),
+                ('description', models.CharField(blank=True,
+                                                 max_length=200, null=True, verbose_name='Description')),
             ],
             options={
                 'verbose_name': 'Project',
@@ -27,12 +30,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SnapFile',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('timestamp', models.DateTimeField(auto_now_add=True, verbose_name='Timestamp')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('timestamp', models.DateTimeField(
+                    auto_now_add=True, verbose_name='Timestamp')),
                 ('file', models.FileField(upload_to='', verbose_name='File')),
-                ('user', models.CharField(max_length=30, null=True, verbose_name='user')),
+                ('user', models.CharField(
+                    max_length=30, null=True, verbose_name='user')),
                 ('ancestors', models.ManyToManyField(to='home.SnapFile')),
-                ('project', models.ForeignKey(on_delete='cascade', to='home.Project')),
+                ('project', models.ForeignKey(
+                    on_delete=models.CASCADE, to='home.Project')),
             ],
             options={
                 'verbose_name': 'SnapFile',

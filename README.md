@@ -30,6 +30,12 @@ In case, you have unapplied migrations, first run:
 make migrate
 ```
 
+We recommend to test the system using a redis docker. Redis is used for handling all websocket related actions:
+
+```
+docker run -p 6379:6379 --name some-redis -d redis
+```
+
 # Contributing
 
 Thank you for considering contributing to smerge! It's as easy as creating a pull request.
