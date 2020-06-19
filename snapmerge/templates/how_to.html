@@ -9,83 +9,81 @@
 
 {% block content %}
 <div class="jumbotron vertical-center">
-   <div class="container text-center">
-      <div class="col card hoverable">
-         <div class="card-content">
-            <h1>
-                {% trans "How to Smerge..." %}
-            </h1>
+   <div class="container">
+      <div class="col">
+        <h1>
+            {% trans "How to Smerge..." %}
+        </h1>
 
-            <p>
-                {% blocktrans %}
-                    Smerge is a version control system for the block-based language <em>Snap!</em>, which enables collaboration
-                    and tinkering in the classroom. It&#39;s tailored to novice programmers and therefore easy to use for
-                    teachers
-                    and students. What we wanted to avoid was making a feature-overloaded git clone.
-                {% endblocktrans %}
-            </p>
-
-
-            <p><img src="{% static "icon/android-icon-144x144.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-            <h2><a name='header-n6' class='md-header-anchor '></a>{% trans "Our Badger&#39;s sett" %}</h2>
+        <p>
             {% blocktrans %}
-                <p>A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is
-                    gradually expanding it over years.</p>
-                <p>We proceed in exactly the same way while programming: our progress and the further development of the program
-                    from version to version we can also present as a &quot;badger&#39;s sett&quot;. In this example, we are
-                    developing asteroids, the game in which you have to destroy all asteroids with your starship before they hit
-                    the
-                    ship.</p>
+                Smerge is a version control system for the block-based language <em>Snap!</em>, which enables collaboration
+                and tinkering in the classroom. It&#39;s tailored to novice programmers and therefore easy to use for
+                teachers
+                and students. What we wanted to avoid was making a feature-overloaded git clone.
             {% endblocktrans %}
-            <p><img src="{% static "howto/1.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-            {% blocktrans %}
-                <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? We can open any of the versions directly in
-                    <em>Snap!</em>
-                    with a double click. Then we can work on our project, as we are used to.</p>
-                <p> To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to our badgers sett. This is done
-                    via the
-                    corresponding block post to &quot;smerge...&quot; under Variables. We can summarize what we have done; this
-                    way,
-                    we will find this particular version of your project later again. Then we can find them in our badgers sett
-                    on
-                    smerge.org.</p>
-            {% endblocktrans %}
-            <p><img src="{% static "howto/2.png" %}" alt='img' alt='img' referrerPolicy='no-referrer'/></p>
-            <h2><a name='header-n21' class='md-header-anchor '></a>{% trans "Working alone is boring..." %}</h2>
-                <p>{% trans "A badger does not work alone on his construction, but with the whole family. Everyone digs their own tunnel." %}</p>
-                <p>{% trans "It&#39;s the same with us when we work collaboratively. We split the work: You work on making the spaceship able to shoot, while a friend or team member handles the asteroids flying through space." %}</p>
-            <p><img src="{% static "howto/3.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-                <p>{% trans "As you see, everyone is working is his own &quot;tunnels&quot;!" %}</p>
-                <p>{% trans "At a certain point the badger wants to meet up with his family members. In the same way, we want to merge our changes to the project. Eventually we want to play the game, don&#39;t we?" %}</p>
-                <p>{% trans "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, tick all the versions we would like to merge, and click yes to confirm." %}</p>
-            
-            <p><img src="{% static "howto/4.gif" %}" alt='img' referrerPolicy='no-referrer'/></p>
-                <p>{% trans "Now we will find a new version, with all changes merged. But what happens if more than one made changes to the same script? If such a situation occurs, we will have to manually choose with version we want to keep:" %}</p>
-            <p><img src="{% static "howto/5.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-            <h2><a name='header-n42' class='md-header-anchor '></a>{% trans "Go back if you made a mistake" %}</h2>
-                <p>{% trans "Sometimes the badger abandons one tunnel, e.g. due to a lack of stability. He then has to go back and up in his sett, and work on from a different chamber. In the same way, sometimes we have to go back to an older version, e.g. because we made some mistakes or tried something that didn&#39;t really work out. In order to do so, we simply open the version we want to rever to, open it in <em>Snap!</em> by double-clicking, and work on from there. This way, we will get a new &quot;tunnel&quot;." %}</p>
-            <hr/>
-            <h2><a name='header-n54' class='md-header-anchor '></a>{% trans "Built for teachers and the classroom" %}</h2>
+        </p>
 
-                <p>{% trans "What does Smerge offer you and how it can help with teaching?" %}</p>
-                <ul>
-                    <li>{% trans "enabling collaboration for project-based learning with <em>Snap!</em>" %}</li>
-                    <li>{% trans "all the data is always available and automatically backed up, so no more &quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;t work&quot; from your students." %}</li>
-                    <li>
-                        {% trans "set up templates in the sense of &quot;code skeletons&quot;, where you can supply your students with custom blocks, some code pieces already in place, ... You can even add further templates via drag and drop." %}
-                    </li>
-                    <li>{% trans "the development process is always visible, to your students as well as to you. This allows for assessing individual contribution and giving individual feedback." %}
-                    </li>
-                    <li>{% trans "you see the version history and are able to revert changes and go back to old versions, which enables tinkering and playing around in a risk-free enviroment." %}
-                    </li>
-                </ul>
-            <h2><a name='header-n60' class='md-header-anchor '></a>{% trans "Login and User Management" %}</h2>
-           
-            <p>{% trans "We deliberatly have no dedicated user accounts or management. Instead, to secure your projects, you will get a PIN on the time of project creation, and can set a password. If you add your e-mail at project creation, you can retrieve your PIN and password for all your projects if you forgot them." %}</p>
-            <p>{% trans "Want to know more or need help?" %} <a href="mailto:ddi-smerge@fau.de"
-                                                                title="{% trans "Contact us" %}"> {% trans "Contact us" %}</a>
-            </p>
-        </div>
+
+        <p><img src="{% static "icon/logo.svg" %}" width="30%" alt='img' referrerPolicy='no-referrer'/></p>
+        <h2><a name='header-n6' class='md-header-anchor '></a>{% trans "Our Badger&#39;s sett" %}</h2>
+        {% blocktrans %}
+            <p>A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is
+                gradually expanding it over years.</p>
+            <p>We proceed in exactly the same way while programming: our progress and the further development of the program
+                from version to version we can also present as a &quot;badger&#39;s sett&quot;. In this example, we are
+                developing asteroids, the game in which you have to destroy all asteroids with your starship before they hit
+                the
+                ship.</p>
+        {% endblocktrans %}
+        <p><img src="{% static "howto/1.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
+        {% blocktrans %}
+            <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? We can open any of the versions directly in
+                <em>Snap!</em>
+                with a double click. Then we can work on our project, as we are used to.</p>
+            <p> To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to our badgers sett. This is done
+                via the
+                corresponding block post to &quot;smerge...&quot; under Variables. We can summarize what we have done; this
+                way,
+                we will find this particular version of your project later again. Then we can find them in our badgers sett
+                on
+                smerge.org.</p>
+        {% endblocktrans %}
+        <p><img src="{% static "howto/2.png" %}" alt='img' alt='img' referrerPolicy='no-referrer'/></p>
+        <h2><a name='header-n21' class='md-header-anchor '></a>{% trans "Working alone is boring..." %}</h2>
+            <p>{% trans "A badger does not work alone on his construction, but with the whole family. Everyone digs their own tunnel." %}</p>
+            <p>{% trans "It&#39;s the same with us when we work collaboratively. We split the work: You work on making the spaceship able to shoot, while a friend or team member handles the asteroids flying through space." %}</p>
+        <p><img src="{% static "howto/3.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
+            <p>{% trans "As you see, everyone is working is his own &quot;tunnels&quot;!" %}</p>
+            <p>{% trans "At a certain point the badger wants to meet up with his family members. In the same way, we want to merge our changes to the project. Eventually we want to play the game, don&#39;t we?" %}</p>
+            <p>{% trans "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, tick all the versions we would like to merge, and click yes to confirm." %}</p>
+        
+        <p><img src="{% static "howto/4.gif" %}" alt='img' referrerPolicy='no-referrer'/></p>
+            <p>{% trans "Now we will find a new version, with all changes merged. But what happens if more than one made changes to the same script? If such a situation occurs, we will have to manually choose with version we want to keep:" %}</p>
+        <p><img src="{% static "howto/5.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
+        <h2><a name='header-n42' class='md-header-anchor '></a>{% trans "Go back if you made a mistake" %}</h2>
+            <p>{% trans "Sometimes the badger abandons one tunnel, e.g. due to a lack of stability. He then has to go back and up in his sett, and work on from a different chamber. In the same way, sometimes we have to go back to an older version, e.g. because we made some mistakes or tried something that didn&#39;t really work out. In order to do so, we simply open the version we want to rever to, open it in <em>Snap!</em> by double-clicking, and work on from there. This way, we will get a new &quot;tunnel&quot;." %}</p>
+        <hr/>
+        <h2><a name='header-n54' class='md-header-anchor '></a>{% trans "Built for teachers and the classroom" %}</h2>
+
+            <p>{% trans "What does Smerge offer you and how it can help with teaching?" %}</p>
+            <ul>
+                <li>{% trans "enabling collaboration for project-based learning with <em>Snap!</em>" %}</li>
+                <li>{% trans "all the data is always available and automatically backed up, so no more &quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;t work&quot; from your students." %}</li>
+                <li>
+                    {% trans "set up templates in the sense of &quot;code skeletons&quot;, where you can supply your students with custom blocks, some code pieces already in place, ... You can even add further templates via drag and drop." %}
+                </li>
+                <li>{% trans "the development process is always visible, to your students as well as to you. This allows for assessing individual contribution and giving individual feedback." %}
+                </li>
+                <li>{% trans "you see the version history and are able to revert changes and go back to old versions, which enables tinkering and playing around in a risk-free enviroment." %}
+                </li>
+            </ul>
+        <h2><a name='header-n60' class='md-header-anchor '></a>{% trans "Login and User Management" %}</h2>
+        
+        <p>{% trans "We deliberatly have no dedicated user accounts or management. Instead, to secure your projects, you will get a PIN on the time of project creation, and can set a password. If you add your e-mail at project creation, you can retrieve your PIN and password for all your projects if you forgot them." %}</p>
+        <p>{% trans "Want to know more or need help?" %} <a href="mailto:ddi-smerge@fau.de"
+                                                            title="{% trans "Contact us" %}"> {% trans "Contact us" %}</a>
+        </p>
     </div>
 </div>
 {% endblock %}

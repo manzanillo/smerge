@@ -7,8 +7,7 @@ nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-bottom: 1px solid rgba(4, 82, 82, 0.767);
-  background-color: rgb(30, 80, 80);
+  background-color: rgb(15, 3, 3);
 }
 
 .logo {
@@ -86,14 +85,13 @@ nav a {
   }
 
   .burger {
-    background-color: rgba(4, 82, 82, 0.95);
     display: block;
   }
 }
 
 @media screen and (max-width: 600px) {
   .navlinks {
-    background-color: rgb(30, 80, 80);
+    background-color: rgb(15, 3, 3);
     height: calc(100% - var(--nav-heigth));
     z-index: 2;
     width: 100%;

@@ -9,13 +9,9 @@ body {
 
 main {
   width: 100%;
-  min-height: calc(100% - 64px - 60px);
+  min-height: calc(100% - 64px - 60px - 170px);
   display: flex;
-}
-
-h1 {
-  font-weight: 900;
-  font-family: "Titillium Web", sans-serif;
+  padding-top: 2em;
 }
 
 .vertical-center {
@@ -49,4 +45,12 @@ footer > p > a > i {
   position: relative;
   text-align: center;
   overflow: hidden;
+}
+
+.btn {
+  background-color: rgb(15, 3, 3);
+}
+
+.btn:hover {
+  background-color: rgb(7, 106, 171);
 }
