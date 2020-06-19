@@ -47,10 +47,23 @@ footer > p > a > i {
   overflow: hidden;
 }
 
-.btn {
+/*Material.css color adaption -> switch to sass sometimes*/
+.btn,
+.btn-floating {
   background-color: rgb(15, 3, 3);
 }
 
-.btn:hover {
+.btn:hover,
+.btn-floating:hover {
   background-color: rgb(7, 106, 171);
+}
+
+/* label focus color */
+input[type="text"]:focus + label {
+  color: rgb(7, 106, 171) !important;
+}
+/* label underline focus color */
+input[type="text"]:focus {
+  border-bottom: 1px solid rgb(7, 106, 171) !important;
+  box-shadow: 0 1px 0 0 rgb(7, 106, 171) !important;
 }
