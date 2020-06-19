@@ -1,73 +1,67 @@
 main {
-    background: white;
-
+  background: white;
 }
 
-footer {
-    display: none;
+footer,
+.wave-container {
+  display: none;
 }
 
-.project-heading{
-    margin-left: 10px;
-    font-size: 4.2rem;
+.project-heading {
+  margin-left: 10px;
+  font-size: 4.2rem;
 }
 
-.project-description{
-    line-height: 100%;
-    word-wrap: break-word;
-    margin-left: 2px;
-    font-size: 1.2rem;
-    width: 30%;
-    margin-top:10px;
-
+.project-description {
+  line-height: 100%;
+  word-wrap: break-word;
+  margin-left: 2px;
+  font-size: 1.2rem;
+  width: 30%;
+  margin-top: 10px;
 }
 
 .trend-indicator {
-    float: left;
+  float: left;
 }
 
-
 .info-message {
-    padding: 10%;
+  padding: 10%;
 }
 
 #drop-info {
-    display: none;
-    position: absolute;
-    text-align: center;
-    top: 37.5%;
-    left: 25%;
-    font-size: 50px;
-    color: gray;
-    border-style: dashed;
-    width: 50%;
-    height: 25%;
-    z-index: 1000;
-    border-radius: 20px;
+  display: none;
+  position: absolute;
+  text-align: center;
+  top: 37.5%;
+  left: 25%;
+  font-size: 50px;
+  color: gray;
+  border-style: dashed;
+  width: 50%;
+  height: 25%;
+  z-index: 1000;
+  border-radius: 20px;
 }
 
-
-
-
 .smerge-menu-btn {
-    z-index: 1050;
-    position: fixed;
-    right: 23px;
-    top: var(--nav-heigth);
-    padding-top: 15px;
-    margin-bottom: 0;
+  z-index: 1050;
+  position: fixed;
+  right: 23px;
+  top: var(--nav-heigth);
+  padding-top: 15px;
+  margin-bottom: 0;
 }
 
 .smerge-menu-btn > a {
-    color: gray;
+  color: gray;
 }
 
-
 #menu {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 .smerge-menu-modal-footer {
-    background-color: #fff !important;
-    margin-top: -10px;
+  background-color: #fff !important;
+  margin-top: -10px;
 }

@@ -8,7 +8,7 @@ import uuid
 
 
 def default_color():
-    return '#386561'
+    return '#076AAB'
 
 
 class Project(models.Model):
@@ -16,15 +16,17 @@ class Project(models.Model):
     picture = models.FileField(_("Picture"), null=True, blank=True)
     description = models.CharField(_("Description"), max_length=200,
                                    null=True, blank=True)
-    password = models.CharField(_("Password"), max_length=50, null=True, blank=True)
+    password = models.CharField(
+        _("Password"), max_length=50, null=True, blank=True)
     pin = models.CharField(_("PIN"), max_length=6, unique=True)
-    id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(_("Id"), primary_key=True,
+                          default=uuid.uuid4, editable=False)
     email = models.EmailField(_("Email"), null=True, blank=True)
-
 
     @classmethod
     def create_and_save(cls, name, picture, description):
-        proj = cls.objects.create(name=name, picture=picture, description=description, password=password)
+        proj = cls.objects.create(
+            name=name, picture=picture, description=description, password=password)
         proj.save()
         return proj
 
@@ -36,12 +38,11 @@ class Project(models.Model):
         verbose_name_plural = _("Projects")
 
 
-
-
 class File(models.Model):
     # Format: YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True, auto_now=False)
-    project = models.ForeignKey(Project, on_delete =models.CASCADE)
+    timestamp = models.DateTimeField(
+        _("Timestamp"), auto_now_add=True, auto_now=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     # https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.ManyToManyField.symmetrical
     ancestors = models.ManyToManyField("self", symmetrical=False)
     description = models.CharField(_("Description"), max_length=200,
@@ -50,21 +51,21 @@ class File(models.Model):
     number_sprites = models.IntegerField(_("number_sprites"), default=0)
     color = models.CharField(_("color"), max_length=7, default=default_color())
 
-
     class Meta:
         abstract = True
 
 
-
 class SnapFile(File):
     # validates only naming of file
-    file = models.FileField(_("File"), blank=True, validators=[FileExtensionValidator(['xml', 'XML'])])
+    file = models.FileField(_("File"), blank=True, validators=[
+                            FileExtensionValidator(['xml', 'XML'])])
     # thumbnail = models.ImageField(_("Thumbnail"), null=True, blank=True)
     user = models.CharField(_("user"), max_length=30, null=True)
 
     @classmethod
     def create_and_save(cls, project, file, ancestors=None, user=None, description=''):
-        snap = cls.objects.create(project=project, file=file, user=user, description=description)
+        snap = cls.objects.create(
+            project=project, file=file, user=user, description=description)
         if (ancestors):
             snap.ancestors.set(ancestors)
 
@@ -72,14 +73,14 @@ class SnapFile(File):
         return snap
 
     def xml_job(self):
-        include_sync_button(self.get_media_path(), proj_id=self.project.id, me=self.id)
+        include_sync_button(self.get_media_path(),
+                            proj_id=self.project.id, me=self.id)
 
         stats = analyze_file(self.get_media_path())
         self.number_scripts = stats[0]
         self.number_sprites = stats[1]
 
         self.save()
-
 
     def as_dict(self):
         ancestor_ids = [x.id for x in self.ancestors.all()]
@@ -91,7 +92,7 @@ class SnapFile(File):
             'ancestors': ancestor_ids,
             'file_url': file_url,
             'timestamp': str(self.timestamp),
-            'number_scripts' : self.number_scripts,
+            'number_scripts': self.number_scripts,
             'number_sprites': self.number_sprites,
             'color': self.color
         }
@@ -102,7 +103,6 @@ class SnapFile(File):
     class Meta:
         verbose_name = _("SnapFile")
         verbose_name_plural = _("SnapFiles")
-
 
 
 class ProjectForm(ModelForm):
