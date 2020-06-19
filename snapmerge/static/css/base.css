@@ -1,63 +1,52 @@
 html {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    height: 100%;
-    flex-direction: column;
+  height: 100%;
+  flex-direction: column;
 }
 
 main {
-    width: 100%;
-    min-height: calc(100% - 64px - 60px);
-    display: flex;
-    background-image: url("../icon/bg_final.png");
+  width: 100%;
+  min-height: calc(100% - 64px - 60px);
+  display: flex;
 }
 
 h1 {
-    font-weight: 900;
-    font-family: 'Titillium Web', sans-serif;
+  font-weight: 900;
+  font-family: "Titillium Web", sans-serif;
 }
 
 .vertical-center {
-    align-self: center;
-    width: 100%;
-}
-
-.smerge-image {
-    height: 250px;
-    display: block;
-}
-
-@media only screen and (max-width: 600px) {
-    .smerge-image {
-        display: none;
-    }
-}
-
-@media only screen and (min-width: 1200px) {
-    .smerge-image {
-        height: 350px;
-        right: 20%;
-    }
+  align-self: center;
+  width: 100%;
 }
 
 footer {
-    text-align: center;
-    border: 1px solid #BFBFBF;
-    background-color: #FBFBFB;
-    width: 100%;
-    height: 60px;
-    padding-top: .3em;
+  text-align: center;
+  background: linear-gradient(
+    90deg,
+    rgb(195, 158, 193) 0%,
+    rgba(7, 106, 171) 100%
+  );
+  width: 100%;
+  padding: 0.3em;
+  margin-top: -10px;
 }
 
-footer>p>a:link, footer>p>a:visited {
-    color: black;
-    padding-left: 1em;
+footer > p > a:link,
+footer > p > a:visited {
+  color: white;
+  padding-left: 1em;
 }
 
-footer>p>a>i {
-    vertical-align: middle;
+footer > p > a > i {
+  vertical-align: middle;
 }
 
-
+.wave-container {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+}
