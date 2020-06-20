@@ -749,7 +749,7 @@ msgstr "Zurück"
 
 #: snapmerge/templates/base.html:76 snapmerge/templates/base.html:77
 msgid "GitHub"
-msgstr "öffnen"
+msgstr "GitHub"
 
 #: snapmerge/templates/base.html:79 snapmerge/templates/base.html:80
 #: snapmerge/templates/how_to.html:85

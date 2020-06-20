@@ -20,24 +20,28 @@ main {
 }
 
 footer {
+  width: 100%;
+}
+
+.footer-text > a:link,
+.footer-text > a:visited {
+  color: white;
+  padding-left: 1em;
+}
+
+.footer-text {
   text-align: center;
+  padding: 0.3em;
+  height: 3em;
   background: linear-gradient(
     90deg,
     rgb(195, 158, 193) 0%,
     rgba(7, 106, 171) 100%
   );
-  width: 100%;
-  padding: 0.3em;
   margin-top: -10px;
 }
 
-footer > p > a:link,
-footer > p > a:visited {
-  color: white;
-  padding-left: 1em;
-}
-
-footer > p > a > i {
+.footer-text > a > i {
   vertical-align: middle;
 }
 

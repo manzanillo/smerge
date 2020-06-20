@@ -1,3 +1,8 @@
 a.btn {
   margin: 1.5em;
 }
+
+footer {
+  position: absolute;
+  bottom: 0;
+}
