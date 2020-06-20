@@ -8,29 +8,21 @@
 
 {% block content %}
 
-<div class="card vertical-center ">
+<div class="container">
   <div class="row">
-      <div class="col s0 m1 l1 xl1"></div>
-      <div class="col s12 m6 l7 xl7">
-        <h1 class="center-align">Seite nicht gefunden!</h1>
+        <h1 class="center-align">{% trans "No badger has ever dug here!" %}</h1>
         <div class=" text-block">
-          <p>Deine Seite konnte nicht gefunden werden. Das kann verschiedene Gründe haben:</p>
+          <p>{% trans "Your page could not be found. This can have several reasons: " %}</p>
           <dl>
-            <li>Deine Seite gibt es nicht, oder</li>
-            <li>deine Seite ist umgezogen, oder</li>
-            <li>deine Seite wurde gelöscht</li>
+            <li>{% trans "Your page doesn't exist or" %}</li>
+            <li>{% trans "your page has moved or" %}</li>
+            <li>{% trans "your page was deleted" %}</li>
           </dl>
-          <p>Vielleicht helfen dir diese Links weiter:</p>
+          <p>{% trans "Maybe these links will help you:" %}</p>
         </div>
-      </div>
-
-      <div class="col s0 m5 l4 xl4">
-        <img class="smerge-image" src="{% static "icon/icon.svg" %}" />
-      </div>
-    </div>
     <div class="center-align">
       <a href="{% url 'home' %}" class="btn waves-effect waves-light">
-        Startseite
+        {% trans "Home" %}
       </a>
       <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
         {% trans "Open existing" %}
@@ -39,7 +31,7 @@
         {% trans "Create new" %}
       </a>
       <a class="btn waves-effect waves-light" onclick="window.history.back()">
-        Zurück
+        {% trans "Back" %}
       </a>
     </div>
   </div>

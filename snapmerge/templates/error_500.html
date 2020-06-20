@@ -8,36 +8,26 @@
 
 {% block content %}
 
-<div class="card vertical-center ">
+<div class="container">
   <div class="row">
-      <div class="col s0 m1 l1 xl1"></div>
-      <div class="col s12 m6 l7 xl7">
-        <h2 class="center-align">In unserem Server ist etwas kaputt...</h2>
-        <div class=" text-block">
-          <p>Einige Dachstunnel sind eingestürzt. Noch ist unklar, wie lange dies andauern wird.
-          Vielleicht sind andere Seiten noch erreichbar:</p>
-        </div>
-        <div class="center-align">
-          <a href="{% url 'home' %}" class="btn waves-effect waves-light">
-            Startseite
-          </a>
-          <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
-            {% trans "Open existing" %}
-          </a>
-          <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn waves-effect waves-light">
-            {% trans "Create new" %}
-          </a>
-          <a class="btn waves-effect waves-light" onclick="window.history.back()">
-            Zurück
-          </a>
-        </div>
-      </div>
-
-      <div class="col s0 m5 l4 xl4">
-        <img class="smerge-image" src="{% static "icon/icon.svg" %}" />
-      </div>
+    <h2 class="center-align">{% trans "Some badger tunnels have collapsed" %}</h2>
+    <div class=" text-block">
+      <p>{% trans "It is not yet clear how long this will last. Maybe other sites are still accessible:" %}</p>
     </div>
-    
+    <div class="center-align">
+      <a href="{% url 'home' %}" class="btn waves-effect waves-light">
+        {% trans "Home" %}
+      </a>
+      <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">
+        {% trans "Open existing" %}
+      </a>
+      <a href="{% url 'create_proj' %}" id="new-btn" name="new" class="btn waves-effect waves-light">
+        {% trans "Create new" %}
+      </a>
+      <a class="btn waves-effect waves-light" onclick="window.history.back()">
+        {% trans "Back" %}
+      </a>
+    </div>    
   </div>
 </div>
 
