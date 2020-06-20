@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-20 08:28+0000\n"
+"POT-Creation-Date: 2020-06-20 12:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,369 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: env/lib/python3.7/site-packages/django/contrib/messages/apps.py:7
-msgid "Messages"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/contrib/sitemaps/apps.py:7
-msgid "Site Maps"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/contrib/staticfiles/apps.py:9
-#, fuzzy
-#| msgid "SnapFiles"
-msgid "Static Files"
-msgstr "SnapDateien"
-
-#: env/lib/python3.7/site-packages/django/contrib/syndication/apps.py:7
-msgid "Syndication"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/paginator.py:45
-msgid "That page number is not an integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/paginator.py:47
-msgid "That page number is less than 1"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/paginator.py:52
-msgid "That page contains no results"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:32
-msgid "Enter a valid value."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:103
-#: env/lib/python3.7/site-packages/django/forms/fields.py:659
-msgid "Enter a valid URL."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:155
-msgid "Enter a valid integer."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:166
-msgid "Enter a valid email address."
-msgstr ""
-
-#. Translators: "letters" means latin letters: a-z and A-Z.
-#: env/lib/python3.7/site-packages/django/core/validators.py:240
-msgid ""
-"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:247
-msgid ""
-"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:256
-#: env/lib/python3.7/site-packages/django/core/validators.py:276
-msgid "Enter a valid IPv4 address."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:261
-#: env/lib/python3.7/site-packages/django/core/validators.py:277
-msgid "Enter a valid IPv6 address."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:271
-#: env/lib/python3.7/site-packages/django/core/validators.py:275
-msgid "Enter a valid IPv4 or IPv6 address."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:305
-msgid "Enter only digits separated by commas."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:311
-#, python-format
-msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:343
-#, python-format
-msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:352
-#, python-format
-msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:362
-#, python-format
-msgid ""
-"Ensure this value has at least %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at least %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:377
-#, python-format
-msgid ""
-"Ensure this value has at most %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at most %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:396
-#: env/lib/python3.7/site-packages/django/forms/fields.py:291
-#: env/lib/python3.7/site-packages/django/forms/fields.py:326
-msgid "Enter a number."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:398
-#, python-format
-msgid "Ensure that there are no more than %(max)s digit in total."
-msgid_plural "Ensure that there are no more than %(max)s digits in total."
-msgstr[0] ""
-msgstr[1] ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:403
-#, python-format
-msgid "Ensure that there are no more than %(max)s decimal place."
-msgid_plural "Ensure that there are no more than %(max)s decimal places."
-msgstr[0] ""
-msgstr[1] ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:408
-#, python-format
-msgid ""
-"Ensure that there are no more than %(max)s digit before the decimal point."
-msgid_plural ""
-"Ensure that there are no more than %(max)s digits before the decimal point."
-msgstr[0] ""
-msgstr[1] ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:470
-#, python-format
-msgid ""
-"File extension “%(extension)s” is not allowed. Allowed extensions are: "
-"%(allowed_extensions)s."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/core/validators.py:522
-msgid "Null characters are not allowed."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/base.py:1181
-#: env/lib/python3.7/site-packages/django/forms/models.py:759
-msgid "and"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/base.py:1183
-#, python-format
-msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:104
-#, python-format
-msgid "Value %(value)r is not a valid choice."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:105
-msgid "This field cannot be null."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:106
-msgid "This field cannot be blank."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:107
-#, python-format
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr ""
-
-#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
-#. Eg: "Title must be unique for pub_date year"
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:111
-#, python-format
-msgid ""
-"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:130
-#, python-format
-msgid "Field of type: %(field_type)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:937
-#, python-format
-msgid "“%(value)s” value must be either True or False."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:938
-#, python-format
-msgid "“%(value)s” value must be either True, False, or None."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:940
-msgid "Boolean (Either True or False)"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:981
-#, python-format
-msgid "String (up to %(max_length)s)"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1045
-msgid "Comma-separated integers"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1094
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
-"format."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1096
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1239
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
-"date."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1099
-msgid "Date (without time)"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1237
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
-"uuuuuu]][TZ] format."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1241
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1245
-msgid "Date (with time)"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1393
-#, python-format
-msgid "“%(value)s” value must be a decimal number."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1395
-msgid "Decimal number"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1534
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
-"uuuuuu] format."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1537
-#, fuzzy
-#| msgid "Description"
-msgid "Duration"
-msgstr "Beschreibung"
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1587
-msgid "Email address"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1610
-#, fuzzy
-#| msgid "File"
-msgid "File path"
-msgstr "Datei"
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1676
-#, python-format
-msgid "“%(value)s” value must be a float."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1678
-msgid "Floating point number"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1716
-#, python-format
-msgid "“%(value)s” value must be an integer."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1718
-msgid "Integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1801
-msgid "Big (8 byte) integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1817
-msgid "IPv4 address"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1848
-msgid "IP address"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1928
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1929
-#, python-format
-msgid "“%(value)s” value must be either None, True or False."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1931
-msgid "Boolean (Either True, False or None)"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1966
-msgid "Positive integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1979
-msgid "Positive small integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1993
-#, python-format
-msgid "Slug (up to %(max_length)s)"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2025
-msgid "Small integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2032
-msgid "Text"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2060
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
-"format."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2062
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
-"invalid time."
-msgstr ""
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2065
 #, fuzzy
@@ -400,114 +37,6 @@ msgstr "Datei"
 msgid "Image"
 msgstr "Bild"
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:53
-msgid "This field is required."
-msgstr "Dieses Feld ist erforderlich."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:246
-msgid "Enter a whole number."
-msgstr "Bitte Zahl eintragen."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:397
-#: env/lib/python3.7/site-packages/django/forms/fields.py:1127
-#, fuzzy
-#| msgid "Invalid Data."
-msgid "Enter a valid date."
-msgstr "Botte gültiges Datum eintragen."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:421
-#: env/lib/python3.7/site-packages/django/forms/fields.py:1128
-msgid "Enter a valid time."
-msgstr "Bitte gültige Zeit eintragen."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:443
-msgid "Enter a valid date/time."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:472
-msgid "Enter a valid duration."
-msgstr "Bitte gültige Dauer eintragen."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:473
-#, python-brace-format
-msgid "The number of days must be between {min_days} and {max_days}."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:533
-msgid "No file was submitted. Check the encoding type on the form."
-msgstr "Keine Datei hinzugefügt. Bitte Dateiformat prüfen."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:534
-msgid "No file was submitted."
-msgstr "Keine Datei hinzugefügt."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:535
-msgid "The submitted file is empty."
-msgstr "Die hinzugefügte Datei ist leer."
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:537
-#, python-format
-msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
-msgid_plural ""
-"Ensure this filename has at most %(max)d characters (it has %(length)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:540
-msgid "Please either submit a file or check the clear checkbox, not both."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:601
-msgid ""
-"Upload a valid image. The file you uploaded was either not an image or a "
-"corrupted image."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:763
-#: env/lib/python3.7/site-packages/django/forms/fields.py:853
-#: env/lib/python3.7/site-packages/django/forms/models.py:1275
-#, python-format
-msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:854
-#: env/lib/python3.7/site-packages/django/forms/fields.py:969
-#: env/lib/python3.7/site-packages/django/forms/models.py:1274
-msgid "Enter a list of values."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:970
-msgid "Enter a complete value."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/fields.py:1186
-msgid "Enter a valid UUID."
-msgstr ""
-
-
-#: env/lib/python3.7/site-packages/django/forms/forms.py:207
-#, python-format
-msgid "(Hidden field %(name)s) %(error)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:93
-msgid "ManagementForm data is missing or has been tampered with"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:345
-#, python-format
-msgid "Please submit %d or fewer forms."
-msgid_plural "Please submit %d or fewer forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:352
-#, python-format
-msgid "Please submit %d or more forms."
-msgid_plural "Please submit %d or more forms."
-msgstr[0] ""
-msgstr[1] ""
-
 #: env/lib/python3.7/site-packages/django/forms/formsets.py:379
 #: env/lib/python3.7/site-packages/django/forms/formsets.py:386
 msgid "Order"
@@ -515,80 +44,10 @@ msgstr ""
 
 #: env/lib/python3.7/site-packages/django/forms/formsets.py:391
 #: snapmerge/templates/proj.html:126
+#, fuzzy
+#| msgid "Delete Project"
 msgid "Delete"
-msgstr "Löschen"
-
-#: env/lib/python3.7/site-packages/django/forms/models.py:754
-#, python-format
-msgid "Please correct the duplicate data for %(field)s."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/models.py:758
-#, python-format
-msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/models.py:764
-#, python-format
-msgid ""
-"Please correct the duplicate data for %(field_name)s which must be unique "
-"for the %(lookup)s in %(date_field)s."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/models.py:773
-msgid "Please correct the duplicate values below."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/models.py:1094
-msgid "The inline value did not match the parent instance."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/models.py:1161
-msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/models.py:1277
-#, python-format
-msgid "“%(pk)s” is not a valid value."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/utils.py:162
-#, python-format
-msgid ""
-"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
-"may be ambiguous or it may not exist."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:395
-msgid "Clear"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:396
-msgid "Currently"
-msgstr "Aktuell"
-
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:397
-#: snapmerge/templates/proj.html:79 snapmerge/templates/proj.html:94
-#: snapmerge/templates/proj.html:111
-msgid "Change"
-msgstr "Ändern"
-
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:709
-msgid "Unknown"
-msgstr "Unbekannt"
-
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:710
-msgid "Yes"
-msgstr "Ja"
-
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:711
-msgid "No"
-msgstr "Nein"
-
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:788
-msgid "yes,no,maybe"
-msgstr "Ja, nein, vielleicht"
-
+msgstr "Lösche Projekt"
 
 #: snapmerge/home/forms.py:5 snapmerge/home/models.py:21
 #: snapmerge/templates/mail/mail.html:26
@@ -667,7 +126,7 @@ msgstr "Beschreibung (optional)"
 
 #: snapmerge/home/models.py:115
 msgid "email (optional), for restoring password and pin"
-msgstr "Email (optional), zur Wiederherstellung von Zugangsdaten"
+msgstr "Email zur Wiederherstellung von Zugangsdaten (optional)"
 
 #: snapmerge/home/models.py:124
 msgid "File (optional)"
@@ -747,24 +206,24 @@ msgstr "Projekt gelöschht"
 msgid "Back"
 msgstr "Zurück"
 
-#: snapmerge/templates/base.html:76 snapmerge/templates/base.html:77
+#: snapmerge/templates/base.html:75 snapmerge/templates/base.html:76
 msgid "GitHub"
 msgstr "GitHub"
 
-#: snapmerge/templates/base.html:79 snapmerge/templates/base.html:80
+#: snapmerge/templates/base.html:78 snapmerge/templates/base.html:79
 #: snapmerge/templates/how_to.html:85
 msgid "Contact"
 msgstr "Kontakt"
 
-#: snapmerge/templates/create_proj.html:16
+#: snapmerge/templates/create_proj.html:15
 msgid "Create a new Project"
 msgstr "Erstelle ein neues Projekt"
 
-#: snapmerge/templates/create_proj.html:21
+#: snapmerge/templates/create_proj.html:20
 msgid "Optional invividual starting Snap! File"
 msgstr "Optional: Eigene Snap-Datei als Projektstart hochladen"
 
-#: snapmerge/templates/create_proj.html:25
+#: snapmerge/templates/create_proj.html:24
 msgid ""
 "If you don't upload a file, a standard blank snap project will be your "
 "starting point."
@@ -772,32 +231,30 @@ msgstr ""
 "Wenn du keine Datei hochlädst, wird ein leeres Snap-Projekt als "
 "Ausgangspunkt verwendet."
 
-#: snapmerge/templates/create_proj.html:27
-#, fuzzy
-#| msgid ""
-#| " If you have already done something and want to continue working on it in "
-#| "smerge, or if you want to provide\n"
-#| "            your students with a template, custom blocks or something "
-#| "like that, upload your individual starting\n"
-#| "            point here (You get this file through File - Export project "
-#| "in Snap!). "
-msgid ""
-" If you have already done something and want to continue working on it in "
-"smerge, or\n"
-"                if you want to provide\n"
-"                your students with a template, custom blocks or something "
-"like that, upload your individual starting\n"
-"                point here (You get this file through File - Export project "
-"in Snap!). "
-msgstr ""
-"Wenn du an einem bestehenden Projekt weiterarbeiten möchtest, oder deinen "
-"Schülerinnen und Schülern eine Vorlage zur Vefügung (z.B. mit eigenen "
-"Blöcken o.ä.) stellen willst, lade die entsprechende Snap-Datei hier hoch. "
-"Diese Datei erhälst du via Datei - Projekt exportieren aus Snap! "
+#: snapmerge/templates/create_proj.html:26
+msgid "Want to continue working on your project in Smerge?"
+msgstr "Du möchtest an deinem Projekt in Smerge weiterarbeiten?"
 
-#: snapmerge/templates/create_proj.html:31
+
+#: snapmerge/templates/create_proj.html:27
+msgid "Or want to provide your students with a template?"
+msgstr "Oder du möchtest deiner Klasse eine Vorlage zur Verfügung stellen?"
+
+
+#: snapmerge/templates/create_proj.html:28
+msgid "Upload your starting file here."
+msgstr "Lade deine Vorlage hier hoch!"
+
+
+
+
+#: snapmerge/templates/create_proj.html:29
+msgid "You get this file through File - Export project in Snap!)."
+msgstr "Du kannst die Vorlage über Datei - Projekt exportieren in Snap beziehen."
+
+#: snapmerge/templates/create_proj.html:30
 msgid "You can add further initial nodes via drag and drop afterwards."
-msgstr "Weitere Startpunkte kannst du später via drag and drop hinzufügen"
+msgstr "Weitere Startpunkte kannst du später via Drag-and-drop hinzufügen"
 
 #: snapmerge/templates/error_404.html:13
 msgid "No badger has ever dug here!"
@@ -805,7 +262,8 @@ msgstr "Hier war noch kein Dachs."
 
 #: snapmerge/templates/error_404.html:15
 msgid "Your page could not be found. This can have several reasons: "
-msgstr "Deine Seite konnte nicht gefunden werden. Das kann mehrere Ursachen haben:"
+msgstr ""
+"Deine Seite konnte nicht gefunden werden. Das kann mehrere Ursachen haben:"
 
 #: snapmerge/templates/error_404.html:17
 msgid "Your page doesn't exist or"
@@ -845,7 +303,9 @@ msgstr "Einige Dachstunnel sind eingestürzt."
 msgid ""
 "It is not yet clear how long this will last. Maybe other sites are still "
 "accessible:"
-msgstr "Es ist unklar, wie lange das andauern wird. Aber vielleicht sind andere Seiten noch erreichbar."
+msgstr ""
+"Es ist unklar, wie lange das andauern wird. Aber vielleicht sind andere "
+"Seiten noch erreichbar."
 
 #: snapmerge/templates/how_to.html:15
 msgid "How to Smerge..."
@@ -1104,7 +564,9 @@ msgstr "Wie kann Smerge beim Unterrichten helfen?"
 
 #: snapmerge/templates/how_to.html:71
 msgid "enabling collaboration for project-based learning with <em>Snap!</em>"
-msgstr "Smerge ermöglicht die Zusammenarbeit in projektbasiertem Lernen mit <em>Snap!</em>"
+msgstr ""
+"Smerge ermöglicht die Zusammenarbeit in projektbasiertem Lernen mit <em>Snap!"
+"</em>"
 
 #: snapmerge/templates/how_to.html:72
 msgid ""
@@ -1157,6 +619,10 @@ msgstr ""
 #: snapmerge/templates/how_to.html:84
 msgid "Want to know more or need help?"
 msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
+
+#: snapmerge/templates/impressum.html:12
+msgid "About Smerge"
+msgstr "Über Smerge"
 
 #: snapmerge/templates/info_proj.html:12
 #, fuzzy
@@ -1304,8 +770,6 @@ msgid "Change Project Description"
 msgstr "Ändere Projektbeschreibung"
 
 #: snapmerge/templates/proj.html:116
-#, fuzzy
-#| msgid "Project"
 msgid "Delete Project"
 msgstr "Lösche Projekt"
 
@@ -1323,8 +787,20 @@ msgstr ""
 "Gib deine Emailadresse ein, um deine Projektpasswörter und PINs "
 "wiederzuerlangen."
 
+#~ msgid ""
+#~ " If you have already done something and want to continue working on it in "
+#~ "smerge, or if you want to provide\n"
+#~ " your students with a template, custom blocks or something like that, "
+#~ "upload your individual starting\n"
+#~ " point here (You get this file through File - Export project in Snap!). "
+#~ msgstr ""
+#~ "Wenn du an einem bestehenden Projekt weiterarbeiten möchtest, oder deinen "
+#~ "Schülerinnen und Schülern eine Vorlage zur Vefügung (z.B. mit eigenen "
+#~ "Blöcken o.ä.) stellen willst, lade die entsprechende Snap-Datei hier "
+#~ "hoch. Diese Datei erhälst du via Datei - Projekt exportieren aus Snap! "
+
 #~ msgid "How to smerge..."
-#~ msgstr "How to smerge"
+#~ msgstr "How to Smerge"
 
 #~ msgid ""
 #~ "\n"

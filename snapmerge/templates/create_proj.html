@@ -2,7 +2,6 @@
 {% load i18n static %}
 
 {%block css %}
-<link rel="stylesheet" href="{% static "css/home.css" %}">
 {% endblock %}
 
 
@@ -24,10 +23,10 @@
               {{ file_form.as_p }}
               <p> {% trans "If you don't upload a file, a standard blank snap project will be your starting point." %}
               </p>
-              <p> {% blocktrans %} If you have already done something and want to continue working on it in smerge, or
-                if you want to provide
-                your students with a template, custom blocks or something like that, upload your individual starting
-                point here (You get this file through File - Export project in Snap!). {% endblocktrans %} </p>
+              <p> {% trans "Want to continue working on your project in Smerge?" %}
+                  {% trans "Or want to provide your students with a template?" %}
+                  {% trans "Upload your starting file here." %}
+                  {% trans "You get this file through File - Export project in Snap!)." %} </p>
               <p> {% trans "You can add further initial nodes via drag and drop afterwards." %}</p>
             </div>
           </li>
