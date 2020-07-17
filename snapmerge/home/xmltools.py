@@ -68,6 +68,17 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
         elif subject_hash in hashed_elements:
             reference_child = hashed_elements[subject_hash]
 
+            # deal with similar coordinates
+            if 'x' in reference_child.attrib and 'x' in subject_child.attrib:
+                reference_child.set('x', str(round(
+                    float(reference_child.get('x')))))
+                reference_child.set('y', str(round(
+                    float(reference_child.get('y')))))
+                subject_child.set(
+                    'x', str(round(float(subject_child.get('x')))))
+                subject_child.set(
+                    'y', str(round(float(subject_child.get('y')))))
+
             if ref_tag == 'scripts' and subject_tag == 'scripts' \
                     and ET.tostring(reference_child) == ET.tostring(subject_child):
                 # both scripts are identical
