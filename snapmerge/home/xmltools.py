@@ -19,7 +19,11 @@ def element_hash(ele):
         attribute_keys = sorted(ele.keys())
 
     for attr_key in attribute_keys:
-        hash_string += u'{0}{1}'.format(attr_key, ele.get(attr_key))
+        if (attr_key == 'x' or attr_key == 'y'):
+            hash_string += u'{0}{1}'.format(attr_key,
+                                            round(float(ele.get(attr_key))))
+        else:
+            hash_string += u'{0}{1}'.format(attr_key, ele.get(attr_key))
 
     return int(sha1(hash_string.encode('utf-8')).hexdigest(), 16)
 
@@ -76,16 +80,17 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                 else:
                     # add comment
                     ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
-                                  ' from post: ' + ref_description + ' </comment>'
+                        ' from post: ' + ref_description + ' </comment>'
 
                     if reference_child.tag != 'comment':
-                        get_first_child(reference_child).append(ET.fromstring(ref_comment))
-
+                        get_first_child(reference_child).append(
+                            ET.fromstring(ref_comment))
 
                     subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
-                                      '" >' + ' from post: ' + subject_description + '</comment>'
+                        '" >' + ' from post: ' + subject_description + '</comment>'
                     if reference_child.tag != 'comment':
-                        get_first_child(subject_child).append(ET.fromstring(subject_comment))
+                        get_first_child(subject_child).append(
+                            ET.fromstring(subject_comment))
 
                     # change position of subject_child so that they are not on top of each other
                     x_pos = int(float(subject_child.get('x')))
@@ -113,31 +118,34 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
 
                     # the files have a common ancestor
 
-
             else:
-                xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
+                xml_merge(reference_child, subject_child,
+                          ref_description, subject_description, ancestor)
         else:
             # there is a difference
             if subject_child.tag == 'stage':
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'stage':
                         # we are only allowed to have one stage
-                        xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
+                        xml_merge(reference_child, subject_child,
+                                  ref_description, subject_description, ancestor)
                         different_name_of_stage_comment = '<comment collapsed = "false"' + ' w = "150" >' \
-                                                          + ' other stage name was: ' + subject_child.get('name') \
-                                                          + '</comment>'
-                        reference_child.find('scripts').append(ET.fromstring(different_name_of_stage_comment))
+                            + ' other stage name was: ' + subject_child.get('name') \
+                            + '</comment>'
+                        reference_child.find('scripts').append(
+                            ET.fromstring(different_name_of_stage_comment))
             elif subject_child.tag == 'watcher':
                 already_exists = False
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'watcher' and subject_child.get('var') == reference_child.get('var'):
-                            already_exists = True
+                        already_exists = True
                 if not already_exists:
                     reference_element.append(subject_child)
             elif subject_child.tag == 'sprite':
                 for reference_child in list(reference_element):
                     if reference_child.tag == 'sprite' and subject_child.get('name') == reference_child.get('name'):
-                        xml_merge(reference_child, subject_child, ref_description, subject_description, ancestor)
+                        xml_merge(reference_child, subject_child,
+                                  ref_description, subject_description, ancestor)
                 reference_element.append(subject_child)
             else:
                 reference_element.append(subject_child)
@@ -148,8 +156,8 @@ def xml_merge_props(reference_element, subject_element, type="costumes"):
     data_type = 'image'
     if type == 'sounds':
         data_type = 'sound'
-    props_into = reference_element[0]# 'list'
-    props_from = subject_element[0] #'list'
+    props_into = reference_element[0]  # 'list'
+    props_from = subject_element[0]  # 'list'
     if props_from.get('struct') == 'atomic':
         return
     if props_into.get('struct') == 'atomic':
@@ -168,14 +176,13 @@ def xml_merge_props(reference_element, subject_element, type="costumes"):
                 props_into.append(prop)
 
 
-
 def merge(file1, file2, output, file1_description, file2_description, ancestor=None):
     """
-    
+
     :param file1: first XML document path
     :param file2: second XML document path
     :param output: output path for newly created XML document
-    :return: 
+    :return:
     """
     ref = ET.parse(settings.BASE_DIR + file1)
     ref_root = ref.getroot()
@@ -193,7 +200,8 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor=N
                   ancestor=ancestor_root
                   )
     else:
-        xml_merge(ref_root, subject_root, ref_description=file1_description, subject_description=file2_description)
+        xml_merge(ref_root, subject_root, ref_description=file1_description,
+                  subject_description=file2_description)
 
     with open(settings.BASE_DIR + output, 'wb') as f:
         ref.write(f)
@@ -202,7 +210,8 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor=N
 def include_sync_button(file, proj_id, me):
     with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
         sync_file = f.read()
-        sync_file = sync_file.replace('{{url}}', settings.URL + '/sync/' + str(proj_id) + '?ancestor=' + str(me))
+        sync_file = sync_file.replace(
+            '{{url}}', settings.URL + '/sync/' + str(proj_id) + '?ancestor=' + str(me))
         sync_button = ET.fromstring(sync_file)
 
         target = ET.parse(settings.BASE_DIR + file)
