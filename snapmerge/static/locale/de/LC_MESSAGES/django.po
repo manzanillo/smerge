@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-20 12:01+0000\n"
+"POT-Creation-Date: 2020-09-25 11:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,212 +18,1365 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2065
+#: .\env\Lib\site-packages\django\contrib\messages\apps.py:7
+msgid "Messages"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\contrib\sitemaps\apps.py:7
+msgid "Site Maps"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\contrib\staticfiles\apps.py:9
+#, fuzzy
+#| msgid "SnapFiles"
+msgid "Static Files"
+msgstr "Snap-Dateien"
+
+#: .\env\Lib\site-packages\django\contrib\syndication\apps.py:7
+msgid "Syndication"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\core\paginator.py:45
+msgid "That page number is not an integer"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\core\paginator.py:47
+msgid "That page number is less than 1"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\core\paginator.py:52
+msgid "That page contains no results"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:32
+msgid "Enter a valid value."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:103
+#: .\env\Lib\site-packages\django\forms\fields.py:659
+msgid "Enter a valid URL."
+msgstr "Bitte gültige URL eingeben."
+
+#: .\env\Lib\site-packages\django\core\validators.py:155
+msgid "Enter a valid integer."
+msgstr "Bitte gültige Zahl eingeben."
+
+#: .\env\Lib\site-packages\django\core\validators.py:166
+msgid "Enter a valid email address."
+msgstr "Bitte gültige E-Mail-Adresse eingeben."
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: .\env\Lib\site-packages\django\core\validators.py:240
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr "Bitte nur Buchstaben, Zahlen oder Unterstriche verwenden."
+
+#: .\env\Lib\site-packages\django\core\validators.py:247
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr "Bitte nur Buchstaben, Zahlen oder Unterstriche verwenden."
+
+#: .\env\Lib\site-packages\django\core\validators.py:256
+#: .\env\Lib\site-packages\django\core\validators.py:276
+msgid "Enter a valid IPv4 address."
+msgstr "Bitte gültige IPv4 Addresse eingeben."
+
+#: .\env\Lib\site-packages\django\core\validators.py:261
+#: .\env\Lib\site-packages\django\core\validators.py:277
+msgid "Enter a valid IPv6 address."
+msgstr "Bitte gültige IPv6 Addresse eingeben."
+
+#: .\env\Lib\site-packages\django\core\validators.py:271
+#: .\env\Lib\site-packages\django\core\validators.py:275
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr "Bitte gültige IPv4 oder IPv6 Addresse eingeben."
+
+#: .\env\Lib\site-packages\django\core\validators.py:305
+msgid "Enter only digits separated by commas."
+msgstr "Nur kommagetrennte Zahlen verwenden."
+
+#: .\env\Lib\site-packages\django\core\validators.py:311
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+"Stellen Sie sicher, dass der Wert %(limit_value) entspricht (aktuell: "
+"%(show_value))"
+
+#: .\env\Lib\site-packages\django\core\validators.py:343
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+"Stellen Sie sicher, dass der Wert kleiner oder gleich %(limit_value) ist."
+
+#: .\env\Lib\site-packages\django\core\validators.py:352
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+"Stellen Sie sicher, dass der Wert größer oder gleich %(limit_value) ist."
+
+#: .\env\Lib\site-packages\django\core\validators.py:362
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:377
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:396
+#: .\env\Lib\site-packages\django\forms\fields.py:291
+#: .\env\Lib\site-packages\django\forms\fields.py:326
+msgid "Enter a number."
+msgstr "Bitte Zahl eingeben."
+
+#: .\env\Lib\site-packages\django\core\validators.py:398
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:403
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:408
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:470
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\core\validators.py:522
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\base.py:1181
+#: .\env\Lib\site-packages\django\forms\models.py:759
+msgid "and"
+msgstr "und"
+
+#: .\env\Lib\site-packages\django\db\models\base.py:1183
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr "%(model_name)s mit %(field_labels) existiert bereits."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:104
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr "%(value)r stellt keinen gültigen Wert dar."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:105
+msgid "This field cannot be null."
+msgstr "Dieses Feld darf nicht null sein."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:106
+msgid "This field cannot be blank."
+msgstr "Dieses Feld darf nicht leer sein."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:107
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr "%(model_name)s mit %(field_label) existiert bereits."
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
+#. Eg: "Title must be unique for pub_date year"
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:111
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:130
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:937
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:938
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:940
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:981
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr "String (bis zu %(max_length))"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1045
+msgid "Comma-separated integers"
+msgstr "Kommagetrennte Zahlen"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1094
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1096
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1239
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr "“%(value)s” hat das korrekte Format (YYYY-MM-DD) ist aber ungültig"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1099
+msgid "Date (without time)"
+msgstr "Datum (ohne Uhrzeit)"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1237
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1241
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1245
+msgid "Date (with time)"
+msgstr "Datum (mit Uhrzeit)"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1393
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr "“%(value)” muss gültige Dezimalzahl sein."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1395
+msgid "Decimal number"
+msgstr "Dezimalzahl"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1534
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+"uuuuuu] format."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1537
+#, fuzzy
+#| msgid "Description"
+msgid "Duration"
+msgstr "Beschreibung"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1587
+msgid "Email address"
+msgstr "Emailadresse"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1610
+#, fuzzy
+#| msgid "File"
+msgid "File path"
+msgstr "Datei"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1676
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr "“%(value)s” Wert muss float sein."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1678
+msgid "Floating point number"
+msgstr "Gleitkommazahl"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1716
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr "“%(value)s” Wert muss Ganzzahl sein."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1718
+msgid "Integer"
+msgstr "Ganzzahl"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1801
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1817
+msgid "IPv4 address"
+msgstr "IPv4 Adresse"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1848
+msgid "IP address"
+msgstr "IP Adresse"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1928
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1929
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr "“%(value)s” muss None, True oder False sein."
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1931
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1966
+msgid "Positive integer"
+msgstr "Positive Ganzzahl"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1979
+msgid "Positive small integer"
+msgstr "Positive kleine Ganzzahl"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1993
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2025
+msgid "Small integer"
+msgstr "Kleine Ganzzahl"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2032
+msgid "Text"
+msgstr "Text"
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2060
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2062
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2065
 #, fuzzy
 #| msgid "Timestamp"
 msgid "Time"
 msgstr "Zeitstempel"
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2191
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2191
 msgid "URL"
 msgstr "URL"
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:221
-#: snapmerge/home/models.py:60
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2213
+msgid "Raw binary data"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2278
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:2280
+msgid "Universally unique identifier"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\files.py:221
+#: .\snapmerge\home\models.py:60
 msgid "File"
 msgstr "Datei"
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:360
+#: .\env\Lib\site-packages\django\db\models\fields\files.py:360
 msgid "Image"
 msgstr "Bild"
 
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:379
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:386
+#: .\env\Lib\site-packages\django\db\models\fields\related.py:778
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\related.py:780
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\related.py:1012
+msgid "One-to-one relationship"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\related.py:1066
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\related.py:1067
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\db\models\fields\related.py:1109
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: .\env\Lib\site-packages\django\forms\boundfield.py:149
+msgid ":?.!"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:53
+msgid "This field is required."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:246
+msgid "Enter a whole number."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:397
+#: .\env\Lib\site-packages\django\forms\fields.py:1127
+#, fuzzy
+#| msgid "Invalid Data."
+msgid "Enter a valid date."
+msgstr "Ungültige Daten"
+
+#: .\env\Lib\site-packages\django\forms\fields.py:421
+#: .\env\Lib\site-packages\django\forms\fields.py:1128
+msgid "Enter a valid time."
+msgstr "Bitt geben Sie eine gültige Zeit ein."
+
+#: .\env\Lib\site-packages\django\forms\fields.py:443
+msgid "Enter a valid date/time."
+msgstr "Bitte geben Sie ein gültiges Datum ein."
+
+#: .\env\Lib\site-packages\django\forms\fields.py:472
+msgid "Enter a valid duration."
+msgstr "Bitte geben Sie eine gültige DAuer ein."
+
+#: .\env\Lib\site-packages\django\forms\fields.py:473
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:533
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr "Keine Datei hochgeladen. Prüfen Sie den encoding type der form"
+
+#: .\env\Lib\site-packages\django\forms\fields.py:534
+msgid "No file was submitted."
+msgstr "Keine Datei hinzugefügt."
+
+#: .\env\Lib\site-packages\django\forms\fields.py:535
+msgid "The submitted file is empty."
+msgstr "Die hochgeladene Datei ist leer."
+
+#: .\env\Lib\site-packages\django\forms\fields.py:537
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:540
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:601
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr "Bitte gültiges Bild hochladen."
+
+#: .\env\Lib\site-packages\django\forms\fields.py:763
+#: .\env\Lib\site-packages\django\forms\fields.py:853
+#: .\env\Lib\site-packages\django\forms\models.py:1275
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:854
+#: .\env\Lib\site-packages\django\forms\fields.py:969
+#: .\env\Lib\site-packages\django\forms\models.py:1274
+msgid "Enter a list of values."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:970
+msgid "Enter a complete value."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\fields.py:1186
+msgid "Enter a valid UUID."
+msgstr "Bitte gültige UUID eingeben."
+
+#. Translators: This is the default suffix added to form field labels
+#: .\env\Lib\site-packages\django\forms\forms.py:81
+msgid ":"
+msgstr ":"
+
+#: .\env\Lib\site-packages\django\forms\forms.py:207
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr "(Verstecktes Feld %(name)s) %(error)s"
+
+#: .\env\Lib\site-packages\django\forms\formsets.py:93
+msgid "ManagementForm data is missing or has been tampered with"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\formsets.py:345
+#, python-format
+msgid "Please submit %d or fewer forms."
+msgid_plural "Please submit %d or fewer forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\forms\formsets.py:352
+#, python-format
+msgid "Please submit %d or more forms."
+msgid_plural "Please submit %d or more forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\forms\formsets.py:379
+#: .\env\Lib\site-packages\django\forms\formsets.py:386
 msgid "Order"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:391
-#: snapmerge/templates/proj.html:126
+#: .\env\Lib\site-packages\django\forms\formsets.py:391
+#: .\snapmerge\templates\proj.html:126
 #, fuzzy
 #| msgid "Delete Project"
 msgid "Delete"
 msgstr "Lösche Projekt"
 
-#: snapmerge/home/forms.py:5 snapmerge/home/models.py:21
-#: snapmerge/templates/mail/mail.html:26
+#: .\env\Lib\site-packages\django\forms\models.py:754
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\models.py:758
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\models.py:764
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\models.py:773
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\models.py:1094
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\models.py:1161
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\models.py:1277
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\utils.py:162
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\forms\widgets.py:395
+msgid "Clear"
+msgstr "Löschen"
+
+#: .\env\Lib\site-packages\django\forms\widgets.py:396
+msgid "Currently"
+msgstr "Aktuell"
+
+#: .\env\Lib\site-packages\django\forms\widgets.py:397
+#: .\snapmerge\templates\proj.html:79 .\snapmerge\templates\proj.html:94
+#: .\snapmerge\templates\proj.html:111
+msgid "Change"
+msgstr "Ändern"
+
+#: .\env\Lib\site-packages\django\forms\widgets.py:709
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: .\env\Lib\site-packages\django\forms\widgets.py:710
+msgid "Yes"
+msgstr "Ja"
+
+#: .\env\Lib\site-packages\django\forms\widgets.py:711
+msgid "No"
+msgstr "Nein"
+
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:788
+msgid "yes,no,maybe"
+msgstr "Ja, nein, vielleicht"
+
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:817
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:834
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:836
+#, python-format
+msgid "%s KB"
+msgstr "%s KB"
+
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:838
+#, python-format
+msgid "%s MB"
+msgstr "%s MB"
+
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:840
+#, python-format
+msgid "%s GB"
+msgstr "%s GB"
+
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:842
+#, python-format
+msgid "%s TB"
+msgstr "%s TB"
+
+#: .\env\Lib\site-packages\django\template\defaultfilters.py:844
+#, python-format
+msgid "%s PB"
+msgstr "%s PB"
+
+#: .\env\Lib\site-packages\django\utils\dateformat.py:62
+msgid "p.m."
+msgstr "p.m."
+
+#: .\env\Lib\site-packages\django\utils\dateformat.py:63
+msgid "a.m."
+msgstr "a.m."
+
+#: .\env\Lib\site-packages\django\utils\dateformat.py:68
+msgid "PM"
+msgstr "PM"
+
+#: .\env\Lib\site-packages\django\utils\dateformat.py:69
+msgid "AM"
+msgstr "AM"
+
+#: .\env\Lib\site-packages\django\utils\dateformat.py:150
+msgid "midnight"
+msgstr "Mitternacht"
+
+#: .\env\Lib\site-packages\django\utils\dateformat.py:152
+msgid "noon"
+msgstr "Mittag"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:6
+msgid "Monday"
+msgstr "Montag"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:6
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:6
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:6
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:6
+msgid "Friday"
+msgstr "Freitag"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:7
+msgid "Saturday"
+msgstr "Samstag"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:7
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:10
+msgid "Mon"
+msgstr "Mo"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:10
+msgid "Tue"
+msgstr "Di"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:10
+msgid "Wed"
+msgstr "Mi"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:10
+msgid "Thu"
+msgstr "Do"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:10
+msgid "Fri"
+msgstr "Fr"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:11
+msgid "Sat"
+msgstr "Sa"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:11
+msgid "Sun"
+msgstr "So"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:14
+msgid "January"
+msgstr "Januar"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:14
+msgid "February"
+msgstr "Februar"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:14
+msgid "March"
+msgstr "März"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:14
+msgid "April"
+msgstr "April"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:14
+msgid "May"
+msgstr "Mai"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:14
+msgid "June"
+msgstr "Juni"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:15
+msgid "July"
+msgstr "Juli"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:15
+msgid "August"
+msgstr "August"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:15
+msgid "September"
+msgstr "September"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:15
+msgid "October"
+msgstr "Oktober"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:15
+msgid "November"
+msgstr "November"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:16
+msgid "December"
+msgstr "Dezember"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:19
+msgid "jan"
+msgstr "Jan"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:19
+msgid "feb"
+msgstr "Feb"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:19
+msgid "mar"
+msgstr "Mär"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:19
+msgid "apr"
+msgstr "Apr"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:19
+msgid "may"
+msgstr "Mai"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:19
+msgid "jun"
+msgstr "Jun"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:20
+msgid "jul"
+msgstr "Jul"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:20
+msgid "aug"
+msgstr "Aug"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:20
+msgid "sep"
+msgstr "Sep"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:20
+msgid "oct"
+msgstr "Okt"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:20
+msgid "nov"
+msgstr "Nov"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:20
+msgid "dec"
+msgstr "Dez"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:23
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr "Jan."
+
+#: .\env\Lib\site-packages\django\utils\dates.py:24
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr "Feb."
+
+#: .\env\Lib\site-packages\django\utils\dates.py:25
+msgctxt "abbrev. month"
+msgid "March"
+msgstr "März"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:26
+msgctxt "abbrev. month"
+msgid "April"
+msgstr "April"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:27
+msgctxt "abbrev. month"
+msgid "May"
+msgstr "Mai"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:28
+msgctxt "abbrev. month"
+msgid "June"
+msgstr "Juni"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:29
+msgctxt "abbrev. month"
+msgid "July"
+msgstr "Juli"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:30
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr "Aug."
+
+#: .\env\Lib\site-packages\django\utils\dates.py:31
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr "Sep."
+
+#: .\env\Lib\site-packages\django\utils\dates.py:32
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr "Okt."
+
+#: .\env\Lib\site-packages\django\utils\dates.py:33
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr "Nov."
+
+#: .\env\Lib\site-packages\django\utils\dates.py:34
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr "Dez."
+
+#: .\env\Lib\site-packages\django\utils\dates.py:37
+msgctxt "alt. month"
+msgid "January"
+msgstr "Januar"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:38
+msgctxt "alt. month"
+msgid "February"
+msgstr "Februar"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:39
+msgctxt "alt. month"
+msgid "March"
+msgstr "März"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:40
+msgctxt "alt. month"
+msgid "April"
+msgstr "April"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:41
+msgctxt "alt. month"
+msgid "May"
+msgstr "Mai"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:42
+msgctxt "alt. month"
+msgid "June"
+msgstr "Juni"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:43
+msgctxt "alt. month"
+msgid "July"
+msgstr "Juli"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:44
+msgctxt "alt. month"
+msgid "August"
+msgstr "August"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:45
+msgctxt "alt. month"
+msgid "September"
+msgstr "September"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:46
+msgctxt "alt. month"
+msgid "October"
+msgstr "Oktober"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:47
+msgctxt "alt. month"
+msgid "November"
+msgstr "November"
+
+#: .\env\Lib\site-packages\django\utils\dates.py:48
+msgctxt "alt. month"
+msgid "December"
+msgstr "Dezember"
+
+#: .\env\Lib\site-packages\django\utils\ipv6.py:8
+msgid "This is not a valid IPv6 address."
+msgstr "Keine gültige IPv6 Adresse"
+
+#: .\env\Lib\site-packages\django\utils\text.py:69
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\utils\text.py:235
+msgid "or"
+msgstr "oder"
+
+#. Translators: This string is used as a separator between list elements
+#: .\env\Lib\site-packages\django\utils\text.py:254
+#: .\env\Lib\site-packages\django\utils\timesince.py:83
+msgid ", "
+msgstr ", "
+
+#: .\env\Lib\site-packages\django\utils\timesince.py:9
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d Jahr"
+msgstr[1] "%d Jahre"
+
+#: .\env\Lib\site-packages\django\utils\timesince.py:10
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d Monat"
+msgstr[1] "%d Monate"
+
+#: .\env\Lib\site-packages\django\utils\timesince.py:11
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d Woche"
+msgstr[1] "%d Wochen"
+
+#: .\env\Lib\site-packages\django\utils\timesince.py:12
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d Tag"
+msgstr[1] "%d Tage"
+
+#: .\env\Lib\site-packages\django\utils\timesince.py:13
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d Stunde"
+msgstr[1] "%d Stunden"
+
+#: .\env\Lib\site-packages\django\utils\timesince.py:14
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d Minute"
+msgstr[1] "%d Minuten"
+
+#: .\env\Lib\site-packages\django\utils\timesince.py:72
+msgid "0 minutes"
+msgstr "0 Minuten"
+
+#: .\env\Lib\site-packages\django\views\csrf.py:110
+msgid "Forbidden"
+msgstr "Verboten"
+
+#: .\env\Lib\site-packages\django\views\csrf.py:111
+msgid "CSRF verification failed. Request aborted."
+msgstr "CSRF verification failed. Anfrage abgebrochen."
+
+#: .\env\Lib\site-packages\django\views\csrf.py:115
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your Web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\csrf.py:120
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\csrf.py:124
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a rel=\"noreferrer"
+"\" …> for links to third-party sites."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\csrf.py:132
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\csrf.py:137
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\csrf.py:142
+msgid "More information is available with DEBUG=True."
+msgstr "Mehr Informationen erhalten Sie mit DEBUG=True"
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:41
+msgid "No year specified"
+msgstr "Kein Jahr angegeben"
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:61
+#: .\env\Lib\site-packages\django\views\generic\dates.py:111
+#: .\env\Lib\site-packages\django\views\generic\dates.py:208
+msgid "Date out of range"
+msgstr "Datum außerhalb Zeitrahmens"
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:90
+msgid "No month specified"
+msgstr "Kein Monat angegeben"
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:142
+msgid "No day specified"
+msgstr "Kein Tag angegeben"
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:188
+msgid "No week specified"
+msgstr "Keine Woche angegeben"
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:338
+#: .\env\Lib\site-packages\django\views\generic\dates.py:367
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:589
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\generic\dates.py:623
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\generic\detail.py:54
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\generic\list.py:67
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\generic\list.py:72
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr "Invalid page (%(page_number)s): %(message)s"
+
+#: .\env\Lib\site-packages\django\views\generic\list.py:154
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr "Empty list and “%(class_name)s.allow_empty” is False."
+
+#: .\env\Lib\site-packages\django\views\static.py:40
+msgid "Directory indexes are not allowed here."
+msgstr "Directory indexes are not allowed here."
+
+#: .\env\Lib\site-packages\django\views\static.py:42
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr "“%(path)s” does not exist"
+
+#: .\env\Lib\site-packages\django\views\static.py:80
+#, python-format
+msgid "Index of %(directory)s"
+msgstr "Index of %(directory)s"
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:7
+msgid "Django: the Web framework for perfectionists with deadlines."
+msgstr "Django: the Web framework for perfectionists with deadlines."
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:346
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:368
+msgid "The install worked successfully! Congratulations!"
+msgstr "The install worked successfully! Congratulations!"
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:369
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
+"\">DEBUG=True</a> is in your settings file and you have not configured any "
+"URLs."
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:384
+msgid "Django Documentation"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:385
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:396
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:397
+msgid "Get started with Django"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:408
+msgid "Django Community"
+msgstr ""
+
+#: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:409
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#: .\snapmerge\home\forms.py:5 .\snapmerge\home\models.py:21
+#: .\snapmerge\templates\mail\mail.html:26
 msgid "PIN"
 msgstr "PIN"
 
-#: snapmerge/home/forms.py:6 snapmerge/home/models.py:114
+#: .\snapmerge\home\forms.py:6 .\snapmerge\home\models.py:114
 msgid "Password (optional)"
 msgstr "Passwort (optional)"
 
-#: snapmerge/home/forms.py:10 snapmerge/home/models.py:24
+#: .\snapmerge\home\forms.py:10 .\snapmerge\home\models.py:24
 msgid "Email"
 msgstr "Email"
 
-#: snapmerge/home/models.py:15
+#: .\snapmerge\home\models.py:15
 msgid "Name"
 msgstr "Name"
 
-#: snapmerge/home/models.py:16
+#: .\snapmerge\home\models.py:16
 msgid "Picture"
 msgstr "Bild"
 
-#: snapmerge/home/models.py:17 snapmerge/home/models.py:48
-#: snapmerge/templates/mail/mail.html:23 snapmerge/templates/proj.html:108
+#: .\snapmerge\home\models.py:17 .\snapmerge\home\models.py:48
+#: .\snapmerge\templates\mail\mail.html:23 .\snapmerge\templates\proj.html:108
 msgid "Description"
 msgstr "Beschreibung"
 
-#: snapmerge/home/models.py:20 snapmerge/templates/mail/mail.html:29
-#: snapmerge/templates/proj.html:65 snapmerge/templates/proj.html:123
+#: .\snapmerge\home\models.py:20 .\snapmerge\templates\mail\mail.html:29
+#: .\snapmerge\templates\proj.html:65 .\snapmerge\templates\proj.html:123
 msgid "Password"
 msgstr "Passwort"
 
-#: snapmerge/home/models.py:22
+#: .\snapmerge\home\models.py:22
 msgid "Id"
 msgstr "Id"
 
-#: snapmerge/home/models.py:37 snapmerge/templates/mail/mail.html:20
+#: .\snapmerge\home\models.py:37 .\snapmerge\templates\mail\mail.html:20
 msgid "Project"
 msgstr "Projekt"
 
-#: snapmerge/home/models.py:38
+#: .\snapmerge\home\models.py:38
 msgid "Projects"
 msgstr "Projekte"
 
-#: snapmerge/home/models.py:44
+#: .\snapmerge\home\models.py:44
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: snapmerge/home/models.py:50
+#: .\snapmerge\home\models.py:50
 msgid "number_scripts"
 msgstr "Anzahl Skripte"
 
-#: snapmerge/home/models.py:51
+#: .\snapmerge\home\models.py:51
 msgid "number_sprites"
 msgstr "Anzahl Sprites"
 
-#: snapmerge/home/models.py:52
+#: .\snapmerge\home\models.py:52
 msgid "color"
-msgstr ""
+msgstr "Farbe"
 
-#: snapmerge/home/models.py:63
+#: .\snapmerge\home\models.py:63
 msgid "user"
 msgstr "Benutzer"
 
-#: snapmerge/home/models.py:104
+#: .\snapmerge\home\models.py:104
 msgid "SnapFile"
 msgstr "Snap-Datei"
 
-#: snapmerge/home/models.py:105
+#: .\snapmerge\home\models.py:105
 msgid "SnapFiles"
 msgstr "Snap-Dateien"
 
-#: snapmerge/home/models.py:113 snapmerge/home/models.py:125
+#: .\snapmerge\home\models.py:113 .\snapmerge\home\models.py:125
 msgid "Description (optional)"
 msgstr "Beschreibung (optional)"
 
-#: snapmerge/home/models.py:115
+#: .\snapmerge\home\models.py:115
 msgid "email (optional), for restoring password and pin"
 msgstr "Email zur Wiederherstellung von Zugangsdaten (optional)"
 
-#: snapmerge/home/models.py:124
+#: .\snapmerge\home\models.py:124
 msgid "File (optional)"
 msgstr "Datei (optional)"
 
-#: snapmerge/home/views.py:179
+#: .\snapmerge\home\views.py:179
 msgid "OK"
 msgstr "OK"
 
-#: snapmerge/home/views.py:216
+#: .\snapmerge\home\views.py:216
 msgid "No valid xml."
 msgstr "Ungültiges XML"
 
-#: snapmerge/home/views.py:237 snapmerge/home/views.py:283
-#: snapmerge/home/views.py:327 snapmerge/home/views.py:403
-#: snapmerge/home/views.py:411 snapmerge/home/views.py:429
-#: snapmerge/home/views.py:437
+#: .\snapmerge\home\views.py:237 .\snapmerge\home\views.py:283
+#: .\snapmerge\home\views.py:327 .\snapmerge\home\views.py:403
+#: .\snapmerge\home\views.py:411 .\snapmerge\home\views.py:429
+#: .\snapmerge\home\views.py:437
 msgid "Invalid Data."
 msgstr "Ungültige Daten"
 
-#: snapmerge/home/views.py:274 snapmerge/home/views.py:279
-#: snapmerge/home/views.py:371 snapmerge/home/views.py:454
+#: .\snapmerge\home\views.py:274 .\snapmerge\home\views.py:279
+#: .\snapmerge\home\views.py:371 .\snapmerge\home\views.py:454
 msgid "No such project or wrong password"
 msgstr "Es existiert kein Projekt mit dieser PIN oder falsches Passwort"
 
-#: snapmerge/home/views.py:309
+#: .\snapmerge\home\views.py:309
 msgid "Your smerge.org projects"
 msgstr "Deine smerge.org Projekte"
 
-#: snapmerge/home/views.py:320
+#: .\snapmerge\home\views.py:320
 msgid "Something went wrong, please try again or contact us"
 msgstr "Etwas ist schief gelaufen, versuche es erneut oder kontaktiere uns"
 
-#: snapmerge/home/views.py:323
+#: .\snapmerge\home\views.py:323
 msgid "Mail sent"
 msgstr "Mail gesendet"
 
-#: snapmerge/home/views.py:346 snapmerge/home/views.py:354
+#: .\snapmerge\home\views.py:346 .\snapmerge\home\views.py:354
 msgid "no valid xml"
 msgstr "Ungültiges XML"
 
-#: snapmerge/home/views.py:377
-#, fuzzy
-#| msgid "Password"
+#: .\snapmerge\home\views.py:377
 msgid "Password changed"
 msgstr "Passwort geändert"
 
-#: snapmerge/home/views.py:382 snapmerge/home/views.py:464
-#, fuzzy
-#| msgid "Password"
+#: .\snapmerge\home\views.py:382 .\snapmerge\home\views.py:464
 msgid "Wrong password"
 msgstr "Falsches Passwort"
 
-#: snapmerge/home/views.py:386 snapmerge/home/views.py:468
+#: .\snapmerge\home\views.py:386 .\snapmerge\home\views.py:468
 msgid "something went wrong"
 msgstr "Etwas ist schief gelaufen"
 
-#: snapmerge/home/views.py:406
+#: .\snapmerge\home\views.py:406
 msgid "Project Name changed"
 msgstr "Projektname geändert"
 
-#: snapmerge/home/views.py:432
-#, fuzzy
-#| msgid "Description"
+#: .\snapmerge\home\views.py:432
 msgid "Description changed"
 msgstr "Beschreibung geändert"
 
-#: snapmerge/home/views.py:459
-#, fuzzy
-#| msgid "Project"
+#: .\snapmerge\home\views.py:459
 msgid "Project deleted"
 msgstr "Projekt gelöschht"
 
-#: snapmerge/templates/base.html:37 snapmerge/templates/error_404.html:34
-#: snapmerge/templates/error_500.html:28
-#: snapmerge/templates/restore_info.html:25
+#: .\snapmerge\templates\base.html:38 .\snapmerge\templates\error_404.html:34
+#: .\snapmerge\templates\error_500.html:28
+#: .\snapmerge\templates\restore_info.html:25
 msgid "Back"
 msgstr "Zurück"
 
-#: snapmerge/templates/base.html:75 snapmerge/templates/base.html:76
+#: .\snapmerge\templates\base.html:76 .\snapmerge\templates\base.html:77
 msgid "GitHub"
 msgstr "GitHub"
 
-#: snapmerge/templates/base.html:78 snapmerge/templates/base.html:79
-#: snapmerge/templates/how_to.html:85
+#: .\snapmerge\templates\base.html:79 .\snapmerge\templates\base.html:80
+#: .\snapmerge\templates\how_to.html:80
 msgid "Contact"
 msgstr "Kontakt"
 
-#: snapmerge/templates/create_proj.html:15
+#: .\snapmerge\templates\create_proj.html:15
 msgid "Create a new Project"
 msgstr "Erstelle ein neues Projekt"
 
-#: snapmerge/templates/create_proj.html:20
+#: .\snapmerge\templates\create_proj.html:20
 msgid "Optional invividual starting Snap! File"
 msgstr "Optional: Eigene Snap-Datei als Projektstart hochladen"
 
-#: snapmerge/templates/create_proj.html:24
+#: .\snapmerge\templates\create_proj.html:24
 msgid ""
 "If you don't upload a file, a standard blank snap project will be your "
 "starting point."
@@ -231,75 +1384,72 @@ msgstr ""
 "Wenn du keine Datei hochlädst, wird ein leeres Snap-Projekt als "
 "Ausgangspunkt verwendet."
 
-#: snapmerge/templates/create_proj.html:26
+#: .\snapmerge\templates\create_proj.html:26
 msgid "Want to continue working on your project in Smerge?"
 msgstr "Du möchtest an deinem Projekt in Smerge weiterarbeiten?"
 
-
-#: snapmerge/templates/create_proj.html:27
+#: .\snapmerge\templates\create_proj.html:27
 msgid "Or want to provide your students with a template?"
 msgstr "Oder du möchtest deiner Klasse eine Vorlage zur Verfügung stellen?"
 
-
-#: snapmerge/templates/create_proj.html:28
+#: .\snapmerge\templates\create_proj.html:28
 msgid "Upload your starting file here."
 msgstr "Lade deine Vorlage hier hoch!"
 
-
-
-
-#: snapmerge/templates/create_proj.html:29
+#: .\snapmerge\templates\create_proj.html:29
 msgid "You get this file through File - Export project in Snap!)."
-msgstr "Du kannst die Vorlage über Datei - Projekt exportieren in Snap beziehen."
+msgstr ""
+"Du kannst die Vorlage über Datei - Projekt exportieren in Snap beziehen."
 
-#: snapmerge/templates/create_proj.html:30
+#: .\snapmerge\templates\create_proj.html:30
 msgid "You can add further initial nodes via drag and drop afterwards."
 msgstr "Weitere Startpunkte kannst du später via Drag-and-drop hinzufügen"
 
-#: snapmerge/templates/error_404.html:13
+#: .\snapmerge\templates\error_404.html:13
 msgid "No badger has ever dug here!"
 msgstr "Hier war noch kein Dachs."
 
-#: snapmerge/templates/error_404.html:15
+#: .\snapmerge\templates\error_404.html:15
 msgid "Your page could not be found. This can have several reasons: "
 msgstr ""
 "Deine Seite konnte nicht gefunden werden. Das kann mehrere Ursachen haben:"
 
-#: snapmerge/templates/error_404.html:17
+#: .\snapmerge\templates\error_404.html:17
 msgid "Your page doesn't exist or"
 msgstr "Die von dir angeforderte Seite existiert nicht,"
 
-#: snapmerge/templates/error_404.html:18
+#: .\snapmerge\templates\error_404.html:18
 msgid "your page has moved or"
 msgstr "deine Seite ist umgezogen"
 
-#: snapmerge/templates/error_404.html:19
+#: .\snapmerge\templates\error_404.html:19
 msgid "your page was deleted"
 msgstr "oder deine Seite wurde gelöscht."
 
-#: snapmerge/templates/error_404.html:21
+#: .\snapmerge\templates\error_404.html:21
 msgid "Maybe these links will help you:"
-msgstr ""
+msgstr "Vielleicht helfen Dir diese Links: "
 
-#: snapmerge/templates/error_404.html:25 snapmerge/templates/error_500.html:19
+#: .\snapmerge\templates\error_404.html:25
+#: .\snapmerge\templates\error_500.html:19
 msgid "Home"
 msgstr "Home"
 
-#: snapmerge/templates/error_404.html:28 snapmerge/templates/error_500.html:22
-#: snapmerge/templates/home.html:16
+#: .\snapmerge\templates\error_404.html:28
+#: .\snapmerge\templates\error_500.html:22 .\snapmerge\templates\home.html:16
 msgid "Open existing"
 msgstr "Projekt öffnen"
 
-#: snapmerge/templates/error_404.html:31 snapmerge/templates/error_500.html:25
-#: snapmerge/templates/home.html:20
+#: .\snapmerge\templates\error_404.html:31
+#: .\snapmerge\templates\error_500.html:25 .\snapmerge\templates\home.html:20
 msgid "Create new"
 msgstr "Projekt erstellen"
 
-#: snapmerge/templates/error_500.html:13
+#: .\snapmerge\templates\error_500.html:13
 msgid "Some badger tunnels have collapsed"
 msgstr "Einige Dachstunnel sind eingestürzt."
 
-#: snapmerge/templates/error_500.html:15
+#: .\snapmerge\templates\error_500.html:15
 msgid ""
 "It is not yet clear how long this will last. Maybe other sites are still "
 "accessible:"
@@ -307,149 +1457,87 @@ msgstr ""
 "Es ist unklar, wie lange das andauern wird. Aber vielleicht sind andere "
 "Seiten noch erreichbar."
 
-#: snapmerge/templates/how_to.html:15
+#: .\snapmerge\templates\how_to.html:15
 msgid "How to Smerge..."
 msgstr "How to Smerge..."
 
-#: snapmerge/templates/how_to.html:19
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "            Smerge is a version control system for the block-based "
-#| "language <em>Snap!</em>, which enables collaboration\n"
-#| "            and tinkering in the classroom. It&#39;s tailored to novice "
-#| "programmers and therefore easy to use for\n"
-#| "            teachers\n"
-#| "            and students. What we wanted to avoid was making a feature-"
-#| "overloaded git clone.\n"
-#| "        "
+#: .\snapmerge\templates\how_to.html:19
 msgid ""
-"\n"
-"                Smerge is a version control system for the block-based "
-"language <em>Snap!</em>, which enables collaboration\n"
-"                and tinkering in the classroom. It&#39;s tailored to novice "
-"programmers and therefore easy to use for\n"
-"                teachers\n"
-"                and students. What we wanted to avoid was making a feature-"
-"overloaded git clone.\n"
-"            "
+"Smerge is a version control system for the block-based language <em>Snap!</"
+"em>, "
 msgstr ""
-"\n"
-"            Smerge ist ein Versionskontrollsystem für die blockbasierte "
-"Sprache <em>Snap!</em>, die Kollaboration\n"
-"            und Tinkering im Klassenzimmer ermöglicht. Smerge ist an die "
-"Bedürfnisse von Programmeieranfängerinnen und -anfänger angepasst "
-"und             dementsprechend leicht zu nutzen von Schuelerinnen und "
-"Schülern             wie Lehrkräften. Wir wollten es vermeiden, eine "
-"überladene Kopie von git zu erstellen.\n"
-"        "
 
-#: snapmerge/templates/how_to.html:29
+#: .\snapmerge\templates\how_to.html:20
+msgid "which enables collaboration and tinkering in the classroom. "
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:21
+msgid ""
+"It&#39;s tailored to novice programmers and therefore easy to use for "
+"teachers and students. "
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:22
+msgid "What we wanted to avoid was making a feature-overloaded git clone."
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:27
 msgid "Our Badger&#39;s sett"
 msgstr "Unser Dachsbau"
 
-#: snapmerge/templates/how_to.html:30
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <p>A Badger works on his sett, containing a lot of tunnels and "
-#| "chambers, with all his family members and is\n"
-#| "            gradually expanding it over years.</p>\n"
-#| "        <p>We proceed in exactly the same way while programming: our "
-#| "progress and the further development of the program\n"
-#| "            from version to version we can also present as a &quot;"
-#| "badger&#39;s sett&quot;. In this example, we are\n"
-#| "            developing asteroids, the game in which you have to destroy "
-#| "all asteroids with your starship before they hit\n"
-#| "            the\n"
-#| "            ship.</p>\n"
-#| "    "
+#: .\snapmerge\templates\how_to.html:32
 msgid ""
-"\n"
-"            <p>A Badger works on his sett, containing a lot of tunnels and "
-"chambers, with all his family members and is\n"
-"                gradually expanding it over years.</p>\n"
-"            <p>We proceed in exactly the same way while programming: our "
-"progress and the further development of the program\n"
-"                from version to version we can also present as a &quot;"
-"badger&#39;s sett&quot;. In this example, we are\n"
-"                developing asteroids, the game in which you have to destroy "
-"all asteroids with your starship before they hit\n"
-"                the\n"
-"                ship.</p>\n"
-"        "
+"In this example, we are developing asteroids, the game in which you have to "
+"destroy all asteroids with your starship before they hit the ship."
 msgstr ""
-"\n"
-"        <p>Ein Dachs arbeitet an seinem Bau, der viele Tunnel und Kammern "
-"enthält, nicht alleine, sondern zusammen mit all seinen "
-"Familienmitgliedern.            So bauen sie den Bau über Jahre immer weiter "
-"aus.</p>\n"
-"        <p>Beim Programmieren gehen wir genau so vor: Den Fortschritt und "
-"die Weiterentwicklung unseres Programms  von Version zu Version können wir "
-"uns auch als &quot;Dachsbau&quot; vorstellen. Im Beispiel im Bild entwickeln "
-"wir             Asteroids, das Spiel, bei dem alle Asteroiden zerstört "
-"werden müssen, bevor diese das Raumschiff treffen.            </p>"
 
-#: snapmerge/templates/how_to.html:40
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? "
-#| "We can open any of the versions directly in\n"
-#| "            <em>Snap!</em>\n"
-#| "            with a double click. Then we can work on our project, as we "
-#| "are used to.</p>\n"
-#| "        <p> To save the changes in <em>Snap!</em>, we have to &quot;"
-#| "post&quot; them to our badgers sett. This is done\n"
-#| "            via the\n"
-#| "            corresponding block post to &quot;smerge...&quot; under "
-#| "Variables. We can summarize what we have done; this\n"
-#| "            way,\n"
-#| "            we will find this particular version of your project later "
-#| "again. Then we can find them in our badgers sett\n"
-#| "            on\n"
-#| "            smerge.org.</p>\n"
-#| "    "
+#: .\snapmerge\templates\how_to.html:37
+msgid "But how do we come to such a &quot;badger&#39;s burrow&quot;? "
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:38
 msgid ""
-"\n"
-"            <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? "
-"We can open any of the versions directly in\n"
-"                <em>Snap!</em>\n"
-"                with a double click. Then we can work on our project, as we "
-"are used to.</p>\n"
-"            <p> To save the changes in <em>Snap!</em>, we have to &quot;"
-"post&quot; them to our badgers sett. This is done\n"
-"                via the\n"
-"                corresponding block post to &quot;smerge...&quot; under "
-"Variables. We can summarize what we have done; this\n"
-"                way,\n"
-"                we will find this particular version of your project later "
-"again. Then we can find them in our badgers sett\n"
-"                on\n"
-"                smerge.org.</p>\n"
-"        "
+"We can open any of the versions directly in <em>Snap!</em> with a double "
+"click. "
 msgstr ""
-"\n"
-"        <p>Aber wie kommen wir zu so einem „Dachsbau“? Wir können jede der "
-"Versionen direkt in Snap! mit einem Doppelklick öffnen.Dann können wir an "
-"unserem Projekt arbeiten, wie wir es gewohnt sind.\n"
-" Um die Änderungen in Snap! zu speichern, müssen wir sie in unserem Dachsbau "
-"&quot;posten&quot;. Dies geschieht über den entsprechenden  &quot;Post to "
-"smerge….“ Block unter Variablen. Wir können dann  zusammenfassen, was wir "
-"getan haben. So werden wir diese spezielle  Version in unserem Projekt "
-"später auf smerge.org wiederfinden."
 
-#: snapmerge/templates/how_to.html:53
+#: .\snapmerge\templates\how_to.html:39
+msgid "Then we can work on our project, as we are used to."
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:42
+msgid ""
+"To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to "
+"our badgers sett. "
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:43
+msgid ""
+"This is done via the corresponding block post to &quot;smerge...&quot; under "
+"Variables. "
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:44
+msgid ""
+"We can summarize what we have done; this way, we will find this particular "
+"version of your project later again. "
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:45
+msgid "Then we can find them in our badgers sett on smerge.org."
+msgstr ""
+
+#: .\snapmerge\templates\how_to.html:48
 msgid "Working alone is boring..."
 msgstr "Alleine zu arbeiten ist langweilig..."
 
-#: snapmerge/templates/how_to.html:54
+#: .\snapmerge\templates\how_to.html:49
 msgid ""
 "A badger does not work alone on his construction, but with the whole family. "
 "Everyone digs their own tunnel."
 msgstr ""
 
-#: snapmerge/templates/how_to.html:55
+#: .\snapmerge\templates\how_to.html:50
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -474,24 +1562,24 @@ msgstr ""
 "auf: Du arbeitest daran, das Raumschiff schussfähig zu machen, während ein "
 "Freund oder Teammitglied die Asteroiden durch den Weltraum fliegt."
 
-#: snapmerge/templates/how_to.html:57
+#: .\snapmerge\templates\how_to.html:52
 msgid "As you see, everyone is working is his own &quot;tunnels&quot;!"
 msgstr ""
 
-#: snapmerge/templates/how_to.html:58
+#: .\snapmerge\templates\how_to.html:53
 msgid ""
 "At a certain point the badger wants to meet up with his family members. In "
 "the same way, we want to merge our changes to the project. Eventually we "
 "want to play the game, don&#39;t we?"
 msgstr ""
 
-#: snapmerge/templates/how_to.html:59
+#: .\snapmerge\templates\how_to.html:54
 msgid ""
 "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, "
 "tick all the versions we would like to merge, and click yes to confirm."
 msgstr ""
 
-#: snapmerge/templates/how_to.html:62
+#: .\snapmerge\templates\how_to.html:57
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -515,11 +1603,11 @@ msgstr ""
 " Dazu klicken wir einfach auf den „Merge“-Button unten rechts, kreuzen alle "
 "Versionen an, die wir zusammenführen möchten,  und bestätigen mit Ja."
 
-#: snapmerge/templates/how_to.html:64
+#: .\snapmerge\templates\how_to.html:59
 msgid "Go back if you made a mistake"
 msgstr "Gehe zurück, wenn du einen Fehler gemacht hast"
 
-#: snapmerge/templates/how_to.html:65
+#: .\snapmerge\templates\how_to.html:60
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -554,21 +1642,21 @@ msgstr ""
 "durch Doppelklick und arbeiten von dort aus weiter. Auf diese Weise erhalten "
 "wir einen neuen &quot;Tunnel&quot;."
 
-#: snapmerge/templates/how_to.html:67
+#: .\snapmerge\templates\how_to.html:62
 msgid "Built for teachers and the classroom"
 msgstr "Entwickelt für Lehrpersonen und das Klassenzimmer"
 
-#: snapmerge/templates/how_to.html:69
+#: .\snapmerge\templates\how_to.html:64
 msgid "What does Smerge offer you and how it can help with teaching?"
 msgstr "Wie kann Smerge beim Unterrichten helfen?"
 
-#: snapmerge/templates/how_to.html:71
+#: .\snapmerge\templates\how_to.html:66
 msgid "enabling collaboration for project-based learning with <em>Snap!</em>"
 msgstr ""
 "Smerge ermöglicht die Zusammenarbeit in projektbasiertem Lernen mit <em>Snap!"
 "</em>"
 
-#: snapmerge/templates/how_to.html:72
+#: .\snapmerge\templates\how_to.html:67
 msgid ""
 "all the data is always available and automatically backed up, so no more "
 "&quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;"
@@ -578,32 +1666,32 @@ msgstr ""
 "Schluss mit dem &quot;Ich habe meine Sachen zuhause vergessen&quot; oder "
 "&quot;Mein Partner ist krank, ich kann nicht weiterarbeiten."
 
-#: snapmerge/templates/how_to.html:74
+#: .\snapmerge\templates\how_to.html:69
 msgid ""
 "set up templates in the sense of &quot;code skeletons&quot;, where you can "
 "supply your students with custom blocks, some code pieces already in "
 "place, ... You can even add further templates via drag and drop."
 msgstr ""
 
-#: snapmerge/templates/how_to.html:76
+#: .\snapmerge\templates\how_to.html:71
 msgid ""
 "the development process is always visible, to your students as well as to "
 "you. This allows for assessing individual contribution and giving individual "
 "feedback."
 msgstr ""
 
-#: snapmerge/templates/how_to.html:78
+#: .\snapmerge\templates\how_to.html:73
 msgid ""
 "you see the version history and are able to revert changes and go back to "
 "old versions, which enables tinkering and playing around in a risk-free "
 "enviroment."
 msgstr ""
 
-#: snapmerge/templates/how_to.html:81
+#: .\snapmerge\templates\how_to.html:76
 msgid "Login and User Management"
 msgstr "Login und User Management"
 
-#: snapmerge/templates/how_to.html:83
+#: .\snapmerge\templates\how_to.html:78
 msgid ""
 "We deliberatly have no dedicated user accounts or management. Instead, to "
 "secure your projects, you will get a PIN on the time of project creation, "
@@ -616,59 +1704,60 @@ msgstr ""
 "Ihre E-Mail bei der Projekterstellung hinterlegen, können Sie bei Bedarf PIN "
 "und Passwort für all Ihre Projekte abrufen, falls Sie diese vergessen haben."
 
-#: snapmerge/templates/how_to.html:84
+#: .\snapmerge\templates\how_to.html:79
 msgid "Want to know more or need help?"
 msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
 
-#: snapmerge/templates/impressum.html:12
+#: .\snapmerge\templates\impressum.html:12
 msgid "About Smerge"
 msgstr "Über Smerge"
 
-#: snapmerge/templates/info_proj.html:12
+#: .\snapmerge\templates\info_proj.html:13
 #, fuzzy
 #| msgid ""
 #| " This are your PIN and password, which you need to open your smerge-"
 #| "project. It might be a good idea to keep\n"
 #| "        them somewhere, so you wont forget them! "
 msgid ""
-" This are your PIN and password, which you need to open your smerge-project. "
-"It might be a good idea to keep\n"
-"      them somewhere, so you wont forget them! "
+"This are your PIN and password, which you need to open your Smerge-project."
 msgstr ""
 "Das sind deine PIN und dein Passwort, die du zum Öffnen deines Smerge-"
-"Projekts benötigst. Schreib sie dir am Besten auf, damit du sie nicht "
-"vergisst!"
+"Projekts benötigst. "
 
-#: snapmerge/templates/info_proj.html:16
-#, fuzzy
-#| msgid ""
-#| " This is your PIN, which you need to open your smerge-project. It might "
-#| "be a good idea to keep\n"
-#| "        it somewhere, so you wont forget it! If you wan't to have a "
-#| "password as well, you can change this later on. "
+#: .\snapmerge\templates\info_proj.html:14
 msgid ""
-" This is your PIN, which you need to open your smerge-project. It might be a "
-"good idea to keep\n"
-"      it somewhere, so you wont forget it! If you wan't to have a password "
-"as well, you can change this later on. "
-msgstr ""
-"Das ist deine PIN, die du zum Öffnen deines Smerge-Projekts benötigst. "
-"Schreib sie dir am Besten auf, damit du sie nicht vergisst!Solltest du auch "
-"ein Passwort vergeben wollen, kannst du das später noch erledigen."
+" It might be a good idea to keep them somewhere, so you wont forget them!"
+msgstr "Schreib sie dir am Besten auf, damit du sie nicht vergisst!"
 
-#: snapmerge/templates/info_proj.html:24
+#: .\snapmerge\templates\info_proj.html:17
+msgid "This is your PIN, which you need to open your smerge-project."
+msgstr "Dies ist deine PIN, die du zum Öffnen deines Projekts benötigst."
+
+#: .\snapmerge\templates\info_proj.html:18
+msgid "It might be a good idea to keep it somewhere, so you wont forget it!"
+msgstr "Schreib sie dir am Besten auf, damit du sie nicht vergisst!"
+
+#: .\snapmerge\templates\info_proj.html:19
+msgid "If you wan't to have a password as well, you can change this later on."
+msgstr ""
+"Falls Du doch ein Passwort hinzugefügen willst, kannst du das später "
+"hinzufügen."
+
+#: .\snapmerge\templates\info_proj.html:25
 msgid "PIN:"
 msgstr "PIN:"
 
-#: snapmerge/templates/info_proj.html:28
+#: .\snapmerge\templates\info_proj.html:29
 msgid "Password:"
 msgstr "Passwort:"
 
-#: snapmerge/templates/mail/mail.html:13 snapmerge/templates/mail/mail.txt:2
+#: .\snapmerge\templates\mail\mail.html:13
+#: .\snapmerge\templates\mail\mail.txt:2
 msgid "Hello,"
 msgstr "Hallo,"
 
-#: snapmerge/templates/mail/mail.html:14 snapmerge/templates/mail/mail.txt:3
+#: .\snapmerge\templates\mail\mail.html:14
+#: .\snapmerge\templates\mail\mail.txt:3
 msgid ""
 "you forgot one of your passwords or PINs of the smerge-projects you are "
 "registered with this mail-address. In the following you find all your "
@@ -678,114 +1767,232 @@ msgstr ""
 "Folgenden findest du all deine Projekte und die dazugehörigen Login "
 "Informationen."
 
-#: snapmerge/templates/mail/mail.html:36 snapmerge/templates/mail/mail.txt:14
+#: .\snapmerge\templates\mail\mail.html:36
+#: .\snapmerge\templates\mail\mail.txt:14
 msgid "So what are you waiting for? Smerge on on smerge.org!"
 msgstr "Worauf wartest du? Leg los auf smerge.org!"
 
-#: snapmerge/templates/mail/mail.txt:7
-#, fuzzy
-#| msgid "Project"
+#: .\snapmerge\templates\mail\mail.txt:7
 msgid "Project: "
 msgstr "Projekt: "
 
-#: snapmerge/templates/mail/mail.txt:8
-#, fuzzy
-#| msgid "Description"
+#: .\snapmerge\templates\mail\mail.txt:8
 msgid "Description: "
 msgstr "Beschreibung: "
 
-#: snapmerge/templates/mail/mail.txt:9
-#, fuzzy
-#| msgid "PIN:"
+#: .\snapmerge\templates\mail\mail.txt:9
 msgid "PIN: "
 msgstr "PIN: "
 
-#: snapmerge/templates/mail/mail.txt:10
-#, fuzzy
-#| msgid "Password:"
+#: .\snapmerge\templates\mail\mail.txt:10
 msgid "Password: "
 msgstr "Passwort: "
 
-#: snapmerge/templates/open_proj.html:16
+#: .\snapmerge\templates\open_proj.html:16
 msgid "Open an existing project"
 msgstr "Öffne ein existierendes Projekt"
 
-#: snapmerge/templates/open_proj.html:29
+#: .\snapmerge\templates\open_proj.html:29
 msgid "I forgot my Password or PIN"
 msgstr "Ich habe Passwort oder PIN vergessen"
 
-#: snapmerge/templates/open_proj.html:30
-#: snapmerge/templates/restore_info.html:26
+#: .\snapmerge\templates\open_proj.html:30
+#: .\snapmerge\templates\restore_info.html:26
 msgid "Submit"
 msgstr "Los"
 
-#: snapmerge/templates/proj.html:24
+#: .\snapmerge\templates\proj.html:24
 msgid "Drop here!"
 msgstr "Hier ablegen!"
 
-#: snapmerge/templates/proj.html:29
+#: .\snapmerge\templates\proj.html:29
 msgid "cancel merge"
 msgstr "Merge abbrechen"
 
-#: snapmerge/templates/proj.html:33
+#: .\snapmerge\templates\proj.html:33
 msgid "merge"
 msgstr "mergen"
 
-#: snapmerge/templates/proj.html:52
-#, fuzzy
-#| msgid "Projects"
+#: .\snapmerge\templates\proj.html:52
 msgid "Project Settings"
-msgstr "Projekte"
+msgstr "Projekteinstellungen"
 
-#: snapmerge/templates/proj.html:54
+#: .\snapmerge\templates\proj.html:54
 #, fuzzy
 #| msgid "Project"
 msgid "Project Pin"
 msgstr "Projekt Pin"
 
-#: snapmerge/templates/proj.html:71
+#: .\snapmerge\templates\proj.html:71
 #, fuzzy
 #| msgid "Password"
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#: snapmerge/templates/proj.html:76
+#: .\snapmerge\templates\proj.html:76
 #, fuzzy
 #| msgid "Password"
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: snapmerge/templates/proj.html:84
+#: .\snapmerge\templates\proj.html:84
 #, fuzzy
 #| msgid "Create a new Project"
 msgid "Change Project Name"
 msgstr "Erstelle ein neues Projekt"
 
-#: snapmerge/templates/proj.html:91
+#: .\snapmerge\templates\proj.html:91
 msgid "Title"
 msgstr "Titel"
 
-#: snapmerge/templates/proj.html:101
+#: .\snapmerge\templates\proj.html:101
 msgid "Change Project Description"
 msgstr "Ändere Projektbeschreibung"
 
-#: snapmerge/templates/proj.html:116
+#: .\snapmerge\templates\proj.html:116
 msgid "Delete Project"
 msgstr "Lösche Projekt"
 
-#: snapmerge/templates/proj.html:120
+#: .\snapmerge\templates\proj.html:120
 msgid "Insert your password to delete this project."
 msgstr "Gib dein Passwort ein, um dieses Projekt zu löschen."
 
-#: snapmerge/templates/proj.html:135
+#: .\snapmerge\templates\proj.html:135
 msgid "Close"
 msgstr "Schließen"
 
-#: snapmerge/templates/restore_info.html:16
+#: .\snapmerge\templates\restore_info.html:16
 msgid "Enter your email to restore all you're projects passwords or PINs"
 msgstr ""
 "Gib deine Emailadresse ein, um deine Projektpasswörter und PINs "
 "wiederzuerlangen."
+
+#~ msgid ""
+#~ "\n"
+#~ "                Smerge is a version control system for the block-based "
+#~ "language <em>Snap!</em>, which enables collaboration\n"
+#~ "                and tinkering in the classroom. It&#39;s tailored to "
+#~ "novice programmers and therefore easy to use for\n"
+#~ "                teachers\n"
+#~ "                and students. What we wanted to avoid was making a "
+#~ "feature-overloaded git clone.\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "            Smerge ist ein Versionskontrollsystem für die blockbasierte "
+#~ "Sprache <em>Snap!</em>, die Kollaboration\n"
+#~ "            und Tinkering im Klassenzimmer ermöglicht. Smerge ist an die "
+#~ "Bedürfnisse von Programmeieranfängerinnen und -anfänger angepasst "
+#~ "und             dementsprechend leicht zu nutzen von Schuelerinnen und "
+#~ "Schülern             wie Lehrkräften. Wir wollten es vermeiden, eine "
+#~ "überladene Kopie von git zu erstellen.\n"
+#~ "        "
+
+#, fuzzy
+#~| msgid ""
+#~| "\n"
+#~| "        <p>A Badger works on his sett, containing a lot of tunnels and "
+#~| "chambers, with all his family members and is\n"
+#~| "            gradually expanding it over years.</p>\n"
+#~| "        <p>We proceed in exactly the same way while programming: our "
+#~| "progress and the further development of the program\n"
+#~| "            from version to version we can also present as a &quot;"
+#~| "badger&#39;s sett&quot;. In this example, we are\n"
+#~| "            developing asteroids, the game in which you have to destroy "
+#~| "all asteroids with your starship before they hit\n"
+#~| "            the\n"
+#~| "            ship.</p>\n"
+#~| "    "
+#~ msgid ""
+#~ "\n"
+#~ "            <p>A Badger works on his sett, containing a lot of tunnels "
+#~ "and chambers, with all his family members and is\n"
+#~ "                gradually expanding it over years.</p>\n"
+#~ "            <p>We proceed in exactly the same way while programming: our "
+#~ "progress and the further development of the program\n"
+#~ "                from version to version we can also present as a &quot;"
+#~ "badger&#39;s sett&quot;. In this example, we are\n"
+#~ "                developing asteroids, the game in which you have to "
+#~ "destroy all asteroids with your starship before they hit\n"
+#~ "                the\n"
+#~ "                ship.</p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        <p>Ein Dachs arbeitet an seinem Bau, der viele Tunnel und Kammern "
+#~ "enthält, nicht alleine, sondern zusammen mit all seinen "
+#~ "Familienmitgliedern.            So bauen sie den Bau über Jahre immer "
+#~ "weiter aus.</p>\n"
+#~ "        <p>Beim Programmieren gehen wir genau so vor: Den Fortschritt und "
+#~ "die Weiterentwicklung unseres Programms  von Version zu Version können "
+#~ "wir uns auch als &quot;Dachsbau&quot; vorstellen. Im Beispiel im Bild "
+#~ "entwickeln wir             Asteroids, das Spiel, bei dem alle Asteroiden "
+#~ "zerstört werden müssen, bevor diese das Raumschiff treffen.            </"
+#~ "p>"
+
+#, fuzzy
+#~| msgid ""
+#~| "\n"
+#~| "        <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? "
+#~| "We can open any of the versions directly in\n"
+#~| "            <em>Snap!</em>\n"
+#~| "            with a double click. Then we can work on our project, as we "
+#~| "are used to.</p>\n"
+#~| "        <p> To save the changes in <em>Snap!</em>, we have to &quot;"
+#~| "post&quot; them to our badgers sett. This is done\n"
+#~| "            via the\n"
+#~| "            corresponding block post to &quot;smerge...&quot; under "
+#~| "Variables. We can summarize what we have done; this\n"
+#~| "            way,\n"
+#~| "            we will find this particular version of your project later "
+#~| "again. Then we can find them in our badgers sett\n"
+#~| "            on\n"
+#~| "            smerge.org.</p>\n"
+#~| "    "
+#~ msgid ""
+#~ "\n"
+#~ "            <p>But how do we come to such a &quot;badger&#39;s "
+#~ "burrow&quot;? We can open any of the versions directly in\n"
+#~ "                <em>Snap!</em>\n"
+#~ "                with a double click. Then we can work on our project, as "
+#~ "we are used to.</p>\n"
+#~ "            <p> To save the changes in <em>Snap!</em>, we have to &quot;"
+#~ "post&quot; them to our badgers sett. This is done\n"
+#~ "                via the\n"
+#~ "                corresponding block post to &quot;smerge...&quot; under "
+#~ "Variables. We can summarize what we have done; this\n"
+#~ "                way,\n"
+#~ "                we will find this particular version of your project "
+#~ "later again. Then we can find them in our badgers sett\n"
+#~ "                on\n"
+#~ "                smerge.org.</p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        <p>Aber wie kommen wir zu so einem „Dachsbau“? Wir können jede "
+#~ "der Versionen direkt in Snap! mit einem Doppelklick öffnen.Dann können "
+#~ "wir an unserem Projekt arbeiten, wie wir es gewohnt sind.\n"
+#~ " Um die Änderungen in Snap! zu speichern, müssen wir sie in unserem "
+#~ "Dachsbau &quot;posten&quot;. Dies geschieht über den entsprechenden  "
+#~ "&quot;Post to smerge….“ Block unter Variablen. Wir können dann  "
+#~ "zusammenfassen, was wir getan haben. So werden wir diese spezielle  "
+#~ "Version in unserem Projekt später auf smerge.org wiederfinden."
+
+#, fuzzy
+#~| msgid ""
+#~| " This is your PIN, which you need to open your smerge-project. It might "
+#~| "be a good idea to keep\n"
+#~| "        it somewhere, so you wont forget it! If you wan't to have a "
+#~| "password as well, you can change this later on. "
+#~ msgid ""
+#~ " This is your PIN, which you need to open your smerge-project. It might "
+#~ "be a good idea to keep\n"
+#~ "      it somewhere, so you wont forget it! If you wan't to have a "
+#~ "password as well, you can change this later on. "
+#~ msgstr ""
+#~ "Das ist deine PIN, die du zum Öffnen deines Smerge-Projekts benötigst. "
+#~ "Schreib sie dir am Besten auf, damit du sie nicht vergisst!Solltest du "
+#~ "auch ein Passwort vergeben wollen, kannst du das später noch erledigen."
 
 #~ msgid ""
 #~ " If you have already done something and want to continue working on it in "

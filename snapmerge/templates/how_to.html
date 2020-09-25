@@ -16,39 +16,34 @@
         </h1>
 
         <p>
-            {% blocktrans %}
-                Smerge is a version control system for the block-based language <em>Snap!</em>, which enables collaboration
-                and tinkering in the classroom. It&#39;s tailored to novice programmers and therefore easy to use for
-                teachers
-                and students. What we wanted to avoid was making a feature-overloaded git clone.
-            {% endblocktrans %}
+            {% trans "Smerge is a version control system for the block-based language <em>Snap!</em>, " %} 
+            {% trans "which enables collaboration and tinkering in the classroom. " %}
+            {% trans "It&#39;s tailored to novice programmers and therefore easy to use for teachers and students. " %}
+            {% trans "What we wanted to avoid was making a feature-overloaded git clone." %}
         </p>
 
 
         <p><img src="{% static "icon/logo.svg" %}" width="30%" alt='img' referrerPolicy='no-referrer'/></p>
         <h2><a name='header-n6' class='md-header-anchor '></a>{% trans "Our Badger&#39;s sett" %}</h2>
-        {% blocktrans %}
-            <p>A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is
-                gradually expanding it over years.</p>
-            <p>We proceed in exactly the same way while programming: our progress and the further development of the program
-                from version to version we can also present as a &quot;badger&#39;s sett&quot;. In this example, we are
-                developing asteroids, the game in which you have to destroy all asteroids with your starship before they hit
-                the
-                ship.</p>
-        {% endblocktrans %}
+            <p>{% trans "A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is
+                gradually expanding it over years." %}</p>
+            <p>{% trans "We proceed in exactly the same way while programming: our progress and the further development of the program
+                from version to version we can also present as a &quot;badger&#39;s sett&quot;. " %}
+                {% trans "In this example, we are developing asteroids, the game in which you have to destroy all asteroids with your starship before they hit the ship." %}
+            </p>
         <p><img src="{% static "howto/1.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-        {% blocktrans %}
-            <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? We can open any of the versions directly in
-                <em>Snap!</em>
-                with a double click. Then we can work on our project, as we are used to.</p>
-            <p> To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to our badgers sett. This is done
-                via the
-                corresponding block post to &quot;smerge...&quot; under Variables. We can summarize what we have done; this
-                way,
-                we will find this particular version of your project later again. Then we can find them in our badgers sett
-                on
-                smerge.org.</p>
-        {% endblocktrans %}
+
+            <p>
+                {% trans "But how do we come to such a &quot;badger&#39;s burrow&quot;? " %}
+                {% trans "We can open any of the versions directly in <em>Snap!</em> with a double click. " %}
+                {% trans "Then we can work on our project, as we are used to." %}
+            </p>
+            <p>
+                {% trans "To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to our badgers sett. " %}
+                {% trans "This is done via the corresponding block post to &quot;smerge...&quot; under Variables. " %}
+                {% trans "We can summarize what we have done; this way, we will find this particular version of your project later again. " %}
+                {% trans "Then we can find them in our badgers sett on smerge.org." %}
+            </p>
         <p><img src="{% static "howto/2.png" %}" alt='img' alt='img' referrerPolicy='no-referrer'/></p>
         <h2><a name='header-n21' class='md-header-anchor '></a>{% trans "Working alone is boring..." %}</h2>
             <p>{% trans "A badger does not work alone on his construction, but with the whole family. Everyone digs their own tunnel." %}</p>
