@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'channels',
     'home',
     'compressor',
-    'compressor_toolkit',
 ]
 
 MIDDLEWARE = [
@@ -182,10 +181,7 @@ COMPRESS_CSS_FILTERS = [
 COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.JSMinFilter',
 ]
-COMPRESS_PRECOMPILERS = (
-    ('module', 'compressor_toolkit.precompilers.ES6Compiler'),
-    ('css', 'compressor_toolkit.precompilers.SCSSCompiler'),
-)
+
 COMPRESS_ENABLED = True
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
