@@ -8,14 +8,15 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <p>  {% if proj_password != none %}
-      {% blocktrans %} This are your PIN and password, which you need to open your smerge-project. It might be a good idea to keep
-      them somewhere, so you wont forget them! {% endblocktrans %}
+    <p>  
+      {% if proj_password != none %}
+        {% trans "This are your PIN and password, which you need to open your Smerge-project." %}
+        {% trans " It might be a good idea to keep them somewhere, so you wont forget them!" %}
 
       {% else %}
-      {% blocktrans %} This is your PIN, which you need to open your smerge-project. It might be a good idea to keep
-      it somewhere, so you wont forget it! If you wan't to have a password as well, you can change this later on. {% endblocktrans %}
-
+        {% trans "This is your PIN, which you need to open your smerge-project." %}
+        {% trans "It might be a good idea to keep it somewhere, so you wont forget it!" %}
+        {% trans "If you wan't to have a password as well, you can change this later on." %}
       {% endif %}
     </p>
 

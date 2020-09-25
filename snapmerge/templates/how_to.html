@@ -16,45 +16,39 @@
         </h1>
 
         <p>
-            {% blocktrans %}
-                Smerge is a version control system for the block-based language <em>Snap!</em>, which enables collaboration
-                and tinkering in the classroom. It&#39;s tailored to novice programmers and therefore easy to use for
-                teachers
-                and students. What we wanted to avoid was making a feature-overloaded git clone.
-            {% endblocktrans %}
+            {% trans "Smerge is a version control system for the block-based language <em>Snap!</em>, " %} 
+            {% trans "which enables collaboration and tinkering in the classroom. " %}
+            {% trans "It&#39;s tailored to novice programmers and therefore easy to use for teachers and students. " %}
+            {% trans "What we wanted to avoid was making a feature-overloaded git clone." %}
         </p>
 
 
         <p><img src="{% static "icon/logo.svg" %}" width="30%" alt='img' referrerPolicy='no-referrer'/></p>
         <h2><a name='header-n6' class='md-header-anchor '></a>{% trans "Our Badger&#39;s sett" %}</h2>
-        {% blocktrans %}
-            <p>A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is
-                gradually expanding it over years.</p>
-            <p>We proceed in exactly the same way while programming: our progress and the further development of the program
-                from version to version we can also present as a &quot;badger&#39;s sett&quot;. In this example, we are
-                developing asteroids, the game in which you have to destroy all asteroids with your starship before they hit
-                the
-                ship.</p>
-        {% endblocktrans %}
+            <p>{% trans "A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is gradually expanding it over years." %}</p>
+            <p>
+               {% trans "We proceed in exactly the same way while programming: our progress and the further development of the program from version to version we can also present as a &quot;badger&#39;s sett&quot;. " %}
+               {% trans "In this example, we are developing asteroids, the game in which you have to destroy all asteroids with your starship before they hit the ship." %}
+            </p>
         <p><img src="{% static "howto/1.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-        {% blocktrans %}
-            <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? We can open any of the versions directly in
-                <em>Snap!</em>
-                with a double click. Then we can work on our project, as we are used to.</p>
-            <p> To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to our badgers sett. This is done
-                via the
-                corresponding block post to &quot;smerge...&quot; under Variables. We can summarize what we have done; this
-                way,
-                we will find this particular version of your project later again. Then we can find them in our badgers sett
-                on
-                smerge.org.</p>
-        {% endblocktrans %}
+
+            <p>
+                {% trans "But how do we come to such a &quot;badger&#39;s burrow&quot;? " %}
+                {% trans "We can open any of the versions directly in <em>Snap!</em> with a double click. " %}
+                {% trans "Then we can work on our project, as we are used to." %}
+            </p>
+            <p>
+                {% trans "To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to our badgers sett. " %}
+                {% trans "This is done via the corresponding block post to &quot;smerge...&quot; under Variables. " %}
+                {% trans "We can summarize what we have done; this way, we will find this particular version of your project later again. " %}
+                {% trans "Then we can find them in our badgers sett on smerge.org." %}
+            </p>
         <p><img src="{% static "howto/2.png" %}" alt='img' alt='img' referrerPolicy='no-referrer'/></p>
         <h2><a name='header-n21' class='md-header-anchor '></a>{% trans "Working alone is boring..." %}</h2>
             <p>{% trans "A badger does not work alone on his construction, but with the whole family. Everyone digs their own tunnel." %}</p>
             <p>{% trans "It&#39;s the same with us when we work collaboratively. We split the work: You work on making the spaceship able to shoot, while a friend or team member handles the asteroids flying through space." %}</p>
         <p><img src="{% static "howto/3.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
-            <p>{% trans "As you see, everyone is working is his own &quot;tunnels&quot;!" %}</p>
+            <p>{% trans "As you see, everyone is working in his own &quot;tunnels&quot;!" %}</p>
             <p>{% trans "At a certain point the badger wants to meet up with his family members. In the same way, we want to merge our changes to the project. Eventually we want to play the game, don&#39;t we?" %}</p>
             <p>{% trans "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, tick all the versions we would like to merge, and click yes to confirm." %}</p>
         
@@ -67,15 +61,15 @@
         <h2><a name='header-n54' class='md-header-anchor '></a>{% trans "Built for teachers and the classroom" %}</h2>
 
             <p>{% trans "What does Smerge offer you and how it can help with teaching?" %}</p>
-            <ul>
-                <li>{% trans "enabling collaboration for project-based learning with <em>Snap!</em>" %}</li>
-                <li>{% trans "all the data is always available and automatically backed up, so no more &quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;t work&quot; from your students." %}</li>
-                <li>
+            <ul style="padding-left:30px; list-style-type: disc;">
+                <li style="list-style-type: disc;">{% trans "enabling collaboration for project-based learning with <em>Snap!</em>" %}</li>
+                <li style="list-style-type: disc;">{% trans "all the data is always available and automatically backed up, so no more &quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;t work&quot; from your students." %}</li>
+                <li style="list-style-type: disc;">
                     {% trans "set up templates in the sense of &quot;code skeletons&quot;, where you can supply your students with custom blocks, some code pieces already in place, ... You can even add further templates via drag and drop." %}
                 </li>
-                <li>{% trans "the development process is always visible, to your students as well as to you. This allows for assessing individual contribution and giving individual feedback." %}
+                <li style="list-style-type: disc;">{% trans "the development process is always visible, to your students as well as to you. This allows for assessing individual contribution and giving individual feedback." %}
                 </li>
-                <li>{% trans "you see the version history and are able to revert changes and go back to old versions, which enables tinkering and playing around in a risk-free enviroment." %}
+                <li style="list-style-type: disc;">{% trans "you see the version history and are able to revert changes and go back to old versions, which enables tinkering and playing around in a risk-free enviroment." %}
                 </li>
             </ul>
         <h2><a name='header-n60' class='md-header-anchor '></a>{% trans "Login and User Management" %}</h2>
