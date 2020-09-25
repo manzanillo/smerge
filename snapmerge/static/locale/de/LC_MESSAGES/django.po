@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-25 11:47+0200\n"
+"POT-Creation-Date: 2020-09-25 12:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1364,7 +1364,7 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: .\snapmerge\templates\base.html:79 .\snapmerge\templates\base.html:80
-#: .\snapmerge\templates\how_to.html:80
+#: .\snapmerge\templates\how_to.html:79
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -1465,8 +1465,10 @@ msgstr "How to Smerge..."
 msgid ""
 "Smerge is a version control system for the block-based language <em>Snap!</"
 "em>, "
-msgstr "Smerge ist ein Versionskontrollsystem für die blockbasierte Sprache "
-"<em>Snap!</em>. "
+msgstr ""
+"Smerge ist ein Versionskontrollsystem für die blockbasierte Sprache <em>Snap!"
+"</em>. "
+
 #: .\snapmerge\templates\how_to.html:20
 msgid "which enables collaboration and tinkering in the classroom. "
 msgstr "Es erlaubt die einfache Kollaboration im Klassenzimmer. "
@@ -1475,8 +1477,9 @@ msgstr "Es erlaubt die einfache Kollaboration im Klassenzimmer. "
 msgid ""
 "It&#39;s tailored to novice programmers and therefore easy to use for "
 "teachers and students. "
-msgstr "Smerge richtet sich an Novizen in der Programmierung und ist für "
-"Lehrerinnen und Lehrer sowie Schülerinnen und Schüler einfach nutzbar. "
+msgstr ""
+"Smerge richtet sich an Novizen in der Programmierung und ist für Lehrerinnen "
+"und Lehrer sowie Schülerinnen und Schüler einfach nutzbar. "
 
 #: .\snapmerge\templates\how_to.html:22
 msgid "What we wanted to avoid was making a feature-overloaded git clone."
@@ -1486,7 +1489,24 @@ msgstr "Wir wollten keinen überladenen Git-Klon erschaffen."
 msgid "Our Badger&#39;s sett"
 msgstr "Unser Dachsbau"
 
-#: .\snapmerge\templates\how_to.html:32
+#: .\snapmerge\templates\how_to.html:28
+msgid ""
+"A Badger works on his sett, containing a lot of tunnels and chambers, with "
+"all his family members and is gradually expanding it over years."
+msgstr ""
+"Ein Dachs arbeitet jahrelang zusammen mit seiner ganzen Familie "
+"an seinem Bau mit all den Kammern und Tunnels."
+
+#: .\snapmerge\templates\how_to.html:30
+msgid ""
+"We proceed in exactly the same way while programming: our progress and the "
+"further development of the program from version to version we can also "
+"present as a &quot;badger&#39;s sett&quot;. "
+msgstr ""
+"Bei Programmieren gehen wir eigentlich genauso vor. Wir könnnen unseren "
+"Entwicklungsfortschritt von Version zu Version als Dachsbau darstellen. "
+
+#: .\snapmerge\templates\how_to.html:31
 msgid ""
 "In this example, we are developing asteroids, the game in which you have to "
 "destroy all asteroids with your starship before they hit the ship."
@@ -1494,59 +1514,61 @@ msgstr ""
 "In diesem Beispiel entwickeln wir das Spiel Asteroids, in dem es darum geht "
 "Asteroiden zu zerstören bevor diese das Schiff treffen. "
 
-#: .\snapmerge\templates\how_to.html:37
+#: .\snapmerge\templates\how_to.html:36
 msgid "But how do we come to such a &quot;badger&#39;s burrow&quot;? "
 msgstr "Wie aber kommen wir zu so einem Dachsbau? "
 
-#: .\snapmerge\templates\how_to.html:38
+#: .\snapmerge\templates\how_to.html:37
 msgid ""
 "We can open any of the versions directly in <em>Snap!</em> with a double "
 "click. "
 msgstr "Wir können Versionen über einen Doppelklick direkt in Snap! öffnen. "
 
-#: .\snapmerge\templates\how_to.html:39
+#: .\snapmerge\templates\how_to.html:38
 msgid "Then we can work on our project, as we are used to."
 msgstr "Dann können wir wie gewohnt an unseren Projekten arbeiten. "
 
-#: .\snapmerge\templates\how_to.html:42
+#: .\snapmerge\templates\how_to.html:41
 msgid ""
 "To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to "
 "our badgers sett. "
 msgstr ""
-"Um unsere Änderungen zu speichern, müssen wir Sie in unserem Dachsbau "
-"&quot;posten&quot;."
+"Um unsere Änderungen zu speichern, müssen wir Sie in unserem Dachsbau &quot;"
+"posten&quot;."
 
-#: .\snapmerge\templates\how_to.html:43
+#: .\snapmerge\templates\how_to.html:42
 msgid ""
 "This is done via the corresponding block post to &quot;smerge...&quot; under "
 "Variables. "
-msgstr "Das erfolgt über den Block post to &quot;smerge...&quot; in "
-"der Kategorie Variablen."
+msgstr ""
+"Das erfolgt über den Block post to &quot;smerge...&quot; in der Kategorie "
+"Variablen."
 
-#: .\snapmerge\templates\how_to.html:44
+#: .\snapmerge\templates\how_to.html:43
 msgid ""
 "We can summarize what we have done; this way, we will find this particular "
 "version of your project later again. "
 msgstr ""
-"Wir können außerdem zusammenfassen, was wir gemacht haben. So finden wir diese Version "
-"später leichter wieder. "
+"Wir können außerdem zusammenfassen, was wir gemacht haben. So finden wir "
+"diese Version später leichter wieder. "
 
-#: .\snapmerge\templates\how_to.html:45
+#: .\snapmerge\templates\how_to.html:44
 msgid "Then we can find them in our badgers sett on smerge.org."
 msgstr "Außerdem finden wir sie dann auch in unserem Dachsbau auf smerge.org."
 
-#: .\snapmerge\templates\how_to.html:48
+#: .\snapmerge\templates\how_to.html:47
 msgid "Working alone is boring..."
 msgstr "Alleine zu arbeiten ist langweilig..."
 
-#: .\snapmerge\templates\how_to.html:49
+#: .\snapmerge\templates\how_to.html:48
 msgid ""
 "A badger does not work alone on his construction, but with the whole family. "
 "Everyone digs their own tunnel."
-msgstr "Ein Dachs arbeitet nicht alleine an seiner Konstruktion. Seine Familie "
+msgstr ""
+"Ein Dachs arbeitet nicht alleine an seiner Konstruktion. Seine Familie "
 "unterstützt ihn. Jeder gräbt seinen eigenen Tunnel. "
 
-#: .\snapmerge\templates\how_to.html:50
+#: .\snapmerge\templates\how_to.html:49
 msgid ""
 "It&#39;s the same with us when we work collaboratively. We split the work: "
 "You work on making the spaceship able to shoot, while a friend or team "
@@ -1556,11 +1578,11 @@ msgstr ""
 "auf: Du arbeitest daran, das Raumschiff schussfähig zu machen, während ein "
 "Freund oder Teammitglied die Asteroiden durch den Weltraum fliegt."
 
-#: .\snapmerge\templates\how_to.html:52
+#: .\snapmerge\templates\how_to.html:51
 msgid "As you see, everyone is working in his own &quot;tunnels&quot;!"
 msgstr "Wie du siehst, arbeitet jeder in seinem eigenen &quot;Tunnel&quot;!"
 
-#: .\snapmerge\templates\how_to.html:53
+#: .\snapmerge\templates\how_to.html:52
 msgid ""
 "At a certain point the badger wants to meet up with his family members. In "
 "the same way, we want to merge our changes to the project. Eventually we "
@@ -1570,7 +1592,7 @@ msgstr ""
 "treffen. Ebenso wollen wir unsere Änderungen im Projekt zusammenführen. "
 "Irgendwann wollen wir das Spiel ja auch spielen, nicht wahr?"
 
-#: .\snapmerge\templates\how_to.html:54
+#: .\snapmerge\templates\how_to.html:53
 msgid ""
 "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, "
 "tick all the versions we would like to merge, and click yes to confirm."
@@ -1578,22 +1600,22 @@ msgstr ""
 " Dazu klicken wir einfach auf den „Merge“-Button unten rechts, kreuzen alle "
 "Versionen an, die wir zusammenführen möchten,  und bestätigen mit Ja."
 
-#: .\snapmerge\templates\how_to.html:57
+#: .\snapmerge\templates\how_to.html:56
 msgid ""
 "Now we will find a new version, with all changes merged. But what happens if "
 "more than one made changes to the same script? If such a situation occurs, "
 "we will have to manually choose with version we want to keep:"
 msgstr ""
-"Jetzt haben wir eine neue Version mit den zusammengeführten "
-"Änderungen. Was aber passiert, wenn wir mehr als eine Änderung am selben Skript "
-"gemacht haben? In einer solchen Situiation müssen wir manuell wählen, "
-"welche Version wir behalten wollen:"
+"Jetzt haben wir eine neue Version mit den zusammengeführten Änderungen. Was "
+"aber passiert, wenn wir mehr als eine Änderung am selben Skript gemacht "
+"haben? In einer solchen Situiation müssen wir manuell wählen, welche Version "
+"wir behalten wollen:"
 
-#: .\snapmerge\templates\how_to.html:59
+#: .\snapmerge\templates\how_to.html:58
 msgid "Go back if you made a mistake"
 msgstr "Gehe zurück, wenn du einen Fehler gemacht hast"
 
-#: .\snapmerge\templates\how_to.html:60
+#: .\snapmerge\templates\how_to.html:59
 msgid ""
 "Sometimes the badger abandons one tunnel, e.g. due to a lack of stability. "
 "He then has to go back and up in his sett, and work on from a different "
@@ -1612,21 +1634,21 @@ msgstr ""
 "durch Doppelklick und arbeiten von dort aus weiter. Auf diese Weise erhalten "
 "wir einen neuen &quot;Tunnel&quot;."
 
-#: .\snapmerge\templates\how_to.html:62
+#: .\snapmerge\templates\how_to.html:61
 msgid "Built for teachers and the classroom"
 msgstr "Entwickelt für Lehrpersonen und das Klassenzimmer"
 
-#: .\snapmerge\templates\how_to.html:64
+#: .\snapmerge\templates\how_to.html:63
 msgid "What does Smerge offer you and how it can help with teaching?"
 msgstr "Wie kann Smerge beim Unterrichten helfen?"
 
-#: .\snapmerge\templates\how_to.html:66
+#: .\snapmerge\templates\how_to.html:65
 msgid "enabling collaboration for project-based learning with <em>Snap!</em>"
 msgstr ""
 "Smerge ermöglicht die Zusammenarbeit in projektbasiertem Lernen mit <em>Snap!"
 "</em>"
 
-#: .\snapmerge\templates\how_to.html:67
+#: .\snapmerge\templates\how_to.html:66
 msgid ""
 "all the data is always available and automatically backed up, so no more "
 "&quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;"
@@ -1636,38 +1658,39 @@ msgstr ""
 "Schluss mit dem &quot;Ich habe meine Sachen zuhause vergessen&quot; oder "
 "&quot;Mein Partner ist krank, ich kann nicht weiterarbeiten."
 
-#: .\snapmerge\templates\how_to.html:69
+#: .\snapmerge\templates\how_to.html:68
 msgid ""
 "set up templates in the sense of &quot;code skeletons&quot;, where you can "
 "supply your students with custom blocks, some code pieces already in "
 "place, ... You can even add further templates via drag and drop."
 msgstr ""
-"Lege Templates oder Sleketons an, um den Schülerinnen und Schülern "
-"eigene Blöcke oder vorgefertigen Code bereitzustellen. Weitere Templates "
-"können übrigens immer über Drag-and-Drop hinzugefügt werden. "
+"Lege Templates oder Sleketons an, um den Schülerinnen und Schülern eigene "
+"Blöcke oder vorgefertigen Code bereitzustellen. Weitere Templates können "
+"übrigens immer über Drag-and-Drop hinzugefügt werden. "
 
-#: .\snapmerge\templates\how_to.html:71
+#: .\snapmerge\templates\how_to.html:70
 msgid ""
 "the development process is always visible, to your students as well as to "
 "you. This allows for assessing individual contribution and giving individual "
 "feedback."
-msgstr "der Entwicklungsprozess ist stets sichbar für dich aber auch für deine "
+msgstr ""
+"der Entwicklungsprozess ist stets sichbar für dich aber auch für deine "
 "Schülerinnen und Schüler. Das erlaubt es individuelles Feedback zu geben."
 
-#: .\snapmerge\templates\how_to.html:73
+#: .\snapmerge\templates\how_to.html:72
 msgid ""
 "you see the version history and are able to revert changes and go back to "
 "old versions, which enables tinkering and playing around in a risk-free "
 "enviroment."
 msgstr ""
-"du siehst die Versionhistorie, kannst Änderungen rückgängig machen "
-"und so ganz risikofrei experimentieren."
+"du siehst die Versionhistorie, kannst Änderungen rückgängig machen und so "
+"ganz risikofrei experimentieren."
 
-#: .\snapmerge\templates\how_to.html:76
+#: .\snapmerge\templates\how_to.html:75
 msgid "Login and User Management"
 msgstr "Login und User Management"
 
-#: .\snapmerge\templates\how_to.html:78
+#: .\snapmerge\templates\how_to.html:77
 msgid ""
 "We deliberatly have no dedicated user accounts or management. Instead, to "
 "secure your projects, you will get a PIN on the time of project creation, "
@@ -1680,7 +1703,7 @@ msgstr ""
 "Ihre E-Mail bei der Projekterstellung hinterlegen, können Sie bei Bedarf PIN "
 "und Passwort für all Ihre Projekte abrufen, falls Sie diese vergessen haben."
 
-#: .\snapmerge\templates\how_to.html:79
+#: .\snapmerge\templates\how_to.html:78
 msgid "Want to know more or need help?"
 msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
 
@@ -1837,219 +1860,3 @@ msgid "Enter your email to restore all you're projects passwords or PINs"
 msgstr ""
 "Gib deine Emailadresse ein, um deine Projektpasswörter und PINs "
 "wiederzuerlangen."
-
-#~ msgid ""
-#~ "\n"
-#~ "                Smerge is a version control system for the block-based "
-#~ "language <em>Snap!</em>, which enables collaboration\n"
-#~ "                and tinkering in the classroom. It&#39;s tailored to "
-#~ "novice programmers and therefore easy to use for\n"
-#~ "                teachers\n"
-#~ "                and students. What we wanted to avoid was making a "
-#~ "feature-overloaded git clone.\n"
-#~ "            "
-#~ msgstr ""
-#~ "\n"
-#~ "            Smerge ist ein Versionskontrollsystem für die blockbasierte "
-#~ "Sprache <em>Snap!</em>, die Kollaboration\n"
-#~ "            und Tinkering im Klassenzimmer ermöglicht. Smerge ist an die "
-#~ "Bedürfnisse von Programmeieranfängerinnen und -anfänger angepasst "
-#~ "und             dementsprechend leicht zu nutzen von Schuelerinnen und "
-#~ "Schülern             wie Lehrkräften. Wir wollten es vermeiden, eine "
-#~ "überladene Kopie von git zu erstellen.\n"
-#~ "        "
-
-#, fuzzy
-#~| msgid ""
-#~| "\n"
-#~| "        <p>A Badger works on his sett, containing a lot of tunnels and "
-#~| "chambers, with all his family members and is\n"
-#~| "            gradually expanding it over years.</p>\n"
-#~| "        <p>We proceed in exactly the same way while programming: our "
-#~| "progress and the further development of the program\n"
-#~| "            from version to version we can also present as a &quot;"
-#~| "badger&#39;s sett&quot;. In this example, we are\n"
-#~| "            developing asteroids, the game in which you have to destroy "
-#~| "all asteroids with your starship before they hit\n"
-#~| "            the\n"
-#~| "            ship.</p>\n"
-#~| "    "
-#~ msgid ""
-#~ "\n"
-#~ "            <p>A Badger works on his sett, containing a lot of tunnels "
-#~ "and chambers, with all his family members and is\n"
-#~ "                gradually expanding it over years.</p>\n"
-#~ "            <p>We proceed in exactly the same way while programming: our "
-#~ "progress and the further development of the program\n"
-#~ "                from version to version we can also present as a &quot;"
-#~ "badger&#39;s sett&quot;. In this example, we are\n"
-#~ "                developing asteroids, the game in which you have to "
-#~ "destroy all asteroids with your starship before they hit\n"
-#~ "                the\n"
-#~ "                ship.</p>\n"
-#~ "        "
-#~ msgstr ""
-#~ "\n"
-#~ "        <p>Ein Dachs arbeitet an seinem Bau, der viele Tunnel und Kammern "
-#~ "enthält, nicht alleine, sondern zusammen mit all seinen "
-#~ "Familienmitgliedern.            So bauen sie den Bau über Jahre immer "
-#~ "weiter aus.</p>\n"
-#~ "        <p>Beim Programmieren gehen wir genau so vor: Den Fortschritt und "
-#~ "die Weiterentwicklung unseres Programms  von Version zu Version können "
-#~ "wir uns auch als &quot;Dachsbau&quot; vorstellen. Im Beispiel im Bild "
-#~ "entwickeln wir             Asteroids, das Spiel, bei dem alle Asteroiden "
-#~ "zerstört werden müssen, bevor diese das Raumschiff treffen.            </"
-#~ "p>"
-
-#, fuzzy
-#~| msgid ""
-#~| "\n"
-#~| "        <p>But how do we come to such a &quot;badger&#39;s burrow&quot;? "
-#~| "We can open any of the versions directly in\n"
-#~| "            <em>Snap!</em>\n"
-#~| "            with a double click. Then we can work on our project, as we "
-#~| "are used to.</p>\n"
-#~| "        <p> To save the changes in <em>Snap!</em>, we have to &quot;"
-#~| "post&quot; them to our badgers sett. This is done\n"
-#~| "            via the\n"
-#~| "            corresponding block post to &quot;smerge...&quot; under "
-#~| "Variables. We can summarize what we have done; this\n"
-#~| "            way,\n"
-#~| "            we will find this particular version of your project later "
-#~| "again. Then we can find them in our badgers sett\n"
-#~| "            on\n"
-#~| "            smerge.org.</p>\n"
-#~| "    "
-#~ msgid ""
-#~ "\n"
-#~ "            <p>But how do we come to such a &quot;badger&#39;s "
-#~ "burrow&quot;? We can open any of the versions directly in\n"
-#~ "                <em>Snap!</em>\n"
-#~ "                with a double click. Then we can work on our project, as "
-#~ "we are used to.</p>\n"
-#~ "            <p> To save the changes in <em>Snap!</em>, we have to &quot;"
-#~ "post&quot; them to our badgers sett. This is done\n"
-#~ "                via the\n"
-#~ "                corresponding block post to &quot;smerge...&quot; under "
-#~ "Variables. We can summarize what we have done; this\n"
-#~ "                way,\n"
-#~ "                we will find this particular version of your project "
-#~ "later again. Then we can find them in our badgers sett\n"
-#~ "                on\n"
-#~ "                smerge.org.</p>\n"
-#~ "        "
-#~ msgstr ""
-#~ "\n"
-#~ "        <p>Aber wie kommen wir zu so einem „Dachsbau“? Wir können jede "
-#~ "der Versionen direkt in Snap! mit einem Doppelklick öffnen.Dann können "
-#~ "wir an unserem Projekt arbeiten, wie wir es gewohnt sind.\n"
-#~ " Um die Änderungen in Snap! zu speichern, müssen wir sie in unserem "
-#~ "Dachsbau &quot;posten&quot;. Dies geschieht über den entsprechenden  "
-#~ "&quot;Post to smerge….“ Block unter Variablen. Wir können dann  "
-#~ "zusammenfassen, was wir getan haben. So werden wir diese spezielle  "
-#~ "Version in unserem Projekt später auf smerge.org wiederfinden."
-
-#, fuzzy
-#~| msgid ""
-#~| " This is your PIN, which you need to open your smerge-project. It might "
-#~| "be a good idea to keep\n"
-#~| "        it somewhere, so you wont forget it! If you wan't to have a "
-#~| "password as well, you can change this later on. "
-#~ msgid ""
-#~ " This is your PIN, which you need to open your smerge-project. It might "
-#~ "be a good idea to keep\n"
-#~ "      it somewhere, so you wont forget it! If you wan't to have a "
-#~ "password as well, you can change this later on. "
-#~ msgstr ""
-#~ "Das ist deine PIN, die du zum Öffnen deines Smerge-Projekts benötigst. "
-#~ "Schreib sie dir am Besten auf, damit du sie nicht vergisst!Solltest du "
-#~ "auch ein Passwort vergeben wollen, kannst du das später noch erledigen."
-
-#~ msgid ""
-#~ " If you have already done something and want to continue working on it in "
-#~ "smerge, or if you want to provide\n"
-#~ " your students with a template, custom blocks or something like that, "
-#~ "upload your individual starting\n"
-#~ " point here (You get this file through File - Export project in Snap!). "
-#~ msgstr ""
-#~ "Wenn du an einem bestehenden Projekt weiterarbeiten möchtest, oder deinen "
-#~ "Schülerinnen und Schülern eine Vorlage zur Vefügung (z.B. mit eigenen "
-#~ "Blöcken o.ä.) stellen willst, lade die entsprechende Snap-Datei hier "
-#~ "hoch. Diese Datei erhälst du via Datei - Projekt exportieren aus Snap! "
-
-#~ msgid "How to smerge..."
-#~ msgstr "How to Smerge"
-
-#~ msgid ""
-#~ "\n"
-#~ "        <p>As you see, everyone is working is his own &quot;tunnels&quot;!"
-#~ "</p>\n"
-#~ "        <p>At a certain point the badger wants to meet up with his family "
-#~ "members. In the same way, we want to merge our\n"
-#~ "            changes to the project. Eventually we want to play the game, "
-#~ "don&#39;t we?</p>\n"
-#~ "        <p>Therefore we simply click the &quot;merge&quot;-Button in the "
-#~ "bottom right, tick all the versions we would\n"
-#~ "            like\n"
-#~ "            to merge, and click yes to confirm.</p>\n"
-#~ "    "
-#~ msgstr ""
-#~ "\n"
-#~ "Wie du siehst, arbeitet jeder wie sein eigener &quot;Tunnel&quot;!\n"
-#~ "An einem bestimmten Punkt will sich der Dachs mit seinen "
-#~ "Familienmitgliedern  treffen. Ebenso wollen wir unsere Änderungen im "
-#~ "Projekt zusammenführen. Irgendwann wollen wir das Spiel ja auch spielen, "
-#~ "nicht wahr? \n"
-#~ " \n"
-#~ " Dazu klicken wir einfach auf den „Merge“-Button unten rechts, kreuzen "
-#~ "alle Versionen an, die wir zusammenführen möchten, und bestätigen mit Ja."
-
-#~ msgid ""
-#~ "enabling collaboration for project-based learning with <em>Snap!</"
-#~ "em>            <li>all the data is always available and automatically "
-#~ "backed up, so no more &quot;I forgot my stuff at home&quot;\n"
-#~ "                or &quot;my partner is ill, i can&#39;t work&quot; from "
-#~ "your students.\n"
-#~ "            </li>\n"
-#~ "            <li>set up templates in the sense of &quot;code "
-#~ "skeletons&quot;, where you can supply your students with\n"
-#~ "                custom\n"
-#~ "                blocks, some code pieces already in place, ...\n"
-#~ "                You can even add further templates via drag and drop.\n"
-#~ "            </li>\n"
-#~ "            <li>the development process is always visible, to your "
-#~ "students as well as to you. This allows for assessing\n"
-#~ "                individual contribution and giving individual feedback.\n"
-#~ "            </li>\n"
-#~ "            <li>you see the version history and are able to revert "
-#~ "changes and go back to old versions, which enables\n"
-#~ "                tinkering and playing around in a risk-free enviroment.\n"
-#~ "            </li>\n"
-#~ "        </ul>\n"
-#~ msgstr ""
-#~ "\n"
-#~ "<p>Was bietet Smerge und wie kann es beim Unterrichten helfen?</p>\n"
-#~ "<ul>\n"
-#~ "<li>Smerge ermöglicht die Zusammenarbeit für projektbasiertes Lernen mit "
-#~ "Snap!</li>\n"
-#~ "<li>Alle Daten sind immer verfügbar und werden automatisch gesichert, so "
-#~ "dass es kein &quot;Ich habe meine Sachen zu Hause vergessen&quot; oder "
-#~ "&quot;Mein Partner ist krank, ich kann nicht arbeiten&quot; mehr von "
-#~ "Seiten der Schülerinnen und Schülern gibt. </li> \n"
-#~ "<li>Es können Vorlagen im Sinne von &quot;Codeskeletten&quot; einrichten, "
-#~ "mit denen Sie Ihre Schülerinnen und Schülern mit benutzerdefinierten "
-#~ "Blöcken, einigen bereits vorhandenen Codeteilen, usw. zur Verfügung "
-#~ "gestellt werden können. </li>\n"
-#~ "<li>Weitere Vorlagen können sogar via Drag & Drop hinzugefügt werden.</"
-#~ "li>\n"
-#~ "<li>Der Entwicklungsprozess ist immer sichtbar, sowohl für Ihre "
-#~ "Schülerinnen und Schüler als auch für Sie. Dies ermöglicht es, den "
-#~ "individuellen Beitrag zu bewerten und individuelles Feedback zu geben.</"
-#~ "li>\n"
-#~ "<li>Sie sehen die Versionshistorie und können Änderungen rückgängig "
-#~ "machen und zu alten Versionen zurückkehren, was das Basteln und Tinkern "
-#~ "in einer risikofreien Umgebung ermöglicht.</li>\n"
-#~ "</ul>\n"
-
-#~ msgid "password (optional)"
-#~ msgstr "Passwort (optional)"
