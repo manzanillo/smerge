@@ -4,7 +4,7 @@ import json
 #URL = 'http://127.0.0.1:80'
 URL = 'https://smerge.org'
 
-SECRET_PATH = '/var/secrets/smerge/secrets.smerge.json'
+SECRET_PATH = './secrets/smerge/secrets.smerge.json'
 
 secret_file = open(SECRET_PATH).read()
 secrets = json.loads(secret_file)

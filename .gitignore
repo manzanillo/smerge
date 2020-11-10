@@ -81,3 +81,6 @@ snapmerge/media/*
 
 #Compiled css and js
 snapmerge/static/CACHE/**
+
+#secrets file
+secrets/secrets.smerge.json

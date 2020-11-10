@@ -11,16 +11,15 @@ services:
     volumes:
       - ./snapmerge/media:/var/www/snapmerge/snapmerge/media
       - ./snapmerge/database:/var/www/snapmerge/snapmerge/database
-      - /var/secrets/smerge:/var/secrets/smerge
-   # ports:
-   #   - "80:8000"
+    # ports:
+    #   - "80:8000"
 
   redis:
     image: "redis:alpine"
 
   nginx:
     image: nginx:1.15-alpine
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     ports:
       - "80:80"
       - "443:443"
