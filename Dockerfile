@@ -12,7 +12,7 @@ RUN apt-get install -y \
     libfreetype6-dev \
     zlib1g-dev \
     net-tools
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 # Project Files and Settings
 ARG PROJECT=snapmerge
