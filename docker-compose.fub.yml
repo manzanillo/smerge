@@ -1,0 +1,29 @@
+version: "3.6"
+services:
+  django:
+    container_name: smerge_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smerge_docker
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./snapmerge/media:/var/www/snapmerge/snapmerge/media
+      - ./snapmerge/database:/var/www/snapmerge/snapmerge/database
+
+  redis:
+    image: "redis:alpine"
+
+  nginx:
+    image: nginx:1.15-alpine
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - django
+    volumes:
+      - ./data/nginx-fu:/etc/nginx/conf.d
+      - ../../smerge.imp.fu-berlin.de.pem:/etc/letsencrypt/live/smerge.imp.fu-berlin.de.pem
+      - ../../smerge.imp.fu-berlin.de-key.pem:/etc/letsencrypt/live/smerge.imp.fu-berlin.de-key.pem
