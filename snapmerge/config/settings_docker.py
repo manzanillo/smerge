@@ -2,7 +2,8 @@ from .settings_base import *
 import json
 
 #URL = 'http://127.0.0.1:80'
-URL = 'https://smerge.org'
+#URL = 'https://smerge.org'
+URL = 'https://smerge.imp.fu-berlin.de'
 
 SECRET_PATH = './secrets/smerge/secrets.smerge.json'
 
@@ -15,7 +16,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 COMPRESS_OFFLINE = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', 'smerge.org']
+ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de',
+                 'faui20s.informatik.uni-erlangen.de', 'smerge.org', 'smerge.imp.fu-berlin.de']
 
 ASGI_APPLICATION = "routing.application"
 CHANNEL_LAYERS = {
@@ -26,7 +28,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
 
 
 SECURE_CONTENT_TYPE_NOSNIFF = True

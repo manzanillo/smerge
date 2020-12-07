@@ -83,7 +83,8 @@ CORS_ORIGIN_WHITELIST = [
     'https://berkeley.edu',
     'http://localhost:8000',
     'http://127.0.0.1:9000',
-    'https://smerge.org'
+    'https://smerge.org',
+    'https://smerge.imp.fu-berlin.de'
 ]
 
 
