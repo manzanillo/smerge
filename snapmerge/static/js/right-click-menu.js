@@ -58,7 +58,7 @@ let defaults = {
         }
     ], // function( ele ){ return [ /*...*/ ] }, // a function that returns commands or a promise of commands
     fillColor: 'rgba(0, 0, 0, 0.75)', // the background colour of the menu
-    activeFillColor: '#26a69a', // the colour used to indicate the selected command
+    activeFillColor: '#076aab', // the colour used to indicate the selected command
     activePadding: 20, // additional size in pixels for the active command
     indicatorSize: 24, // the size in pixels of the pointer to the active command
     separatorWidth: 5, // the empty spacing in pixels between successive commands
