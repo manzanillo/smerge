@@ -1,4 +1,4 @@
-Django==3.0.7
+Django==3.1.6
 django-cors-headers==3.2.1
 django-compressor==2.4
 django-compressor-toolkit==0.6.0 
