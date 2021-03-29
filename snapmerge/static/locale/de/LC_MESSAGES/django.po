@@ -1732,7 +1732,7 @@ msgid "It might be a good idea to keep it somewhere, so you wont forget it!"
 msgstr "Schreib sie dir am Besten auf, damit du sie nicht vergisst!"
 
 #: .\snapmerge\templates\info_proj.html:19
-msgid "If you wan't to have a password as well, you can change this later on."
+msgid "If you want to have a password as well, you can change this later on."
 msgstr ""
 "Falls Du doch ein Passwort hinzugefügen willst, kannst du das später "
 "hinzufügen."
