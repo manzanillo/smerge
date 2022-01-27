@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 18:22+0000\n"
+"POT-Creation-Date: 2022-01-27 18:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,7 +176,7 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: snapmerge/templates/base.html:79 snapmerge/templates/base.html:80
-#: snapmerge/templates/how_to.html:89
+#: snapmerge/templates/how_to.html:94
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -296,11 +296,19 @@ msgstr ""
 msgid "What we wanted to avoid was making a feature-overloaded git clone."
 msgstr "Wir wollten keinen überladenen Git-Klon erschaffen."
 
-#: snapmerge/templates/how_to.html:29
+#: snapmerge/templates/how_to.html:25
+msgid ""
+"The use of Smerge is also explained in this video (English subtitles "
+"available) in addition to the following instructions"
+msgstr ""
+"Die Nutzung von Smerge wird zusätzlich zur folgenden Anleitung auch in "
+"diesem Video erklärt (englische Untertitel verfügbar)"
+
+#: snapmerge/templates/how_to.html:33
 msgid "Attention!"
 msgstr "Achtung!"
 
-#: snapmerge/templates/how_to.html:30
+#: snapmerge/templates/how_to.html:34
 msgid ""
 "For Smerge to work, JavaScript extensions must be enabled in Snap! To do "
 "this, simply click once on the gear in Snap! the first time you open a "
@@ -311,11 +319,11 @@ msgstr ""
 "Projekts einmal auf das Zahnrad in Snap! klicken, und den entsprechenden "
 "Haken setzen!"
 
-#: snapmerge/templates/how_to.html:37
+#: snapmerge/templates/how_to.html:42
 msgid "Our Badger&#39;s sett"
 msgstr "Unser Dachsbau"
 
-#: snapmerge/templates/how_to.html:38
+#: snapmerge/templates/how_to.html:43
 msgid ""
 "A Badger works on his sett, containing a lot of tunnels and chambers, with "
 "all his family members and is gradually expanding it over years."
@@ -323,7 +331,7 @@ msgstr ""
 "Ein Dachs arbeitet jahrelang zusammen mit seiner ganzen Familie an seinem "
 "Bau mit all den Kammern und Tunnels."
 
-#: snapmerge/templates/how_to.html:40
+#: snapmerge/templates/how_to.html:45
 msgid ""
 "We proceed in exactly the same way while programming: our progress and the "
 "further development of the program from version to version we can also "
@@ -332,7 +340,7 @@ msgstr ""
 "Bei Programmieren gehen wir eigentlich genauso vor. Wir könnnen unseren "
 "Entwicklungsfortschritt von Version zu Version als Dachsbau darstellen. "
 
-#: snapmerge/templates/how_to.html:41
+#: snapmerge/templates/how_to.html:46
 msgid ""
 "In this example, we are developing asteroids, the game in which you have to "
 "destroy all asteroids with your starship before they hit the ship."
@@ -340,21 +348,21 @@ msgstr ""
 "In diesem Beispiel entwickeln wir das Spiel Asteroids, in dem es darum geht "
 "Asteroiden zu zerstören bevor diese das Schiff treffen. "
 
-#: snapmerge/templates/how_to.html:46
+#: snapmerge/templates/how_to.html:51
 msgid "But how do we come to such a &quot;badger&#39;s burrow&quot;? "
 msgstr "Wie aber kommen wir zu so einem Dachsbau? "
 
-#: snapmerge/templates/how_to.html:47
+#: snapmerge/templates/how_to.html:52
 msgid ""
 "We can open any of the versions directly in <em>Snap!</em> with a double "
 "click. "
 msgstr "Wir können Versionen über einen Doppelklick direkt in Snap! öffnen. "
 
-#: snapmerge/templates/how_to.html:48
+#: snapmerge/templates/how_to.html:53
 msgid "Then we can work on our project, as we are used to."
 msgstr "Dann können wir wie gewohnt an unseren Projekten arbeiten. "
 
-#: snapmerge/templates/how_to.html:51
+#: snapmerge/templates/how_to.html:56
 msgid ""
 "To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to "
 "our badgers sett. "
@@ -362,7 +370,7 @@ msgstr ""
 "Um unsere Änderungen zu speichern, müssen wir Sie in unserem Dachsbau &quot;"
 "posten&quot;."
 
-#: snapmerge/templates/how_to.html:52
+#: snapmerge/templates/how_to.html:57
 msgid ""
 "This is done via the corresponding block post to &quot;smerge...&quot; under "
 "Variables. "
@@ -370,7 +378,7 @@ msgstr ""
 "Das erfolgt über den Block post to &quot;smerge...&quot; in der Kategorie "
 "Variablen."
 
-#: snapmerge/templates/how_to.html:53
+#: snapmerge/templates/how_to.html:58
 msgid ""
 "We can summarize what we have done; this way, we will find this particular "
 "version of your project later again. "
@@ -378,15 +386,15 @@ msgstr ""
 "Wir können außerdem zusammenfassen, was wir gemacht haben. So finden wir "
 "diese Version später leichter wieder. "
 
-#: snapmerge/templates/how_to.html:54
+#: snapmerge/templates/how_to.html:59
 msgid "Then we can find them in our badgers sett on smerge.org."
 msgstr "Außerdem finden wir sie dann auch in unserem Dachsbau auf smerge.org."
 
-#: snapmerge/templates/how_to.html:57
+#: snapmerge/templates/how_to.html:62
 msgid "Working alone is boring..."
 msgstr "Alleine zu arbeiten ist langweilig..."
 
-#: snapmerge/templates/how_to.html:58
+#: snapmerge/templates/how_to.html:63
 msgid ""
 "A badger does not work alone on his construction, but with the whole family. "
 "Everyone digs their own tunnel."
@@ -394,7 +402,7 @@ msgstr ""
 "Ein Dachs arbeitet nicht alleine an seiner Konstruktion. Seine Familie "
 "unterstützt ihn. Jeder gräbt seinen eigenen Tunnel. "
 
-#: snapmerge/templates/how_to.html:59
+#: snapmerge/templates/how_to.html:64
 msgid ""
 "It&#39;s the same with us when we work collaboratively. We split the work: "
 "You work on making the spaceship able to shoot, while a friend or team "
@@ -404,11 +412,11 @@ msgstr ""
 "auf: Du arbeitest daran, das Raumschiff schussfähig zu machen, während ein "
 "Freund oder Teammitglied die Asteroiden durch den Weltraum fliegt."
 
-#: snapmerge/templates/how_to.html:61
+#: snapmerge/templates/how_to.html:66
 msgid "As you see, everyone is working in his own &quot;tunnels&quot;!"
 msgstr "Wie du siehst, arbeitet jeder in seinem eigenen &quot;Tunnel&quot;!"
 
-#: snapmerge/templates/how_to.html:62
+#: snapmerge/templates/how_to.html:67
 msgid ""
 "At a certain point the badger wants to meet up with his family members. In "
 "the same way, we want to merge our changes to the project. Eventually we "
@@ -418,7 +426,7 @@ msgstr ""
 "treffen. Ebenso wollen wir unsere Änderungen im Projekt zusammenführen. "
 "Irgendwann wollen wir das Spiel ja auch spielen, nicht wahr?"
 
-#: snapmerge/templates/how_to.html:63
+#: snapmerge/templates/how_to.html:68
 msgid ""
 "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, "
 "tick all the versions we would like to merge, and click yes to confirm."
@@ -426,7 +434,7 @@ msgstr ""
 " Dazu klicken wir einfach auf den „Merge“-Button unten rechts, kreuzen alle "
 "Versionen an, die wir zusammenführen möchten,  und bestätigen mit Ja."
 
-#: snapmerge/templates/how_to.html:66
+#: snapmerge/templates/how_to.html:71
 msgid ""
 "Now we will find a new version, with all changes merged. But what happens if "
 "more than one made changes to the same script? If such a situation occurs, "
@@ -437,11 +445,11 @@ msgstr ""
 "haben? In einer solchen Situiation müssen wir manuell wählen, welche Version "
 "wir behalten wollen:"
 
-#: snapmerge/templates/how_to.html:68
+#: snapmerge/templates/how_to.html:73
 msgid "Go back if you made a mistake"
 msgstr "Gehe zurück, wenn du einen Fehler gemacht hast"
 
-#: snapmerge/templates/how_to.html:69
+#: snapmerge/templates/how_to.html:74
 msgid ""
 "Sometimes the badger abandons one tunnel, e.g. due to a lack of stability. "
 "He then has to go back and up in his sett, and work on from a different "
@@ -460,21 +468,21 @@ msgstr ""
 "durch Doppelklick und arbeiten von dort aus weiter. Auf diese Weise erhalten "
 "wir einen neuen &quot;Tunnel&quot;."
 
-#: snapmerge/templates/how_to.html:71
+#: snapmerge/templates/how_to.html:76
 msgid "Built for teachers and the classroom"
 msgstr "Entwickelt für Lehrpersonen und das Klassenzimmer"
 
-#: snapmerge/templates/how_to.html:73
+#: snapmerge/templates/how_to.html:78
 msgid "What does Smerge offer you and how it can help with teaching?"
 msgstr "Wie kann Smerge beim Unterrichten helfen?"
 
-#: snapmerge/templates/how_to.html:75
+#: snapmerge/templates/how_to.html:80
 msgid "enabling collaboration for project-based learning with <em>Snap!</em>"
 msgstr ""
 "Smerge ermöglicht die Zusammenarbeit in projektbasiertem Lernen mit <em>Snap!"
 "</em>"
 
-#: snapmerge/templates/how_to.html:76
+#: snapmerge/templates/how_to.html:81
 msgid ""
 "all the data is always available and automatically backed up, so no more "
 "&quot;I forgot my stuff at home&quot; or &quot;my partner is ill, I can&#39;"
@@ -484,7 +492,7 @@ msgstr ""
 "Schluss mit dem &quot;Ich habe meine Sachen zuhause vergessen&quot; oder "
 "&quot;Mein Partner ist krank, ich kann nicht weiterarbeiten."
 
-#: snapmerge/templates/how_to.html:78
+#: snapmerge/templates/how_to.html:83
 msgid ""
 "set up templates in the sense of &quot;code skeletons&quot;, where you can "
 "supply your students with custom blocks, some code pieces already in "
@@ -494,7 +502,7 @@ msgstr ""
 "Blöcke oder vorgefertigen Code bereitzustellen. Weitere Templates können "
 "übrigens immer über Drag-and-Drop hinzugefügt werden. "
 
-#: snapmerge/templates/how_to.html:80
+#: snapmerge/templates/how_to.html:85
 msgid ""
 "the development process is always visible, to your students as well as to "
 "you. This allows for assessing individual contribution and giving individual "
@@ -503,7 +511,7 @@ msgstr ""
 "der Entwicklungsprozess ist stets sichbar für dich aber auch für deine "
 "Schülerinnen und Schüler. Das erlaubt es individuelles Feedback zu geben."
 
-#: snapmerge/templates/how_to.html:82
+#: snapmerge/templates/how_to.html:87
 msgid ""
 "you see the version history and are able to revert changes and go back to "
 "old versions, which enables tinkering and playing around in a risk-free "
@@ -512,11 +520,11 @@ msgstr ""
 "du siehst die Versionhistorie, kannst Änderungen rückgängig machen und so "
 "ganz risikofrei experimentieren."
 
-#: snapmerge/templates/how_to.html:85
+#: snapmerge/templates/how_to.html:90
 msgid "Login and User Management"
 msgstr "Login und User Management"
 
-#: snapmerge/templates/how_to.html:87
+#: snapmerge/templates/how_to.html:92
 msgid ""
 "We deliberatly have no dedicated user accounts or management. Instead, to "
 "secure your projects, you will get a PIN on the time of project creation, "
@@ -529,7 +537,7 @@ msgstr ""
 "Ihre E-Mail bei der Projekterstellung hinterlegen, können Sie bei Bedarf PIN "
 "und Passwort für all Ihre Projekte abrufen, falls Sie diese vergessen haben."
 
-#: snapmerge/templates/how_to.html:88
+#: snapmerge/templates/how_to.html:93
 msgid "Want to know more or need help?"
 msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
 
