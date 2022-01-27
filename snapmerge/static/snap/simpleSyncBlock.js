@@ -9,7 +9,7 @@ new DialogBoxMorph(
    }
    console.log(url);
    url += "&message="+message;
-   var data = ide.serializer.serialize(ide.stage);
+   var data = ide.getProjectXML();
    var r =  new XMLHttpRequest();
    r.open("POST", url, true);
    r.setRequestHeader("Content-Type", "application/xml");
