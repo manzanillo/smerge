@@ -1,3 +1,6 @@
+# TMP - README...
+This is a private "fork" of [smerge](https://github.com/manzanillo/smerge) and used to develope the application further on a local basis. This repository is connected to a server under "xxx" which should automatically compile a pushed version to view chances.
+
 # smerge
 
 Smerge is a merge tool for school environments and Snap!. It is based on a lot of open source projects including cytoscape.js or Django. It is intended to be simple, beautiful, fast, and easy to use in school environments. A live demo can be found at [smerge.org](https://smerge.org)
