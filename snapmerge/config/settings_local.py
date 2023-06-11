@@ -17,6 +17,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', 'smerge.org']
+ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', 'smerge.org', 'idpsmerge.duckdns.org']
 
 DEBUG = True
