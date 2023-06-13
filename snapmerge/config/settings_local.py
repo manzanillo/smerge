@@ -8,7 +8,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 COMPRESS_OFFLINE = False
 
 # allow cross for testing...
-#CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 ASGI_APPLICATION = "routing.application"
 CHANNEL_LAYERS = {
