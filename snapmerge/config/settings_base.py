@@ -84,7 +84,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
     'http://127.0.0.1:9000',
     'https://smerge.org',
-    'https://smerge.imp.fu-berlin.de'
+    'https://smerge.imp.fu-berlin.de',
+    'https://idpsmerge.duckdns.org'
 ]
 
 
