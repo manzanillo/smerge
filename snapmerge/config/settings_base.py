@@ -96,7 +96,7 @@ CORS_ORIGIN_WHITELIST = [
 
 #CSRF_COOKIE_DOMAIN = 'faui20q.cs.fau.de/smerge'
 
-#CSRF_TRUSTED_ORIGINS = ['snap.berkeley.edu', 'berkeley.edu']
+CSRF_TRUSTED_ORIGINS = ['snap.berkeley.edu', 'berkeley.edu']
 
 
 # Database
