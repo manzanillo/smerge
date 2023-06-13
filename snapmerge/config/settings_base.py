@@ -82,6 +82,7 @@ CORS_ORIGIN_WHITELIST = [
     'https://snap.berkeley.edu',
     'https://berkeley.edu',
     'http://localhost:8000',
+    'http://127.0.0.1:8000',
     'http://127.0.0.1:9000',
     'https://smerge.org',
     'https://smerge.imp.fu-berlin.de',
