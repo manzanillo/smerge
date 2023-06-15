@@ -1,5 +1,6 @@
 BASE = ./snapmerge
 SETTINGS = config.settings_local
+SETTINGS_TESTSERVER = config.settings_test
 
 .PHONY: run startapp makemigrations migrate test
 
@@ -7,6 +8,8 @@ crun:
 	npm install && python $(BASE)/manage.py compress --settings=$(SETTINGS) ; python $(BASE)/manage.py runserver --settings=$(SETTINGS)
 run:
 	python $(BASE)/manage.py runserver --settings=$(SETTINGS)
+run_testserver:
+	python $(BASE)/manage.py runserver --settings=$(SETTINGS_TESTSERVER)
 
 startapp:
 	python $(BASE)/manage.py startapp $(APPNAME)
