@@ -46,6 +46,7 @@ def notify_room(proj_id, new_node, event_type="commit"):
 class HomeView(View):
     def get(self, request):
         context = {
+            'devAdd': '(DEV)' if settings.DEBUG else ''
         }
         return render(request, 'home.html', context)
 
