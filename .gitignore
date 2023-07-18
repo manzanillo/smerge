@@ -83,4 +83,4 @@ snapmerge/media/*
 snapmerge/static/CACHE/**
 
 #secrets file
-secrets/secrets.smerge.json
+secrets/smerge/secrets.smerge.json
