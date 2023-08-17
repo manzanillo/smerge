@@ -43,7 +43,7 @@ var cy = window.cy = cytoscape({
   elements: {
     nodes: [
     {% for ele in files  %}
-    { data: { id: '{{ele.id}}' ,
+    { data: { id: '{{ele.id}}',
               href: '{{ele.file_url}}',
               description: '{{ele.description}}',
               timestamp : '{{ele.timestamp}}',
