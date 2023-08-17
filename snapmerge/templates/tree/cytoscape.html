@@ -101,9 +101,6 @@ cy.on('taphold dblclick', 'node', function(evt){
 
 // Show tooltip on hover
 cy.on('click', 'node', function(evt){
-  console.log(window.location.origin);
-  console.log(this.data('href'));
-  console.log("Name is: ", {{proj_name}});
   node = evt.target;
 
   //calculate difference to parent node
