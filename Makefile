@@ -1,4 +1,5 @@
 BASE = ./snapmerge
+REACT_BASE= ./react_extension
 SETTINGS = config.settings_local
 SETTINGS_TESTSERVER = config.settings_test
 
@@ -6,10 +7,16 @@ SETTINGS_TESTSERVER = config.settings_test
 
 crun:
 	npm install && python $(BASE)/manage.py compress --settings=$(SETTINGS) ; python $(BASE)/manage.py runserver --settings=$(SETTINGS)
+
 run:
 	python $(BASE)/manage.py runserver --settings=$(SETTINGS)
+
 run_testserver:
 	python $(BASE)/manage.py runserver --settings=$(SETTINGS_TESTSERVER)
+
+run_with_react_ext:
+	./launch.sh
+
 
 startapp:
 	python $(BASE)/manage.py startapp $(APPNAME)

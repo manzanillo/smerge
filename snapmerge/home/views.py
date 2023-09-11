@@ -480,3 +480,9 @@ class ToggleColorView(View):
         file.save()
         print(new_color)
         return HttpResponse(new_color)
+
+class ReactMergeView(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'merge_react.html', context)

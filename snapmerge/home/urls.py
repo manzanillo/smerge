@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'change_description/(?P<proj_id>[-\w]+)$', views.ChangeDescriptionView.as_view(), name='change_description'),
     url(r'delete_proj/(?P<proj_id>[-\w]+)$', views.DeleteProjectView.as_view(), name='delete_proj'),
     url(r'^toggle_color/(?P<proj_id>[-\w]+)/(?P<file_id>[-\w]+)$', views.ToggleColorView.as_view(), name='toggle_color'),
+    url(r'^merge_conf/*', views.ReactMergeView.as_view(), name='react_merge_conf')
 ]

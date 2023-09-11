@@ -1,0 +1,133 @@
+:root {
+    --nav-heigth: 64px;
+    --color-bg-nav: rgb(15,3,3);
+  }
+  
+  nav {
+    height: var(--nav-heigth);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--color-bg-nav);
+  }
+  
+  .logo {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+    font-size: 1.25em;
+    letter-spacing: 0.15em;
+    position: absolute;
+    left: 2%;
+  }
+  
+  nav ul {
+    position: absolute;
+    right: 2%;
+  }
+  
+  .navlinks {
+    right: 10%;
+  }
+  
+  nav a {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+    font-size: 0.75em;
+  }
+  
+  .burger {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: 5%;
+  }
+  
+  .burger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px;
+    justify-content: space-around;
+    transition: all 0.3s ease-in;
+  }
+  
+  @media screen and (max-width: 760px) {
+    body {
+      overflow-x: hidden;
+    }
+  
+    nav {
+      position: static;
+    }
+  
+    nav ul {
+      position: static;
+    }
+  
+    .navlinks {
+      position: absolute;
+      right: 0;
+      top: var(--nav-heigth);
+      height: calc(100% - var(--nav-heigth));
+      width: 30%;
+      z-index: 2;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: nav(--color-bg-nav);
+      transform: translateX(100%);
+      transition: transform 0.5s ease-in;
+    }
+    .navlinks li {
+      opacity: 0;
+      width: 100%;
+      text-align: center;
+    }
+  
+    .burger {
+      display: block;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .navlinks {
+      background-color: nav(--color-bg-nav);
+      height: calc(100% - var(--nav-heigth));
+      width: 100%;
+    }
+  
+    nav ul a {
+      padding: 1rem;
+      font-size: 2rem;
+    }
+  }
+  
+  .nav-active {
+    transform: translateX(0%);
+  }
+  
+  @keyframes navLinkFade {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+  
+    to {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+  
+  .toggle .line1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
+  }
+  .toggle .line2 {
+    opacity: 0;
+  }
+  .toggle .line3 {
+    transform: rotate(45deg) translate(-5px, -6px);
+  }
+  
