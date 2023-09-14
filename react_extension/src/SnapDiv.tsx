@@ -6,9 +6,14 @@ import { cloneDeep, debounce, xor } from 'lodash';
 import { Button, DefaultButton, Stack } from '@fluentui/react';
 
 
-function SnapDiv() {
-    const xml1 = useRef<string>("");
-    const xml2 = useRef<string>("");
+interface SnapDivProps {
+    xml1: string;
+    xml2: string;
+  }
+  
+  const SnapDiv: React.FC<SnapDivProps> = ({ xml1, xml2 }) => {
+    // const xml1 = useRef<string>("");
+    // const xml2 = useRef<string>("");
 
     const xml1IsFetching = useRef<boolean>(false);
     const xml2IsFetching = useRef<boolean>(false);
@@ -79,14 +84,14 @@ function SnapDiv() {
 
         // use Split to display world1 and world2 side aside and allow resizing
 
-        ide = new IDE_Morph({ load:"http://127.0.0.1/media/2.xml", hideControls: true, mode: "preview", noPalette: true, noUserSettings: true, hideCategories: true, noSpriteEdits: true, noSprites: true, blocksZoom:1, noImports: true, world: world });
+        ide = new IDE_Morph({ load:xml1, hideControls: true, mode: "preview", noPalette: true, noUserSettings: true, hideCategories: true, noSpriteEdits: true, noSprites: true, blocksZoom:1, noImports: true, world: world });
         let loop = () => {
             if(ide == undefined || world == undefined) return;
             setTimeout(() => {requestAnimationFrame(loop);}, 33);
             //console.log("Draw1")
             world.doOneCycle();
         };
-        ide2 = new IDE_Morph({ load:"http://127.0.0.1/media/2.xml", hideControls: true, mode: "editor", noPalette: true, noUserSettings: true, hideCategories: true, noSpriteEdits: true, noSprites: true, blocksZoom:1, noImports: true, world: world2 });
+        ide2 = new IDE_Morph({ load:xml2, hideControls: true, mode: "editor", noPalette: true, noUserSettings: true, hideCategories: true, noSpriteEdits: true, noSprites: true, blocksZoom:1, noImports: true, world: world2 });
         let loop2 = () => {
             if(ide2 == undefined || world2 == undefined) return;
             setTimeout(() => {requestAnimationFrame(loop2);}, 33);
@@ -154,7 +159,7 @@ function SnapDiv() {
     const debouncedUpdateSize = useRef(
         debounce(() => {
             updateIdeSizes();
-        }, 200)
+        }, 20)
     ).current;
 
     useEffect(() => {
