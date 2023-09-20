@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  django:
+    container_name: smerge_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smerge_docker
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./snapmerge/media:/var/www/snapmerge/snapmerge/media
+      - ./snapmerge/database:/var/www/snapmerge/snapmerge/database
+    # ports:
+    #   - "80:8000"
+
+  redis:
+    image: "redis:alpine"
+
+  nginx:
+    image: nginx:1.25.2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - django
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
