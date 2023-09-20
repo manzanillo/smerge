@@ -1,12 +1,12 @@
 #!/bin/bash
 
-current_path=$(pwd)
+current_path=$(dirname $0)
 # Execute the script to generate JSON
-json_branches=$(./getBranchJson.sh)
+json_branches=$($current_path/getBranchJson.sh)
 
 remote_branches=$(echo $json_branches | jq -r .remote_branches[])
 
-cd ~/Desktop/Smerge-Private
+cd $current_path/../../..
 export GIT_PAGER="cat"
 
 # Loop through remote branches and run 'git log' for each one

@@ -2,6 +2,7 @@
 
 # Collect static files
 #echo "compress"
+
 npm install && python ./snapmerge/manage.py compress --settings=config.settings_docker
 
 

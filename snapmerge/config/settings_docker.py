@@ -16,7 +16,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 COMPRESS_OFFLINE = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de',
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'faui20s.cs.fau.de',
                  'faui20s.informatik.uni-erlangen.de', 'smerge.org', 'smerge.imp.fu-berlin.de']
 
 ASGI_APPLICATION = "routing.application"

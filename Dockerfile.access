@@ -1,0 +1,68 @@
+# Use the official Nginx slim image as the base image
+FROM nginx:alpine
+
+# Remove the default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy your custom Nginx configuration file
+COPY /Access_Portal/nginx.conf /etc/nginx/conf.d/default.conf
+
+RUN apk update && apk add --no-cache bash
+
+RUN apk --no-cache add git python3-dev py3-pip nodejs npm
+
+RUN apk add --no-cache gcc
+
+RUN apk add --no-cache \
+    libffi-dev \
+    libressl-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libc-dev \
+    zlib-dev
+
+RUN apk add --no-cache jq
+
+RUN mkdir /app
+
+WORKDIR /app
+
+COPY . /app
+
+WORKDIR /app/Access_Portal/access_portal
+
+RUN npm install
+
+WORKDIR /app/Access_Portal/Web_Api
+
+RUN pip install -r requirements.txt
+
+WORKDIR /app/react_extension
+
+RUN npm install
+
+
+WORKDIR /app
+RUN pip install -r requirements.txt
+RUN npm install
+
+RUN chmod +x ./entrypoint.sh
+RUN ./entrypoint.sh
+
+
+# Expose port 80 to allow incoming HTTP traffic
+EXPOSE 80
+EXPOSE 443
+
+# Start Nginx when the container runs
+CMD ["nginx", "-g", "daemon off;"]
+
+RUN chmod 777 /app/Access_Portal/launch_docker.sh
+
+ENTRYPOINT ["/app/launch_docker.sh"]
+
+
+# docker build -t my-nginx-test .
+# docker run -d -p 80:80 -p 443:443 my-nginx-test

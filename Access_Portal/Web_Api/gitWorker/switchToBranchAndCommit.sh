@@ -10,7 +10,8 @@ fi
 branch="$1"
 commit_hash="$2"
 
-cd ~/Desktop/Smerge-Private
+current_path=$(dirname $0)
+cd $current_path/../../..
 
 local_branch="${branch/origin\//}"
 #echo "Switching to: $local_branch"

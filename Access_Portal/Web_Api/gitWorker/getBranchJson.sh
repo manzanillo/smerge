@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Get the currently selected branch
-cd ~/Desktop/Smerge-Private
+current_path=$(dirname $0)
+cd $current_path/../../..
 current_branch=$(git symbolic-ref --short HEAD)
 
 # Get a list of remote branches
