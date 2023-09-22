@@ -2,7 +2,6 @@ import { AppBar, Box, Button, Divider, Drawer, FormControl, IconButton, InputLab
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import App from "../App";
 import NotFound from "./NotFound"
 import LoginIcon from '@mui/icons-material/Login';
 import LockIcon from '@mui/icons-material/Lock';
@@ -16,6 +15,8 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import Grid from '@mui/material/Unstable_Grid2';
 import { JSX } from "react/jsx-runtime";
 import Switcher from "./Switcher";
+import Unlock from "./Unlock";
+import AdminPanel from "./AdminPanel";
 
 const Layout = () => {
   const [state, setState] = useState(false);
@@ -217,9 +218,9 @@ const Layout = () => {
 
         <div className="Content" style={{ position: "absolute", top: "64px", bottom: "0px", width: "100vw", overflow: "scroll" }}>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/" element={<Unlock />} />
             <Route path="/switch" element={<Switcher/>} />
-            <Route path="/admin" element={<div><h1>Admin</h1></div>} />
+            <Route path="/admin" element={<AdminPanel/>} />
             <Route path="/login" element={<Login onAuthSuccess={onAuthSuccess} />} />
             <Route path="/error/:errorCode" element={<NotFound />} />
             <Route path="*" Component={() => <Navigate to="/access/error/404" />} />

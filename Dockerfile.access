@@ -52,6 +52,18 @@ RUN chmod +x ./entrypoint.sh
 RUN ./entrypoint.sh
 
 
+# Install SSH client
+RUN apk add --no-cache openssh-client
+
+# Generate a random SSH key pair during the container build
+RUN ssh-keygen -t rsa -b 4096 -f /root/.ssh/id_rsa -N ""
+
+# Set the permissions on the SSH key
+RUN chmod 600 /root/.ssh/id_rsa
+
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+
 # Expose port 80 to allow incoming HTTP traffic
 EXPOSE 80
 EXPOSE 443
@@ -64,5 +76,5 @@ RUN chmod 777 /app/Access_Portal/launch_docker.sh
 ENTRYPOINT ["/app/launch_docker.sh"]
 
 
-# docker build -t my-nginx-test .
+# docker build -t my-nginx-test . -f Dockerfile.access
 # docker run -d -p 80:80 -p 443:443 my-nginx-test

@@ -6,10 +6,15 @@ interface CommitDto{
     commit: Commit[];
 }
 
+interface BranchesDto{
+    current_branch: string;
+    remote_branches: string[];
+}
+
 export const getCommits = async (branch: string) => {
     if (branch == "") return [];
     const res = await httpService.post(`/git/commits`,{
-        "path": "origin/master"
+        "path": branch
     }) as AxiosResponse;
 
     if(res.status == 200) {
@@ -17,4 +22,14 @@ export const getCommits = async (branch: string) => {
         return commits.commit;
     }
     return [];
+}
+
+export const getBranches = async () => {
+    const res = await httpService.get(`/git/branches`) as AxiosResponse;
+
+    if(res.status == 200) {
+        const branches = await res.data as BranchesDto;
+        return branches;
+    }
+    return {current_branch:"", remote_branches:[]};
 }

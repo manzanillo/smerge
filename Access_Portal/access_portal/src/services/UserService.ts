@@ -41,6 +41,31 @@ export const getUserAvailable = async (username: string) => {
     return false;
 }
 
+interface UnlockedIpDto{
+    expire_date: string;
+    id: number;
+    ip_address: string;
+    username: string;
+}
+
+export const getUnlockIp = async () => {
+    const res = await httpService.get(`/access/unlock`) as AxiosResponse;
+    const text = await res.data as UnlockedIpDto;
+    if(res.status == 200) {
+        return {success:true, text:text};
+    }
+    return {success:false, text:text};
+}
+
+export const getIsIpLocked = async () => {
+    const res = await httpService.get(`/access/isUnlocked`) as AxiosResponse;
+    const text = await res.data as UnlockedIpDto[];
+    if(res.status == 200) {
+        return {success:true, text:text};
+    }
+    return {success:false, text:text};
+}
+
 export const postLogin = async (username: string, password: string) => {
     if (username == "") return "";
     const res = await httpService.post(`/login`, {"username":username, "password":password});

@@ -5,6 +5,7 @@ from app import app, db
 #parser = argparse.ArgumentParser(description='Controls the whole api server')
 #parser.add_argument('--migrate', '-m', action='store_true', help='Migrate the database')
 
+
 if __name__ == '__main__':
     #args = parser.parse_args()
     #if args.migrate:

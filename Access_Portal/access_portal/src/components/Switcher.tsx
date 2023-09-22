@@ -1,30 +1,59 @@
 
-import { Box, Grid } from '@mui/material';
+import { Box, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Commit from '../models/Commit';
 import CommitList from './CommitList';
-import { getCommits } from "../services/GitService";
+import { getBranches, getCommits } from "../services/GitService";
 import { useCallback, useEffect, useState } from 'react';
 
 export default function Switch() {
-  const tmpData = [{
-    author: "Richie <richieschmid@live.de>",
-    date: "Fri Sep 8 21:24:26 2023 +0200",
-    hash: "ac911c7e4c2b7400290108671c8d00b7009c3f1f",
-    msg: "updated conda env export"
-}] as Commit[]
+//   const tmpData = [{
+//     author: "Richie <richieschmid@live.de>",
+//     date: "Fri Sep 8 21:24:26 2023 +0200",
+//     hash: "ac911c7e4c2b7400290108671c8d00b7009c3f1f",
+//     msg: "updated conda env export"
+// }] as Commit[]
 
   const [commits, setCommits] = useState<Commit[]>([]);
+  const [branch, setBranch] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [branches, setBranches] = useState<string[]>([]);
+
+  const gatherBranches = useCallback(async () => {
+    const branchData = await getBranches();
+    setBranches(branchData.remote_branches);
+    setBranch(branchData.remote_branches.filter((b:string) => b.includes(branchData.current_branch))[0]);
+  }, []);
+
+  useEffect(() => {
+    gatherBranches();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const gatherData = useCallback(async () => {
-    let res = await getCommits("origin/master");
-    res = res.slice(0,10);
-    console.log(res);
+    if(branches.length == 0) return;
+    setIsLoading(true);
+    const res = await getCommits(branch);
     setCommits(res);
-  }, []);
+    setIsLoading(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branch]);
 
   useEffect(()=>{
     gatherData();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branch]);
+
+  //const [branch, setBranch] = useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setBranch(event.target.value as string);
+  };
+
+  const getBranchItems = () => {
+    if (!branches) return <MenuItem value=""></MenuItem>;
+    return (branches.map((bran) => <MenuItem key={bran} value={bran}>{bran}</MenuItem>));
+  }
 
   return (
     <Box style={{ height: "100%" }}>
@@ -33,37 +62,34 @@ export default function Switch() {
         spacing={0}
         // alignItems="center"
         justifyContent="center"
-        sx={{ height: "100%", overflow: "scroll" }}
+        justifyItems="center"
+        sx={{ height: "100%", overflow: "scroll", p:"20px" }}
       >
-        <Grid xs="auto">
-
-          <CommitList data={commits}></CommitList>
-
-          {/* <List sx={{ width: '100%', minWidth: 360, bgcolor: 'background.paper' }}>
-          <ListItem>
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="https://avatars.githubusercontent.com/u/2918581?v=4" />
-        </ListItemAvatar>
-        <ListItemText primary="Photos" secondary="Jan 9, 2014" />
-        <div >test</div>
-        <Divider sx={{ml:"10px", mr:"10px"}} orientation='vertical' flexItem/>
-        <Typography align='right'><Button variant='outlined' onClick={(e)=> console.log(e.target)}>Switch</Button></Typography>
-      </ListItem>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg"/>
-        </ListItemAvatar>
-        <ListItemText primary="Work" secondary="Jan 7, 2014" />
-      </ListItem>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg"/>
-        </ListItemAvatar>
-        <ListItemText primary="Vacation" secondary="July 20, 2014" />
-      </ListItem> */}
-
-          {/* </List> */}
-        </Grid>
+        <Grid>
+          <Grid container >
+            <div style={{width:"200px", paddingBottom:"10px"}}>
+            <FormControl fullWidth>
+              <InputLabel id="branch-label">Branch</InputLabel>
+              <Select
+                labelId="branch-label"
+                id="branch-select"
+                value={branch}
+                label="Branch"
+                onChange={handleChange}
+              >
+                {getBranchItems()}
+                {/* <MenuItem value={"origin/master"}>origin/master</MenuItem>
+                <MenuItem value={"origin/1"}>origin/1</MenuItem>
+                <MenuItem value={"origin/2"}>origin/2</MenuItem> */}
+              </Select>
+            </FormControl>
+            </div>
+            
+          </Grid>
+          <Grid>
+            <CommitList data={commits} branch={branch} isLoading={isLoading}></CommitList>
+          </Grid>
+      </Grid>
       </Grid>
     </Box>
   );

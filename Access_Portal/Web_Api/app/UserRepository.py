@@ -20,6 +20,9 @@ def addUser(username, password):
     except:
         return False
     
+def getUserToActivate():
+    return User.query.filter(User.activated == False)
+    
 def hashPassword(password):
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
@@ -28,6 +31,27 @@ def hashPassword(password):
 def addUserPrivate(user):
     db.session.add(user)
     db.session.commit()
+    
+# switches the users activation status
+def activateUser(userName):
+    toActivate = User.query.filter(User.username == userName).first()
+    if toActivate:
+        toActivate.activated = not toActivate.activated
+        db.session.commit()
+        return "Switched"
+    return "No user found."
+
+def setAdminState(userName, state):
+    toSet = User.query.filter(User.username == userName).first()
+    if toSet:
+        toSet.isAdmin = state
+        db.session.commit()
+        if state:
+            return f"{userName} is now an admin."
+        else:
+            return f"{userName} is no longer an admin!"
+    return f'No user named "{userName}" found.'
+    
     
 def check_password(username, password_hashed):
     user = getUser(username)

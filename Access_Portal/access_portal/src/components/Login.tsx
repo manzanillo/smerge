@@ -97,12 +97,16 @@ const Login = ({onAuthSuccess}:loginProps) => {
         checksFailed = true;
       }
 
-      if (!usernameValid){
+      if (usernameValid){
+        console.log(usernameValid)
         checksFailed = true;
         setUsernameError(true);
         setUsernameErrorText("Username is not available.");
       }
-      if (!validatePassword(password, passwordAgain)) checksFailed = true;
+      console.log(checksFailed)
+      console.log("Passcheck: ",validatePassword(password, passwordAgain))
+      if (validatePassword(password, passwordAgain)) checksFailed = true;
+      console.log(checksFailed)
     }
     
     if (checksFailed){
@@ -126,6 +130,7 @@ const Login = ({onAuthSuccess}:loginProps) => {
         autoClose: 3000,
         hideProgressBar: false,
       });
+      navigate("/access/login");
     } catch (err) {
       const text = (err as AxiosError).request.response;
       toast.error(text, {

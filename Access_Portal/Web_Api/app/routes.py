@@ -4,9 +4,12 @@ from app.models import User
 import json
 from flask_cors import CORS, cross_origin
 from app.UserRepository import *
+from app.UnlockedIpsRepository import *
+from app.SettingsRepository import *
 from functools import wraps
 import jwt
 import re
+from datetime import datetime, timedelta
 
 def token_required(func):
     # decorator factory which invoks update_wrapper() method and passes decorated function as an argument
@@ -102,8 +105,8 @@ def login():
         checked = check_password(username, password)
         if checked != "True":
             if "Please wait" in checked:
-                return make_response(checked, 401, {'WWW-Authenticate': 'Basic realm: "Authentication Failed "'})
-            return make_response('Wrong username or password!', 401, {'WWW-Authenticate': 'Basic realm: "Authentication Failed "'})
+                return make_response(checked, 401)
+            return make_response('Wrong username or password!', 401)
             #return "Wrong username or password!", 401
     
         token = generateToken(username)
@@ -113,13 +116,13 @@ def login():
     
     else:
         if not username and not password:
-            return make_response('Username and password are missing!', 403, {'WWW-Authenticate': 'Basic realm: "Authentication Failed "'})
+            return make_response('Username and password are missing!', 403)
             #return "Username and password are missing!", 403
         if not username:
-            return make_response('Username is missing!', 403, {'WWW-Authenticate': 'Basic realm: "Authentication Failed "'})
+            return make_response('Username is missing!', 403)
             #return "Username is missing!", 403
         else:
-            return make_response('Password is missing!', 403, {'WWW-Authenticate': 'Basic realm: "Authentication Failed "'})
+            return make_response('Password is missing!', 403)
             #return "Password is missing!", 403
         
         
@@ -217,6 +220,148 @@ def getIconList():
         
     }
     return make_response(ret, 200)
+
+# import random
+from app import generateWhitelist
+@app.get('/api/access/unlock')
+@cross_origin()
+def unlockIp():
+    timeSpan = int(getSetting("timeout").value)
+    ret = addUnlockedIp("tmp", request.remote_addr, timeSpan)
+
+    generateWhitelist()
+    #store_ip(request.remote_addr)
+    if type(ret) != UnlockedIps:
+        return make_response(ret, 404)
+    return make_response(ret.as_dict(), 200)
+    # if random_bool:
+    #     return make_response(request.remote_addr, 200)
+    # else:
+    #     return make_response(request.remote_addr, 404)
+    
+    
+
+
+    
+@app.get('/api/access/isUnlocked')
+@cross_origin()
+def isIpUnlocked():
+    unlocked = getIpIsUnlocked(request.remote_addr)
+    if unlocked != None:
+    #if store_ip(request.remote_addr, store=False):
+        return make_response([u.as_dict() for u in unlocked], 200)
+    else:
+        return make_response(request.remote_addr, 404)
+    
+
+# Tmp for testing...
+@app.route('/api/access/delete_ip_byID/<int:ip_id>', methods=['DELETE'])
+@cross_origin()
+def delete_id(ip_id):
+    if(request.remote_addr != "127.0.0.1"):
+        return "Only internal allowed...", 401
+    ip_to_delete = getUnlockedIpById(ip_id)
+    
+    if ip_to_delete:
+        db.session.delete(ip_to_delete)
+        db.session.commit()
+        return "Ip deleted successfully"
+    else:
+        return "Ip not found", 404
+    
+    
+    
+@app.post('/api/access/setting')
+@cross_origin()
+def post_setting():
+    if(request.remote_addr != "127.0.0.1"):
+        return "Only internal allowed...", 401
+
+    name = None
+    value = None
+    desc = ""
+    request_data = request.get_json()
+    if request_data:
+        if 'name' in request_data.keys():
+            name = request_data['name']
+        if 'value' in request_data.keys():
+            value = request_data['value']
+        if 'desc' in request_data.keys():
+            desc = request_data['desc']
+            if len(desc) > 255:
+                return make_response('Description is to long.', 403)
+            
+    if name and value:
+        res = upsertSetting(name, value, desc)
+        if res == 1:
+            return make_response('Setting updated.', 200)
+        return make_response('Setting added.', 200)
+    
+    else:
+        if not name and not value:
+            return make_response('Name and value are missing!', 403)
+        if not name:
+            return make_response('Name is missing!', 403)
+        else:
+            return make_response('Value is missing!', 403)
+        
+@app.get('/api/access/setting')
+@cross_origin()
+def getSettings():
+    ret = getAllSettings()
+    if(ret == None):
+        return make_response('No settings!', 200)
+    return make_response([u.as_dict() for u in ret], 200)
+
+@app.get('/api/admin/userToActivate')
+@cross_origin()
+def getToActivate():
+    ret = getUserToActivate()
+    if(ret == None):
+        return make_response('No user!', 200)
+    return make_response([u.as_save_dict() for u in ret], 200)
+
+@app.get('/api/admin/getAll')
+@cross_origin()
+def getAll():
+    ret = getAllUser()
+    if(ret == None):
+        return make_response('No user!', 200)
+    return make_response([u.as_save_dict() for u in ret], 200)
+
+@app.get('/api/admin/activateUser/<string:username>')
+@cross_origin()
+def getActivateUser(username):
+    ret = activateUser(username)
+    if(ret == "Switched"):
+        return make_response('User activation switched.', 200)
+    return make_response(f'User "{username}"" not found.', 403)
+
+# expects /setAdmin/<name>?state=boolean
+@app.get('/api/admin/setAdmin/<string:username>')
+@cross_origin()
+def getAdminSetState(username):
+    state = request.args.get('state').lower() == 'true'
+    ret = setAdminState(username, state)
+    if("admin" in ret):
+        return make_response(ret, 200)
+    return make_response(ret, 403)
+        
+
+    
+# # Tmp for testing...
+# @app.get('/api/access/genWhite')
+# @cross_origin()
+# def genWhitelist():
+#     if(request.remote_addr != "127.0.0.1"):
+#         return "Only internal allowed...", 403
+    
+#     res = wL.generateWhitelist()
+#     if res != None:
+#         return res
+#     return "Generated..."
+
+    
 
 @app.post('/api/git')
 @cross_origin()
