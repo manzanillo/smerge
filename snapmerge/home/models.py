@@ -58,7 +58,7 @@ class File(models.Model):
 class SnapFile(File):
     # validates only naming of file
     file = models.FileField(_("File"), blank=True, validators=[
-                            FileExtensionValidator(['xml', 'XML'])])
+        FileExtensionValidator(['xml', 'XML'])])
     # thumbnail = models.ImageField(_("Thumbnail"), null=True, blank=True)
     user = models.CharField(_("user"), max_length=30, null=True)
 
@@ -124,3 +124,15 @@ class SnapFileForm(ModelForm):
             'file': _('File (optional)'),
             'description': _('Description (optional)'),
         }
+
+
+class MergeConflict(models.Model):
+    left = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="leftFile")
+    right = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="rightFile")
+    hunks = models.fields
+
+
+class Hunk(File):
+    mergeConflict = models.ForeignKey(MergeConflict, on_delete=models.CASCADE)
+
+
