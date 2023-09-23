@@ -132,7 +132,9 @@ class MergeConflict(models.Model):
     hunks = models.fields
 
 
-class Hunk(File):
+class Hunk(models.Model):
     mergeConflict = models.ForeignKey(MergeConflict, on_delete=models.CASCADE)
+    left = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="leftHunk")
+    right = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="rightHunk")
 
 
