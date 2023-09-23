@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
-import './MergeConfictView.css'
+import './MergeConflictView.css'
 import SnapDiv from './SnapDiv';
 import { Button, Stack } from '@fluentui/react';
-import { useParams } from 'react-router-dom';
 
 
-function MergeConfictView() {
+interface MergeConflictViewProps {
+    code?: string;
+}
+  
+const MergeConflictView: React.FC<MergeConflictViewProps> = ({code=""}) => {
 
-    const {code} = useParams();
-
+    
     const [xml1, setXml1] = useState<string>("http://127.0.0.1/media/1.xml");
     const [xml2, setXml2] = useState<string>("http://127.0.0.1/media/2.xml");
 
@@ -39,4 +42,4 @@ function MergeConfictView() {
     )
 }
 
-export default MergeConfictView
+export default MergeConflictView

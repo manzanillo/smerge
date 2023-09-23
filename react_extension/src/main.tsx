@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import Layout from './Layout.tsx'
-import MergeConfictView from './MergeConfictView.tsx'
 import { PartialTheme, ThemeProvider } from '@fluentui/react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import ConflictStepper from './ConflictStepper.tsx'
 
 const lightTheme: PartialTheme = {
   semanticColors: {
@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <div style={{ position: "absolute", top: "64px", bottom: "0px", width: "100vw", overflow: "scroll" }}>
           <Router>
             <Routes>
-                <Route path="ext/merge/:code" element={<MergeConfictView />}></Route>
+                <Route path="ext/merge/:code" element={<ConflictStepper />}></Route>
                 <Route path="ext/*" element={<h1>404</h1>}></Route>
             </Routes>
           </Router>

@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
-import reactLogo from './assets/react.svg'
-import './MergeConfictView.css'
+import './MergeConflictView.css'
 import Split from 'react-split'
-import { cloneDeep, debounce, xor } from 'lodash';
-import { Button, DefaultButton, Stack } from '@fluentui/react';
+import { debounce } from 'lodash';
 
 
 interface SnapDivProps {
@@ -109,14 +107,7 @@ interface SnapDivProps {
         let re = document.getElementById('rightEditor');
         le.style.position = 'unset';
         re.style.position = 'unset';
-        let c1 = () =>{
-            world.doOneCycle();
-        }
-        let c2 = () =>{
-            world2.doOneCycle();
-        }
-        setTimeout(c1, 500);
-        setTimeout(c2, 500);
+        // setTimeout(c2, 500);
         console.log(world);
         
         console.log(ide);
