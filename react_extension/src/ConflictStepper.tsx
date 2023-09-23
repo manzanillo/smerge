@@ -9,6 +9,7 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import "./ConflictStepper.css"
 
 
 interface ConflictStepperProps {
@@ -58,6 +59,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
         {steps.map((step, index) => (
           <Step key={step.label}>
             <StepLabel
+              
               optional={
                 index === 2 ? (
                   <Typography variant="caption">Last step</Typography>
@@ -67,7 +69,10 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
               {step.label}
             </StepLabel>
             <StepContent>
-              <Typography>{step.description}</Typography>
+              <div className="stepCard">
+                <MergeConflictView code={step.description} isActive={index==activeStep}/>
+              </div>
+           
               <Box sx={{ mb: 2 }}>
                 <div>
                   <Button

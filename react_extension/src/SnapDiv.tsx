@@ -43,7 +43,6 @@ interface SnapDivProps {
             removeSnap();
         };
     }, []);
-
     // const loadData = () => {
     //     if (xml1.current != "" && xml2.current != ""){
     //         addSnap();
@@ -130,7 +129,7 @@ interface SnapDivProps {
         debouncedUpdateSize();
     }, true);
 
-    const viewRatio = useRef([50.0, 50.0]);
+    //const viewRatio = useState([49.0, 51.0]);
 
     // const lRec = useRef<DOMRect>();
     // const rRec = useRef<DOMRect>();
@@ -174,8 +173,11 @@ interface SnapDivProps {
                 <Split
                     onDragEnd={(_) => { debouncedUpdateSize(); }}
                     className="split"
+                    gutterAlign="center"
+                    sizes={[49.5, 50.5]}
+                    style={{height:"600px"}}
                 >
-                    <div ref={lRec} style={{  overflow: "auto", width:"100%", height:"100%"}}><canvas ref={leRef} style={{ borderRadius: "20px" }} id="leftEditor" tabIndex={1} ></canvas></div>
+                    <div ref={lRec} style={{ width:"100%", height:"100%"}}><canvas ref={leRef} style={{ borderRadius: "20px" }} id="leftEditor" tabIndex={1} ></canvas></div>
                     <div ref={rRec} style={{ width:"100%", height:"100%"}}><canvas ref={riRef} style={{ borderRadius: "20px" }} id="rightEditor" tabIndex={2} ></canvas></div>
                 </Split>
             
