@@ -6,14 +6,16 @@ import TurnSlightLeftIcon from '@mui/icons-material/TurnSlightLeft';
 import TurnSlightRightIcon from '@mui/icons-material/TurnSlightRight';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import TextDiv from './TextDiv';
 
 
 interface MergeConflictViewProps {
     code?: string;
     isActive?: boolean;
+    isText?: boolean;
 }
 
-const MergeConflictView: React.FC<MergeConflictViewProps> = ({ code = "", isActive }) => {
+const MergeConflictView: React.FC<MergeConflictViewProps> = ({ code = "", isActive, isText = false }) => {
 
 
     const [xml1, setXml1] = useState<string>("http://127.0.0.1/media/1.xml");
@@ -32,7 +34,7 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({ code = "", isActi
             {(!isLoaded && isActive) ?
                 <div className='merge_main_space' >
                     <div className='merge_main_pane' style={{ minHeight: "600px" }}>
-                        <SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>
+                        {isText?<TextDiv text1={xml1} text2={xml2}/>:<SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>}
                     </div>
                     <Stack direction="row" spacing={10} justifyContent={"center"} sx={{pt:"20px"}}>
                         <Button variant="contained" color={"success"} startIcon={<TurnSlightLeftIcon />}>

@@ -177,8 +177,8 @@ interface SnapDivProps {
                     sizes={[49.5, 50.5]}
                     style={{height:"600px"}}
                 >
-                    <div ref={lRec} style={{ width:"100%", height:"100%"}}><canvas ref={leRef} style={{ borderRadius: "20px" }} id="leftEditor" tabIndex={1} ></canvas></div>
-                    <div ref={rRec} style={{ width:"100%", height:"100%"}}><canvas ref={riRef} style={{ borderRadius: "20px" }} id="rightEditor" tabIndex={2} ></canvas></div>
+                    <div ref={lRec} style={{ width:"100%", height:"100%"}}><canvas ref={leRef} className='leftSplitPane' id="leftEditor" tabIndex={1} ></canvas></div>
+                    <div ref={rRec} style={{ width:"100%", height:"100%"}}><canvas ref={riRef} className='rightSplitPane' id="rightEditor" tabIndex={2} ></canvas></div>
                 </Split>
             
     )
