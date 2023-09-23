@@ -21,7 +21,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <div style={{ position: "absolute", top: "64px", bottom: "0px", width: "100vw", overflow: "scroll" }}>
           <Router>
             <Routes>
-              <Route path="*" element={<MergeConfictView />}></Route>
+                <Route path="ext/merge/:code" element={<MergeConfictView />}></Route>
+                <Route path="ext/*" element={<h1>404</h1>}></Route>
             </Routes>
           </Router>
         </div>
