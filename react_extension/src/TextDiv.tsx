@@ -25,18 +25,17 @@ const TextDiv: React.FC<TextDivProps> = ({ text1, text2 }) => {
     }
 
     return (
-        // <div className='merge_main_space' >
-        //     <div ref={pane} className='merge_main_pane'>
         <Split
             className="split"
             gutterAlign="center"
+            snapOffset={200}
             sizes={[49.5, 50.5]}
-            style={{ height: "600px" }}
+            style={{ height: "600px"}}
         >
-            <div style={{ width: "100%", height: "100%" }}>
+            <div>
                 {getTextPane(text1,true)}
             </div>
-            <div style={{ width: "100%", height: "100%" }}>
+            <div>
                 {getTextPane(text2,false)}
             </div>
         </Split>
@@ -45,3 +44,7 @@ const TextDiv: React.FC<TextDivProps> = ({ text1, text2 }) => {
 }
 
 export default TextDiv
+
+// pointerEvents:"none"
+        // <div className='merge_main_space' >
+        //     <div ref={pane} className='merge_main_pane'>

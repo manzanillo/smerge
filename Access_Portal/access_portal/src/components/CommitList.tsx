@@ -4,6 +4,7 @@ import Commit from '../models/Commit';
 import HashDisplay from './HashDisplay';
 import { range } from 'lodash';
 import "./CommitList.css"
+import TurnSlightRightIcon from '@mui/icons-material/TurnSlightRight';
 
 interface Props {
   data: Commit[];
@@ -133,9 +134,13 @@ const customListItem = (key:string ,commit: Commit, branch:string, isLast: boole
       {expanded ? <>
       <Divider sx={{ mt: "10px", mb: "10px" }} variant="middle" orientation='horizontal' flexItem />
       <Grid container justifyContent={"center"}>
-          <ClickAwayListener onClickAway={() => handleExpand()}>
+          {/* <ClickAwayListener onClickAway={() => handleExpand()}> */}
             <Button sx={{ mt:"10px", mb: "20px" }} onClick={switchGit} variant='outlined'>Switch dev server to this commit</Button>
-          </ClickAwayListener>
+          
+          {/* </ClickAwayListener> */}
+          <Button variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
+                            Select Right
+                        </Button>
       </Grid></> : <></>}
       {!isLast ? <Divider variant="inset" component="li" sx={{mr:"15px"}}></Divider> : <></>}
     </div>);

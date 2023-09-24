@@ -1,6 +1,6 @@
 .merge_main_space {
-    width:100%;
-    height:100%;
+    /* width:100%;
+    height:100%; */
     padding:2em;
     /* border-radius: 20px; */
 }
@@ -16,8 +16,8 @@
 }
 
 .merge_main_pane {
-    width:100%;
-    height:100%;
+    /* width:100%;
+    height:100%; */
 
 
     border-radius: 20px;

@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import Layout from './Layout.tsx'
 import { ThemeProvider, createTheme } from '@mui/material';
-// import { PartialTheme, ThemeProvider } from '@fluentui/react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
-import ConflictStepper from './ConflictStepper.tsx'
+import ConflictStepper from './ConflictStepper.tsx';
 
 // const lightTheme: PartialTheme = {
 //   semanticColors: {
