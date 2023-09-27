@@ -10,7 +10,31 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import "./ConflictStepper.css"
+import { useEffect, useState } from "react";
+import { CircularProgress, Stack } from "@mui/material";
+import { toast } from "react-toastify";
 
+interface ConflictVM{
+  hunks: ConflictDto[]
+}
+
+interface ConflictDto{
+  id: number;
+  left: FileDto;
+  right: FileDto;
+  choice: string;
+}
+
+interface FileDto{
+  id: number;
+  description: string;
+  ancestors: undefined;
+  file_url: string;
+  timestamp: Date;
+  number_scripts: number;
+  number_sprites: number;
+  color: string;
+}
 
 interface ConflictStepperProps {
 }
@@ -36,10 +60,42 @@ const steps = [
   },
 ];
 
+function getCookie(key:string) {
+  const b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
+
+
 const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   const { code } = useParams();
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [loadingConflict, setLoadingConflict] = useState(true);
+  const [conflictData, setConflictData] = useState<ConflictDto[]>();
+
+  useEffect(()=>{
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", `/tmp/${code}`, true);
+    const csrftoken = getCookie('csrftoken');
+    xhttp.setRequestHeader("X-CSRFToken", csrftoken??"");
+    xhttp.send();
+
+    xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      setLoadingConflict(false);
+      const resJson = JSON.parse(xhttp.responseText) as ConflictVM;
+      setConflictData(resJson.hunks);
+      console.log(conflictData);
+    } else {
+      console.log(`Conflict ${code} not found.`);
+      // toast.warning(`Conflict ${code} not found.`, {
+      //   position: 'top-right',
+      //   autoClose: 2000,
+      //   hideProgressBar: false,
+      // });
+    }
+}},[])
+
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -53,11 +109,12 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
     setActiveStep(0);
   };
 
-  return (
+  return (<>{loadingConflict?
+    <Box sx={{ width:"100%", height:"100%", display:"flex", justifyContent:"center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>Loading conflicts...</h1></Stack></Box>:
     <Box sx={{ p:"20px" }}>
       <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((step, index) => (
-          <Step key={step.label}>
+        {conflictData?.map((step, index) => (
+          <Step key={step.id}>
             <StepLabel
               
               optional={
@@ -66,11 +123,11 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                 ) : null
               }
             >
-              {step.label}
+              {`Conflict ${index} of ${conflictData?.length}`}
             </StepLabel>
             <StepContent>
               <div className="stepCard">
-              <MergeConflictView code={step.description} isActive={index==activeStep} isText={index==2}/>
+              <MergeConflictView code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index==activeStep} isText={step.left.file_url.includes(".txt")}/>
               </div>
            
               <Box sx={{ mb: 2 }}>
@@ -103,7 +160,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
           </Button>
         </Paper>
       )}
-    </Box>
+    </Box>}</>
   )
   //<MergeConflictView code={code}/>
 }

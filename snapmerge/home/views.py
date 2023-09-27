@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonRespons
 from django.utils.translation import ugettext as _
 
 from . import models
-from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color
+from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, MergeConflict, Hunk
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
@@ -22,6 +22,9 @@ import os
 from .ancestors import gca
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+
+from .Merger_Two_ElectricBoogaloo.merger import merge, Conflict
+from uuid import uuid4
 
 
 def generate_unique_PIN():
@@ -494,13 +497,187 @@ class ReactMergeView(View):
 class TmpView(View):
 
     def get(self, request, proj_id):
-        proj = Project.objects.get(id=proj_id)
+        # proj = Project.objects.get(id=proj_id)
 
-        left = models.SnapFile.create_and_save(project=proj,
-                                               file="1.xml")
-        right = models.SnapFile.create_and_save(project=proj,
-                                                file="2.xml")
+        # left = models.SnapFile.create_and_save(project=proj,
+        #                                        file="1.xml")
+        # right = models.SnapFile.create_and_save(project=proj,
+        #                                         file="2.xml")
 
-        merge_conflict = models.MergeConflict(left=left, right=right)
+        # merge_conflict = models.MergeConflict(left=left, right=right)
+        # merge_conflict.save()
+        # ret:MergeConflict = MergeConflict.objects.get(id=1)
+        # print(ret.left)
+        # print(ret.right)
+        # fileToDel = SnapFile.objects.get(id=proj_id)
+        # if fileToDel:
+        #     fileToDel.delete()
+        print(proj_id)
+        mc = MergeConflict.objects.get(id=proj_id)
+        hunks = Hunk.objects.filter(mergeConflict=mc)
+        ret = {}
+        for i in range(len(hunks)):
+            ret[f"{i}"] = hunks[i].as_dict()
+        return JsonResponse({"hunks":[h.as_dict() for h in hunks]})
+    
+class TmpTmpView(View):
+
+    def get(self, request, proj_id):
+        # proj = Project.objects.get(id=proj_id)
+
+        # left = models.SnapFile.create_and_save(project=proj,
+        #                                        file="1.xml")
+        # right = models.SnapFile.create_and_save(project=proj,
+        #                                         file="2.xml")
+
+        # merge_conflict = models.MergeConflict(left=left, right=right)
+        # merge_conflict.save()
+        # ret:MergeConflict = MergeConflict.objects.get(id=1)
+        # print(ret.left)
+        # print(ret.right)
+        # fileToDel = SnapFile.objects.get(id=proj_id)
+        # if fileToDel:
+        #     fileToDel.delete()
+        
+        file1= SnapFile.objects.get(id=1)
+        file2= SnapFile.objects.get(id=2)
+        proj=Project.objects.get(id="d7af4edb96b54e98a4625e8d288bf528")
+        merge_conflict = models.MergeConflict(left=file1, right=file2, project=proj)
         merge_conflict.save()
-        return HttpResponse("ok")
+                    
+        
+        left1 = models.ConflictFile.create_and_save(project=proj,
+                                                file=f"2a82a956-8052-44bd-a6e4-35e0dd9e7d86.txt")
+        left1.save()
+        right2 = models.ConflictFile.create_and_save(project=proj,
+                                                file=f"2bfd58cc-c658-4399-a0a3-ce71957186b7.txt")
+        right2.save()
+                        
+        hunk = models.Hunk(left=left1, right=right2, mergeConflict=merge_conflict)
+        hunk.save()
+        
+        left3 = models.ConflictFile.create_and_save(project=proj,
+                                                file=f"4c36ae19-be0b-42b9-a5ee-392a8d190d6f.xml")
+        left3.save()
+        right4 = models.ConflictFile.create_and_save(project=proj,
+                                                file=f"5f16a298-4d09-4a57-ab29-127833edcd0e.xml")
+        right4.save()
+                        
+        hunk = models.Hunk(left=left3, right=right4, mergeConflict=merge_conflict)
+        hunk.save()
+        
+        return HttpResponse(merge_conflict.id, 200)
+
+
+class NewMergeView(View):
+    def get(self, request, proj_id):
+        file_ids = request.GET.getlist('file')
+        proj = Project.objects.get(id=proj_id)
+        files = list(SnapFile.objects.filter(id__in=file_ids, project=proj_id))
+        all_files = list(SnapFile.objects.filter(project=proj_id))
+        parents = {all_files[i].id:
+                       [anc.id for anc in list(all_files[i].ancestors.all())]
+                   for i in range(len(all_files))}
+
+        if len(files) > 1:
+
+            new_file = SnapFile.create_and_save(
+                project=proj, ancestors=file_ids, file='')
+            new_file.file = str(new_file.id) + '.xml'
+            new_file.save()
+
+            try:
+                file1 = files.pop()
+                file2 = files.pop()
+                ancestor_id = gca(file1.id, file2.id, parents=parents)
+                ancestor = None
+                if ancestor_id != None:
+                    ancestor = SnapFile.objects.get(
+                        id=ancestor_id).get_media_path()
+
+                conflicts, result = merge(settings.BASE_DIR + file1.get_media_path(), settings.BASE_DIR + file2.get_media_path())
+                
+                if conflicts == None:
+                    with open(settings.BASE_DIR + new_file.get_media_path(), 'wb') as f:
+                        result.write(f)
+                else:
+                    new_file.delete()
+                    
+                    # Create new conflict with both files
+                    merge_conflict = models.MergeConflict(left=file1, right=file2, project=proj)
+                    merge_conflict.save()
+                    
+                    for conf in conflicts:
+                        match conf.conflictType:
+                            case "Text":
+                                ending = ".txt"
+                            case "Image":
+                                ending = ".base64"
+                            case _:
+                                ending = ".xml"
+                        left = models.ConflictFile.create_and_save(project=proj,
+                                                               file=f"{uuid4()}{ending}")
+                        left.save()
+                        right = models.ConflictFile.create_and_save(project=proj,
+                                                                file=f"{uuid4()}{ending}")
+                        right.save()
+                        
+                        conf.toFile(settings.BASE_DIR + left.get_media_path(), settings.BASE_DIR + right.get_media_path())
+                        
+                        hunk = models.Hunk(left=left, right=right, mergeConflict=merge_conflict)
+                        hunk.save()
+
+                        
+                        # ret:MergeConflict = MergeConflict.objects.get(id=1)
+                        # print(ret.left)
+                        # print(ret.right)
+                    
+                    print(conflicts)
+                    # response = HttpResponseRedirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+                    # response.status_code = 303
+                    # return response
+                    return HttpResponse(f"http://127.0.0.1/ext/merge/{merge_conflict.id}", status=303)
+                    # return HttpResponseRedirect(f'/ext/merge/{merge_conflict.id}')
+                    # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+                
+                new_file.xml_job()
+                notify_room(proj.id, new_file.as_dict(), "merge")
+                return JsonResponse(new_file.as_dict())
+
+            except Exception as e:
+                print(e)
+                new_file.delete()
+                return HttpResponse('invalid data ', status=400)
+
+        else:
+            return HttpResponse('invalid data ', status=400)
+        
+        
+import json
+# { hunkId: <id>, choice: "left|right" }
+class ResolveHunkView(View):
+    def post(self, request, proj_id):
+        try:
+            j = json.loads(request.body.decode("utf-8"))
+            hunkId = j["hunkId"]
+
+            if hunkId != None:
+                choice = j["choice"]
+                if choice != None:
+                    if choice == "right" or choice == "left":
+                        
+                        hunk = Hunk.objects.get(id=hunkId)
+                        
+                        if hunk:
+                            hunk.choice = choice
+                            hunk.save()
+                            return HttpResponse('Choice accepted', status=200)
+                        else:
+                            return HttpResponse('Hunk not found', status=400)
+                    else:
+                        return HttpResponse('This choice is not allowed.', status=400)
+                else:
+                    return HttpResponse('invalid data ', status=400)
+            return HttpResponse('invalid data ', status=400)
+        except:
+            return HttpResponse('Hunk not found', status=400)

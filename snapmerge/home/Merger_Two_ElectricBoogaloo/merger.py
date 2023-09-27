@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 import re
-from Tests.generator import create_xml
-
+from .generator import *
 tmp1_file_path = "add_new.xml"
 tmp2_file_path = "moved.xml"
 
@@ -29,24 +28,24 @@ class Conflict:
     def __str__(self):
         return f"Conflict ({self.conflictType}): {self.leftElement} <-> {self.rightElement}"
     
-    def toFile(self, filePath, fileBaseName):
+    def toFile(self, leftFilePath, rightFilePath):
         if self.conflictType == "Element":
             projectName = "View"
             versionName = "Snap! 9.0, https://snap.berkeley.edu"
             file1, test = create_xml(projectName, versionName)
             test.append(self.leftElement)
-            with open(f"{fileBaseName}_conflict1.xml", "w") as f:
+            
+            with open(leftFilePath, "w") as f:
                 f.write(pretty_print_xml(file1.getroot()))
             
             file2, test2 = create_xml(projectName, versionName)
             test2.append(self.rightElement)
-            with open(f"{fileBaseName}_conflict2.xml", "w") as f:
+            with open(rightFilePath, "w") as f:
                 f.write(pretty_print_xml(file2.getroot()))
         else:
-            ending = ".txt" if self.conflictType == "Text" else ".base64"
-            with open(f"{fileBaseName}_conflict1{ending}", "w") as f:
+            with open(leftFilePath, "w") as f:
                 f.write(self.leftElement)
-            with open(f"{fileBaseName}_conflict2{ending}", "w") as f:
+            with open(rightFilePath, "w") as f:
                 f.write(self.rightElement)
 
 
@@ -71,7 +70,7 @@ def merge(file1Path, file2Path):
     # Merge simple till scenes
     for i in range(len(leftRoot)):
         if leftRoot[i].tag != "scenes":
-            simConflict = mergeScenes(leftRoot[i], rightRoot[i])
+            simConflict, _ = mergeSimple(leftRoot[i], rightRoot[i])
             if simConflict:
                 for con in simConflict:
                     conflicts.append(con)
@@ -326,8 +325,22 @@ def mergeSimple(leftNode, rightNode):
             leftNode.append(rNode)
         elif cont == 2:
             conflictNode = getNodeMatchByDef(leftNodeList, rNode)
-            retConflicts.append(Conflict(conflictNode, rNode))
+            if(leftNode.tag == "thumbnail"):
+                retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image"))
+            elif ("script" not in leftNode.tag):
+                retConflicts.append(Conflict(pretty_print_xml(conflictNode), pretty_print_xml(rNode), conflictType="Text"))
+            else:
+                retConflicts.append(Conflict(conflictNode, rNode))
     
+    if len(leftNodeList) == 0:
+        if not compareNodesSame(leftNode, rightNode, onlyCheck=""):
+            if(leftNode.tag == "thumbnail"):
+                retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image"))
+            elif ("script" not in leftNode.tag):
+                retConflicts.append(Conflict(pretty_print_xml(leftNode), pretty_print_xml(rightNode), conflictType="Text"))
+            else:
+                retConflicts.append(Conflict(leftNode, rightNode))
+            
     if len(retConflicts) != 0:
         return retConflicts, None
     return None, leftNode

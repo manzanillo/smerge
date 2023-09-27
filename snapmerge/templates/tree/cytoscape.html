@@ -221,4 +221,40 @@ $('#merge').mousedown(function (evt) {
 
 $('#cancel-merge').mousedown(toggleMerge);
 
+$('#new-merge').mousedown(function (evt) {
+  var selectedElements = cy.$(':selected');
+
+        if (selectedElements.length > 0){
+            console.log(selectedElements);
+
+            var merge_url = 'new_merge/{{proj_id}}';
+            var first = true;
+            selectedElements.forEach(function(ele){
+                if (first){
+                    merge_url += '?';
+                    first = false;
+                }
+                else {
+                    merge_url += '&';
+                }
+                merge_url += 'file='+ele.data('id');
+            });
+
+            var merged_node;
+            $.ajax({
+                url: merge_url,
+                cache: false,
+                success: function(new_node) {
+                  console.log(new_node)
+                },
+                error: function(stuff){
+                  if(stuff.status === 303){
+                    location.replace(stuff.responseText)
+                  }
+                    console.log('new merge did not work');
+                }
+            });
+        }
+});
+
 </script>

@@ -22,4 +22,7 @@ urlpatterns = [
     url(r'^toggle_color/(?P<proj_id>[-\w]+)/(?P<file_id>[-\w]+)$', views.ToggleColorView.as_view(), name='toggle_color'),
     url(r'^merge_conf/*', views.ReactMergeView.as_view(), name='react_merge_conf'),
     url(r'^tmp/(?P<proj_id>[-\w]+)$', views.TmpView.as_view(), name='tmp'),
+    url(r'^new_merge/(?P<proj_id>[-\w]+)$', views.NewMergeView.as_view(), name='new_merge'),
+    url(r'^res_hunk/(?P<proj_id>[-\w]+)$', views.ResolveHunkView.as_view(), name='res_hunk'),
+    url(r'^tmptmp/(?P<proj_id>[-\w]+)$', views.TmpTmpView.as_view(), name='tmptmp'),
 ]

@@ -124,9 +124,61 @@ class SnapFileForm(ModelForm):
             'file': _('File (optional)'),
             'description': _('Description (optional)'),
         }
+        
+
+
+class ConflictFile(File):
+    # validates only naming of file
+    file = models.FileField(_("File"), blank=True, validators=[
+        FileExtensionValidator(['xml', 'XML', 'txt', 'TXT', 'base64', 'BASE64'])])
+
+    @classmethod
+    def create_and_save(cls, project, file, ancestors=None, description=''):
+        confl = cls.objects.create(
+            project=project, file=file, description=description)
+        if (ancestors):
+            confl.ancestors.set(ancestors)
+
+        confl.save()
+        return confl
+
+    # def xml_job(self):
+    #     include_sync_button(self.get_media_path(),
+    #                         proj_id=self.project.id, me=self.id)
+
+    #     stats = analyze_file(self.get_media_path())
+    #     self.number_scripts = stats[0]
+    #     self.number_sprites = stats[1]
+
+    #     self.save()
+
+    def as_dict(self):
+        ancestor_ids = [x.id for x in self.ancestors.all()]
+        file_url = settings.MEDIA_URL + str(self.file)
+
+        return {
+            'id': self.id,
+            'description': self.description,
+            'ancestors': ancestor_ids,
+            'file_url': file_url,
+            'timestamp': str(self.timestamp),
+            'number_scripts': self.number_scripts,
+            'number_sprites': self.number_sprites,
+            'color': self.color
+        }
+
+    def get_media_path(self):
+        return settings.MEDIA_URL + str(self.file)
+
+    class Meta:
+        verbose_name = _("ConflictFile")
+        verbose_name_plural = _("ConflictFiles")
+
+
 
 
 class MergeConflict(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     left = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="leftFile")
     right = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="rightFile")
     hunks = models.fields
@@ -134,7 +186,16 @@ class MergeConflict(models.Model):
 
 class Hunk(models.Model):
     mergeConflict = models.ForeignKey(MergeConflict, on_delete=models.CASCADE)
-    left = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="leftHunk")
-    right = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="rightHunk")
+    left = models.ForeignKey(ConflictFile, on_delete=models.CASCADE, related_name="leftHunk")
+    right = models.ForeignKey(ConflictFile, on_delete=models.CASCADE, related_name="rightHunk")
+    choice = models.CharField(_("choice"), max_length=30, null=True)
+    
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'left': self.left.as_dict(),
+            'right': self.right.as_dict(),
+            'choice': self.choice if self.choice != None else ""
+        }
 
 
