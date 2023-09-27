@@ -12,6 +12,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --nav-heigth: 64px;
 }
 
 /* a {
@@ -54,6 +56,44 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
+
+
+nav {
+  height: var(--nav-heigth);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--color-bg-nav);
+}
+
+.logo {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white;
+  font-size: 1.25em;
+  letter-spacing: 0.15em;
+  position: absolute;
+  left: 2%;
+}
+
+nav ul {
+  position: absolute;
+  right: 2%;
+}
+
+.navlinks {
+  right: 10%;
+}
+
+nav a {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white;
+  font-size: 0.75em;
+}
+
+
+
 
 @media (prefers-color-scheme: light) {
   :root {
