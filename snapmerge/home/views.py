@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
+
+from . import models
 from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
@@ -97,7 +99,7 @@ class MergeView(View):
         files = list(SnapFile.objects.filter(id__in=file_ids, project=proj_id))
         all_files = list(SnapFile.objects.filter(project=proj_id))
         parents = {all_files[i].id:
-                   [anc.id for anc in list(all_files[i].ancestors.all())]
+                       [anc.id for anc in list(all_files[i].ancestors.all())]
                    for i in range(len(all_files))}
 
         if len(files) > 1:
@@ -176,7 +178,7 @@ class SyncView(View):
         notify_room(proj.id, new_file.as_dict(), "commit")
 
         new_url = settings.URL + '/sync/' + \
-            str(proj.id) + '?ancestor='+str(new_file.id)
+                  str(proj.id) + '?ancestor=' + str(new_file.id)
         return JsonResponse({'message': _('OK'), 'url': new_url})
 
 
@@ -481,8 +483,24 @@ class ToggleColorView(View):
         print(new_color)
         return HttpResponse(new_color)
 
+
 class ReactMergeView(View):
     def get(self, request):
         context = {
         }
         return render(request, 'merge_react.html', context)
+
+
+class TmpView(View):
+
+    def get(self, request, proj_id):
+        proj = Project.objects.get(id=proj_id)
+
+        left = models.SnapFile.create_and_save(project=proj,
+                                               file="1.xml")
+        right = models.SnapFile.create_and_save(project=proj,
+                                                file="2.xml")
+
+        merge_conflict = models.MergeConflict(left=left, right=right)
+        merge_conflict.save()
+        return HttpResponse("ok")
