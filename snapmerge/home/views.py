@@ -567,6 +567,26 @@ class TmpTmpView(View):
         hunk.save()
         
         return HttpResponse(merge_conflict.id, 200)
+    
+    
+# todo remove or change later...
+class JsRedirectView(View):
+    def get(self, request, file_id):
+        return ""
+    
+    
+class GetBlockerXMLView(View):
+    def get(self, request, file_name):
+        # Your XML generation logic here
+        #xml_content = f'<?xml version="1.0" encoding="UTF-8"?><root><data>Hello, {file_name}!</data></root>'
+        
+        with open(settings.BASE_DIR + '/static/snap/data_importer.xml', 'r') as i:
+            cImport_blank_data = i.read()
+        #cImport_blank_data = cImport_blank_data.replace('{{url}}', f"{settings.URL}/{file_name}")
+        cImport_blank_data = cImport_blank_data.replace('{{url}}', f"http://127.0.0.1/media/{file_name}")
+        
+        # Return the XML content with the appropriate content type
+        return HttpResponse(cImport_blank_data, content_type='application/xml')
 
 
 class NewMergeView(View):

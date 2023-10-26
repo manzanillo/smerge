@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from hashlib import sha1
 import os
 from django.conf import settings
+import uuid
 
 
 def element_hash(ele):
@@ -218,6 +219,24 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor=N
         ref.write(f)
 
 
+# def include_sync_button(file, proj_id, me):
+#     with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
+#         sync_file = f.read()
+#         sync_file = sync_file.replace(
+#             '{{url}}', settings.URL + '/sync/' + str(proj_id) + '?ancestor=' + str(me))
+#         sync_button = ET.fromstring(sync_file)
+
+#         target = ET.parse(settings.BASE_DIR + file)
+#         if target.find(".//block-definition[@s='Post to smerge...']") != None:
+#             for scenes in target.findall(".//scene"):
+#                 for blocks in scenes.findall("blocks"):
+#                     for sync_block in blocks.findall("block-definition[@s='Post to smerge...']"):
+#                         blocks.remove(sync_block)
+#         for scenes in target.findall(".//scene"):
+#             scenes.find('blocks').append(sync_button)
+#         with open(settings.BASE_DIR + file, 'wb') as x:
+#             target.write(x)
+            
 def include_sync_button(file, proj_id, me):
     with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
         sync_file = f.read()
@@ -226,6 +245,18 @@ def include_sync_button(file, proj_id, me):
         sync_button = ET.fromstring(sync_file)
 
         target = ET.parse(settings.BASE_DIR + file)
+        
+        # adds uid to each script element that dose not have a id already
+        all_current_ids = get_all_ids(target)
+        for script_tag in target.findall(".//script"):
+            keys = script_tag.keys()
+            if "customData" in keys:
+                print("found")
+            elif len(keys) > 0:
+                script_tag.attrib['customData'] = get_uid(all_current_ids)
+                print(script_tag.attrib)
+
+        
         if target.find(".//block-definition[@s='Post to smerge...']") != None:
             for scenes in target.findall(".//scene"):
                 for blocks in scenes.findall("blocks"):
@@ -235,6 +266,29 @@ def include_sync_button(file, proj_id, me):
             scenes.find('blocks').append(sync_button)
         with open(settings.BASE_DIR + file, 'wb') as x:
             target.write(x)
+        
+# collects all ids from the given tags in the tree
+def get_all_ids(tree):
+    ret = []
+    for script_tag in tree.findall(".//script"):
+        keys = script_tag.keys()
+        if "customData" in keys:
+            ret.append(script_tag.attrib['customData'])
+    return ret
+
+
+# generates a random id unique to the allocated list
+def get_uid(allocated):
+    c = 0
+    while(c < 100):
+        new_id = uuid.uuid4()
+        if new_id in allocated:
+            continue
+        else:
+            return str(new_id)
+        c += 1
+    # if (with a very big if...) 100 attempts to find a unique id have failed, generate a time and system based one as fallback... should work
+    return str(uuid.uuid1())
 
 
 def analyze_file(file):

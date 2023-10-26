@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^new_merge/(?P<proj_id>[-\w]+)$', views.NewMergeView.as_view(), name='new_merge'),
     url(r'^res_hunk/(?P<proj_id>[-\w]+)$', views.ResolveHunkView.as_view(), name='res_hunk'),
     url(r'^tmptmp/(?P<proj_id>[-\w]+)$', views.TmpTmpView.as_view(), name='tmptmp'),
+    url(r'^jsredirect/(?P<file_id>[-\w]+)$', views.JsRedirectView.as_view(), name='jsredirect'),
+    url(r'blockerXML/(?P<file_name>[-./\w]+)$',views.GetBlockerXMLView.as_view(), name='getBlockXML'),
 ]
