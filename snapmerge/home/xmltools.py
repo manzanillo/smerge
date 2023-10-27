@@ -51,7 +51,7 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
     """
     hashed_elements = element_hash_children(reference_element)
 
-#    print(subject_child.tag, subject_child.attrib)
+    #    print(subject_child.tag, subject_child.attrib)
     ref_tag = reference_element.tag
     subject_tag = subject_element.tag
 
@@ -92,14 +92,14 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                 else:
                     # add comment
                     ref_comment = '<comment collapsed = "false"' + ' w = "' + str(len(ref_description) * 3) + '" > ' + \
-                        ' from post: ' + ref_description + ' </comment>'
+                                  ' from post: ' + ref_description + ' </comment>'
 
                     if reference_child.tag != 'comment':
                         get_first_child(reference_child).append(
                             ET.fromstring(ref_comment))
 
                     subject_comment = '<comment collapsed = "false"' + ' w = "' + str(len(subject_description) * 3) + \
-                        '" >' + ' from post: ' + subject_description + '</comment>'
+                                      '" >' + ' from post: ' + subject_description + '</comment>'
                     if reference_child.tag != 'comment':
                         get_first_child(subject_child).append(
                             ET.fromstring(subject_comment))
@@ -142,8 +142,8 @@ def xml_merge(reference_element, subject_element, ref_description='', subject_de
                         xml_merge(reference_child, subject_child,
                                   ref_description, subject_description, ancestor)
                         different_name_of_stage_comment = '<comment collapsed = "false"' + ' w = "150" >' \
-                            + ' other stage name was: ' + subject_child.get('name') \
-                            + '</comment>'
+                                                          + ' other stage name was: ' + subject_child.get('name') \
+                                                          + '</comment>'
                         reference_child.find('scripts').append(
                             ET.fromstring(different_name_of_stage_comment))
             elif subject_child.tag == 'watcher':
@@ -236,7 +236,7 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor=N
 #             scenes.find('blocks').append(sync_button)
 #         with open(settings.BASE_DIR + file, 'wb') as x:
 #             target.write(x)
-            
+
 def include_sync_button(file, proj_id, me):
     with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
         sync_file = f.read()
@@ -245,7 +245,7 @@ def include_sync_button(file, proj_id, me):
         sync_button = ET.fromstring(sync_file)
 
         target = ET.parse(settings.BASE_DIR + file)
-        
+
         # adds uid to each script element that dose not have a id already
         all_current_ids = get_all_ids(target)
         for script_tag in target.findall(".//script"):
@@ -256,7 +256,6 @@ def include_sync_button(file, proj_id, me):
                 script_tag.attrib['customData'] = get_uid(all_current_ids)
                 print(script_tag.attrib)
 
-        
         if target.find(".//block-definition[@s='Post to smerge...']") != None:
             for scenes in target.findall(".//scene"):
                 for blocks in scenes.findall("blocks"):
@@ -266,7 +265,8 @@ def include_sync_button(file, proj_id, me):
             scenes.find('blocks').append(sync_button)
         with open(settings.BASE_DIR + file, 'wb') as x:
             target.write(x)
-        
+
+
 # collects all ids from the given tags in the tree
 def get_all_ids(tree):
     ret = []
@@ -280,7 +280,7 @@ def get_all_ids(tree):
 # generates a random id unique to the allocated list
 def get_uid(allocated):
     c = 0
-    while(c < 100):
+    while c < 100:
         new_id = uuid.uuid4()
         if new_id in allocated:
             c += 1
