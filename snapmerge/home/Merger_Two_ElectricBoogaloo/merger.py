@@ -83,7 +83,7 @@ def merge(file1Path, file2Path):
     if len(conflicts) > 0:
         return conflicts, None
     print("Save merged xml")
-    return None, leftRoot
+    return None, ET.tostring(leftRoot, encoding="UTF-8")
     
     # tmp function store...
     #     mother_sprite = tree1.find(".//sprites")
@@ -239,8 +239,8 @@ def mergeScene(leftNode, rightNode):
 # todo
 def mergeBlocks(leftNode, rightNode):
     simConflict, merged = mergeSimple(leftNode, rightNode)
-    if simConflict:
-        return simConflict
+    # if simConflict:
+    #     return simConflict
     return []
 
 
@@ -319,6 +319,17 @@ def mergeScripts(leftNode, rightNode):
 def mergeSimple(leftNode, rightNode):
     leftNodeList = [n for n in leftNode]
     retConflicts = []
+    
+    # post to smerge ignore hotfix...
+    if leftNode.tag == "block-definition":
+        print(leftNode)
+        try:
+            s = leftNode.get("s")
+            if "" in s:
+                return None, leftNode
+        except:
+            pass
+    
     for rNode in rightNode:
         cont = containsNode(leftNodeList, rNode)
         if cont == 0:

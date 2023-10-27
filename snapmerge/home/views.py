@@ -619,7 +619,8 @@ class NewMergeView(View):
                 
                 if conflicts == None:
                     with open(settings.BASE_DIR + new_file.get_media_path(), 'wb') as f:
-                        result.write(f)
+                        f.write(result)
+                        #result.write(f)
                 else:
                     new_file.delete()
                     
@@ -661,6 +662,7 @@ class NewMergeView(View):
                     # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
                 
                 new_file.xml_job()
+                print(new_file.as_dict())
                 notify_room(proj.id, new_file.as_dict(), "merge")
                 return JsonResponse(new_file.as_dict())
 
