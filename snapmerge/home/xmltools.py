@@ -253,7 +253,9 @@ def include_sync_button(file, proj_id, me):
             if "customData" in keys:
                 print("found")
             elif len(keys) > 0:
+                new_uid = get_uid(all_current_ids)
                 script_tag.attrib['customData'] = get_uid(all_current_ids)
+                all_current_ids.append(new_uid)
                 print(script_tag.attrib)
 
         if target.find(".//block-definition[@s='Post to smerge...']") != None:
