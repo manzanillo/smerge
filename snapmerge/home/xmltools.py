@@ -246,7 +246,7 @@ def include_sync_button(file, proj_id, me):
 
         target = ET.parse(settings.BASE_DIR + file)
 
-        # adds uid to each script element that dose not have a id already
+        # adds uid to each script element that does not have an id already
         all_current_ids = get_all_ids(target)
         for script_tag in target.findall(".//script"):
             keys = script_tag.keys()
