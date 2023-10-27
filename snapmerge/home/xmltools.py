@@ -283,10 +283,10 @@ def get_uid(allocated):
     while(c < 100):
         new_id = uuid.uuid4()
         if new_id in allocated:
+            c += 1
             continue
         else:
             return str(new_id)
-        c += 1
     # if (with a very big if...) 100 attempts to find a unique id have failed, generate a time and system based one as fallback... should work
     return str(uuid.uuid1())
 
