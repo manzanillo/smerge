@@ -8,7 +8,7 @@ from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color,
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
-from .xmltools import merge
+from .xmltools import merge, create_dummy_file
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -576,17 +576,9 @@ class JsRedirectView(View):
     
     
 class GetBlockerXMLView(View):
-    def get(self, request, file_name):
-        # Your XML generation logic here
-        #xml_content = f'<?xml version="1.0" encoding="UTF-8"?><root><data>Hello, {file_name}!</data></root>'
-        
-        with open(settings.BASE_DIR + '/static/snap/data_importer.xml', 'r') as i:
-            cImport_blank_data = i.read()
-        #cImport_blank_data = cImport_blank_data.replace('{{url}}', f"{settings.URL}/{file_name}")
-        cImport_blank_data = cImport_blank_data.replace('{{url}}', f"http://127.0.0.1/media/{file_name}")
-        
-        # Return the XML content with the appropriate content type
-        return HttpResponse(cImport_blank_data, content_type='application/xml')
+    def get(self, request, file_name) -> HttpResponse:
+        dummy_file: str = create_dummy_file(file_name)
+        return HttpResponse(dummy_file, content_type='application/xml')
 
 
 class NewMergeView(View):

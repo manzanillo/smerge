@@ -269,8 +269,12 @@ def include_sync_button(file, proj_id, me):
             target.write(x)
 
 
-# collects all ids from the given tags in the tree
-def get_all_ids(tree):
+def get_all_ids(tree) -> list[str]:
+    """
+    collects all ids from the given tags in the tree
+    @param tree:
+    @return: a list of all ids within the project file
+    """
     ret = []
     for script_tag in tree.findall(".//script"):
         keys = script_tag.keys()
@@ -279,8 +283,12 @@ def get_all_ids(tree):
     return ret
 
 
-# generates a random id unique to the allocated list
 def get_uid(allocated):
+    """
+    generates a random id unique to the allocated list
+    @param allocated:
+    @return:
+    """
     c = 0
     while c < 100:
         new_id = uuid.uuid4()
@@ -291,6 +299,18 @@ def get_uid(allocated):
             return str(new_id)
     # if (with a very big if...) 100 attempts to find a unique id have failed, generate a time and system based one as fallback... should work
     return str(uuid.uuid1())
+
+
+def create_dummy_file(file_name: str) -> str:
+    """
+    Creates a dummy file in the media folder that loads the real project
+    :param file_name: the name of the file to be loaded
+    :return: the dummy file with project loading block
+    """
+    with open(settings.BASE_DIR + '/static/snap/data_importer.xml', 'r') as dummy_template:
+        cImport_blank_data: str = dummy_template.read()
+        cImport_blank_data = cImport_blank_data.replace('{{url}}', f"{settings.URL}/media/{file_name}")
+        return cImport_blank_data
 
 
 def analyze_file(file):
