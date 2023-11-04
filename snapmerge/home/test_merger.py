@@ -1,10 +1,16 @@
-import unittest
-from generator import create_xml_head, pretty_print_xml
+from django.test import TestCase, RequestFactory
+from django.test.client import Client
+from django.db import models
+
+from .Merger_Two_ElectricBoogaloo.generator import create_xml_head, pretty_print_xml
 import xml.etree.ElementTree as ET
-from merger import *
+from .Merger_Two_ElectricBoogaloo.merger import *
+
+# to run
+# python manage.py test --settings=config.settings_test
 
 
-class TestMergeDoc(unittest.TestCase):
+class TestMergeDoc(TestCase):
     # If both names and version are the same, it should return no collision and return the left
     def testCollision(self):
         projectName = "project"
@@ -42,7 +48,7 @@ class TestMergeDoc(unittest.TestCase):
         versionName = "Snap! 9.0, https://snap.berkeley.edu"
         xml1 = create_xml_head(projectName, versionName, asTree=True).getroot()
         xml2 = create_xml_head(projectName2, versionName, asTree=True).getroot()
-        conflict, merged = mergeDoc(xml1, xml2, resolutions=[Resolution(Step.LEFT)])
+        conflict, merged = mergeDoc(xml1, xml2, resolutions=[Resolution(Step.RIGHT)])
         self.assertEqual(conflict, None)
         self.assertEqual(merged, xml1)
         self.assertNotEqual(merged, xml2)
@@ -57,7 +63,7 @@ class TestMergeDoc(unittest.TestCase):
     # def tearDown(self):
     #     # Perform cleanup actions here, if needed
 
-class TestAtomicMerge(unittest.TestCase):
+class TestAtomicMerge(TestCase):
     def testSame(self):
         tagLeft = ET.Element('project', {'name': "tmp", 'app': "123", 'version': '2'})
         tagRight = ET.Element('project', {'name': "tmp", 'app': "123", 'version': '2'})
@@ -85,9 +91,3 @@ class TestAtomicMerge(unittest.TestCase):
         conflict, merged = atomicMerge(tagLeft, tagRight)
         self.assertEqual(type(conflict), type(Conflict("","")))
         self.assertEqual(merged, None)
-
-# to run
-#python -m unittest tests.py
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,12 +1,12 @@
 import xml.etree.ElementTree as ET
 import re
+
 from .generator import *
 from enum import Enum
 
 
 tmp1_file_path = "add_new.xml"
 tmp2_file_path = "moved.xml"
-
 
 import xml.dom.minidom
 def pretty_print_xml(xml_tree):
@@ -18,7 +18,6 @@ def pretty_print_xml(xml_tree):
 def nodeToReadable(node: ET.Element):
     attribs = ' '.join([(f'{key}="{value}"') for (key, value) in node.attrib.items()])
     return f"<{node.tag}{' ' if attribs != '' else ''}{attribs}>"
-
 
 
 class Conflict:
@@ -52,8 +51,6 @@ class Conflict:
             with open(rightFilePath, "w") as f:
                 f.write(self.rightElement)
 
-
-
 class Step(Enum):
     LEFT = 1
     RIGHT = 2
@@ -75,7 +72,6 @@ class Resolution:
             case _:
                 return self.additionalData
         
-
 
 
 def merge(file1Path: str, file2Path: str, resolutions: list[Resolution]=[]) -> tuple[list[Conflict], str]:
@@ -140,25 +136,6 @@ def getResolution(resolutions):
         return resolutions.pop(0)
     return None
 
-
-    
-    
-# merge both projects definitions, check if name has changed and return text conflict in case
-# in addition chose newest version
-def mergeDoc(leftNode, rightNode, resolutions):
-    # if project names mismatch, add conflict
-    if leftNode.attrib['name'] != rightNode.attrib['name']:
-        tmpRes = getResolution(resolutions)
-        if tmpRes:
-            return None, tmpRes.resolve(leftNode, rightNode)
-        return Conflict(leftNode.attrib['name'], rightNode.attrib['name'], conflictType="Text"), leftNode
-    
-    # if the right version is higher, chose that one, otherwise use the left
-    if compareVersionName(leftNode.attrib['app'], rightNode.attrib['app']) == -1:
-        return None, rightNode
-    return None, leftNode
-
-
 def compareVersionName(leftNodeText, rightNodeText):
     pattern = r"(([0-9]+\.)*[0-9]+)+"
     matchesLeft = re.findall(pattern, leftNodeText)
@@ -188,6 +165,144 @@ def compareVersionName(leftNodeText, rightNodeText):
     if matchesRight:
         return -1
     return 0
+
+# merge both projects definitions, check if name has changed and return text conflict in case
+# in addition chose newest version
+def mergeDoc(leftNode, rightNode, resolutions=[]):
+    # if project names mismatch, add conflict
+    if leftNode.attrib['name'] != rightNode.attrib['name']:
+        tmpRes = getResolution(resolutions)
+        if tmpRes:
+            return None, tmpRes.resolve(leftNode, rightNode)
+        return Conflict(leftNode.attrib['name'], rightNode.attrib['name'], conflictType="Text"), leftNode
+    
+    # if the right version is higher, chose that one, otherwise use the left
+    if compareVersionName(leftNode.attrib['app'], rightNode.attrib['app']) == -1:
+        return None, rightNode
+    return None, leftNode
+
+
+
+# if node is in list and exact the same, 1
+# if in list by definition, 2
+# if not at all, 0
+def containsNode(nodeList, nodeToFind, onlyCheck=""):
+    for node in nodeList:
+        if (compareNodesSame(node, nodeToFind, onlyCheck)):
+            return 1
+    for node in nodeList:
+        if (compareNodesDefinition(node, nodeToFind, onlyCheck)):
+            return 2
+    return 0
+
+
+# Checks only if tag, attributes and text are the same
+def compareNodesDefinition(leftNode, rightNode, onlyCheck=""):
+    if leftNode.tag != rightNode.tag:
+        return False
+    
+    if onlyCheck != "":
+        if onlyCheck in leftNode.keys() and onlyCheck in rightNode.keys():
+            if leftNode.attrib[onlyCheck] != rightNode.attrib[onlyCheck]:
+                return False
+    else:
+        if leftNode.keys() != rightNode.keys():
+            return False
+    
+    if leftNode.text and rightNode.text:
+        if leftNode.text != rightNode.text:
+            return False
+        
+    if (leftNode.text is None and rightNode.text is not None) or (leftNode.text is not None and rightNode.text is None):
+        return False
+    
+    if onlyCheck == "":
+        for i in range(len(leftNode.attrib)):
+            if leftNode.attrib[leftNode.keys()[i]] != rightNode.attrib[rightNode.keys()[i]]:
+                return False
+    return True
+
+
+# reccursifly compares two nodes and return true if they are the same and false if they differ
+def compareNodesSame(leftNode, rightNode, onlyCheck=""):
+    # Break case, if leaf and same, ret true
+    if isAtomic(leftNode) and isAtomic(rightNode):
+        conflict, _ = atomicMerge(leftNode, rightNode)
+        return conflict == None
+            
+    # If one is not atomic, they differ return false
+    if isAtomic(leftNode) != isAtomic(rightNode):
+        return False
+    if len(leftNode) != len(rightNode):
+        return False
+    if(not compareNodesDefinition(leftNode, rightNode, onlyCheck)):
+        return False
+    
+    res = True
+    for (l, r) in zip(leftNode, rightNode):
+        res = res and compareNodesSame(l, r)
+    return res
+
+
+# expects left and right node have same definition and values, only child nodes differ
+def mergeSimple(leftNode: ET.Element, rightNode: ET.Element, resolutions:list[Resolution]=[]) -> tuple[list[Conflict], ET.Element]:
+    """Simply merges two nodes 
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        _description_
+    rightNode : ET.Element
+        _description_
+    resolutions : list[Resolution], optional
+        _description_, by default []
+
+    Returns
+    -------
+    tuple[list[Conflict], ET.Element]
+        _description_
+    """
+    leftNodeList = [n for n in leftNode]
+    retConflicts = []
+    
+    # post to smerge ignore hotfix...
+    if leftNode.tag == "block-definition":
+        print(leftNode)
+        try:
+            s = leftNode.get("s")
+            if "" in s:
+                return None, leftNode
+        except:
+            pass
+    
+    for rNode in rightNode:
+        cont = containsNode(leftNodeList, rNode)
+        if cont == 0:
+            leftNode.append(rNode)
+        elif cont == 2:
+            conflictNode = getNodeMatchByDef(leftNodeList, rNode)
+            
+            if(leftNode.tag == "thumbnail"):
+                retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image"))
+            elif ("script" not in leftNode.tag):
+                retConflicts.append(Conflict(pretty_print_xml(conflictNode), pretty_print_xml(rNode), conflictType="Text"))
+            else:
+                retConflicts.append(Conflict(conflictNode, rNode))
+    
+    if len(leftNodeList) == 0:
+        if not compareNodesSame(leftNode, rightNode, onlyCheck=""):
+            if(leftNode.tag == "thumbnail"):
+                retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image"))
+            elif ("script" not in leftNode.tag):
+                retConflicts.append(Conflict(pretty_print_xml(leftNode), pretty_print_xml(rightNode), conflictType="Text"))
+            else:
+                retConflicts.append(Conflict(leftNode, rightNode))
+            
+    if len(retConflicts) != 0:
+        return retConflicts, None
+    return None, leftNode
+
+
 
 
 # merge the smallest leaf if they are exact the same, conflict otherwise
@@ -240,11 +355,15 @@ def isAtomic(node):
     #     leftNodeChildren = [t for t in leftNode]
     #     rightNodeChildren = [t for t in rightNode]
         
-    #     for()
 
 
-def mergeScenes(leftNode, rightNode):
-    leftNodeList = [n for n in leftNode]
+
+
+
+
+    
+
+
     retConflicts = []
     for rNode in rightNode:
         cont = containsNode(leftNodeList, rNode)
@@ -352,7 +471,6 @@ def mergeSprite(leftNode, rightNode):
     return conflicts
 
 
-
 def mergeScripts(leftNode, rightNode):
     leftNodeList = [n for n in leftNode]
     retConflicts = []
@@ -365,112 +483,6 @@ def mergeScripts(leftNode, rightNode):
             retConflicts.append(Conflict(conflictingLeftNode, rNode))
     return retConflicts
         
-
-
-# expects left and right node have same definition and values, only child nodes differ
-def mergeSimple(leftNode, rightNode):
-    leftNodeList = [n for n in leftNode]
-    retConflicts = []
-    
-    # post to smerge ignore hotfix...
-    if leftNode.tag == "block-definition":
-        print(leftNode)
-        try:
-            s = leftNode.get("s")
-            if "" in s:
-                return None, leftNode
-        except:
-            pass
-    
-    for rNode in rightNode:
-        cont = containsNode(leftNodeList, rNode)
-        if cont == 0:
-            leftNode.append(rNode)
-        elif cont == 2:
-            conflictNode = getNodeMatchByDef(leftNodeList, rNode)
-            if(leftNode.tag == "thumbnail"):
-                retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image"))
-            elif ("script" not in leftNode.tag):
-                retConflicts.append(Conflict(pretty_print_xml(conflictNode), pretty_print_xml(rNode), conflictType="Text"))
-            else:
-                retConflicts.append(Conflict(conflictNode, rNode))
-    
-    if len(leftNodeList) == 0:
-        if not compareNodesSame(leftNode, rightNode, onlyCheck=""):
-            if(leftNode.tag == "thumbnail"):
-                retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image"))
-            elif ("script" not in leftNode.tag):
-                retConflicts.append(Conflict(pretty_print_xml(leftNode), pretty_print_xml(rightNode), conflictType="Text"))
-            else:
-                retConflicts.append(Conflict(leftNode, rightNode))
-            
-    if len(retConflicts) != 0:
-        return retConflicts, None
-    return None, leftNode
-
-# if node is in list and exact the same, 1
-# if in list by definition, 2
-# if not at all, 0
-def containsNode(nodeList, nodeToFind, onlyCheck=""):
-    for node in nodeList:
-        if (compareNodesSame(node, nodeToFind, onlyCheck)):
-            return 1
-    for node in nodeList:
-        if (compareNodesDefinition(node, nodeToFind, onlyCheck)):
-            return 2
-    return 0
-
-
-# Checks only if tag, attributes and text are the same
-def compareNodesDefinition(leftNode, rightNode, onlyCheck=""):
-    if leftNode.tag != rightNode.tag:
-        return False
-    
-    if onlyCheck != "":
-        if onlyCheck in leftNode.keys() and onlyCheck in rightNode.keys():
-            if leftNode.attrib[onlyCheck] != rightNode.attrib[onlyCheck]:
-                return False
-    else:
-        if leftNode.keys() != rightNode.keys():
-            return False
-    
-    if leftNode.text and rightNode.text:
-        if leftNode.text != rightNode.text:
-            return False
-        
-    if (leftNode.text is None and rightNode.text is not None) or (leftNode.text is not None and rightNode.text is None):
-        return False
-    
-    if onlyCheck == "":
-        for i in range(len(leftNode.attrib)):
-            if leftNode.attrib[leftNode.keys()[i]] != rightNode.attrib[rightNode.keys()[i]]:
-                return False
-    return True
-
-
-# reccursifly compares two nodes and return true if they are the same and false if they differ
-def compareNodesSame(leftNode, rightNode, onlyCheck=""):
-    # Break case, if leaf and same, ret true
-    if isAtomic(leftNode) and isAtomic(rightNode):
-        conflict, _ = atomicMerge(leftNode, rightNode)
-        return conflict == None
-            
-    # If one is not atomic, they differ return false
-    if isAtomic(leftNode) != isAtomic(rightNode):
-        return False
-    if len(leftNode) != len(rightNode):
-        return False
-    if(not compareNodesDefinition(leftNode, rightNode, onlyCheck)):
-        return False
-    
-    res = True
-    for (l, r) in zip(leftNode, rightNode):
-        res = res and compareNodesSame(l, r)
-    return res
-    
-
-def getNodeSame(leftNode, rightNode):
-    _
 
 conflicts = []
 

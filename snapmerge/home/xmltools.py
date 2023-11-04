@@ -270,8 +270,8 @@ def include_sync_button(file, proj_id, me):
 
 
 def get_all_ids(tree) -> list[str]:
-    """
-    collects all ids from the given tags in the tree
+    """collects all ids from the given tags in the tree
+    
     @param tree:
     @return: a list of all ids within the project file
     """

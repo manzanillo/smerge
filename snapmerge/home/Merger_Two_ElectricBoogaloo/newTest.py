@@ -1,6 +1,10 @@
 import unittest
 from generator import pretty_print_xml, create_xml_head
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from merger import mergeDoc
 
 class TestStringMethods(unittest.TestCase):
