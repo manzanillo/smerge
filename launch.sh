@@ -2,7 +2,7 @@
 
 # Function to start the Flask server
 start_django() {
-    /home/rs-kubuntu/miniconda3/envs/smerge/bin/python ./snapmerge/manage.py runserver --settings=config.settings_local > /tmp/django_output 2>&1
+    python ./snapmerge/manage.py runserver --settings=config.settings_local > /tmp/django_output 2>&1
 }
 
 # Function to stop all processes gracefully
