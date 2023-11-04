@@ -1,8 +1,12 @@
 import xml.etree.ElementTree as ET
 import re
 from .generator import *
+from enum import Enum
+
+
 tmp1_file_path = "add_new.xml"
 tmp2_file_path = "moved.xml"
+
 
 import xml.dom.minidom
 def pretty_print_xml(xml_tree):
@@ -50,9 +54,49 @@ class Conflict:
 
 
 
-# main merging function
-# returns conflicts and merged if conflicts is None, the merge should have worked, otherwise return conflicts
-def merge(file1Path, file2Path):
+class Step(Enum):
+    LEFT = 1
+    RIGHT = 2
+    DATA = 3
+
+class Resolution:
+    """Resolution contains information to resolve a conflict. Steps can be "left", "right" or "data"
+    """
+    def __init__(self, step: Step, additionalData: str=""):
+        self.step = step
+        self.additionalData = additionalData
+        
+    def resolve(self, leftElement, rightElement):
+        match self.step:
+            case Step.LEFT:
+                return leftElement
+            case Step.RIGHT:
+                return rightElement
+            case _:
+                return self.additionalData
+        
+
+
+
+def merge(file1Path: str, file2Path: str, resolutions: list[Resolution]=[]) -> tuple[list[Conflict], str]:
+    """Main merging function
+
+    Parameters
+    ----------
+    file1Path : str
+        Path to left xml File.
+    file2Path : str
+        Path to right xml File.
+    resolutions : list[Resolution]
+        List of resolutions
+
+    Returns
+    -------
+    tuple[list[Conflict], str]
+        returns conflicts and merged if conflicts is None, the merge should have worked, otherwise return conflicts
+    """
+    
+    
     conflicts = []
     
     treeLeft = ET.parse(file1Path)
@@ -62,7 +106,7 @@ def merge(file1Path, file2Path):
     rightRoot = treeRight.getroot()
     
     # Merge project definition
-    defConflict, merged = mergeDoc(leftRoot,rightRoot)
+    defConflict, merged = mergeDoc(leftRoot,rightRoot, resolutions)
     
     if defConflict:
         conflicts.append(defConflict)
@@ -91,14 +135,22 @@ def merge(file1Path, file2Path):
     # sprites2 = tree2.getroot().findall(".//sprite")
     
     
-    
+def getResolution(resolutions):
+    if len(resolutions) > 0:
+        return resolutions.pop(0)
+    return None
+
+
     
     
 # merge both projects definitions, check if name has changed and return text conflict in case
 # in addition chose newest version
-def mergeDoc(leftNode, rightNode):
+def mergeDoc(leftNode, rightNode, resolutions):
     # if project names mismatch, add conflict
     if leftNode.attrib['name'] != rightNode.attrib['name']:
+        tmpRes = getResolution(resolutions)
+        if tmpRes:
+            return None, tmpRes.resolve(leftNode, rightNode)
         return Conflict(leftNode.attrib['name'], rightNode.attrib['name'], conflictType="Text"), leftNode
     
     # if the right version is higher, chose that one, otherwise use the left

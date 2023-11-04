@@ -66,7 +66,7 @@ def create_xml(projectName, versionName):
 
     # Finally, write the XML to a file
     tree = ET.ElementTree(project)
-    return tree, scripts_sprite
+    return tree#, scripts_sprite
 
 import xml.dom.minidom
 def pretty_print_xml(xml_tree):
