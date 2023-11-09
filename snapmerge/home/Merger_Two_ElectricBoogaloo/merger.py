@@ -35,13 +35,13 @@ class Conflict:
         if self.conflictType == "Element":
             projectName = "View"
             versionName = "Snap! 9.0, https://snap.berkeley.edu"
-            file1, test = create_xml(projectName, versionName)
+            file1, test = create_snap_file(projectName, versionName)
             test.append(self.leftElement)
             
             with open(leftFilePath, "w") as f:
                 f.write(pretty_print_xml(file1.getroot()))
             
-            file2, test2 = create_xml(projectName, versionName)
+            file2, test2 = create_snap_file(projectName, versionName)
             test2.append(self.rightElement)
             with open(rightFilePath, "w") as f:
                 f.write(pretty_print_xml(file2.getroot()))
