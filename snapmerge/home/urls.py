@@ -1,6 +1,10 @@
 from django.conf.urls import url, include
 from . import views
+from django.urls import include, path
+from rest_framework import routers
 
+router = routers.DefaultRouter()
+router.register(r'project', views.ProjectViewSet)
 
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
