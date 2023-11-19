@@ -1,20 +1,26 @@
 from rest_framework import serializers
-from snapmerge.home.models import Project, SnapFile, File
+
+from ..models import SnapFile, Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    """
+    Serializes a project without credential information
+    """
+
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'created_at', 'updated_at')
+        fields = ('id', 'name', 'description')
 
 
 class SnapFileSerializer(serializers.ModelSerializer):
+    """
+    Serializes a snapfile
+    """
+
+    file_url = serializers.CharField(source='get_media_path', read_only=True)
+
     class Meta:
         model = SnapFile
-        fields = ('id', 'name', 'description', 'project', 'created_at', 'updated_at', 'ancestors', 'file_url', 'timestamp', 'number_scripts', 'number_sprites', 'color')
-
-
-class FileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = File
-        fields = ('id', 'name', 'path', 'project', 'created_at', 'updated_at')
+        fields = ('id', 'file_url', 'description', 'project', 'ancestors', 'timestamp', 'number_scripts',
+                  'number_sprites', 'color')
