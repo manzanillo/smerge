@@ -98,6 +98,9 @@ cy.on('taphold dblclick', 'node', function(evt){
     }
 );
 
+cy.on('dragfree', 'node', function (evt){
+    console.log(evt.target.position());
+});
 
 // Show tooltip on hover
 cy.on('click', 'node', function(evt){
