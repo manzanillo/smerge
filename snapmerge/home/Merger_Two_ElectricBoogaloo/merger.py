@@ -282,6 +282,10 @@ def mergeSimple(leftNode: ET.Element, rightNode: ET.Element, resolutions:list[Re
         elif cont == 2:
             conflictNode = getNodeMatchByDef(leftNodeList, rNode)
             
+            tmpRes = getResolution(resolutions)
+            if tmpRes:
+                return None, tmpRes.resolve(leftNode, rightNode)
+            
             if(leftNode.tag == "thumbnail"):
                 retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image"))
             elif ("script" not in leftNode.tag):
@@ -291,6 +295,9 @@ def mergeSimple(leftNode: ET.Element, rightNode: ET.Element, resolutions:list[Re
     
     if len(leftNodeList) == 0:
         if not compareNodesSame(leftNode, rightNode, onlyCheck=""):
+            tmpRes = getResolution(resolutions)
+            if tmpRes:
+                return None, tmpRes.resolve(leftNode, rightNode)
             if(leftNode.tag == "thumbnail"):
                 retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image"))
             elif ("script" not in leftNode.tag):
@@ -471,7 +478,7 @@ def mergeSprite(leftNode, rightNode):
     return conflicts
 
 
-def mergeScripts(leftNode, rightNode):
+def mergeScripts(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
     leftNodeList = [n for n in leftNode]
     retConflicts = []
     for rNode in rightNode:
@@ -482,6 +489,36 @@ def mergeScripts(leftNode, rightNode):
             conflictingLeftNode = getNodeMatchByDef(leftNodeList, rNode, onlyCheck="customData")
             retConflicts.append(Conflict(conflictingLeftNode, rNode))
     return retConflicts
+
+
+
+def mergeScript(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+    """Checks if two script nodes can be merged, or generate a conflict
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Root node for the left side of the single script merge.
+    rightNode : ET.Element
+        Root node for the right side of the single script merge.
+    resolutions : list[Resolution]
+        List of resolutions to be poped
+
+    Returns
+    -------
+    None | list[Conflict]
+        Returns None if the merge is successful, otherwise a Conflict
+    -------
+    """
+    
+    leftId = leftNode.attrib["customData"]
+    rightId = rightNode.attrib["customData"]
+    
+    if leftId != rightId:
+        return None
+    
+    
+    return None
         
 
 conflicts = []
@@ -513,16 +550,19 @@ if __name__ == '__main__':
     
     
     
-    conflicts, res = merge("moved.xml", "export.xml")
-    if conflicts:
-        for c in conflicts:
-            print(pretty_print_xml(c.leftElement))
-            print("<-->")
-            print(pretty_print_xml(c.rightElement))
-            c.toFile("./","test")
-        # print([str(c) for c in conflicts])
-    if res:
-        print(pretty_print_xml(res))
+    # conflicts, res = merge("moved.xml", "export.xml")
+    # if conflicts:
+    #     for c in conflicts:
+    #         print(pretty_print_xml(c.leftElement))
+    #         print("<-->")
+    #         print(pretty_print_xml(c.rightElement))
+    #         c.toFile("./","test")
+    #     # print([str(c) for c in conflicts])
+    # if res:
+    #     print(pretty_print_xml(res))
+    node = SnapScript().generate()
+    print(pretty_print_xml(node))
+    print(pretty_print_xml(SnapScript.alterPos(node)))
     
     
     
