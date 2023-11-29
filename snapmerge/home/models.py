@@ -84,13 +84,12 @@ class SnapFile(File):
 
     def as_dict(self):
         ancestor_ids = [x.id for x in self.ancestors.all()]
-        file_url = settings.MEDIA_URL + str(self.file)
 
         return {
             'id': self.id,
             'description': self.description,
             'ancestors': ancestor_ids,
-            'file_url': file_url,
+            'file_url': self.get_media_path(),
             'timestamp': str(self.timestamp),
             'number_scripts': self.number_scripts,
             'number_sprites': self.number_sprites,
