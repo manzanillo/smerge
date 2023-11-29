@@ -21,7 +21,16 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     const projectName: string = "";
     const projectDescription: string = "";
 
-    const layout = {name: 'dagre'};
+    // const layout = {name: 'dagre'};
+
+    const layout = {
+        name: 'dagre',
+        fit: true, // Whether to fit to viewport
+        padding: 30, // Padding on fit
+        spacingFactor: 1.2, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+        nodeDimensionsIncludeLabels: true, // Whether labels should be included in determining the space used by a node
+    };
+    
 
     const {error, data} = useFiles(String(projectId));
     if (error) console.log(error);
@@ -73,6 +82,17 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
        { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } },
        { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }
     ];*/
+
+    const cyRef = React.useRef(null);
+
+    React.useEffect(() => {
+        if (cyRef.current) {
+            const layout = cyRef.current.layout({name: 'dagre'});
+            layout.run();
+        }
+    }, [cyRef, nodes]);
+
+
     return (
         <>
             <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({nodes: nodes, edges: edges})}
@@ -82,7 +102,8 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                                     left: '0',
                                     top: '0',
                                     zIndex: '999'
-                                }}/>
+                                }}
+                                cy={(cy) => { cyRef.current = cy; }}/>
 
             <h1 className="project-heading" data-proj-id={projectId}>
                 {projectName}

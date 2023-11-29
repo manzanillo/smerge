@@ -9,6 +9,7 @@ COMPRESS_OFFLINE = False
 
 # allow cross for testing...
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 SECURE_REFERRER_POLICY = 'unsafe-url'
 CORS_ALLOW_HEADERS = "*"
 
