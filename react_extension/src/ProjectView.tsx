@@ -37,7 +37,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     console.log(data?.toString());
 
     const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
-        const nodeDefinition: NodeDefinition = {data: {id: file.id.toString(), label: file.description}};
+        const nodeDefinition: NodeDefinition = {data: {id: file.id.toString(), label: file.description, file_url: file.file_url}};
         return nodeDefinition;
     });
 
@@ -89,6 +89,15 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         if (cyRef.current) {
             const layout = cyRef.current.layout({name: 'dagre'});
             layout.run();
+
+            cyRef.current.on('dblclick', 'node', function(evt){
+                var node = evt.target;
+                // console.log('dblclick', node.id());
+                // console.log(node.data("file_url"));
+    
+                // Open a new tab with a set link
+                window.open('https://snap.berkeley.edu/snap/snap.html#open:https://idpsmerge.duckdns.org/blockerXML/' + node.data("file_url").replace("/media/", ""), '_blank');
+            });
         }
     }, [cyRef, nodes]);
 
