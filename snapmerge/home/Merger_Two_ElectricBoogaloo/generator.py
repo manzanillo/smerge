@@ -7,14 +7,15 @@ import uuid
 # from merge_two_electric_boogaloo import prettify_xml
 
 defaultImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAB4CAYAAAB1ovlvAAACqElEQVR4Xu3XMY7aUABF0e99QA/LAYkN0bAgEKuBjUBBRqSYYmaSKIWvZB3Xlp58/xHG0+vjGi4FogITgFF5s+8CAIKQFgAwzW8cQAbSAgCm+Y0DyEBaAMA0v3EAGUgLAJjmNw4gA2kBANP8xgFkIC0AYJrfOIAMpAUATPMbB5CBtACAaX7jADKQFgAwzW8cQAbSAgCm+Y0DyEBaAMA0v3EAGUgLAJjmNw4gA2kBANP8xgFkIC0AYJrfOIAMpAUATPMbB5CBtACAaX7jADKQFgAwzW8cQAbSAgCm+Y0DyEBaAMA0v3EAGUgLAJjmNw4gA2kBANP8xgFkIC0AYJrfOIAMpAUATPMbB5CBtACAaX7jADKQFgAwzW8cQAbSAgCm+Y0DyEBaAMA0v3EAGUgLAPhD/u12O47H4zgcDukBLX0cwD+c8H6/H6/X633H7XYb1+t1rNfrpZuY9fkA/Evu3W735Y5pmsbz+Rzn83nWw1riGID/CfDxeIzL5bJEE7M+E4D/+Aq+3+/vV/BqtZr1gJY+BuAPJ7zZbMbpdBrfvYKXjmLO5wNwztq2vv6f/vjK+/2Z51IgKOAXMIhu8rMAgDSkBQBM8xsHkIG0AIBpfuMAMpAWADDNbxxABtICAKb5jQPIQFoAwDS/cQAZSAsAmOY3DiADaQEA0/zGAWQgLQBgmt84gAykBQBM8xsHkIG0AIBpfuMAMpAWADDNbxxABtICAKb5jQPIQFoAwDS/cQAZSAsAmOY3DiADaQEA0/zGAWQgLQBgmt84gAykBQBM8xsHkIG0AIBpfuMAMpAWADDNbxxABtICAKb5jQPIQFoAwDS/cQAZSAsAmOY3DiADaQEA0/zGAWQgLQBgmt84gAykBQBM8xsHkIG0AIBpfuMAMpAWADDNb/wXK14Ct+2fpIIAAAAASUVORK5CYII='
-
+defaultImageShort = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAB4CAYAAA'
 
 class SnapStage:
     idCounter = 0
     
-    def __init__(self):
+    def __init__(self, blankScript=False):
         self.id = SnapStage.idCounter
         SnapStage.idCounter += 1
+        self.blankScript = blankScript
         
     def generate(self):
         stage = ET.Element('stage', {'name': 'Stage', 'width': '480', 'height': '360', 'costume': '0', 'color': '255,255,255,1', 'tempo': '60', 'threadsafe': 'false', 'penlog': 'false', 'volume': '100', 'pan': '0', 'lines': 'round', 'ternary': 'false', 'hyperops': 'true', 'codify': 'false', 'inheritance': 'true', 'sublistIDs': 'false', 'id': f"{self.id}"})
@@ -27,16 +28,17 @@ class SnapStage:
         ET.SubElement(stage, 'blocks')
         ET.SubElement(stage, 'scripts')
         sprites = ET.SubElement(stage, 'sprites', {'select': '1'})
-        sprites.append(SnapSprite("testSprite").generate())
+        sprites.append(SnapSprite("testSprite", blankScript=self.blankScript).generate())
         return stage
     
 class SnapSprite:
     idCounter = 0
     
-    def __init__(self, name:str="def"):
+    def __init__(self, name:str="def", blankScript=False):
         self.name = name
         self.id = SnapSprite.idCounter
         SnapSprite.idCounter += 1
+        self.blankScript = blankScript
         
     def generate(self):
         sprite = ET.Element('sprite', {'name': self.name, 'idx': f"{self.id}", 'x': '0', 'y': '0', 'heading': '90', 'scale': '1', 'volume': '100', 'pan': '0', 'rotation': '1', 'draggable': 'true', 'costume': '0', 'color': '80,80,80,1', 'pen': 'tip', 'id': f"{100+self.id}"})
@@ -46,32 +48,50 @@ class SnapSprite:
         ET.SubElement(sounds_sprite, 'list', {'struct': 'atomic', 'id': '24'})
         ET.SubElement(sprite, 'blocks')
         ET.SubElement(sprite, 'variables')
-        scripts_sprite = ET.SubElement(sprite, 'scripts')
-        scripts_sprite.append(SnapScript().generate())
+        
+        scripts = SnapScripts(blankScript=self.blankScript).generate()
+        sprite.append(scripts)
         return sprite
     
+class SnapScripts:
+    def __init__(self, blankScript=False):
+        self.blankScript = blankScript
+    
+    def generate(self, scriptAmount=random.randrange(1,3)):
+        scripts = ET.Element('scripts')
+        if not self.blankScript: 
+            for i in range(0, scriptAmount):
+                scripts.append(SnapScript(blankScript=self.blankScript).generate())
+        return scripts
+    
+    def alterScripts(node: ET.Element):
+        for n in node:
+            SnapScript.alterBlocks(n)
+    
 class SnapScript:
-    def __init__(self):
+    def __init__(self, blankScript=False):
         self.x = random.randrange(0,300) + random.random()
         self.y = random.randrange(0,300) + random.random()
+        self.blankScript = blankScript
     
     def generate(self):
         script = ET.Element('script', {'x': str(self.x), 'y': str(self.y), 'customData': str(uuid.uuid4())})
-        ET.SubElement(script, 'block', {'s':'receiveGo'})
-        for i in range(random.randrange(0,5)):
-            match(random.randrange(0,3)):
-                case 0:
-                    block = ET.SubElement(script, 'block', {'s':"forward"})
-                    l = ET.SubElement(block, 'l')
-                    l.text = str(random.randrange(5, 15))
-                case 1:
-                    block = ET.SubElement(script, 'block', {'s':"changeXPosition"})
-                    l = ET.SubElement(block, 'l')
-                    l.text = str(random.randrange(5, 15))
-                case 2:
-                    block = ET.SubElement(script, 'block', {'s':"changeYPosition"})
-                    l = ET.SubElement(block, 'l')
-                    l.text = str(random.randrange(5, 15))
+        if not self.blankScript:
+            ET.SubElement(script, 'block', {'s':'receiveGo'})
+            for i in range(random.randrange(0,5)):
+                match(random.randrange(0,3)):
+                    case 0:
+                        block = ET.SubElement(script, 'block', {'s':"forward"})
+                        l = ET.SubElement(block, 'l')
+                        l.text = str(random.randrange(5, 15))
+                    case 1:
+                        block = ET.SubElement(script, 'block', {'s':"changeXPosition"})
+                        l = ET.SubElement(block, 'l')
+                        l.text = str(random.randrange(5, 15))
+                    case 2:
+                        block = ET.SubElement(script, 'block', {'s':"changeYPosition"})
+                        l = ET.SubElement(block, 'l')
+                        l.text = str(random.randrange(5, 15))
         return script
     
     def alterPos(node: ET.Element):
@@ -96,7 +116,15 @@ class SnapScript:
                 counter += 1
                 block = ET.SubElement(node, 'block', {'s':"forward"})
                 l = ET.SubElement(block, 'l')
-                l.text = str(random.randrange(5, 15))
+                origText = l.text
+                # ensure value is new
+                for c in range(0,10):
+                    l.text = str(random.randrange(5, 30))
+                    if l.text != origText:
+                        break
+                # ensure differ to be sure, many tests can provoce same value when it should differ
+                if l.text == origText:
+                    l.text = str(random.randrange(100, 200))
             else:
                 counter += 1
                 switchNodeState(node[1])
@@ -109,7 +137,15 @@ def copyElement(elem):
 def switchNodeState(subNode: ET.Element):
     match(subNode.attrib["s"]):
         case "forward":
-            subNode[0].text = str(random.randrange(0,20))
+            origText = subNode[0].text
+            # ensure value is new
+            for c in range(0,10):
+                subNode[0].text = str(random.randrange(5, 30))
+                if subNode[0].text != origText:
+                    break
+            # ensure differ to be sure, many tests can provoce same value when it should differ
+            if subNode[0].text == origText:
+                subNode[0].text = str(random.randrange(100, 200))
         case "changeXPosition":
             subNode.attrib["s"] = "changeYPosition"
         case "changeYPosition":
@@ -120,8 +156,9 @@ def switchNodeState(subNode: ET.Element):
         
 
 class SnapScene:
-    def __init__(self, name: str = "defaultName"):
+    def __init__(self, name: str = "defaultName", blankScript=False):
         self.name = name
+        self.blankScript = blankScript
     
     def generate(self):
         scene = ET.Element('scene', {'name': self.name})
@@ -130,7 +167,7 @@ class SnapScene:
         ET.SubElement(scene, 'headers')
         ET.SubElement(scene, 'code')
         blocks = ET.SubElement(scene, 'blocks')
-        scene.append(SnapStage().generate())
+        scene.append(SnapStage(blankScript=self.blankScript).generate())
         
         return scene
 
@@ -139,10 +176,11 @@ class SnapFileGenerator:
     """
     scenes:SnapScene = []
     
-    def __init__(self,projectName:str = "", appName:str = "", version: int = 2):
+    def __init__(self,projectName:str = "", appName:str = "", version: int = 2, blankScript=False):
         self.projectName = projectName
         self.appName = appName
         self.version = version
+        self.blankScript = blankScript
         
     def addScene(self, scene):
         self.scenes.append(scene)
@@ -150,9 +188,20 @@ class SnapFileGenerator:
     def generate(self):
         file, scenesNode = create_xml_head(self.projectName, self.appName, self.version)
         for s in self.scenes:
+            s.blankScript = self.blankScript
             scenesNode.append(s.generate())
         return file
     
+    def alterScripts(root: ET.Element):
+        for scripts in root.findall('.//scripts'):
+            SnapScripts.alterScripts(scripts)
+            
+    def getScript(root: ET.Element):
+        scripts = root.findall('.//scripts')
+        if scripts:
+            return scripts[1]
+            
+        
 
 
 
@@ -169,53 +218,14 @@ def create_xml_head(projectName, versionName, version, asTree=False):
 
 
 def create_snap_file(projectName, versionName):
-    project, scene = create_xml_head(projectName, versionName)
-    ET.SubElement(scene, 'notes')
-    ET.SubElement(scene, 'hidden')
-    ET.SubElement(scene, 'headers')
-    ET.SubElement(scene, 'code')
-    blocks = ET.SubElement(scene, 'blocks')
-    # block_definition = ET.SubElement(blocks, 'block-definition', {'s': 'Post to smerge...', 'type': 'command', 'category': 'other'})
-    # ET.SubElement(block_definition, 'header')
-    # ET.SubElement(block_definition, 'code')
-    # ET.SubElement(block_definition, 'translations').text = 'de:Poste auf smerge...'
-    # ET.SubElement(block_definition, 'inputs')
-    # script = ET.SubElement(block_definition, 'script')
-    # block = ET.SubElement(script, 'block', {'s': 'doRun'})
-    # block2 = ET.SubElement(block, 'block', {'s': 'reportJSFunction'})
-    # ET.SubElement(block2, 'list')
-    # ET.SubElement(block2, 'l').text = 'console.log("")'
-    # ET.SubElement(block, 'list')
+    tmp = SnapFileGenerator(projectName, versionName, blankScript=True)
+    tmp.addScene(SnapScene("view"))
+    project = tmp.generate()
+    scripts_sprite = SnapFileGenerator.getScript(project)
     
-    stage = ET.SubElement(scene, 'stage', {'name': 'Stage', 'width': '480', 'height': '360', 'costume': '0', 'color': '255,255,255,1', 'tempo': '60', 'threadsafe': 'false', 'penlog': 'false', 'volume': '100', 'pan': '0', 'lines': 'round', 'ternary': 'false', 'hyperops': 'true', 'codify': 'false', 'inheritance': 'true', 'sublistIDs': 'false', 'id': '15'})
-    ET.SubElement(stage, 'pentrails').text = 'data:image/png;base64,...'
-    costumes = ET.SubElement(stage, 'costumes')
-    ET.SubElement(costumes, 'list', {'struct': 'atomic', 'id': '16'})
-    sounds = ET.SubElement(stage, 'sounds')
-    ET.SubElement(sounds, 'list', {'struct': 'atomic', 'id': '17'})
-    ET.SubElement(stage, 'variables')
-    ET.SubElement(stage, 'blocks')
-    ET.SubElement(stage, 'scripts')
-    sprites = ET.SubElement(stage, 'sprites', {'select': '1'})
-    sprite = ET.SubElement(sprites, 'sprite', {'name': 'Sprite', 'idx': '1', 'x': '0', 'y': '0', 'heading': '90', 'scale': '1', 'volume': '100', 'pan': '0', 'rotation': '1', 'draggable': 'true', 'costume': '0', 'color': '80,80,80,1', 'pen': 'tip', 'id': '22'})
-    costumes_sprite = ET.SubElement(sprSnapSprite, {'struct': 'atomic', 'id': '24'})
-    ET.SubElement(sprite, 'blocks')
-    ET.SubElement(sprite, 'variables')
-    scripts_sprite = ET.SubElement(sprite, 'scripts')
-    # script1 = ET.SubElement(scripts_sprite, 'script', {'x': '222', 'y': '71.33333333333334', 'customData': '2nnk0aVP0cG2TyeQ'})
-    # block1 = ET.SubElement(script1, 'block', {'s': 'receiveGo'})
-    # block2 = ET.SubElement(script1, 'block', {'s': 'forward'})
-    # ET.SubElement(block2, 'l').text = '10'
-    # script2 = ET.SubElement(scripts_sprite, 'script', {'x': '83', 'y': '220.33333333333337', 'customData': 'iN0aYDEcJCssahrI'})
-    # block3 = ET.SubElement(script2, 'block', {'s': 'receiveGo'})
-    # ET.SubElement(script2, 'block', {'s': 'doSwitchToCostume'})
-    # ET.SubElement(script2, 'l')
-
-    # Continue creating the rest of the XML structure in a similar manner...
-
     # Finally, write the XML to a file
     tree = ET.ElementTree(project)
-    return tree#, scripts_sprite<stage
+    return tree, scripts_sprite
 
 
 
@@ -247,7 +257,12 @@ def fetchRandomImageBase64():
     # with open("tmp_base_image.html", "w") as f:
     #     f.write(base64_image)
 
-fetchedImage = fetchRandomImageBase64()
+
+# uncomment for random image fetching
+# fetchedImage = fetchRandomImageBase64()
+fetchedImage = defaultImageShort
+
+
 
 import xml.dom.minidom
 def pretty_print_xml(xml_tree):

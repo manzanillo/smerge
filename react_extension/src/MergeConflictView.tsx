@@ -5,12 +5,14 @@ import SnapDiv from './SnapDiv';
 import TurnSlightLeftIcon from '@mui/icons-material/TurnSlightLeft';
 import TurnSlightRightIcon from '@mui/icons-material/TurnSlightRight';
 // import Button from '@mui/material/Button';
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Box, Button, ButtonProps, CircularProgress } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextDiv from './TextDiv';
 
 
 interface MergeConflictViewProps {
+    leftButtonAction: ()=>void;
+    rightButtonAction: ()=>void;
     code?: string;
     isActive?: boolean;
     isText?: boolean;
@@ -18,7 +20,7 @@ interface MergeConflictViewProps {
     rightLink?: string;
 }
 
-const MergeConflictView: React.FC<MergeConflictViewProps> = ({ code = "", leftLink="", rightLink="" ,isActive, isText = false }) => {
+const MergeConflictView: React.FC<MergeConflictViewProps> = ({ leftButtonAction, rightButtonAction, code = "", leftLink="", rightLink="" ,isActive, isText = false }) => {
 
     const serverEndpoint = "http://127.0.0.1"
 
@@ -41,10 +43,10 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({ code = "", leftLi
                         {isText?<TextDiv text1={xml1} text2={xml2}/>:<SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>}
                     </div>
                     <Stack direction="row" spacing={10} justifyContent={"center"} sx={{pt:"20px"}}>
-                        <Button variant="contained" color={"success"} startIcon={<TurnSlightLeftIcon />}>
+                        <Button onClick={leftButtonAction} variant="contained" color={"success"} startIcon={<TurnSlightLeftIcon />}>
                             Select Left
                         </Button>
-                        <Button variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
+                        <Button onClick={rightButtonAction} variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
                             Select Right
                         </Button>
                     </Stack>

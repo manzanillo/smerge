@@ -9,6 +9,8 @@ import ConflictStepper from './ConflictStepper.tsx';
 import ProjectView from './ProjectView.tsx';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // const lightTheme: PartialTheme = {
 //   semanticColors: {
@@ -27,8 +29,8 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-      <div style={{ width: "100vw", position: "absolute", left: "0", top: "0" }}><Layout /></div>
       <ThemeProvider theme={darkTheme}>
+      <div style={{ width: "100vw", position: "absolute", left: "0", top: "0" }}><Layout /></div>
         <div style={{ position: "absolute", top: "64px", bottom: "0px", width: "100vw", overflow: "scroll" }}>
             <QueryClientProvider client={queryClient}>
                 <ReactQueryDevtools initialIsOpen={false} />
@@ -42,6 +44,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </QueryClientProvider>
         </div>
       </ThemeProvider>
-      <ToastContainer theme="dark" />    
+      <ToastContainer theme="dark" /> 
   </React.StrictMode>,
 )

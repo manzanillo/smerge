@@ -83,7 +83,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
        { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }
     ];*/
 
-    const cyRef = React.useRef(null);
+    const cyRef = React.useRef();
 
     React.useEffect(() => {
         if (cyRef.current) {
@@ -91,12 +91,13 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
             layout.run();
 
             cyRef.current.on('dblclick', 'node', function(evt){
-                var node = evt.target;
+                const node = evt.target;
                 // console.log('dblclick', node.id());
                 // console.log(node.data("file_url"));
     
                 // Open a new tab with a set link
-                window.open('https://snap.berkeley.edu/snap/snap.html#open:https://idpsmerge.duckdns.org/blockerXML/' + node.data("file_url").replace("/media/", ""), '_blank');
+                const currentBaseUrl = window.location.href.split("ext")[0]
+                window.open(`https://snap.berkeley.edu/snap/snap.html#open:${currentBaseUrl}blockerXML/` + node.data("file_url").replace("/media/", ""), '_blank');
             });
         }
     }, [cyRef, nodes]);
@@ -108,6 +109,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                                 layout={layout}
                                 style={{
                                     width: '100%', height: '100%', position: 'absolute',
+                                    background: 'white',
                                     left: '0',
                                     top: '0',
                                     zIndex: '999'

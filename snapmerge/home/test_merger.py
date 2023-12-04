@@ -9,25 +9,122 @@ from .Merger_Two_ElectricBoogaloo.merger import *
 # to run
 # python manage.py test --settings=config.settings_test
 
-class TestMisc(TestCase):
-    # If both names and version are the same, it should return no collision and return the left
-    def testCollision(self):
+# class TestMisc(TestCase):
+#     # If both names and version are the same, it should return no collision and return the left
+#     def testCollision(self):
+#         node = SnapScript().generate()
+#         original = copyElement(node)
+        
+#         changes = SnapScript.alterBlocks(node)
+#         conflicts = mergeScripts(original, node)
+        
+#         if len(conflicts) != changes:
+#             print(f"# of changes: {changes}")
+#             print("Original:")
+#             print(pretty_print_xml(original))
+#             print("Changed:")
+#             print(pretty_print_xml(node))
+#             print("Conflicts:")
+#             for con in conflicts:
+#                 print(str(con))
+#         self.assertEqual(len(conflicts), changes)
+        
+
+def printOrigNew(original: ET.Element, diff: ET.Element):
+    if original:
+        print("Orig:")
+        print(pretty_print_xml(original))
+    if diff:
+        print("Differ:")
+        print(pretty_print_xml(diff))
+        
+
+class TestSnapFile(TestCase):
+    def testMergerWithScriptDiffer(self):
+        tmp = SnapFileGenerator(projectName="project", appName="Snap! 9.0, https://snap.berkeley.edu")
+        tmp.addScene(SnapScene("test"))
+        # tmp.addScene(SnapScene("tes2"))
+        snap = tmp.generate()
+        original = copyElement(snap)
+        SnapFileGenerator.alterScripts(snap)
+        
+        with open("/tmp/snap_test_file_orig.xml", "w") as f:
+            f.write(pretty_print_xml(original))
+        with open("/tmp/snap_test_file_altered.xml", "w") as f:
+            f.write(pretty_print_xml(snap))
+        
+        res = merge("/tmp/snap_test_file_orig.xml", "/tmp/snap_test_file_altered.xml")
+        print(str(res[0][0]))
+
+
+class TestScriptsMerge(TestCase):
+    def testScriptAltered(self):
+        scripts = SnapScripts()
+        node = scripts.generate(scriptAmount=2)
+        
+        original = copyElement(node)
+        SnapScripts.alterScripts(node)
+        
+        resSame = mergeScripts(original, node)
+        
+        if type(resSame) != list:
+            printOrigNew(original, node)
+        self.assertTrue(type(resSame) == list)
+        
+    def testScriptNew(self):
+        scripts = SnapScripts()
+        node = scripts.generate(scriptAmount=2)
+        
+        newScripts = SnapScripts()
+        newNode = newScripts.generate(scriptAmount=2)
+        
+        resSame = mergeScripts(node, newNode)
+        
+        if resSame != None:
+            printOrigNew(node, newNode)
+        self.assertIsNone(resSame)
+        
+    def testScriptSame(self):
+        scripts = SnapScripts()
+        node = scripts.generate(scriptAmount=2)
+        
+        resSame = mergeScripts(node, node)
+        
+        if resSame != None:
+            printOrigNew(node, None)
+        self.assertIsNone(resSame)
+            
+
+        
+    
+class TestCompareCustomDataNodes(TestCase):
+    def testSame(self):
+        for i in range(0,5):
+            node = SnapScript().generate()
+            original = copyElement(node)
+            
+            changes = SnapScript.alterBlocks(node)
+            resSame = compareCustomDataNodes(original, original)
+            resDiff = compareCustomDataNodes(original, node)
+            
+            if not resSame:
+                print(pretty_print_xml(original))
+            self.assertTrue(resSame)
+            
+            if resDiff:
+                printOrigNew(original, node)
+            self.assertFalse(resDiff)
+            
+    def testPositionChange(self):
         node = SnapScript().generate()
         original = copyElement(node)
         
-        changes = SnapScript.alterBlocks(node)
-        conflicts = mergeScripts(original, node)
+        changes = SnapScript.alterPos(node)
+        resDiff = compareCustomDataNodes(original, node)
         
-        if len(conflicts) != changes:
-            print(f"# of changes: {changes}")
-            print("Original:")
-            print(pretty_print_xml(original))
-            print("Changed:")
-            print(pretty_print_xml(node))
-            print("Conflicts:")
-            for con in conflicts:
-                print(str(con))
-        self.assertEqual(len(conflicts), changes)
+        if not resDiff:
+            printOrigNew(original, node)
+        self.assertTrue(resDiff)
         
 
 

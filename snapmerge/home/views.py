@@ -23,7 +23,7 @@ from .ancestors import gca
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
-from .Merger_Two_ElectricBoogaloo.merger import merge, Conflict
+from .Merger_Two_ElectricBoogaloo.merger import merge, Conflict, Resolution, Step
 from uuid import uuid4
 
 
@@ -518,7 +518,7 @@ class TmpView(View):
         ret = {}
         for i in range(len(hunks)):
             ret[f"{i}"] = hunks[i].as_dict()
-        return JsonResponse({"hunks":[h.as_dict() for h in hunks]})
+        return JsonResponse({"hunks":[h.as_dict() for h in hunks], "projectId": mc.project.id, "leftId": mc.left.id, "rightId": mc.right.id})
     
 class TmpTmpView(View):
 
@@ -582,89 +582,107 @@ class GetBlockerXMLView(View):
 
 
 class NewMergeView(View):
+    def post(self, request, proj_id):
+        resolutions = request.POST.get('resolutions')
+        dict_list_string = f"[{resolutions}]"
+        print(dict_list_string)
+        resolutions_dict = json.loads(dict_list_string)
+        resolutionsConverted = [Resolution(step=(Step.LEFT if (res["choice"] == "left") else Step.RIGHT)) for res in resolutions_dict]
+        
+        print("resolutions:")
+        print(resolutionsConverted)
+        [print(x.step) for x in resolutionsConverted]
+        
+        return mergeExt(request, proj_id, resolutionsConverted)
+        # print(resolutions_dict)
+        # return HttpResponse('Merge success', status=200)
+        
     def get(self, request, proj_id):
-        file_ids = request.GET.getlist('file')
-        proj = Project.objects.get(id=proj_id)
-        files = list(SnapFile.objects.filter(id__in=file_ids, project=proj_id))
-        all_files = list(SnapFile.objects.filter(project=proj_id))
-        parents = {all_files[i].id:
-                       [anc.id for anc in list(all_files[i].ancestors.all())]
-                   for i in range(len(all_files))}
+        return mergeExt(request, proj_id, [])
+        
+def mergeExt(request, proj_id, resolutions):
+    file_ids = request.GET.getlist('file')
+    proj = Project.objects.get(id=proj_id)
+    files = list(SnapFile.objects.filter(id__in=file_ids, project=proj_id))
+    all_files = list(SnapFile.objects.filter(project=proj_id))
+    parents = {all_files[i].id:
+                    [anc.id for anc in list(all_files[i].ancestors.all())]
+                for i in range(len(all_files))}
 
-        if len(files) > 1:
+    if len(files) > 1:
 
-            new_file = SnapFile.create_and_save(
-                project=proj, ancestors=file_ids, file='')
-            new_file.file = str(new_file.id) + '.xml'
-            new_file.save()
+        new_file = SnapFile.create_and_save(
+            project=proj, ancestors=file_ids, file='')
+        new_file.file = str(new_file.id) + '.xml'
+        new_file.save()
 
-            try:
-                file1 = files.pop()
-                file2 = files.pop()
-                ancestor_id = gca(file1.id, file2.id, parents=parents)
-                ancestor = None
-                if ancestor_id != None:
-                    ancestor = SnapFile.objects.get(
-                        id=ancestor_id).get_media_path()
+        try:
+            file1 = files.pop()
+            file2 = files.pop()
+            ancestor_id = gca(file1.id, file2.id, parents=parents)
+            ancestor = None
+            if ancestor_id != None:
+                ancestor = SnapFile.objects.get(
+                    id=ancestor_id).get_media_path()
 
-                conflicts, result = merge(settings.BASE_DIR + file1.get_media_path(), settings.BASE_DIR + file2.get_media_path())
-                
-                if conflicts == None:
-                    with open(settings.BASE_DIR + new_file.get_media_path(), 'wb') as f:
-                        f.write(result)
-                        #result.write(f)
-                else:
-                    new_file.delete()
-                    
-                    # Create new conflict with both files
-                    merge_conflict = models.MergeConflict(left=file1, right=file2, project=proj)
-                    merge_conflict.save()
-                    
-                    for conf in conflicts:
-                        match conf.conflictType:
-                            case "Text":
-                                ending = ".txt"
-                            case "Image":
-                                ending = ".base64"
-                            case _:
-                                ending = ".xml"
-                        left = models.ConflictFile.create_and_save(project=proj,
-                                                               file=f"{uuid4()}{ending}")
-                        left.save()
-                        right = models.ConflictFile.create_and_save(project=proj,
-                                                                file=f"{uuid4()}{ending}")
-                        right.save()
-                        
-                        conf.toFile(settings.BASE_DIR + left.get_media_path(), settings.BASE_DIR + right.get_media_path())
-                        
-                        hunk = models.Hunk(left=left, right=right, mergeConflict=merge_conflict)
-                        hunk.save()
-
-                        
-                        # ret:MergeConflict = MergeConflict.objects.get(id=1)
-                        # print(ret.left)
-                        # print(ret.right)
-                    
-                    print(conflicts)
-                    # response = HttpResponseRedirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
-                    # response.status_code = 303
-                    # return response
-                    return HttpResponse(f"http://127.0.0.1/ext/merge/{merge_conflict.id}", status=303)
-                    # return HttpResponseRedirect(f'/ext/merge/{merge_conflict.id}')
-                    # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
-                
-                new_file.xml_job()
-                print(new_file.as_dict())
-                notify_room(proj.id, new_file.as_dict(), "merge")
-                return JsonResponse(new_file.as_dict())
-
-            except Exception as e:
-                print(e)
+            conflicts, result = merge(settings.BASE_DIR + file1.get_media_path(), settings.BASE_DIR + file2.get_media_path(), resolutions)
+            
+            if conflicts == None:
+                with open(settings.BASE_DIR + new_file.get_media_path(), 'wb') as f:
+                    f.write(result)
+                    #result.write(f)
+            else:
                 new_file.delete()
-                return HttpResponse('invalid data ', status=400)
+                
+                # Create new conflict with both files
+                merge_conflict = models.MergeConflict(left=file1, right=file2, project=proj)
+                merge_conflict.save()
+                
+                for conf in conflicts:
+                    match conf.conflictType:
+                        case "Text":
+                            ending = ".txt"
+                        case "Image":
+                            ending = ".base64"
+                        case _:
+                            ending = ".xml"
+                    left = models.ConflictFile.create_and_save(project=proj,
+                                                            file=f"{uuid4()}{ending}")
+                    left.save()
+                    right = models.ConflictFile.create_and_save(project=proj,
+                                                            file=f"{uuid4()}{ending}")
+                    right.save()
+                    
+                    conf.toFile(settings.BASE_DIR + left.get_media_path(), settings.BASE_DIR + right.get_media_path())
+                    
+                    hunk = models.Hunk(left=left, right=right, mergeConflict=merge_conflict)
+                    hunk.save()
 
-        else:
+                    
+                    # ret:MergeConflict = MergeConflict.objects.get(id=1)
+                    # print(ret.left)
+                    # print(ret.right)
+                
+                print(conflicts)
+                # response = HttpResponseRedirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+                # response.status_code = 303
+                # return response
+                return HttpResponse(f"http://127.0.0.1/ext/merge/{merge_conflict.id}", status=303)
+                # return HttpResponseRedirect(f'/ext/merge/{merge_conflict.id}')
+                # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+            
+            new_file.xml_job()
+            print(new_file.as_dict())
+            notify_room(proj.id, new_file.as_dict(), "merge")
+            return JsonResponse(new_file.as_dict())
+
+        except Exception as e:
+            print(e)
+            new_file.delete()
             return HttpResponse('invalid data ', status=400)
+
+    else:
+        return HttpResponse('invalid data ', status=400)
         
         
 import json
