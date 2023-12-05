@@ -107,13 +107,14 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
     xhttp.onreadystatechange = function () {
       if (xhttp.readyState === 4 && xhttp.status === 200) {
         setLoadingConflict(false);
+        window.close();
         toast.success(xhttp.responseText, {
             position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
           });
       } else {
-        if (xhttp.status >= 400){
+        if (xhttp.readyState === 4 && xhttp.status >= 400){
           console.log(`Conflict ${code} not found.`);
           toast.warning(`Merge ${code} failed.`, {
             position: 'top-right',

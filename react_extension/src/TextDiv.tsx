@@ -38,13 +38,13 @@ const TextDiv: React.FC<TextDivProps> = ({ text1, text2 }) => {
             setText1Loading(false);
         }, (req) =>{
             console.log(req)
-        },true, false);
+        },()=>{},true, false);
         httpService.get(text2, (req)=>{
             setText2Data(req.response);
             setText2Loading(false);
         }, (req) =>{
             console.log(req)
-        },true, false);
+        },()=>{},true, false);
     }, [])
 
     return (<>

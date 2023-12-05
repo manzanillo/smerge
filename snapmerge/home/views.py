@@ -8,7 +8,7 @@ from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color,
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
-from .xmltools import merge, create_dummy_file
+from .xmltools import merge as mergeOld, create_dummy_file
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -121,7 +121,7 @@ class MergeView(View):
                     ancestor = SnapFile.objects.get(
                         id=ancestor_id).get_media_path()
 
-                merge(file1=file1.get_media_path(),
+                mergeOld(file1=file1.get_media_path(),
                       file2=file2.get_media_path(),
                       output=new_file.get_media_path(),
                       file1_description=file1.description,
@@ -135,7 +135,7 @@ class MergeView(View):
                         ancestor = SnapFile.objects.get(
                             id=ancestor_id).get_media_path()
 
-                    merge(file1=new_file.get_media_path(),
+                    mergeOld(file1=new_file.get_media_path(),
                           file2=file.get_media_path(),
                           output=new_file.get_media_path(),
                           file1_description=file1.description,

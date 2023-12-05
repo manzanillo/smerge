@@ -13,11 +13,22 @@ async function getFiles(projectId : string) {
   return data;*/
 
 
+// export function useFiles(projectId : string) {
+//     //console.log(projectId);
+//     return useQuery<File[], Error>({queryKey: ['files' , projectId], queryFn: () => getFiles(projectId)});
+// }
+
 export function useFiles(projectId : string) {
-    console.log(projectId);
-    return useQuery<File[], Error>({queryKey: ['files' , projectId], queryFn: () => getFiles(projectId)});
+  const queryInfo = useQuery<File[], Error>({queryKey: ['files' , projectId], queryFn: () => getFiles(projectId)});
+
+  const refresh = () => {
+      queryInfo.refetch();
+  };
+
+  return {...queryInfo, refresh};
 }
 
+//{"id": 159, "description": "", "ancestors": [142, 143], "file_url": "/media/159.xml", "timestamp": "2023-12-05 17:38:19.389135+00:00", "number_scripts": 6, "number_sprites": 1, "color": "#076AAB"}
 export type File = {
     id: number,
     file_url: string,
