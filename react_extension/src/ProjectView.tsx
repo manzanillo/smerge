@@ -83,7 +83,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
        { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }
     ];*/
 
-    const cyRef = React.useRef();
+    const cyRef = React.useRef<Cytoscape.Core>();
 
     React.useEffect(() => {
         if (cyRef.current) {
@@ -105,7 +105,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
     return (
         <>
-            <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({nodes: nodes, edges: edges})}
+            <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({nodes: nodes || [], edges: edges || []})}
                                 layout={layout}
                                 style={{
                                     width: '100%', height: '100%', position: 'absolute',
