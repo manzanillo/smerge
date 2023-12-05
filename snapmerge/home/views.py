@@ -577,7 +577,7 @@ class JsRedirectView(View):
     
 class GetBlockerXMLView(View):
     def get(self, request, file_name) -> HttpResponse:
-        dummy_file: str = create_dummy_file(file_name)
+        dummy_file: str = create_dummy_file(file_name, request._current_scheme_host)
         return HttpResponse(dummy_file, content_type='application/xml')
 
 
@@ -667,7 +667,7 @@ def mergeExt(request, proj_id, resolutions):
                 # response = HttpResponseRedirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
                 # response.status_code = 303
                 # return response
-                return HttpResponse(f"http://127.0.0.1/ext/merge/{merge_conflict.id}", status=303)
+                return HttpResponse(f"{request._current_scheme_host}/ext/merge/{merge_conflict.id}", status=303)
                 # return HttpResponseRedirect(f'/ext/merge/{merge_conflict.id}')
                 # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
             

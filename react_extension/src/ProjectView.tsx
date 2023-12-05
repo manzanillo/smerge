@@ -21,6 +21,10 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import cxtmenu from 'cytoscape-cxtmenu';
 
+import downloadIcon from './assets/download.png'
+import colorIcon from './assets/color.png'
+import editIcon from './assets/edit.png'
+
 interface ProjectViewProps {
     projectId: string;
 }
@@ -48,7 +52,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     // console.log(data?.toString());
 
     const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
-        const nodeDefinition: NodeDefinition = { data: { id: file.id.toString(), label: file.description, file_url: file.file_url } };
+        const nodeDefinition: NodeDefinition = { data: { id: file.id.toString(), label: file.description, file_url: file.file_url, color: file.color } };
         return nodeDefinition;
     });
 
@@ -61,7 +65,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
 
     const nodeStyle = {
-        content: 'data(description)',
+        content: 'data(label)',
         textMarginX: 2,
         textOpacity: 0.5,
         textValign: 'center',
@@ -85,7 +89,6 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         node: nodeStyle,
         edge: edgeStyle,
         selected: selectedStyle,
-
     }
 
     /*const elements = [
@@ -193,7 +196,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     }
 
     const mergeNew = (selected) => {
-        const url = `/new_merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
+        const url = `new_merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
         httpService.get(url, (req) => {
             console.log(req.response);
             refresh();
@@ -223,7 +226,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     };
 
     const mergeOld = (selected) => {
-        const url = `/merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
+        const url = `merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
         httpService.get(url, (req) => {
             console.log(req.response);
             refresh();
@@ -293,30 +296,108 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         Cytoscape.use(cxtmenu);
     
         const menu = cyRef.current?.cxtmenu({
-            selector: 'node',
+            menuRadius: 75, // the radius of the circular menu in pixels
+            selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
             commands: [
               {
-                content: 'command 1',
+                fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+                content: `<img src="${downloadIcon}" alt="Download" />`, // html/text content to be displayed in the menu
                 select: function(ele){
-                  console.log(ele);
+                    const element = document.createElement('a');
+                    element.setAttribute('href', ele.data('file_url'));
+                    element.setAttribute('download', ele.data('description'));
+
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+
+                    element.click();
+
+                    document.body.removeChild(element);
                 }
               },
               {
-                content: 'command 2',
+                fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+                content: `<img src="${editIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
                 select: function(ele){
-                  console.log(ele);
+                    console.log(ele.data());
+                }
+              },
+              {
+                fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+                content: `<img src="${colorIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
+                select: function(ele){
+                    const toggle_color_url = 'toggle_color/' + projectId + '/' + ele.id();
+                    console.log(httpService.baseURL);
+                    httpService.get(toggle_color_url, ()=>{refresh();}, (req)=> {console.log(`Url: '${toggle_color_url}' failed. \n ${req}`)}, ()=>{}, true, false)
                 }
               }
-              // add more commands here
-            ]
+            ],
+            fillColor: 'rgba(0, 0, 0, 0.75)', // the background colour of the menu
+            activeFillColor: '#076aab', // the colour used to indicate the selected command
+            activePadding: 20, // additional size in pixels for the active command
+            indicatorSize: 24, // the size in pixels of the pointer to the active command
+            separatorWidth: 5, // the empty spacing in pixels between successive commands
+            spotlightPadding: 4, // extra spacing in pixels between the element and the spotlight
+            minSpotlightRadius: 24, // the minimum radius in pixels of the spotlight
+            maxSpotlightRadius: 38, // the maximum radius in pixels of the spotlight
+            openMenuEvents: 'cxttapstart', // space-separated cytoscape events that will open the menu; only `cxttapstart` and/or `taphold` work here
+            itemColor: 'white', // the colour of text in the command's content
+            itemTextShadowColor: 'transparent', // the text shadow colour of the command's content
+            zIndex: 9999, // the z-index of the ui div
+            atMouse: false // draw menu at mouse position
           });
     }, [])
+
+
+    const cytoscapeStyle = `
+        node {
+            content: 'data(label)',
+            textMarginX: 2,
+            textOpacity: 0.5,
+            textValign: 'center',
+            textHalign: 'right',
+            background-Color: 'data(color)',
+        }
+        edge {
+        /* Your custom styles for edges */
+        }
+        /* More custom styles as needed */
+    `;
     
 
     return (
         <>
             <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({ nodes: nodes || [], edges: edges || [] })}
                 layout={layout}
+                stylesheet={[
+                    {
+                      selector: 'node',
+                      style: {
+                        content: 'data(label)',
+                        "text-margin-x": 2,
+                        "text-opacity": 0.8,
+                        "text-valign": 'center',
+                        "text-halign": 'right',
+                        "background-color": 'data(color)',
+                      }
+                    },
+                    {
+                      selector: 'edge',
+                      style: {
+                        "curve-style": 'bezier',
+                        width: 4,
+                        "target-arrow-shape": 'triangle',
+                        "line-color": '#808080',
+                        "target-arrow-color": '#808080',
+                      }
+                    },
+                    {
+                        selector: 'node:selected', // Define style for selected nodes
+                        style: {
+                          'background-color': '#C39EC1', // Change the background color to pink for selected nodes
+                        },
+                      },                  
+                  ]}
                 style={{
                     width: '100%', height: '100%', position: 'absolute',
                     background: 'white',

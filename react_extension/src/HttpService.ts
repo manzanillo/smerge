@@ -26,7 +26,7 @@ class HttpService {
 
     get(endpoint: string, onSuccess: (_:XMLHttpRequest) => void, onFail: (_:XMLHttpRequest) => void, onRedirect: (_:XMLHttpRequest) => void, suppressNotificationSuccess= false, suppressNotificationFail= false) {
         const xhttp = new XMLHttpRequest();
-        xhttp.open("GET", endpoint, true);
+        xhttp.open("GET", this.baseURL+endpoint, true);
         xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
         xhttp.send();
 

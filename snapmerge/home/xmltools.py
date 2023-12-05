@@ -301,7 +301,7 @@ def get_uid(allocated):
     return str(uuid.uuid1())
 
 
-def create_dummy_file(file_name: str) -> str:
+def create_dummy_file(file_name: str, host: str) -> str:
     """
     Creates a dummy file in the media folder that loads the real project
     :param file_name: the name of the file to be loaded
@@ -309,7 +309,11 @@ def create_dummy_file(file_name: str) -> str:
     """
     with open(settings.BASE_DIR + '/static/snap/data_importer.xml', 'r') as dummy_template:
         cImport_blank_data: str = dummy_template.read()
-        cImport_blank_data = cImport_blank_data.replace('{{url}}', f"{settings.URL}/media/{file_name}")
+        url = host
+        # quick fix to make link agnostic to server location...
+        if ".org" in url:
+            url = url.replace('http', 'https')
+        cImport_blank_data = cImport_blank_data.replace('{{url}}', f"{url}/media/{file_name}")
         return cImport_blank_data
 
 
