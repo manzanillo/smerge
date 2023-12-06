@@ -5,11 +5,11 @@ URL = 'https://idpsmerge.duckdns.org'
 SECRET_KEY = '()fvd?-m+=quyxz*_3v+gjg!d)8n0(wbo*k)(0kwtwuryr4nil'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# hallo i bims
 COMPRESS_OFFLINE = False
 
 # allow cross for testing...
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 SECURE_REFERRER_POLICY = 'unsafe-url'
 CORS_ALLOW_HEADERS = "*"
 
