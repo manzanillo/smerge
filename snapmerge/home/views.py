@@ -284,7 +284,7 @@ class OpenProjectView(View):
                 messages.warning(request, _(
                     'No such project or wrong password'))
             else:
-                return redirect('proj', proj_id=proj.id)
+                return redirect(f'/ext/project_view/{proj.id}')
         else:
             messages.warning(request, _('Invalid Data.'))
 
