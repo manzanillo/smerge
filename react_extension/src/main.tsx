@@ -10,6 +10,7 @@ import ProjectView from './ProjectView.tsx';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import 'react-toastify/dist/ReactToastify.css';
+import ProjectViewTest from './ProjectViewTest.tsx';
 
 
 // const lightTheme: PartialTheme = {
@@ -37,6 +38,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <Router>
                 <Routes>
                     <Route path="ext/project_view/:projectId" element={<ProjectView />}></Route>
+                    <Route path="ext/project_view_test/:projectId" element={<ProjectViewTest />}></Route>
                     <Route path="ext/merge/:code" element={<ConflictStepper />}></Route>
                     <Route path="ext/*" element={<h1>404</h1>}></Route>
                 </Routes>

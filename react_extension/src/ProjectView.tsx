@@ -4,13 +4,14 @@ import type { File } from "./Api.tsx"
 import { useFiles } from "./Api.tsx"
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import dagre from 'cytoscape-dagre';
 import Cytoscape from "cytoscape";
 import { EdgeDefinition, NodeDefinition } from "cytoscape";
 import Fab from "@mui/material/Fab";
 import AddIcon from '@mui/icons-material/Add';
+import useResizeObserver from '@react-hook/resize-observer';
 import {
     Box,
     CircularProgress,
@@ -39,6 +40,7 @@ import cxtmenu from 'cytoscape-cxtmenu';
 import downloadIcon from './assets/download.png'
 import colorIcon from './assets/color.png'
 import editIcon from './assets/edit.png'
+import { lstat } from "fs";
 
 interface ProjectViewProps {
     projectId: string;
@@ -138,16 +140,16 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
     const modalStyle = {
 
-          position: 'absolute' as const,
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
-  } as SxProps ;
+        position: 'absolute' as const,
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    } as SxProps;
 
     const hamburgerStyle = {
         position: 'absolute',
@@ -304,17 +306,14 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     });
 
 
-    useEffect(()=>{
-        Cytoscape.use(cxtmenu);
-
-        const menu = cyRef.current?.cxtmenu({
-            menuRadius: 75, // the radius of the circular menu in pixels
-            selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
-            commands: [
-              {
+    const rightClickMenuSettings = {
+        menuRadius: 75, // the radius of the circular menu in pixels
+        selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
+        commands: [
+            {
                 fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
                 content: `<img src="${downloadIcon}" alt="Download" />`, // html/text content to be displayed in the menu
-                select: function(ele){
+                select: function (ele) {
                     const element = document.createElement('a');
                     element.setAttribute('href', ele.data('file_url'));
                     element.setAttribute('download', ele.data('description'));
@@ -326,38 +325,118 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
                     document.body.removeChild(element);
                 }
-              },
-              {
+            },
+            {
                 fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
                 content: `<img src="${editIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
-                select: function(ele){
+                select: function (ele) {
                     console.log(ele.data());
                 }
-              },
-              {
+            },
+            {
                 fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
                 content: `<img src="${colorIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
-                select: function(ele){
+                select: function (ele) {
                     const toggle_color_url = 'toggle_color/' + projectId + '/' + ele.id();
                     console.log(httpService.baseURL);
-                    httpService.get(toggle_color_url, ()=>{refresh();}, (req)=> {console.log(`Url: '${toggle_color_url}' failed. \n ${req}`)}, ()=>{}, true, false)
+                    httpService.get(toggle_color_url, () => { refresh(); }, (req) => { console.log(`Url: '${toggle_color_url}' failed. \n ${req}`) }, () => { }, true, false)
                 }
-              }
-            ],
-            fillColor: 'rgba(0, 0, 0, 0.75)', // the background colour of the menu
-            activeFillColor: '#076aab', // the colour used to indicate the selected command
-            activePadding: 20, // additional size in pixels for the active command
-            indicatorSize: 24, // the size in pixels of the pointer to the active command
-            separatorWidth: 5, // the empty spacing in pixels between successive commands
-            spotlightPadding: 4, // extra spacing in pixels between the element and the spotlight
-            minSpotlightRadius: 24, // the minimum radius in pixels of the spotlight
-            maxSpotlightRadius: 38, // the maximum radius in pixels of the spotlight
-            openMenuEvents: 'cxttapstart', // space-separated cytoscape events that will open the menu; only `cxttapstart` and/or `taphold` work here
-            itemColor: 'white', // the colour of text in the command's content
-            itemTextShadowColor: 'transparent', // the text shadow colour of the command's content
-            zIndex: 9999, // the z-index of the ui div
-            atMouse: false // draw menu at mouse position
-          });
+            }
+        ],
+        fillColor: 'rgba(0, 0, 0, 0.75)', // the background colour of the menu
+        activeFillColor: '#076aab', // the colour used to indicate the selected command
+        activePadding: 20, // additional size in pixels for the active command
+        indicatorSize: 24, // the size in pixels of the pointer to the active command
+        separatorWidth: 5, // the empty spacing in pixels between successive commands
+        spotlightPadding: 4, // extra spacing in pixels between the element and the spotlight
+        minSpotlightRadius: 24, // the minimum radius in pixels of the spotlight
+        maxSpotlightRadius: 38, // the maximum radius in pixels of the spotlight
+        openMenuEvents: 'cxttapstart', // space-separated cytoscape events that will open the menu; only `cxttapstart` and/or `taphold` work here
+        itemColor: 'white', // the colour of text in the command's content
+        itemTextShadowColor: 'transparent', // the text shadow colour of the command's content
+        zIndex: 9999, // the z-index of the ui div
+        atMouse: false // draw menu at mouse position
+    }
+
+    const cyContainerDiv = useRef(null);
+    useResizeObserver(cyContainerDiv, entry => {
+        debouncedCyResize(entry);
+    });
+
+    const debouncedCyResize = debounce((entry) =>{
+        if(cyContainerDiv.current){
+            // cyRef.current.resize();
+            // cyRef.current.fit();
+            console.log("The device pixel ratio for this browser is: " + window.devicePixelRatio);
+            
+
+            for(const c of cyContainerDiv.current.children[0].children){
+                c.width = entry.target.clientWidth;
+                c.height = entry.target.clientHeight;
+            }
+            cyRef.current.resize();
+            cyRef.current.fit();
+
+            console.log(cyContainerDiv.current.children[0].children);
+            // let sizes = cyRef.current._private.renderer
+            // console.log(sizes);
+            // sizes.canvasWidth = entry.target.clientWidth*4;
+            // sizes.canvasHeight = entry.target.clientHeight*4;
+
+            // sizes.containerBB[2] = entry.target.clientWidth*4;
+            // sizes.containerBB[3] = entry.target.clientHeight*4;
+
+
+            // cyRef.current._private.sizeCache = {width:entry.target.clientWidth*4, height:entry.target.clientHeight*4}
+            console.log(cyRef.current);
+        }
+    }, 200);
+
+
+
+    // Script run only on load and ensured to run only once
+    const ranOnce = useRef<boolean>(false);
+    useEffect(() => {
+        if (!ranOnce.current) {
+          ranOnce.current = true;
+    
+          cyContainerDiv.current = document.getElementsByClassName("__________cytoscape_container")[0] as HTMLDivElement;
+
+          
+
+        //   window.devicePixelRatio = 1;
+    
+
+          
+
+
+
+          return () => {
+          };
+        }
+      }, []);
+
+
+    useEffect(() => {
+        Cytoscape.use(cxtmenu);
+        const menu = cyRef.current?.cxtmenu(rightClickMenuSettings);
+
+        // cyContainerDiv.current.addEventListener("click", (event) => {
+        //     debouncedCyResize(event);
+        //   });
+
+        // console.log(cyRef.current)
+        // let sizes = cyRef.current._private.sizeCache
+        // let cyDiv = document.getElementsByClassName("__________cytoscape_container")[0]
+        // let wantedWidth = cyDiv.clientWidth
+        // let wantedHeight = cyDiv.clientHeight
+        // console.log(cyDiv);
+        // console.log("wanted", wantedHeight, wantedWidth)
+        // console.log(sizes)
+
+        
+
+
     }, [])
 
 
@@ -379,45 +458,51 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
     return (
         <>
-            <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({ nodes: nodes || [], edges: edges || [] })}
+<CytoscapeComponent elements={CytoscapeComponent.normalizeElements({ nodes: nodes || [], edges: edges || [] })}
+                
+                minZoom={0.5}
+                maxZoom={8}
+                autounselectify={false}
                 layout={layout}
                 stylesheet={[
                     {
-                      selector: 'node',
-                      style: {
-                        content: 'data(label)',
-                        "text-margin-x": 2,
-                        "text-opacity": 0.8,
-                        "text-valign": 'center',
-                        "text-halign": 'right',
-                        "background-color": 'data(color)',
-                      }
+                        selector: 'node',
+                        style: {
+                            content: 'data(label)',
+                            "text-margin-x": 2,
+                            "text-opacity": 0.8,
+                            "text-valign": 'center',
+                            "text-halign": 'right',
+                            "background-color": 'data(color)',
+                        }
                     },
                     {
-                      selector: 'edge',
-                      style: {
-                        "curve-style": 'bezier',
-                        width: 4,
-                        "target-arrow-shape": 'triangle',
-                        "line-color": '#808080',
-                        "target-arrow-color": '#808080',
-                      }
+                        selector: 'edge',
+                        style: {
+                            "curve-style": 'bezier',
+                            width: 4,
+                            "target-arrow-shape": 'triangle',
+                            "line-color": '#808080',
+                            "target-arrow-color": '#808080',
+                        }
                     },
                     {
                         selector: 'node:selected', // Define style for selected nodes
                         style: {
-                          'background-color': '#C39EC1', // Change the background color to pink for selected nodes
+                            'background-color': '#C39EC1', // Change the background color to pink for selected nodes
                         },
-                      },
-                  ]}
+                    },
+                ]}
                 style={{
-                    width: '100%', height: '100%', position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
                     background: 'white',
-                    left: '0',
-                    top: '0',
-                    zIndex: '999'
+                    zIndex: '800'
                 }}
+
                 cy={(cy) => { cyRef.current = cy; }} />
+
 
             <h1 className="project-heading" data-proj-id={projectId}>
                 {projectName}
@@ -425,18 +510,19 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                 <div className="project-description"> {projectDescription}</div>
             </h1>
 
+            
 
             <ThemeProvider theme={lightTheme}>
 
-                <Modal open={ modalOpen}  sx={ modalStyle}>
+                <Modal open={modalOpen} sx={modalStyle}>
                     <Box>
-                        <Button onClick={()=>{window.open( `${httpService.baseURL}${projectId}`,"_self");}} style={ {color: "black", backgroundColor: "white"}}>Old ProjectView</Button>
+                        <Button onClick={() => { window.open(`${httpService.baseURL}${projectId}`, "_self"); }} style={{ color: "black", backgroundColor: "white" }}>Old ProjectView</Button>
                     </Box>
                 </Modal>
-                <MenuIcon onClick={ ()=> {
+                <MenuIcon onClick={() => {
                     setModalOpen(true);
                 }
-                } sx={hamburgerStyle}/>
+                } sx={hamburgerStyle} />
 
                 <Box sx={fabStyle}>
                     <Popover
@@ -455,7 +541,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                             horizontal: 'right',
                         }}
                         slotProps={{
-                            paper: { style: { backgroundColor: 'transparent', borderRadius:"32px" } },
+                            paper: { style: { backgroundColor: 'transparent', borderRadius: "32px" } },
                         }}
                     >
                         <Stack direction="row" spacing={1} padding={"5px"}>
