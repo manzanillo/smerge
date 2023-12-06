@@ -11,8 +11,23 @@ import Cytoscape from "cytoscape";
 import { EdgeDefinition, NodeDefinition } from "cytoscape";
 import Fab from "@mui/material/Fab";
 import AddIcon from '@mui/icons-material/Add';
-import { Box, CircularProgress, Color, Grid, Popover, PropTypes, Stack, SxProps, ThemeProvider, Tooltip, Typography, createTheme } from "@mui/material";
+import {
+    Box,
+    CircularProgress,
+    Color,
+    Grid,
+    Popover,
+    PropTypes,
+    Stack,
+    SxProps,
+    ThemeProvider,
+    Tooltip,
+    Typography,
+    createTheme,
+    Button, Modal
+} from "@mui/material";
 import MergeIcon from '@mui/icons-material/Merge';
+import MenuIcon from "@mui/icons-material/Menu";
 import { toast } from "react-toastify";
 import httpService from './HttpService';
 import { debounce } from "lodash";
@@ -64,32 +79,6 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     });
 
 
-    const nodeStyle = {
-        content: 'data(label)',
-        textMarginX: 2,
-        textOpacity: 0.5,
-        textValign: 'center',
-        textHalign: 'right',
-        backgroundColor: 'data(color)',
-    };
-
-    const edgeStyle = {
-        curveStyle: 'bezier',
-        width: 4,
-        targetArrowShape: 'triangle',
-        lineColor: '#808080',
-        targetArrowColor: '#808080',
-    };
-
-    const selectedStyle = {
-        backgroundColor: '#C39EC1',
-    };
-
-    const styles = {
-        node: nodeStyle,
-        edge: edgeStyle,
-        selected: selectedStyle,
-    }
 
     /*const elements = [
        { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
@@ -113,7 +102,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     }
     // const debouncedOpenSnap = debounce(openSnap, 250, { leading: false, trailing: true });
 
-
+    let [modalOpen, setModalOpen] = React.useState(false);
 
     React.useEffect(() => {
         if (cyRef.current) {
@@ -147,6 +136,29 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     //   }, [cyRef]);
 
 
+    const modalStyle = {
+
+          position: 'absolute' as const,
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+  } as SxProps ;
+
+    const hamburgerStyle = {
+        position: 'absolute',
+        top: 30,
+        right: 30,
+        zIndex: 9999,
+        width: 50,
+        height: 50,
+        color: 'black',
+    } as SxProps;
+
     const fabStyle = {
         position: 'absolute',
         borderRadius: '32px',
@@ -177,7 +189,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         e.preventDefault();
 
         const selected = getSelectedNodes();
-        if (selected.length != 2) {
+        if (selected?.length != 2) {
             toast.warning(`Please select two nodes for a merge.`, {
                 position: 'top-right',
                 autoClose: 2000,
@@ -239,8 +251,8 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
     const getSelectedNodes = () => {
         const cy = cyRef.current;
-        const selectedNodes = cy.$('node:selected');
-        const selectedNodeData = selectedNodes.map((node) => node.data());
+        const selectedNodes = cy?.$('node:selected');
+        const selectedNodeData = selectedNodes?.map((node) => node.data());
         console.log(selectedNodeData);
         return selectedNodeData;
     };
@@ -291,10 +303,10 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         },
     });
 
-    
+
     useEffect(()=>{
         Cytoscape.use(cxtmenu);
-    
+
         const menu = cyRef.current?.cxtmenu({
             menuRadius: 75, // the radius of the circular menu in pixels
             selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
@@ -363,7 +375,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         }
         /* More custom styles as needed */
     `;
-    
+
 
     return (
         <>
@@ -396,7 +408,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                         style: {
                           'background-color': '#C39EC1', // Change the background color to pink for selected nodes
                         },
-                      },                  
+                      },
                   ]}
                 style={{
                     width: '100%', height: '100%', position: 'absolute',
@@ -415,13 +427,24 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
 
             <ThemeProvider theme={lightTheme}>
+
+                <Modal open={ modalOpen}  sx={ modalStyle}>
+                    <Box>
+                        <Button onClick={()=>{window.open( `${httpService.baseURL}${projectId}`,"_self");}} style={ {color: "black", backgroundColor: "white"}}>Old ProjectView</Button>
+                    </Box>
+                </Modal>
+                <MenuIcon onClick={ ()=> {
+                    setModalOpen(true);
+                }
+                } sx={hamburgerStyle}/>
+
                 <Box sx={fabStyle}>
                     <Popover
                         id={id}
                         open={open}
                         anchorEl={anchorEl}
                         onClose={handleClose}
-                        
+
                         anchorOrigin={{
                             vertical: 'center',
                             horizontal: 'left',
@@ -448,6 +471,8 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                             </Tooltip>
                         </Stack>
                     </Popover>
+
+
 
                     <Tooltip title={mergeTooltip}>
                         <Fab sx={fabStyle} size="large" color={mergeFabColor} aria-label="add" onContextMenu={handleMergeRightClick} onClick={handleMergePreClick}>
