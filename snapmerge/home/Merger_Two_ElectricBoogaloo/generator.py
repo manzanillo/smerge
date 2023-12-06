@@ -31,6 +31,20 @@ class SnapStage:
         sprites.append(SnapSprite("testSprite", blankScript=self.blankScript).generate())
         return stage
     
+class SnapCustomBlock:
+    def __init__(self, s="Custom", category="other"):
+        self.s = s
+        self.category = category
+        
+    def generate(self):
+        customBlock = ET.Element('block-definition', {'s': self.s, 'type': 'command', 'category': self.category})
+        ET.SubElement(customBlock, 'header')
+        ET.SubElement(customBlock, 'code')
+        ET.SubElement(customBlock, 'translations')
+        ET.SubElement(customBlock, 'inputs')
+        ET.SubElement(customBlock, 'scripts')
+        return customBlock
+    
 class SnapSprite:
     idCounter = 0
     
@@ -200,6 +214,11 @@ class SnapFileGenerator:
         scripts = root.findall('.//scripts')
         if scripts:
             return scripts[1]
+        
+    def getAllBlocks(root: ET.Element):
+        blocks = root.findall('.//blocks')
+        if blocks:
+            return blocks
             
         
 
@@ -222,10 +241,11 @@ def create_snap_file(projectName, versionName):
     tmp.addScene(SnapScene("view"))
     project = tmp.generate()
     scripts_sprite = SnapFileGenerator.getScript(project)
+    blocks = SnapFileGenerator.getAllBlocks(project)
     
     # Finally, write the XML to a file
     tree = ET.ElementTree(project)
-    return tree, scripts_sprite
+    return tree, scripts_sprite, blocks
 
 
 

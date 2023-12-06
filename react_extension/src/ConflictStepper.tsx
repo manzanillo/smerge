@@ -212,7 +212,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
             </StepLabel>
             <StepContent>
               <div className="stepCard">
-                <MergeConflictView leftButtonAction={leftButtonAction} rightButtonAction={rightButtonAction} code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index == activeStep} isText={step.left.file_url.includes(".txt")} />
+                <MergeConflictView leftButtonAction={leftButtonAction} rightButtonAction={rightButtonAction} code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index == activeStep} isText={step.left.file_url.includes(".txt")} isImage={step.left.file_url.includes(".base64")} />
               </div>
 
               <Box sx={{ mb: 2 }}>
