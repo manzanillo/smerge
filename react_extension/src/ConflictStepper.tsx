@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
+import {Helmet} from "react-helmet";
 
 interface ConflictVM {
   hunks: ConflictDto[];
@@ -194,7 +195,33 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
     // }, 1000)
   }
 
-  return (<>{loadingConflict ?
+  return (<>
+        <Helmet>
+           <script src="/csnap/morphic.js"></script>
+    <script src="/csnap/symbols.js"></script>
+    <script src="/csnap/widgets.js"></script>
+    <script src="/csnap/blocks.js"></script>
+    <script src="/csnap/threads.js"></script>
+    <script src="/csnap/objects.js"></script>
+    <script src="/csnap/scenes.js"></script>
+    <script src="/csnap/gui.js"></script>
+    <script src="/csnap/paint.js"></script>
+    <script src="/csnap/lists.js"></script>
+    <script src="/csnap/byob.js"></script>
+    <script src="/csnap/tables.js"></script>
+    <script src="/csnap/sketch.js"></script>
+    <script src="/csnap/video.js"></script>
+    <script src="/csnap/maps.js"></script>
+    <script src="/csnap/extensions.js"></script>
+    <script src="/csnap/xml.js"></script>
+    <script src="/csnap/store.js"></script>
+    <script src="/csnap/locale.js"></script>
+    <script src="/csnap/cloud.js"></script>
+
+    <script src="/csnap/sha512.js"></script>
+    <script src="/csnap/FileSaver.min.js"></script>
+    </Helmet>
+        {loadingConflict ?
     <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>{loadingConfictText}</h1></Stack></Box> :
     <Box sx={{ p: "20px" }}>
       <Stepper activeStep={activeStep} orientation="vertical">
