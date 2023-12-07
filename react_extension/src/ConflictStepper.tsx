@@ -15,7 +15,6 @@ import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
 import {Helmet} from "react-helmet";
-import ScriptTag from 'react-script-tag';
 
 interface ConflictVM {
   hunks: ConflictDto[];
@@ -207,50 +206,50 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
           <Step key={step.id}>
             <StepLabel
 
-              optional={
-                index === conflictData.length - 1 ? (
-                  <Typography variant="caption">Last step</Typography>
-                ) : null
-              }
-            >
-              {`Conflict ${index + 1} of ${conflictData?.length}`}
-            </StepLabel>
-            <StepContent>
-              <div className="stepCard">
-                <MergeConflictView leftButtonAction={leftButtonAction} rightButtonAction={rightButtonAction} code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index == activeStep} isText={step.left.file_url.includes(".txt")} isImage={step.left.file_url.includes(".base64")} />
-              </div>
+                  optional={
+                    index === conflictData.length - 1 ? (
+                      <Typography variant="caption">Last step</Typography>
+                    ) : null
+                  }
+                >
+                  {`Conflict ${index + 1} of ${conflictData?.length}`}
+                </StepLabel>
+                <StepContent>
+                  <div className="stepCard">
+                    <MergeConflictView leftButtonAction={leftButtonAction} rightButtonAction={rightButtonAction} code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index == activeStep} isText={step.left.file_url.includes(".txt")} isImage={step.left.file_url.includes(".base64")} />
+                  </div>
 
-              <Box sx={{ mb: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={() => { handleNext(true) }}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    {index === conflictData.length - 1 ? 'Finish' : 'Continue'}
-                  </Button>
-                  <Button
-                    disabled={index === 0}
-                    onClick={handleBack}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep > conflictData.length - 1 && (
-        <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-            Reset
-          </Button>
-        </Paper>
-      )}
-    </Box>}</>
+                  <Box sx={{ mb: 2 }}>
+                    <div>
+                      <Button
+                        variant="contained"
+                        onClick={() => { handleNext(true) }}
+                        sx={{ mt: 1, mr: 1 }}
+                      >
+                        {index === conflictData.length - 1 ? 'Finish' : 'Continue'}
+                      </Button>
+                      <Button
+                        disabled={index === 0}
+                        onClick={handleBack}
+                        sx={{ mt: 1, mr: 1 }}
+                      >
+                        Back
+                      </Button>
+                    </div>
+                  </Box>
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep > conflictData.length - 1 && (
+            <Paper square elevation={0} sx={{ p: 3 }}>
+              <Typography>All steps completed - you&apos;re finished</Typography>
+              <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                Reset
+              </Button>
+            </Paper>
+          )}
+        </Box>}</>
   )
   //<MergeConflictView code={code}/>
 }
