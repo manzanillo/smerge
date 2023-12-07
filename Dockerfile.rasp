@@ -32,22 +32,42 @@ WORKDIR /app
 COPY /requirements.txt /app
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY /requirements.txt /app
+COPY /smerge.yml /app
+
+COPY /entrypoint.sh /app
+COPY /launch_docker_rasp.sh /app
+COPY /Makefile /app
+
+COPY /secrets /app/
+# Copy your custom Nginx configuration file
+COPY /react_extension/ext_nginx.conf /etc/nginx/conf.d/default.conf
+RUN mkdir -p /etc/letsencrypt/live/idpsmerge.duckdns.org
+COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
+COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
+
+
+COPY /Dockerfile.rasp /app
+
+COPY /package.json /app
+
 RUN npm install
+
+RUN mkdir /app/react_extension
+COPY /react_extension/package.json /app/react_extension
 
 WORKDIR /app/react_extension
 RUN npm install
+
+
+COPY /snapmerge /app/
+COPY /react_extension /app/
 
 WORKDIR /app
 
 RUN chmod +x ./entrypoint.sh
 RUN ./entrypoint.sh
 
-# Copy your custom Nginx configuration file
-COPY /react_extension/ext_nginx.conf /etc/nginx/conf.d/default.conf
-RUN mkdir -p /etc/letsencrypt/live/idpsmerge.duckdns.org
-COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
-COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
 
 # Expose port 80 to allow incoming HTTP traffic
 EXPOSE 80
