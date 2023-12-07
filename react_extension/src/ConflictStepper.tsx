@@ -196,38 +196,15 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   }
 
   return (<>
-        <Helmet>
-          <script src="/ext/csnap/morphic.js"></script>
-          <script src="/ext/csnap/symbols.js"></script>
-          <script src="/ext/csnap/widgets.js"></script>
-          <script src="/ext/csnap/blocks.js"></script>
-          <script src="/ext/csnap/threads.js"></script>
-          <script src="/ext/csnap/objects.js"></script>
-          <script src="/ext/csnap/scenes.js"></script>
-          <script src="/ext/csnap/gui.js"></script>
-          <script src="/ext/csnap/paint.js"></script>
-          <script src="/ext/csnap/lists.js"></script>
-          <script src="/ext/csnap/byob.js"></script>
-          <script src="/ext/csnap/tables.js"></script>
-          <script src="/ext/csnap/sketch.js"></script>
-          <script src="/ext/csnap/video.js"></script>
-          <script src="/ext/csnap/maps.js"></script>
-          <script src="/ext/csnap/extensions.js"></script>
-          <script src="/ext/csnap/xml.js"></script>
-          <script src="/ext/csnap/store.js"></script>
-          <script src="/ext/csnap/locale.js"></script>
-          <script src="/ext/csnap/cloud.js"></script>
 
-          <script src="/ext/csnap/sha512.js"></script>
-          <script src="/ext/csnap/FileSaver.min.js"></script>
-      </Helmet>
-      {loadingConflict ?
-        <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>{loadingConfictText}</h1></Stack></Box> :
-        <Box sx={{ p: "20px" }}>
-          <Stepper activeStep={activeStep} orientation="vertical">
-            {conflictData?.map((step, index) => (
-              <Step key={step.id}>
-                <StepLabel
+
+        {loadingConflict ?
+    <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>{loadingConfictText}</h1></Stack></Box> :
+    <Box sx={{ p: "20px" }}>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {conflictData?.map((step, index) => (
+          <Step key={step.id}>
+            <StepLabel
 
                   optional={
                     index === conflictData.length - 1 ? (
