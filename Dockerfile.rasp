@@ -49,6 +49,8 @@ COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org
 
 COPY /Dockerfile.rasp /app
 
+RUN mkdir /app/node_modules
+COPY /package-lock.json /app
 COPY /package.json /app
 
 RUN npm install
