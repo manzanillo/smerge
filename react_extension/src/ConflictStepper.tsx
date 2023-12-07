@@ -197,82 +197,82 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
 
   return (<>
         <Helmet>
-           <script src="/csnap/morphic.js"></script>
-    <script src="/csnap/symbols.js"></script>
-    <script src="/csnap/widgets.js"></script>
-    <script src="/csnap/blocks.js"></script>
-    <script src="/csnap/threads.js"></script>
-    <script src="/csnap/objects.js"></script>
-    <script src="/csnap/scenes.js"></script>
-    <script src="/csnap/gui.js"></script>
-    <script src="/csnap/paint.js"></script>
-    <script src="/csnap/lists.js"></script>
-    <script src="/csnap/byob.js"></script>
-    <script src="/csnap/tables.js"></script>
-    <script src="/csnap/sketch.js"></script>
-    <script src="/csnap/video.js"></script>
-    <script src="/csnap/maps.js"></script>
-    <script src="/csnap/extensions.js"></script>
-    <script src="/csnap/xml.js"></script>
-    <script src="/csnap/store.js"></script>
-    <script src="/csnap/locale.js"></script>
-    <script src="/csnap/cloud.js"></script>
+          <script src="/ext/csnap/morphic.js"></script>
+          <script src="/ext/csnap/symbols.js"></script>
+          <script src="/ext/csnap/widgets.js"></script>
+          <script src="/ext/csnap/blocks.js"></script>
+          <script src="/ext/csnap/threads.js"></script>
+          <script src="/ext/csnap/objects.js"></script>
+          <script src="/ext/csnap/scenes.js"></script>
+          <script src="/ext/csnap/gui.js"></script>
+          <script src="/ext/csnap/paint.js"></script>
+          <script src="/ext/csnap/lists.js"></script>
+          <script src="/ext/csnap/byob.js"></script>
+          <script src="/ext/csnap/tables.js"></script>
+          <script src="/ext/csnap/sketch.js"></script>
+          <script src="/ext/csnap/video.js"></script>
+          <script src="/ext/csnap/maps.js"></script>
+          <script src="/ext/csnap/extensions.js"></script>
+          <script src="/ext/csnap/xml.js"></script>
+          <script src="/ext/csnap/store.js"></script>
+          <script src="/ext/csnap/locale.js"></script>
+          <script src="/ext/csnap/cloud.js"></script>
 
-    <script src="/csnap/sha512.js"></script>
-    <script src="/csnap/FileSaver.min.js"></script>
-    </Helmet>
-        {loadingConflict ?
-    <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>{loadingConfictText}</h1></Stack></Box> :
-    <Box sx={{ p: "20px" }}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {conflictData?.map((step, index) => (
-          <Step key={step.id}>
-            <StepLabel
+          <script src="/ext/csnap/sha512.js"></script>
+          <script src="/ext/csnap/FileSaver.min.js"></script>
+      </Helmet>
+      {loadingConflict ?
+        <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>{loadingConfictText}</h1></Stack></Box> :
+        <Box sx={{ p: "20px" }}>
+          <Stepper activeStep={activeStep} orientation="vertical">
+            {conflictData?.map((step, index) => (
+              <Step key={step.id}>
+                <StepLabel
 
-              optional={
-                index === conflictData.length - 1 ? (
-                  <Typography variant="caption">Last step</Typography>
-                ) : null
-              }
-            >
-              {`Conflict ${index + 1} of ${conflictData?.length}`}
-            </StepLabel>
-            <StepContent>
-              <div className="stepCard">
-                <MergeConflictView leftButtonAction={leftButtonAction} rightButtonAction={rightButtonAction} code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index == activeStep} isText={step.left.file_url.includes(".txt")} isImage={step.left.file_url.includes(".base64")} />
-              </div>
+                  optional={
+                    index === conflictData.length - 1 ? (
+                      <Typography variant="caption">Last step</Typography>
+                    ) : null
+                  }
+                >
+                  {`Conflict ${index + 1} of ${conflictData?.length}`}
+                </StepLabel>
+                <StepContent>
+                  <div className="stepCard">
+                    <MergeConflictView leftButtonAction={leftButtonAction} rightButtonAction={rightButtonAction} code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index == activeStep} isText={step.left.file_url.includes(".txt")} isImage={step.left.file_url.includes(".base64")} />
+                  </div>
 
-              <Box sx={{ mb: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={() => { handleNext(true) }}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    {index === conflictData.length - 1 ? 'Finish' : 'Continue'}
-                  </Button>
-                  <Button
-                    disabled={index === 0}
-                    onClick={handleBack}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep > conflictData.length - 1 && (
-        <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-            Reset
-          </Button>
-        </Paper>
-      )}
-    </Box>}</>
+                  <Box sx={{ mb: 2 }}>
+                    <div>
+                      <Button
+                        variant="contained"
+                        onClick={() => { handleNext(true) }}
+                        sx={{ mt: 1, mr: 1 }}
+                      >
+                        {index === conflictData.length - 1 ? 'Finish' : 'Continue'}
+                      </Button>
+                      <Button
+                        disabled={index === 0}
+                        onClick={handleBack}
+                        sx={{ mt: 1, mr: 1 }}
+                      >
+                        Back
+                      </Button>
+                    </div>
+                  </Box>
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep > conflictData.length - 1 && (
+            <Paper square elevation={0} sx={{ p: 3 }}>
+              <Typography>All steps completed - you&apos;re finished</Typography>
+              <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                Reset
+              </Button>
+            </Paper>
+          )}
+        </Box>}</>
   )
   //<MergeConflictView code={code}/>
 }
