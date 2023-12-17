@@ -3,6 +3,7 @@
 # Get the currently selected branch
 current_path=$(dirname $0)
 cd $current_path/../../..
+git fetch
 current_branch=$(git symbolic-ref --short HEAD)
 
 # Get a list of remote branches
