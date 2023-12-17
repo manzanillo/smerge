@@ -33,3 +33,15 @@ export const getBranches = async () => {
     }
     return {current_branch:"", remote_branches:[]};
 }
+
+export const switchToBranchAndCommit = async (branch: string, commit: Commit) => {
+    const res = await httpService.post(`/acapi/git/switch`, {
+        "branch":branch, 
+        "commit_hash":commit.hash
+    }) as AxiosResponse;
+
+    if(res.status == 200) {
+        return await res.request.response;
+    }
+    return "";
+}

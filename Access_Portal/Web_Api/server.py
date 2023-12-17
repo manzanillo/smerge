@@ -16,7 +16,7 @@ from Models.User import User
 
 
 
-@app.route("/api/test/<name>")
+@app.route("/acapi/test/<name>")
 def test(name):
     #test_data = db.session.execute("SELECT username, password, isAdmin FROM user").mappings().all()
     test_data = User.query.first()
@@ -29,7 +29,7 @@ def test(name):
     #return test_data, 200
     #return jsonify(test_data), 200
 
-@app.route("/api/login", methods=['GET'])
+@app.route("/acapi/login", methods=['GET'])
 def login():
     username = request.args.get("username")
     password = request.args.get("password")

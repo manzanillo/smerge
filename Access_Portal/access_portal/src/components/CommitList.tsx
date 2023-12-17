@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Avatar, Button, ClickAwayListener, Divider, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Pagination, Skeleton, Stack, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Pagination, Skeleton, Stack, Typography } from '@mui/material';
 import Commit from '../models/Commit';
 import HashDisplay from './HashDisplay';
 import { range } from 'lodash';
 import "./CommitList.css"
-import TurnSlightRightIcon from '@mui/icons-material/TurnSlightRight';
+import { switchToBranchAndCommit } from '../services/GitService';
 
 interface Props {
   data: Commit[];
@@ -109,8 +109,8 @@ const CommitList: React.FC<Props> = ({ data = [{author:"",date:"",msg:"",hash:""
 const customListItem = (key:string ,commit: Commit, branch:string, isLast: boolean, expanded: boolean, handleExpand: () => void) => {
 
   const switchGit = () => {
-    const body = {"branch":branch, "commit_hash":commit.hash}
-    console.log(body);
+    const res = switchToBranchAndCommit(branch, commit)
+    console.log(res);
   }
 
   return (
@@ -138,9 +138,9 @@ const customListItem = (key:string ,commit: Commit, branch:string, isLast: boole
             <Button sx={{ mt:"10px", mb: "20px" }} onClick={switchGit} variant='outlined'>Switch dev server to this commit</Button>
           
           {/* </ClickAwayListener> */}
-          <Button variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
+          {/* <Button variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
                             Select Right
-                        </Button>
+                        </Button> */}
       </Grid></> : <></>}
       {!isLast ? <Divider variant="inset" component="li" sx={{mr:"15px"}}></Divider> : <></>}
     </div>);

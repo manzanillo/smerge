@@ -41,7 +41,7 @@ def decodeJWT(token):
         return (-1, {})
     
 
-@app.get('/api')
+@app.get('/acapi')
 @cross_origin()
 def index():
     #user = User.query.first()
@@ -52,7 +52,7 @@ def index():
     return jsonify(user_dict), 200
 #render_template('index.html', users=users)
 
-@app.get('/api/available/<name>')
+@app.get('/acapi/available/<name>')
 @cross_origin()
 def checkUsernameAvailable(name):
     #user = User.query.first()
@@ -61,7 +61,7 @@ def checkUsernameAvailable(name):
         return "True",200
     return "False", 200
 
-@app.post('/api/add')
+@app.post('/acapi/add')
 @cross_origin()
 def add():
     username = None
@@ -90,7 +90,7 @@ def add():
             #return "Password is missing!", 403
 
 
-@app.post('/api/login')
+@app.post('/acapi/login')
 @cross_origin()
 def login():
     username = None
@@ -126,7 +126,7 @@ def login():
             #return "Password is missing!", 403
         
         
-@app.get('/api/token/valid')
+@app.get('/acapi/token/valid')
 @cross_origin()
 def validatePing():
     if request.authorization:
@@ -144,12 +144,12 @@ def validatePing():
         return "No token!", 400
     
     
-@app.get('/api/git/branches')
+@app.get('/acapi/git/branches')
 @cross_origin()
 def getBranchList():
     return make_response(gitWorker.getBranches(), 200)
 
-@app.post('/api/git/commits')
+@app.post('/acapi/git/commits')
 @cross_origin()
 def getCommits():
     try:
@@ -169,7 +169,7 @@ def getCommits():
     except:
         return "No or malformed json!", 404
     
-@app.post('/api/git/switch')
+@app.post('/acapi/git/switch')
 @cross_origin()
 def switchBranchAndCommit():
     try:
@@ -213,7 +213,7 @@ def switchBranchAndCommit():
         return "No or malformed json!", 404
     
 # mockup for now... fix later
-@app.get('/api/git/icons')
+@app.get('/acapi/git/icons')
 @cross_origin()
 def getIconList():
     ret = {
@@ -223,7 +223,7 @@ def getIconList():
 
 # import random
 from app import generateWhitelist
-@app.get('/api/access/unlock')
+@app.get('/acapi/access/unlock')
 @cross_origin()
 def unlockIp():
     timeSpan = int(getSetting("timeout").value)
@@ -243,7 +243,7 @@ def unlockIp():
 
 
     
-@app.get('/api/access/isUnlocked')
+@app.get('/acapi/access/isUnlocked')
 @cross_origin()
 def isIpUnlocked():
     unlocked = getIpIsUnlocked(request.remote_addr)
@@ -255,7 +255,7 @@ def isIpUnlocked():
     
 
 # Tmp for testing...
-@app.route('/api/access/delete_ip_byID/<int:ip_id>', methods=['DELETE'])
+@app.route('/acapi/access/delete_ip_byID/<int:ip_id>', methods=['DELETE'])
 @cross_origin()
 def delete_id(ip_id):
     if(request.remote_addr != "127.0.0.1"):
@@ -271,7 +271,7 @@ def delete_id(ip_id):
     
     
     
-@app.post('/api/access/setting')
+@app.post('/acapi/access/setting')
 @cross_origin()
 def post_setting():
     if(request.remote_addr != "127.0.0.1"):
@@ -305,7 +305,7 @@ def post_setting():
         else:
             return make_response('Value is missing!', 403)
         
-@app.get('/api/access/setting')
+@app.get('/acapi/access/setting')
 @cross_origin()
 def getSettings():
     ret = getAllSettings()
@@ -313,7 +313,7 @@ def getSettings():
         return make_response('No settings!', 200)
     return make_response([u.as_dict() for u in ret], 200)
 
-@app.get('/api/admin/userToActivate')
+@app.get('/acapi/admin/userToActivate')
 @cross_origin()
 def getToActivate():
     ret = getUserToActivate()
@@ -321,7 +321,7 @@ def getToActivate():
         return make_response('No user!', 200)
     return make_response([u.as_save_dict() for u in ret], 200)
 
-@app.get('/api/admin/getAll')
+@app.get('/acapi/admin/getAll')
 @cross_origin()
 def getAll():
     ret = getAllUser()
@@ -329,7 +329,7 @@ def getAll():
         return make_response('No user!', 200)
     return make_response([u.as_save_dict() for u in ret], 200)
 
-@app.get('/api/admin/activateUser/<string:username>')
+@app.get('/acapi/admin/activateUser/<string:username>')
 @cross_origin()
 def getActivateUser(username):
     ret = activateUser(username)
@@ -338,7 +338,7 @@ def getActivateUser(username):
     return make_response(f'User "{username}"" not found.', 403)
 
 # expects /setAdmin/<name>?state=boolean
-@app.get('/api/admin/setAdmin/<string:username>')
+@app.get('/acapi/admin/setAdmin/<string:username>')
 @cross_origin()
 def getAdminSetState(username):
     state = request.args.get('state').lower() == 'true'
@@ -363,7 +363,7 @@ def getAdminSetState(username):
 
     
 
-@app.post('/api/git')
+@app.post('/acapi/git')
 @cross_origin()
 def handleWebHook():
     return "OK", 200
