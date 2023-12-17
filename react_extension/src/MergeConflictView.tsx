@@ -24,7 +24,7 @@ interface MergeConflictViewProps {
 
 const MergeConflictView: React.FC<MergeConflictViewProps> = ({ leftButtonAction, rightButtonAction, code = "", leftLink="", rightLink="" ,isActive, isText = false, isImage = false}) => {
 
-    const serverEndpoint = "http://127.0.0.1"
+    const serverEndpoint = ""
 
     const [xml1, setXml1] = useState<string>(leftLink.includes(".xml")?(serverEndpoint + leftLink):leftLink.replace("/media", "media"));
     const [xml2, setXml2] = useState<string>(rightLink.includes(".xml")?(serverEndpoint + rightLink):rightLink.replace("/media", "media"));
