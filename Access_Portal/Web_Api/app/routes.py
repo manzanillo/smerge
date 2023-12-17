@@ -366,5 +366,6 @@ def getAdminSetState(username):
 @app.post('/acapi/git')
 @cross_origin()
 def handleWebHook():
+    gitWorker.rebuildCommits()
     return "OK", 200
     
