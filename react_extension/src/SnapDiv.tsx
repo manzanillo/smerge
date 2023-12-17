@@ -1,7 +1,10 @@
-import { useCallback, useEffect, useRef } from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import './MergeConflictView.css'
 import Split from 'react-split'
 import { debounce } from 'lodash';
+import ScriptTag from "react-script-tag";
+import * as React from "react";
+import {Helmet} from "react-helmet";
 
 
 interface SnapDivProps {
@@ -15,6 +18,9 @@ interface SnapDivProps {
 
     const xml1IsFetching = useRef<boolean>(false);
     const xml2IsFetching = useRef<boolean>(false);
+
+
+      const [scriptsLoaded, setScriptsLoaded] = useState<number>(0)
 
     useEffect(() => {
         setTimeout(loadWorld, 100);
@@ -61,7 +67,6 @@ interface SnapDivProps {
         addSnap()
         //document.body.appendChild(script);
     }, []);
-
     var world;
     var world2;
     var ide;
@@ -170,6 +175,31 @@ interface SnapDivProps {
     return (
         // <div className='merge_main_space' >
         //     <div ref={pane} className='merge_main_pane'>
+                <>
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/morphic.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/api.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/symbols.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/widgets.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/blocks.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/threads.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/objects.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/scenes.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/gui.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/paint.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/lists.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/byob.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/tables.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/sketch.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/video.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/maps.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/extensions.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/xml.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/store.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/locale.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/cloud.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/sha512.js" type="text/javascript" />
+                        <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/FileSaver.min.js" type="text/javascript" />
+
                 <Split
                     onDragEnd={(_) => { debouncedUpdateSize(); }}
                     className="split"
@@ -180,7 +210,7 @@ interface SnapDivProps {
                     <div ref={lRec} style={{ width:"100%", height:"100%"}}><canvas ref={leRef} className='leftSplitPane' id="leftEditor" tabIndex={1} ></canvas></div>
                     <div ref={rRec} style={{ width:"100%", height:"100%"}}><canvas ref={riRef} className='rightSplitPane' id="rightEditor" tabIndex={2} ></canvas></div>
                 </Split>
-            
+            </>
     )
 }
 

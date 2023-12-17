@@ -5,25 +5,29 @@ import SnapDiv from './SnapDiv';
 import TurnSlightLeftIcon from '@mui/icons-material/TurnSlightLeft';
 import TurnSlightRightIcon from '@mui/icons-material/TurnSlightRight';
 // import Button from '@mui/material/Button';
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Box, Button, ButtonProps, CircularProgress } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextDiv from './TextDiv';
+import ImageDiv from './ImageDiv';
 
 
 interface MergeConflictViewProps {
+    leftButtonAction: ()=>void;
+    rightButtonAction: ()=>void;
     code?: string;
     isActive?: boolean;
     isText?: boolean;
+    isImage?: boolean;
     leftLink?: string;
     rightLink?: string;
 }
 
-const MergeConflictView: React.FC<MergeConflictViewProps> = ({ code = "", leftLink="", rightLink="" ,isActive, isText = false }) => {
+const MergeConflictView: React.FC<MergeConflictViewProps> = ({ leftButtonAction, rightButtonAction, code = "", leftLink="", rightLink="" ,isActive, isText = false, isImage = false}) => {
 
-    const serverEndpoint = "http://127.0.0.1"
+    const serverEndpoint = ""
 
-    const [xml1, setXml1] = useState<string>(serverEndpoint + leftLink);
-    const [xml2, setXml2] = useState<string>(serverEndpoint + rightLink);
+    const [xml1, setXml1] = useState<string>(leftLink.includes(".xml")?(serverEndpoint + leftLink):leftLink.replace("/media", "media"));
+    const [xml2, setXml2] = useState<string>(rightLink.includes(".xml")?(serverEndpoint + rightLink):rightLink.replace("/media", "media"));
 
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -38,13 +42,13 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({ code = "", leftLi
             {(!isLoaded && isActive && (xml1 != "" && xml2 != "")) ?
                 <div className='merge_main_space' >
                     <div className='merge_main_pane' >
-                        {isText?<TextDiv text1={xml1} text2={xml2}/>:<SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>}
+                        {isText?<TextDiv text1={xml1} text2={xml2}/>:(isImage?<ImageDiv text1={xml1} text2={xml2}/>:<SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>)}
                     </div>
                     <Stack direction="row" spacing={10} justifyContent={"center"} sx={{pt:"20px"}}>
-                        <Button variant="contained" color={"success"} startIcon={<TurnSlightLeftIcon />}>
+                        <Button onClick={leftButtonAction} variant="contained" color={"success"} startIcon={<TurnSlightLeftIcon />}>
                             Select Left
                         </Button>
-                        <Button variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
+                        <Button onClick={rightButtonAction} variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
                             Select Right
                         </Button>
                     </Stack>

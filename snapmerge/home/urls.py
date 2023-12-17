@@ -1,8 +1,15 @@
 from django.conf.urls import url, include
+from django.urls import path
 from . import views
+from .api import views as api_views
+from rest_framework import routers, serializers, viewsets
 
+router = routers.DefaultRouter()
 
 urlpatterns = [
+    path('api/project/<str:id>/files', api_views.ListSnapFilesView.as_view()),
+    path('api/project/<str:id>', api_views.ProjectDetailView.as_view()),
+    path('api/file/<int:id>', api_views.SnapFileDetailView.as_view()),
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^nav/$', views.NavView.as_view(), name='nav'),
     url(r'^impressum/$', views.ImpressumView.as_view(), name='impressum'),
@@ -28,3 +35,6 @@ urlpatterns = [
     url(r'^jsredirect/(?P<file_id>[-\w]+)$', views.JsRedirectView.as_view(), name='jsredirect'),
     url(r'blockerXML/(?P<file_name>[-./\w]+)$',views.GetBlockerXMLView.as_view(), name='getBlockXML'),
 ]
+
+# concat urlpatterns and router.urls
+urlpatterns += router.urls

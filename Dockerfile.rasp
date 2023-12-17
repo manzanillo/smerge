@@ -1,0 +1,88 @@
+# Use the official Nginx slim image as the base image
+FROM nginx:alpine
+
+# Remove the default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+RUN apk update && apk add --no-cache bash
+
+RUN apk --no-cache add python3-dev py3-pip nodejs npm
+
+RUN apk add --update --no-cache --virtual .tmp gcc linux-headers
+
+# RUN apk add --no-cache gcc
+
+RUN apk add --no-cache \
+    libffi-dev \
+    libressl-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libc-dev \
+    zlib-dev
+
+RUN apk add --no-cache jq
+
+RUN mkdir /app
+
+
+
+WORKDIR /app
+COPY /requirements.txt /app
+RUN pip install -r requirements.txt
+
+COPY /requirements.txt /app
+COPY /smerge.yml /app
+
+COPY /entrypoint.sh /app
+COPY /launch_docker_rasp.sh /app
+COPY /Makefile /app
+
+COPY /secrets /app/
+# Copy your custom Nginx configuration file
+COPY /react_extension/ext_nginx.conf /etc/nginx/conf.d/default.conf
+RUN mkdir -p /etc/letsencrypt/live/idpsmerge.duckdns.org
+COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
+COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
+
+
+COPY /Dockerfile.rasp /app
+
+# RUN mkdir /app/node_modules
+COPY /package-lock.json /app
+COPY /package.json /app
+
+
+RUN mkdir /app/react_extension
+COPY /react_extension/package.json /app/react_extension
+
+WORKDIR /app/react_extension
+RUN npm install
+
+COPY /react_extension /app/
+
+WORKDIR /app
+RUN npm install
+COPY /snapmerge /app/
+
+WORKDIR /app
+
+RUN chmod +x ./entrypoint.sh
+RUN ./entrypoint.sh
+
+
+# Expose port 80 to allow incoming HTTP traffic
+EXPOSE 80
+EXPOSE 443
+
+# Start Nginx when the container runs
+CMD ["nginx", "-g", "daemon off;"]
+
+RUN chmod 777 /app/launch_docker_rasp.sh
+
+ENTRYPOINT ["/app/launch_docker_rasp.sh"]
+
+
+# sudo docker build -t smerge_rasp . -f Dockerfile.rasp
+# sudo docker run -d -p 80:80 -p 443:443 smerge_rasp --name raspberry_smerge

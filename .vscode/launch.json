@@ -15,6 +15,18 @@
             ],
             "django": true,
             "justMyCode": true
+        },
+        {
+            "name": "Python: Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/snapmerge/manage.py",
+            "args": [
+                "test",
+                "--settings=config.settings_test"
+            ],
+            "django": true,
+            "justMyCode": true
         }
     ]
 }

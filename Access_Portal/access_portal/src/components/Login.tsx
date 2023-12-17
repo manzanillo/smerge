@@ -149,10 +149,11 @@ const Login = ({onAuthSuccess}:loginProps) => {
       }
     } catch (err) {
       const text = (err as AxiosError).request.response;
+      const code = (err as AxiosError).request.status;
       setPasswordErrorText("Wrong username or password!");
       setUsernameError(true);
       setPasswordError(true);
-      toast.error(text, {
+      toast.error(code==401?text:"API access went wrong!", {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,

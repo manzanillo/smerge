@@ -9,7 +9,7 @@ class HttpService {
 
     constructor() {
         this.instance = axios.create({
-        baseURL: 'http://127.0.0.1/api', // Replace with your API base URL
+        baseURL: '/acapi', // Replace with your API base URL
         timeout: 10000, // Set a timeout for requests (in milliseconds)
         headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3ca6572b-0d3a-4b77-8845-54e7b7e7a9f7" name="Changes" comment="" />
+    <list default="true" id="3ca6572b-0d3a-4b77-8845-54e7b7e7a9f7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pycharm.run/Run Django Server.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pycharm.run/Run Django Server.run.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,9 +16,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2XiHnMCdbgST4iZ38KrOFeYWNB2" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -26,7 +29,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "IDPS-20__Add__Resolution__Steps",
+    "git-widget-placeholder": "IDPS-8-TreePosition",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
@@ -43,6 +46,7 @@
       <option name="presentableId" value="Default" />
       <updated>1699105146427</updated>
       <workItem from="1699105147536" duration="230000" />
+      <workItem from="1699194800308" duration="247000" />
     </task>
     <servers />
   </component>

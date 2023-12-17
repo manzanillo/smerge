@@ -34,6 +34,7 @@
     "cytoscape-qtip": "^2.8.0",
     "jquery": "^3.5.1",
     "materialize-css": "^1.0.0",
+    "react-script-tag": "^1.1.2",
     "timeago.js": "^4.0.0-beta.2"
   }
 }
