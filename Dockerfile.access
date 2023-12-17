@@ -32,7 +32,7 @@ RUN apk add --no-cache \
 
 RUN apk add --no-cache jq
 
-RUN mkdir /app
+# RUN mkdir /app
 
 WORKDIR /app
 
