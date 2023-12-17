@@ -367,5 +367,6 @@ def getAdminSetState(username):
 @cross_origin()
 def handleWebHook():
     gitWorker.rebuildCommits()
+    gitWorker.loadData()
     return "OK", 200
     
