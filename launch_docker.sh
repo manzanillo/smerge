@@ -19,7 +19,7 @@ npx vite --port=4000 2>&1 &
 
 
 cd "$SCRIPT_DIR"
-python ./snapmerge/manage.py runserver --settings=config.settings_docker 2>&1 &
+python ./snapmerge/manage.py runserver --settings=config.settings_test 2>&1 &
 
 # Change directory to your Vite app's directory
 cd "$SCRIPT_DIR/react_extension"
