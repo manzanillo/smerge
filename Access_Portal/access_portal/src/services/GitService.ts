@@ -35,7 +35,7 @@ export const getBranches = async () => {
 }
 
 export const switchToBranchAndCommit = async (branch: string, commit: Commit) => {
-    const res = await httpService.post(`/acapi/git/switch`, {
+    const res = await httpService.post(`/git/switch`, {
         "branch":branch, 
         "commit_hash":commit.hash
     }) as AxiosResponse;
