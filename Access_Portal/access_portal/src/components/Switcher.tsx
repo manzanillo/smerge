@@ -1,9 +1,10 @@
 
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Box, CircularProgress, Divider, FormControl, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import Commit from '../models/Commit';
 import CommitList from './CommitList';
-import { getBranches, getCommits } from "../services/GitService";
+import { getBranches, getCommits, getStatus } from "../services/GitService";
 import { useCallback, useEffect, useState } from 'react';
+import "./Switcher.css";
 
 export default function Switch() {
 //   const tmpData = [{
@@ -19,8 +20,12 @@ export default function Switch() {
 
   const [branches, setBranches] = useState<string[]>([]);
 
+  const [gitStatusText, setGitStatusText] = useState("");
+
   const gatherBranches = useCallback(async () => {
+    const gitStat = await getStatus()
     const branchData = await getBranches();
+    setGitStatusText(gitStat);
     setBranches(branchData.remote_branches);
     setBranch(branchData.remote_branches.filter((b:string) => b.includes(branchData.current_branch))[0]);
   }, []);
@@ -65,6 +70,18 @@ export default function Switch() {
         justifyItems="center"
         sx={{ height: "100%", overflow: "scroll", p:"20px" }}
       >
+        <Stack>
+          <h2 style={{marginBottom:"5px", textDecorationLine:"underline"}}>Current Git Status:</h2>
+          <Paper className="statusPaper" sx={{p:"10px", borderRadius:"15px", bgcolor: 'background.paper'}}>
+            {gitStatusText==""?<CircularProgress />:
+              <Typography component="pre">
+                {gitStatusText}
+              </Typography>
+            }
+          </Paper>
+
+          <Divider sx={{mb:"20px", mt:"20px"}}></Divider>
+        
         <Grid>
           <Grid container >
             <div style={{width:"200px", paddingBottom:"10px"}}>
@@ -89,7 +106,9 @@ export default function Switch() {
           <Grid>
             <CommitList data={commits} branch={branch} isLoading={isLoading}></CommitList>
           </Grid>
-      </Grid>
+          </Grid>
+        </Stack>
+        
       </Grid>
     </Box>
   );

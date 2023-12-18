@@ -61,6 +61,11 @@ class gitWorker:
         return self.json_data["all_branches"]
     
     @staticmethod
+    def getCurrentGitStatus():
+        output = subprocess.check_output('git status', shell=True, stderr=subprocess.STDOUT)
+        return output
+    
+    @staticmethod
     def convertJsonToString(j):
         return json.dumps(j, indent=2)
     

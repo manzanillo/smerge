@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
-import {Helmet} from "react-helmet";
+import ScriptTag from "react-script-tag";
 
 interface ConflictVM {
   hunks: ConflictDto[];
@@ -195,8 +195,33 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
     // }, 1000)
   }
 
+  const [scriptsLoaded, setScriptsLoaded] = useState<number>(0)
+
   return (<>
 
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/morphic.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/api.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/symbols.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/widgets.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/blocks.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/threads.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/objects.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/scenes.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/gui.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/paint.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/lists.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/byob.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/tables.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/sketch.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/video.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/maps.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/extensions.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/xml.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/store.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/locale.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/cloud.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/sha512.js" type="text/javascript" />
+      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/FileSaver.min.js" type="text/javascript" />
 
         {loadingConflict ?
     <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>{loadingConfictText}</h1></Stack></Box> :

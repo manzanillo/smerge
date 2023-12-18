@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, g
 from app import app, db, gW as gitWorker
 from app.models import User
 import json
@@ -15,18 +15,33 @@ def token_required(func):
     # decorator factory which invoks update_wrapper() method and passes decorated function as an argument
     @wraps(func)
     def decorated(*args, **kwargs):
-        token = request.args.get('bearer')
+        # token = request.args.get('bearer')
+        # if not token:
+        #     return jsonify({'Alert!': f'Token is missing! ({request.args})'}), 401
+        token = None
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].replace('Bearer ', '')
+
         if not token:
-            return jsonify({'Alert!': 'Token is missing!'}), 401
+            return jsonify({'message': 'Token is missing!'}), 401
 
-        try:
-
-            data = jwt.decode(token, app.config['SECRET_KEY'])
-        # You can use the JWT errors in exception
-        # except jwt.InvalidTokenError:
-        #     return 'Invalid token. Please log in again.'
-        except:
+        result, data = decodeJWT(token)
+        if result == 0:
+            return jsonify({'Message': 'Token expired!'}), 403
+        elif result == -1:
             return jsonify({'Message': 'Invalid token'}), 403
+        
+        g.user = data
+        return func(*args, **kwargs)
+    return decorated
+
+def admin(func):
+    # decorator factory which invoks update_wrapper() method and passes decorated function as an argument
+    @wraps(func)
+    def decorated(*args, **kwargs):
+        isAdmin = g.user["isAdmin"]
+        if not isAdmin:
+            return jsonify({'Message': 'Admin rights needed!'}), 403
         return func(*args, **kwargs)
     return decorated
 
@@ -41,16 +56,16 @@ def decodeJWT(token):
         return (-1, {})
     
 
-@app.get('/acapi')
-@cross_origin()
-def index():
-    #user = User.query.first()
-    user = getUser("test")
-    if not user:
-        return "No entry found.",404
-    user_dict = [x.as_dict() for x in user]
-    return jsonify(user_dict), 200
-#render_template('index.html', users=users)
+# @app.get('/acapi')
+# @cross_origin()
+# def index():
+#     #user = User.query.first()
+#     user = getUser("test")
+#     if not user:
+#         return "No entry found.",404
+#     user_dict = [x.as_dict() for x in user]
+#     return jsonify(user_dict), 200
+# #render_template('index.html', users=users)
 
 @app.get('/acapi/available/<name>')
 @cross_origin()
@@ -146,11 +161,24 @@ def validatePing():
     
 @app.get('/acapi/git/branches')
 @cross_origin()
+@token_required
+# @admin
 def getBranchList():
     return make_response(gitWorker.getBranches(), 200)
 
+
+@app.get('/acapi/git/status')
+@cross_origin()
+@token_required
+# @admin
+def getGitStatus():
+    return make_response(gitWorker.getCurrentGitStatus(), 200)
+
+
+
 @app.post('/acapi/git/commits')
 @cross_origin()
+@token_required
 def getCommits():
     try:
         request_data = request.get_json()
@@ -171,6 +199,7 @@ def getCommits():
     
 @app.post('/acapi/git/switch')
 @cross_origin()
+@token_required
 def switchBranchAndCommit():
     try:
         request_data = request.get_json()
@@ -215,6 +244,7 @@ def switchBranchAndCommit():
 # mockup for now... fix later
 @app.get('/acapi/git/icons')
 @cross_origin()
+@token_required
 def getIconList():
     ret = {
         
@@ -225,6 +255,7 @@ def getIconList():
 from app import generateWhitelist
 @app.get('/acapi/access/unlock')
 @cross_origin()
+@token_required
 def unlockIp():
     timeSpan = int(getSetting("timeout").value)
     ret = addUnlockedIp("tmp", request.remote_addr, timeSpan)
@@ -245,6 +276,7 @@ def unlockIp():
     
 @app.get('/acapi/access/isUnlocked')
 @cross_origin()
+@token_required
 def isIpUnlocked():
     unlocked = getIpIsUnlocked(request.remote_addr)
     if unlocked != None:
@@ -257,6 +289,7 @@ def isIpUnlocked():
 # Tmp for testing...
 @app.route('/acapi/access/delete_ip_byID/<int:ip_id>', methods=['DELETE'])
 @cross_origin()
+@token_required
 def delete_id(ip_id):
     if(request.remote_addr != "127.0.0.1"):
         return "Only internal allowed...", 401
@@ -273,6 +306,8 @@ def delete_id(ip_id):
     
 @app.post('/acapi/access/setting')
 @cross_origin()
+@token_required
+@admin
 def post_setting():
     if(request.remote_addr != "127.0.0.1"):
         return "Only internal allowed...", 401
@@ -307,6 +342,8 @@ def post_setting():
         
 @app.get('/acapi/access/setting')
 @cross_origin()
+@token_required
+@admin
 def getSettings():
     ret = getAllSettings()
     if(ret == None):
@@ -315,6 +352,8 @@ def getSettings():
 
 @app.get('/acapi/admin/userToActivate')
 @cross_origin()
+@token_required
+@admin
 def getToActivate():
     ret = getUserToActivate()
     if(ret == None):
@@ -323,6 +362,8 @@ def getToActivate():
 
 @app.get('/acapi/admin/getAll')
 @cross_origin()
+@token_required
+@admin
 def getAll():
     ret = getAllUser()
     if(ret == None):
@@ -331,6 +372,8 @@ def getAll():
 
 @app.get('/acapi/admin/activateUser/<string:username>')
 @cross_origin()
+@token_required
+@admin
 def getActivateUser(username):
     ret = activateUser(username)
     if(ret == "Switched"):
@@ -340,6 +383,8 @@ def getActivateUser(username):
 # expects /setAdmin/<name>?state=boolean
 @app.get('/acapi/admin/setAdmin/<string:username>')
 @cross_origin()
+@token_required
+@admin
 def getAdminSetState(username):
     state = request.args.get('state').lower() == 'true'
     ret = setAdminState(username, state)

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Avatar, Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Pagination, Skeleton, Stack, Typography } from '@mui/material';
+import { Avatar, Button, ClickAwayListener, Divider, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Pagination, Skeleton, Stack, Typography } from '@mui/material';
 import Commit from '../models/Commit';
 import HashDisplay from './HashDisplay';
 import { range } from 'lodash';
@@ -134,10 +134,10 @@ const customListItem = (key:string ,commit: Commit, branch:string, isLast: boole
       {expanded ? <>
       <Divider sx={{ mt: "10px", mb: "10px" }} variant="middle" orientation='horizontal' flexItem />
       <Grid container justifyContent={"center"}>
-          {/* <ClickAwayListener onClickAway={() => handleExpand()}> */}
+          <ClickAwayListener onClickAway={() => handleExpand()}>
             <Button sx={{ mt:"10px", mb: "20px" }} onClick={switchGit} variant='outlined'>Switch dev server to this commit</Button>
           
-          {/* </ClickAwayListener> */}
+          </ClickAwayListener>
           {/* <Button variant="contained" color={"warning"} endIcon={<TurnSlightRightIcon />}>
                             Select Right
                         </Button> */}

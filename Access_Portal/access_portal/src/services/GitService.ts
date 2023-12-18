@@ -34,6 +34,16 @@ export const getBranches = async () => {
     return {current_branch:"", remote_branches:[]};
 }
 
+export const getStatus = async () => {
+    const res = await httpService.get(`/git/status`) as AxiosResponse;
+
+    if(res.status == 200) {
+        const statusText = await res.data;
+        return statusText;
+    }
+    return "Failed loading git status!";
+}
+
 export const switchToBranchAndCommit = async (branch: string, commit: Commit) => {
     const res = await httpService.post(`/git/switch`, {
         "branch":branch, 
