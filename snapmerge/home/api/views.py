@@ -1,6 +1,8 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework import generics
 from rest_framework import permissions
+from rest_framework.response import Response
+
 from ..models import SnapFile, Project
 from .serializers import SnapFileSerializer, ProjectSerializer
 from django.shortcuts import get_object_or_404
@@ -49,3 +51,20 @@ class SnapFileDetailView(generics.RetrieveAPIView):
     serializer_class = SnapFileSerializer
     lookup_field = 'id'
     permission_classes = [permissions.AllowAny]
+
+
+class SnapFilePositionView(generics.UpdateAPIView):
+    """
+    API endpoint that allows for the position of a file to be updated.
+    """
+    queryset = SnapFile.objects.all()
+    serializer_class = SnapFileSerializer
+    lookup_field = 'id'
+    permission_classes = [permissions.AllowAny]
+
+    def put(self, request, *args, **kwargs):
+        snap_file = self.get_object()
+        snap_file.xPosition = request.data['x']
+        snap_file.yPosition = request.data['y']
+        snap_file.save()
+        return Response(status=status.HTTP_200_OK)

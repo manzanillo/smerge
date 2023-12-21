@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/project/<str:id>/files', api_views.ListSnapFilesView.as_view()),
     path('api/project/<str:id>', api_views.ProjectDetailView.as_view()),
     path('api/file/<int:id>', api_views.SnapFileDetailView.as_view()),
+    path('api/file/<int:id>/position', api_views.SnapFilePositionView.as_view()),
     re_path('api/sendEventPing', views.SendEventPing.as_view(), name='sendEventPing'),
     # re_path(r'^ws/([-\w]+)', consumers.ChatConsumer.as_asgi()),
     # path('events/', include(django_eventstream.urls), {'channels': ['test']}),

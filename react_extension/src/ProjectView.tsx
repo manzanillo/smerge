@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./ProjectView.css"
-import type { File } from "./Api.tsx"
+import {File, useUpdateNodePosition} from "./Api.tsx"
 import { useFiles } from "./Api.tsx"
 
 
@@ -31,7 +31,7 @@ import MergeIcon from '@mui/icons-material/Merge';
 import MenuIcon from "@mui/icons-material/Menu";
 import { toast } from "react-toastify";
 import httpService from './HttpService';
-import { debounce } from "lodash";
+import {debounce, forEach, toNumber} from "lodash";
 import { green } from "@mui/material/colors";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
@@ -55,6 +55,8 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
 
     // const layout = {name: 'dagre'};
 
+    const {mutate: positionMutate, error: positionError} = useUpdateNodePosition();
+
     const layout = {
         name: 'dagre',
         fit: true, // Whether to fit to viewport
@@ -69,7 +71,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     // console.log(data?.toString());
 
     const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
-        const nodeDefinition: NodeDefinition = { data: { id: file.id.toString(), label: file.description, file_url: file.file_url, color: file.color } };
+        const nodeDefinition: NodeDefinition = { data: { id: file.id.toString(), label: file.description, file_url: file.file_url, color: file.color, position: !file.xPosition || !file.yPosition ? undefined : {x : file.xPosition, y:file.yPosition}} };
         return nodeDefinition;
     });
 
@@ -107,9 +109,26 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     let [modalOpen, setModalOpen] = React.useState(false);
 
     React.useEffect(() => {
+        if (cyRef.current)
+            cyRef.current.on("mouseup", "node", (evt) => {
+                if(evt.target.data() && evt.target.position){
+                    positionMutate({id: toNumber(evt.target.data().id), position: evt.target.position()});
+                }
+            });
+        return () => {
+            if (cyRef.current) cyRef.current.removeListener("mouseup", "node");
+        }
+    } , [positionMutate, nodes]);
+
+    React.useEffect(() => {
         if (cyRef.current) {
             const layout = cyRef.current.layout({ name: 'dagre' });
             layout.run();
+            nodes?.forEach((node) => {
+                if (node.data.id && node.data.position){
+                    cyRef.current?.getElementById(node.data.id)?.position(node.data.position);}
+                });
+
 
             cyRef.current.on('dblclick', 'node', function (evt) {
                 const node = evt.target;

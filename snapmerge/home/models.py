@@ -61,6 +61,8 @@ class SnapFile(File):
         FileExtensionValidator(['xml', 'XML'])])
     # thumbnail = models.ImageField(_("Thumbnail"), null=True, blank=True)
     user = models.CharField(_("user"), max_length=30, null=True)
+    xPosition = models.FloatField(_("xPosition"), null=True)
+    yPosition = models.FloatField(_("yPosition"), null=True)
 
     @classmethod
     def create_and_save(cls, project, file, ancestors=None, user=None, description=''):
@@ -93,7 +95,9 @@ class SnapFile(File):
             'timestamp': str(self.timestamp),
             'number_scripts': self.number_scripts,
             'number_sprites': self.number_sprites,
-            'color': self.color
+            'color': self.color,
+            'xPosition': self.xPosition,
+            'yPosition': self.yPosition
         }
 
     def get_media_path(self):
@@ -123,7 +127,6 @@ class SnapFileForm(ModelForm):
             'file': _('File (optional)'),
             'description': _('Description (optional)'),
         }
-        
 
 
 class ConflictFile(File):
@@ -174,8 +177,6 @@ class ConflictFile(File):
         verbose_name_plural = _("ConflictFiles")
 
 
-
-
 class MergeConflict(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     left = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="leftFile")
@@ -188,7 +189,7 @@ class Hunk(models.Model):
     left = models.ForeignKey(ConflictFile, on_delete=models.CASCADE, related_name="leftHunk")
     right = models.ForeignKey(ConflictFile, on_delete=models.CASCADE, related_name="rightHunk")
     choice = models.CharField(_("choice"), max_length=30, null=True)
-    
+
     def as_dict(self):
         return {
             'id': self.id,
@@ -196,5 +197,3 @@ class Hunk(models.Model):
             'right': self.right.as_dict(),
             'choice': self.choice if self.choice != None else ""
         }
-
-
