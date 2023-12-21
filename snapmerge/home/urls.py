@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/project/<str:id>/files', api_views.ListSnapFilesView.as_view()),
     path('api/project/<str:id>', api_views.ProjectDetailView.as_view()),
     path('api/file/<int:id>', api_views.SnapFileDetailView.as_view()),
+    path('api/file/<int:id>/position', api_views.SnapFilePositionView.as_view()),
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^nav/$', views.NavView.as_view(), name='nav'),
     url(r'^impressum/$', views.ImpressumView.as_view(), name='impressum'),

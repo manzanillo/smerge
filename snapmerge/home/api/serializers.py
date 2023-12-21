@@ -23,4 +23,4 @@ class SnapFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SnapFile
         fields = ('id', 'file_url', 'description', 'project', 'ancestors', 'timestamp', 'number_scripts',
-                  'number_sprites', 'color')
+                  'number_sprites', 'color', 'xPosition', 'yPosition')
