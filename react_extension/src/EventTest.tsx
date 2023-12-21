@@ -24,7 +24,7 @@ const EventTest: React.FC<EventTestProps> = () => {
     //     // }, false);
     // }, 200)
     useEffect(()=>{
-        const chatSocket = new WebSocket('ws://127.0.0.1/ws/test/');
+        const chatSocket = new WebSocket('wss://rs-kubuntu.local/ws/test/');
       
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);

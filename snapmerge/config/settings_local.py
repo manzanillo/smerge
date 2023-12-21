@@ -23,6 +23,12 @@ CHANNEL_LAYERS = {
     },
 }
 
-ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', 'smerge.org', 'idpsmerge.duckdns.org', 'smerge_server']
+CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
+    'https://rs-kubuntu.local'
+]
+
+CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + ['https://rs-kubuntu.local']
+
+ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', 'smerge.org', 'idpsmerge.duckdns.org', 'smerge_server', 'rs-kubuntu.local']
 
 DEBUG = True
