@@ -124,6 +124,11 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         if (cyRef.current) {
             const layout = cyRef.current.layout({ name: 'dagre' });
             layout.run();
+            nodes?.forEach((node) => {
+                if (node.data.id && node.data.position){
+                    cyRef.current?.getElementById(node.data.id)?.position(node.data.position);}
+                });
+
 
             cyRef.current.on('dblclick', 'node', function (evt) {
                 const node = evt.target;
