@@ -30,6 +30,10 @@ docker-compose -f docker-compose.fub.yml build
 ## Without docker
 
 ```
+# remove all pip installs
+# only for reinstall
+# pip freeze | xargs pip uninstall -y
+
 pip install -r requirements.txt
 npm install
 ```

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseBadRequest
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
 
 from . import models
 from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, MergeConflict, Hunk
@@ -25,6 +25,7 @@ from channels.layers import get_channel_layer
 
 from .Merger_Two_ElectricBoogaloo.merger import merge, Conflict, Resolution, Step
 from uuid import uuid4
+from django_eventstream import send_event
 
 
 def generate_unique_PIN():
@@ -713,3 +714,67 @@ class ResolveHunkView(View):
             return HttpResponse('invalid data ', status=400)
         except:
             return HttpResponse('Hunk not found', status=400)
+        
+        
+        
+        
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+def send_message_to_group(message):
+    # Get the channel layer
+    channel_layer = get_channel_layer()
+
+    # Send a message to the group
+    async_to_sync(channel_layer.group_send)(
+        'test',  # The name of the group
+        {
+            'type': 'chat_message',  # The type of the message
+            'message': message  # The message
+        }
+    )
+        
+@method_decorator(csrf_exempt, name='dispatch')
+class SendEventPing(View):
+    def post(self, request):
+        try:
+            j = json.loads(request.body.decode("utf-8"))
+            roomId = j["roomId"]
+
+            if roomId != None:
+                msg = j["msg"]
+                if msg != None:
+                    send_message_to_group('update')
+                    return HttpResponse('Ping sent.', status=200)
+                else:
+                    return HttpResponse('Missing msg!', status=400)
+            return HttpResponse('Missing roomId!', status=400)
+        except:
+            return HttpResponse('Something went wrong!', status=400)
+        
+        
+# import asyncio
+
+# from django.http import StreamingHttpResponse
+# import time
+
+
+# async def sse_stream(request):
+#     """
+#     Sends server-sent events to the client.
+#     """
+#     async def event_stream():
+#         print("Events")
+#         emojis = ["🚀", "🐎", "🌅", "🦾", "🍇"]
+#         i = 0
+#         while True:
+#             yield f'data: {random.choice(emojis)} {i}\n\n'
+#             i += 1
+#             print("jeet")
+#             time.sleep(1)
+#             # await asyncio.sleep(1)
+
+#     return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
+
+def index(request):
+    return render(request, 'sse.html')

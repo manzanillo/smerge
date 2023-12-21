@@ -28,6 +28,9 @@ DEBUG = False
 # Application definition
 
 INSTALLED_APPS = [
+    # "daphne",
+    "django.contrib.sites",
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'channels',
+    # 'django_eventstream',
     'home',
+    'channels',
     'compressor',
     'compressor_toolkit',
     'rest_framework',
@@ -52,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_grip.GripMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -78,6 +83,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+ASGI_APPLICATION = 'config.asgi.application'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# GRIP_URL = 'http://127.0.0.1:5561'
+
 # cors
 CORS_ORIGIN_WHITELIST = [
     'https://snap.berkeley.edu',
@@ -97,7 +107,7 @@ CORS_ORIGIN_WHITELIST = [
 
 #CSRF_COOKIE_DOMAIN = 'faui20q.cs.fau.de/smerge'
 
-CSRF_TRUSTED_ORIGINS = ['snap.berkeley.edu', 'berkeley.edu']
+CSRF_TRUSTED_ORIGINS = [' https://snap.berkeley.edu', ' https://berkeley.edu']
 
 
 # Database
