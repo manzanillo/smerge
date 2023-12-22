@@ -30,7 +30,7 @@ import {
 import MergeIcon from '@mui/icons-material/Merge';
 import MenuIcon from "@mui/icons-material/Menu";
 import { toast } from "react-toastify";
-import httpService from './HttpService';
+import httpService from './services/HttpService.ts';
 import {debounce, forEach, toNumber} from "lodash";
 import { green } from "@mui/material/colors";
 import CheckIcon from '@mui/icons-material/Check';
@@ -41,6 +41,8 @@ import downloadIcon from './assets/download.png'
 import colorIcon from './assets/color.png'
 import editIcon from './assets/edit.png'
 import { lstat } from "fs";
+import useEffectInit from "./shared/useEffectInit.ts";
+import pushService from "./services/PushService.ts";
 
 interface ProjectViewProps {
     projectId: string;
@@ -435,6 +437,16 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         }
       }, []);
 
+      useEffectInit(()=>{
+        setTimeout(()=>{
+            pushService.open("test", (e) => { console.log(data); refresh(); });
+        }, 100);
+
+        return () => {
+            pushService.close("test")
+        }
+      },[])
+
 
     useEffect(() => {
         Cytoscape.use(cxtmenu);
@@ -474,13 +486,14 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         /* More custom styles as needed */
     `;
 
-
+    const [zoom, setZoom] = useState(1.0);
     return (
         <>
 <CytoscapeComponent elements={CytoscapeComponent.normalizeElements({ nodes: nodes || [], edges: edges || [] })}
-                
                 minZoom={0.5}
                 maxZoom={8}
+                zoom={zoom}
+                wheelSensitivity={0.5}
                 autounselectify={false}
                 layout={layout}
                 stylesheet={[

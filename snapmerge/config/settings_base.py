@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    # 'django_eventstream',
+    'django_eventstream',
     'home',
     'channels',
     'compressor',

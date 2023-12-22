@@ -3,7 +3,7 @@ import Split from 'react-split'
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
-import httpService from './HttpService';
+import httpService from './services/HttpService';
 import { Box, CircularProgress, Stack } from '@mui/material';
 
 
