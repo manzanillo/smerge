@@ -744,7 +744,8 @@ class SendEventPing(View):
             if roomId != None:
                 msg = j["msg"]
                 if msg != None:
-                    send_message_to_group('update')
+                    send_event(roomId, 'message', {'text': msg})
+                    #send_message_to_group('update')
                     return HttpResponse('Ping sent.', status=200)
                 else:
                     return HttpResponse('Missing msg!', status=400)

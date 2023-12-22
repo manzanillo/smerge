@@ -1,6 +1,6 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
 import axios from "axios";
-import httpService from './HttpService';
+import httpService from './services/HttpService';
 
 async function getFiles(projectId : string) {
     const url = httpService.baseURL + 'api/project/' + projectId + '/files';

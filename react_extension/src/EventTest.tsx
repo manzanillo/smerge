@@ -1,94 +1,64 @@
-import React, { useCallback, useEffect } from "react";
-import ScriptTag from "react-script-tag";
+import React, { useRef, useState } from "react";
+import useEffectInit from "./shared/useEffectInit";
+
+// import './eventstream/eventsource.min.js';
+// import './eventstream/reconnecting-eventsource.js';
+import { Button, CircularProgress, Divider, List, ListItem, ListItemText, Paper, Stack, TextField } from "@mui/material";
+import pushService from "./services/PushService";
+
 
 interface EventTestProps {
 }
 
 const EventTest: React.FC<EventTestProps> = () => {
 
-    // setTimeout(()=>{
-    //     console.log("added rec")
-    //     // const es = new ReconnectingEventSource('/events/');
+  const path = useRef("");
+  const [inputValue, setInputValue] = useState("");
+  // useEffectInit(() => {
+  // with timeout to enable normal loading
+  // setTimeout(() => {
+  function handleButtonClick() {
+    if (path.current != "") pushService.close(path.current);
+    pushService.open(inputValue, (e) => { console.log(data); setData(a => [...a, e.text]); });
+    path.current = inputValue;
+  }
+  // console.log("added rec")
+  // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // // @ts-ignore
+  // const es: EventSource = new ReconnectingEventSource('/events/test/');
 
-    //     // es.addEventListener('message', function (e) {
-    //     //     console.log(e.data);
-    //     // }, false);
+  // es.addEventListener('message', function (e) {
+  //   console.log(e);
+  //   console.log(e.data);
+  // }, false);
 
-    //     const eventSource = new EventSource('http://127.0.0.1/events/1234');
-    //     eventSource.onmessage = (event) => {
-    //         console.log(event);
-    //     };
-    
-    //     // es.addEventListener('stream-reset', function (e) {
-    //     //     // ... client fell behind, reinitialize ...
-    //     // }, false);
-    // }, 200)
-    useEffect(()=>{
-        const chatSocket = new WebSocket('wss://rs-kubuntu.local/ws/test/');
-      
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            console.log(data);
-        };
-        
-        chatSocket.onclose = function(e) {
-          console.error('The socket closed unexpectedly');
-        };
-  
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-        
-            chatSocket.send(JSON.stringify({
-            'message': message,
-            'username': "jochen",
-            'room': "test"
-            }));
-        
-            messageInputDom.value = '';
-        };
-    }, [])
-    
+  // }, 100);
+  // }, [])
 
-    return (
+  const [data, setData] = useState<string[]>([]);
+
+  return (
     <>
-        <section className="section">
-      <div className="container">
-        <div className="columns is-multiline">
-            <div className="column is-6 is-offset-3">
-              <section className="hero is-primary">
-                <div className="hero-body">
-                  <p className="title">Chatty</p>
-                  <p className="subtitle">A simple chat built with Django, Channels and Redis</p>
-                </div>
-              </section>
-            </div>
-
-            <div className="column is-6 is-offset-3">
-              <div className="box">     
-                <div id="chat-messages">
-                </div>
-              </div>
-
-              <div className="field">
-                <div className="control">
-                  <input className="input" type="text" placeholder="Message" id="chat-message-input"/>
-                </div>
-              </div>
-
-              <div className="field">
-                <div className="control">
-                  <a className="button is-info" id="chat-message-submit">Submit</a>
-                </div>
-              </div>
-
-              <small className="has-text-grey-light">Your username: Jochen</small>
-            </div>
-          </div>
-       </div>
-    </section>
+      <Paper style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '100px' }} elevation={3}>
+        <Stack>
+          <TextField value={inputValue} onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setInputValue(event.target.value); }} id="standard-basic" label="Stream Name" variant="standard" />
+          <Button onClick={handleButtonClick} variant="contained">Start EventStream</Button>
+          <Divider sx={{ mt: "10px", mb: "10px" }} />
+          {!data ?
+            <CircularProgress /> :
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+              {data.map((value: string, index: number) => (
+                <ListItem
+                  key={index+"_"+value}
+                >
+                  <ListItemText primary={`Msg ${value}`} />
+                </ListItem>
+              ))}
+            </List>}
+        </Stack>
+      </Paper>
     </>
-    )
+  )
 }
 
 export default EventTest;
