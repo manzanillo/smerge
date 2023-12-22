@@ -578,7 +578,7 @@ class JsRedirectView(View):
     
 class GetBlockerXMLView(View):
     def get(self, request, file_name) -> HttpResponse:
-        dummy_file: str = create_dummy_file(file_name, request._current_scheme_host)
+        dummy_file: str = create_dummy_file(file_name, f"{request.scheme}://{request.get_host()}")
         return HttpResponse(dummy_file, content_type='application/xml')
 
 
