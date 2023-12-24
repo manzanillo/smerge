@@ -28,7 +28,7 @@ CHANNEL_LAYERS = {
 }
 
 CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
-    'https://rs-kubuntu.local'
+    'https://rs-kubuntu.local', 'https://air.local'
 ]
 
 CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + ['https://rs-kubuntu.local'] + ['https://air.local']

@@ -16,8 +16,14 @@ async function getFiles(projectId : string) {
 
 async function updateNodePosition( positionUpdate : PositionUpdate) {
     const url = httpService.baseURL + 'api/file/' + positionUpdate.id + '/position';
-    const { status} = await axios.put(url, positionUpdate.position);
-    return status;
+    if (positionUpdate.position == null) {
+        const { status} = await axios.put(url, {x:null, y:null});
+        return status;
+    }
+    else {
+       const { status} = await axios.put(url, positionUpdate.position);
+       return status;
+    }
 }
 
 export function useUpdateNodePosition() {
@@ -45,7 +51,7 @@ export function useFiles(projectId : string) {
 
 export type PositionUpdate = {
     id : number
-    position : cytoscape.Position
+    position : cytoscape.Position | null
 }
 
 //{"id": 159, "description": "", "ancestors": [142, 143], "file_url": "/media/159.xml", "timestamp": "2023-12-05 17:38:19.389135+00:00", "number_scripts": 6, "number_sprites": 1, "color": "#076AAB"}

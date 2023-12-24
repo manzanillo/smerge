@@ -1,14 +1,14 @@
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import "./ProjectView.css"
 import {File, useUpdateNodePosition} from "./Api.tsx"
-import { useFiles } from "./Api.tsx"
+import {useFiles} from "./Api.tsx"
 
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import dagre from 'cytoscape-dagre';
 import Cytoscape from "cytoscape";
-import { EdgeDefinition, NodeDefinition } from "cytoscape";
+import {EdgeDefinition, NodeDefinition} from "cytoscape";
 import Fab from "@mui/material/Fab";
 import AddIcon from '@mui/icons-material/Add';
 import useResizeObserver from '@react-hook/resize-observer';
@@ -29,10 +29,10 @@ import {
 } from "@mui/material";
 import MergeIcon from '@mui/icons-material/Merge';
 import MenuIcon from "@mui/icons-material/Menu";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import httpService from './services/HttpService.ts';
 import {debounce, forEach, toNumber} from "lodash";
-import { green } from "@mui/material/colors";
+import {green} from "@mui/material/colors";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import cxtmenu from 'cytoscape-cxtmenu';
@@ -40,7 +40,7 @@ import cxtmenu from 'cytoscape-cxtmenu';
 import downloadIcon from './assets/download.png'
 import colorIcon from './assets/color.png'
 import editIcon from './assets/edit.png'
-import { lstat } from "fs";
+import {lstat} from "fs";
 import useEffectInit from "./shared/useEffectInit.ts";
 import pushService from "./services/PushService.ts";
 
@@ -51,7 +51,7 @@ interface ProjectViewProps {
 Cytoscape.use(dagre);
 
 const ProjectView: React.FC<ProjectViewProps> = () => {
-    const { projectId } = useParams();
+    const {projectId} = useParams();
     const projectName: string = "";
     const projectDescription: string = "";
 
@@ -68,22 +68,29 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     };
 
 
-    const { data, error, isLoading, refresh } = useFiles(String(projectId));
+    const {data, error, isLoading, refresh} = useFiles(String(projectId));
     if (error) console.log(error);
     // console.log(data?.toString());
 
     const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
-        const nodeDefinition: NodeDefinition = { data: { id: file.id.toString(), label: file.description, file_url: file.file_url, color: file.color, position: !file.xPosition || !file.yPosition ? undefined : {x : file.xPosition, y:file.yPosition}} };
+        const nodeDefinition: NodeDefinition = {
+            data: {
+                id: file.id.toString(),
+                label: file.description,
+                file_url: file.file_url,
+                color: file.color,
+                position: !file.xPosition || !file.yPosition ? undefined : {x: file.xPosition, y: file.yPosition}
+            }
+        };
         return nodeDefinition;
     });
 
     const edges: EdgeDefinition[] | undefined = data?.flatMap((file: File) => {
         return file.ancestors.map((ancestor: number) => {
-            const edgeDefinition: EdgeDefinition = { data: { source: ancestor.toString(), target: file.id.toString() } };
+            const edgeDefinition: EdgeDefinition = {data: {source: ancestor.toString(), target: file.id.toString()}};
             return edgeDefinition;
         });
     });
-
 
 
     /*const elements = [
@@ -108,28 +115,30 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     }
     // const debouncedOpenSnap = debounce(openSnap, 250, { leading: false, trailing: true });
 
-    let [modalOpen, setModalOpen] = React.useState(false);
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
+    // update node position on server after mouseup
     React.useEffect(() => {
         if (cyRef.current)
             cyRef.current.on("mouseup", "node", (evt) => {
-                if(evt.target.data() && evt.target.position){
+                if (evt.target.data() && evt.target.position) {
                     positionMutate({id: toNumber(evt.target.data().id), position: evt.target.position()});
                 }
             });
         return () => {
             if (cyRef.current) cyRef.current.removeListener("mouseup", "node");
         }
-    } , [positionMutate, nodes]);
+    }, [positionMutate, nodes]);
 
     React.useEffect(() => {
         if (cyRef.current) {
-            const layout = cyRef.current.layout({ name: 'dagre' });
+            const layout = cyRef.current.layout({name: 'dagre'});
             layout.run();
             nodes?.forEach((node) => {
-                if (node.data.id && node.data.position){
-                    cyRef.current?.getElementById(node.data.id)?.position(node.data.position);}
-                });
+                if (node.data.id && node.data.position) {
+                    cyRef.current?.getElementById(node.data.id)?.position(node.data.position);
+                }
+            });
 
 
             cyRef.current.on('dblclick', 'node', function (evt) {
@@ -141,7 +150,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                 openSnap(`https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` + node.data("file_url").replace("/media/", ""));
             });
         }
-    }, [cyRef, nodes]);
+    }, [nodes]);
 
     // temp, stop more than two nodes to be selected
     // bug when selecting node, then force unselect and select again without clear first... can be ignored for now...
@@ -281,7 +290,6 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     };
 
 
-
     const [progress, setProgress] = React.useState(0);
     let timerId: NodeJS.Timeout | null = null;
 
@@ -309,8 +317,13 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     };
 
 
-
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+
+    const handleModalClose = () => {
+        console.log("close Modal");
+        setModalOpen(false);
+    }
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -360,7 +373,12 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                 select: function (ele) {
                     const toggle_color_url = 'toggle_color/' + projectId + '/' + ele.id();
                     console.log(httpService.baseURL);
-                    httpService.get(toggle_color_url, () => { refresh(); }, (req) => { console.log(`Url: '${toggle_color_url}' failed. \n ${req}`) }, () => { }, true, false)
+                    httpService.get(toggle_color_url, () => {
+                        refresh();
+                    }, (req) => {
+                        console.log(`Url: '${toggle_color_url}' failed. \n ${req}`)
+                    }, () => {
+                    }, true, false)
                 }
             }
         ],
@@ -384,14 +402,14 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         debouncedCyResize(entry);
     });
 
-    const debouncedCyResize = debounce((entry) =>{
-        if(cyContainerDiv.current){
+    const debouncedCyResize = debounce((entry) => {
+        if (cyContainerDiv.current) {
             // cyRef.current.resize();
             // cyRef.current.fit();
             console.log("The device pixel ratio for this browser is: " + window.devicePixelRatio);
-            
 
-            for(const c of cyContainerDiv.current.children[0].children){
+
+            for (const c of cyContainerDiv.current.children[0].children) {
                 c.width = entry.target.clientWidth;
                 c.height = entry.target.clientHeight;
             }
@@ -414,38 +432,35 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     }, 200);
 
 
-
     // Script run only on load and ensured to run only once
     const ranOnce = useRef<boolean>(false);
     useEffect(() => {
         if (!ranOnce.current) {
-          ranOnce.current = true;
-    
-          cyContainerDiv.current = document.getElementsByClassName("__________cytoscape_container")[0] as HTMLDivElement;
+            ranOnce.current = true;
 
-          
-
-        //   window.devicePixelRatio = 1;
-    
-
-          
+            cyContainerDiv.current = document.getElementsByClassName("__________cytoscape_container")[0] as HTMLDivElement;
 
 
+            //   window.devicePixelRatio = 1;
 
-          return () => {
-          };
+
+            return () => {
+            };
         }
-      }, []);
+    }, []);
 
-      useEffectInit(()=>{
-        setTimeout(()=>{
-            pushService.open("test", (e) => { console.log(data); refresh(); });
+    useEffectInit(() => {
+        setTimeout(() => {
+            pushService.open("test", (e) => {
+                console.log(data);
+                refresh();
+            });
         }, 100);
 
         return () => {
             pushService.close("test")
         }
-      },[])
+    }, [])
 
 
     useEffect(() => {
@@ -464,8 +479,6 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
         // console.log(cyDiv);
         // console.log("wanted", wantedHeight, wantedWidth)
         // console.log(sizes)
-
-        
 
 
     }, [])
@@ -487,9 +500,22 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
     `;
 
     const [zoom, setZoom] = useState(1.0);
+
+    const resetLayout = () => {
+        nodes?.forEach((node) => {
+            positionMutate({id: toNumber(node.data.id), position: null});
+        });
+    }
+
+    const centerRoot = () => {
+        //get root nodes cytoscape
+        cyRef?.current?.nodes().roots().forEach((root) => positionMutate({id: toNumber(root.id()), position: null}));
+    }
+
     return (
         <>
-<CytoscapeComponent elements={CytoscapeComponent.normalizeElements({ nodes: nodes || [], edges: edges || [] })}
+            <CytoscapeComponent
+                elements={CytoscapeComponent.normalizeElements({nodes: nodes || [], edges: edges || []})}
                 minZoom={0.5}
                 maxZoom={8}
                 zoom={zoom}
@@ -533,28 +559,37 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                     zIndex: '800'
                 }}
 
-                cy={(cy) => { cyRef.current = cy; }} />
+                cy={(cy) => {
+                    cyRef.current = cy;
+                }}/>
 
 
             <h1 className="project-heading" data-proj-id={projectId}>
                 {projectName}
-                <br />
+                <br/>
                 <div className="project-description"> {projectDescription}</div>
             </h1>
 
-            
 
             <ThemeProvider theme={lightTheme}>
 
-                <Modal open={modalOpen} sx={modalStyle}>
-                    <Box>
-                        <Button onClick={() => { window.open(`${httpService.baseURL}${projectId}`, "_self"); }} style={{ color: "black", backgroundColor: "white" }}>Old ProjectView</Button>
+                <Modal open={modalOpen} onClose={handleModalClose}>
+                    <Box sx={modalStyle}>
+                        <Stack spacing={2}>
+                            <Button variant="contained" onClick={() => {
+                                window.open(`${httpService.baseURL}${projectId}`, "_self");
+                            }}>Old ProjectView</Button>
+
+                            <Button variant="contained" onClick={resetLayout}>Reset Project Layout</Button>
+
+                            <Button variant="contained" onClick={centerRoot}>Center Root</Button>
+                        </Stack>
                     </Box>
                 </Modal>
                 <MenuIcon onClick={() => {
                     setModalOpen(true);
                 }
-                } sx={hamburgerStyle} />
+                } sx={hamburgerStyle}/>
 
                 <Box sx={fabStyle}>
                     <Popover
@@ -573,28 +608,30 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                             horizontal: 'right',
                         }}
                         slotProps={{
-                            paper: { style: { backgroundColor: 'transparent', borderRadius: "32px" } },
+                            paper: {style: {backgroundColor: 'transparent', borderRadius: "32px"}},
                         }}
                     >
                         <Stack direction="row" spacing={1} padding={"5px"}>
                             <Tooltip title={"Cancel"}>
-                                <Fab sx={{ p: "5px" }} size="large" color="error" aria-label="remove" onClick={handleClose}>
-                                    <CloseIcon />
+                                <Fab sx={{p: "5px"}} size="large" color="error" aria-label="remove"
+                                     onClick={handleClose}>
+                                    <CloseIcon/>
                                 </Fab>
                             </Tooltip>
                             <Tooltip title={"Confirm"}>
-                                <Fab sx={{ p: "5px" }} size="large" color="success" aria-label="add" onClick={handleMergeClick}>
-                                    <CheckIcon />
+                                <Fab sx={{p: "5px"}} size="large" color="success" aria-label="add"
+                                     onClick={handleMergeClick}>
+                                    <CheckIcon/>
                                 </Fab>
                             </Tooltip>
                         </Stack>
                     </Popover>
 
 
-
                     <Tooltip title={mergeTooltip}>
-                        <Fab sx={fabStyle} size="large" color={mergeFabColor} aria-label="add" onContextMenu={handleMergeRightClick} onClick={handleMergePreClick}>
-                            <MergeIcon />
+                        <Fab sx={fabStyle} size="large" color={mergeFabColor} aria-label="add"
+                             onContextMenu={handleMergeRightClick} onClick={handleMergePreClick}>
+                            <MergeIcon/>
                         </Fab>
                     </Tooltip>
                 </Box>
