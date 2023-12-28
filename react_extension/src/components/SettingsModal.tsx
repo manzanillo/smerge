@@ -55,7 +55,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout}) 
 
     const [lay, setLay] = useState("preset");
 
-    const layoutNames = ["null", "preset", "random", "grid", "circle", "concentric", "breadthfirst", "cose"]
+    const layoutNames = ["null", "dagre", "preset", "random", "grid", "circle", "concentric", "breadthfirst", "cose"]
 
     return (<>
         <Modal open={modalOpen} onClose={handleModalClose}>

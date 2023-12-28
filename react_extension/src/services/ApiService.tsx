@@ -28,6 +28,14 @@ async function updateNodePosition( positionUpdate : PositionUpdate) {
     }
 }
 
+async function updateNodePositions( positionUpdates : PositionUpdate[]) {
+    // console.log("update now");
+    // return 200;
+    const url = httpService.baseURL + 'api/file/' + positionUpdates[0].id + '/positions';
+    const { status} = await axios.put(url, positionUpdates);
+    return status;
+}
+
 export function useUpdateNodePosition(projectId: string, queryClient: QueryClient) {
     return useMutation<number, Error, PositionUpdate>({mutationKey: ['update_node_position'], mutationFn: updateNodePosition,onMutate: (variable) => {onMutateFile(variable, projectId, queryClient)}});
 }
@@ -69,7 +77,7 @@ const onMutateFile = async (variables: PositionUpdate, projectId: string, queryC
   }
 
 export function useUpdateNodePositions() {
-    return useMutation<number[],  Error, PositionUpdate[]>({mutationKey: ['update_node_positions'], mutationFn: (positionUpdates: PositionUpdate[]) => Promise.all(positionUpdates.map(updateNodePosition))});
+    return useMutation<number,  Error, PositionUpdate[]>({mutationKey: ['update_node_positions'], mutationFn: (positionUpdates: PositionUpdate[]) => updateNodePositions(positionUpdates)});
 }
 
 // export function useFiles(projectId : string) {
@@ -81,7 +89,7 @@ export function useFiles(projectId : string) {
   const queryInfo = useQuery<File[], Error>({queryKey: ['files' , projectId], queryFn: () => getFiles(projectId)});
 
   const refresh = () => {
-      queryInfo.refetch();
+      queryInfo.refetch().then(r => console.log(r));
   };
 
   return {...queryInfo, refresh};
