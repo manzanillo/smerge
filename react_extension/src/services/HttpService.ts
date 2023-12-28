@@ -24,29 +24,35 @@ class HttpService {
         return b ? b.pop() : "";
     }
 
+    getAsync<T>(endpoint: string): Promise<T>{
+        return new Promise((resolve, reject) => {
+            this.get(endpoint, (xHttp) => resolve(JSON.parse(xHttp.responseText)), reject, reject, true, false);
+        });
+    }
+    
     get(endpoint: string, onSuccess: (_:XMLHttpRequest) => void, onFail: (_:XMLHttpRequest) => void, onRedirect: (_:XMLHttpRequest) => void, suppressNotificationSuccess= false, suppressNotificationFail= false) {
         const xhttp = new XMLHttpRequest();
         xhttp.open("GET", this.baseURL+endpoint, true);
         xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
         xhttp.send();
-
+    
         xhttp.onreadystatechange = function () {
             if (xhttp.readyState === 4 && xhttp.status <= 299) {
                 onSuccess(xhttp);
                 if (suppressNotificationSuccess) return;
-
+    
                 toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
                     position: 'top-right',
                     autoClose: 2000,
                     hideProgressBar: false,
                 });
-
+    
             } else if (xhttp.readyState === 4 && xhttp.status <= 399 ) {
                 onRedirect(xhttp)
             } else if (xhttp.readyState === 4){
                 onFail(xhttp)
                 if (suppressNotificationFail) return;
-
+    
                 toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
                     position: 'top-right',
                     autoClose: 2000,

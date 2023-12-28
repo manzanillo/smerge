@@ -1,10 +1,10 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, QueryClient, useQueryClient} from '@tanstack/react-query';
 import axios from "axios";
-import httpService from './services/HttpService';
+import httpService from './HttpService';
 
 async function getFiles(projectId : string) {
-    const url = httpService.baseURL + 'api/project/' + projectId + '/files';
-    const { data } = await axios.get(url);
+    const url = 'api/project/' + projectId + '/files';
+    const data = await httpService.getAsync<File[]>(url);
     return data;
 }
 
@@ -15,6 +15,8 @@ async function getFiles(projectId : string) {
 
 
 async function updateNodePosition( positionUpdate : PositionUpdate) {
+    // console.log("update now");
+    // return 200;
     const url = httpService.baseURL + 'api/file/' + positionUpdate.id + '/position';
     if (positionUpdate.position == null) {
         const { status} = await axios.put(url, {x:null, y:null});
@@ -26,9 +28,45 @@ async function updateNodePosition( positionUpdate : PositionUpdate) {
     }
 }
 
-export function useUpdateNodePosition() {
-    return useMutation<number, Error, PositionUpdate>({mutationKey: ['update_node_position'], mutationFn: updateNodePosition});
+export function useUpdateNodePosition(projectId: string, queryClient: QueryClient) {
+    return useMutation<number, Error, PositionUpdate>({mutationKey: ['update_node_position'], mutationFn: updateNodePosition,onMutate: (variable) => {onMutateFile(variable, projectId, queryClient)}});
 }
+
+// const queryClient = new QueryClient({
+//     defaultOptions: {
+//       queries: {
+//         staleTime: Infinity,
+//       },
+//     },
+//   })
+
+const onMutateFile = async (variables: PositionUpdate, projectId: string, queryClient: QueryClient) => {
+    const { successCb, errorCb } = variables;
+  
+    // // get the cached values of 'get-planets'
+    const previousValue: File[] | undefined = queryClient.getQueryData(['files' , projectId]);
+    // console.log(previousValue);
+  
+    // // set the cached data with an added object
+    // // i.e the new planet posted
+    if (previousValue){
+        queryClient.setQueryData(
+            ['files' , projectId],
+            previousValue.map((file) => {
+                if(file.id == variables.id){
+                    file.xPosition = variables?.position?.x ?? 0;
+                    file.yPosition = variables?.position?.y ?? 0;
+                    return file;
+                }
+                return file;
+            })
+        );
+    }
+    
+    // return previousValue here 
+    // we will use it in the next section
+    return { successCb, errorCb, previousValue };
+  }
 
 export function useUpdateNodePositions() {
     return useMutation<number[],  Error, PositionUpdate[]>({mutationKey: ['update_node_positions'], mutationFn: (positionUpdates: PositionUpdate[]) => Promise.all(positionUpdates.map(updateNodePosition))});

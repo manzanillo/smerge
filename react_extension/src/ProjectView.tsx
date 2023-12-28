@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import "./ProjectView.css"
-import {File, useUpdateNodePosition} from "./Api.tsx"
-import {useFiles} from "./Api.tsx"
+import {File, useUpdateNodePosition} from "./services/ApiService.tsx"
+import {useFiles} from "./services/ApiService.tsx"
 
 
 import React, {useEffect, useRef, useState} from 'react';
@@ -79,15 +79,16 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                 label: file.description,
                 file_url: file.file_url,
                 color: file.color,
-                position: !file.xPosition || !file.yPosition ? undefined : {x: file.xPosition, y: file.yPosition}
-            }
+                position: !file.xPosition || !file.yPosition ? undefined : { x: file.xPosition, y: file.yPosition }
+            },
+            position: !file.xPosition || !file.yPosition ? undefined : { x: file.xPosition, y: file.yPosition }
         };
         return nodeDefinition;
     });
 
     const edges: EdgeDefinition[] | undefined = data?.flatMap((file: File) => {
         return file.ancestors.map((ancestor: number) => {
-            const edgeDefinition: EdgeDefinition = {data: {source: ancestor.toString(), target: file.id.toString()}};
+            const edgeDefinition: EdgeDefinition = { data: { source: ancestor.toString(), target: file.id.toString() } };
             return edgeDefinition;
         });
     });

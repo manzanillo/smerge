@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from ..models import SnapFile, Project
 from .serializers import SnapFileSerializer, ProjectSerializer
 from django.shortcuts import get_object_or_404
+from django_eventstream import send_event
 
 # class ListSnapFilesView(generics.ListAPIView):
 #     """
@@ -67,4 +68,7 @@ class SnapFilePositionView(generics.UpdateAPIView):
         snap_file.xPosition = request.data['x']
         snap_file.yPosition = request.data['y']
         snap_file.save()
+        
+        send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
+        
         return Response(status=status.HTTP_200_OK)
