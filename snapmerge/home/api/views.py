@@ -72,7 +72,6 @@ class SnapFilePositionView(generics.UpdateAPIView):
         snap_file.save()
 
         send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
-        print("Update", str(snap_file.project_id))
 
         return Response(status=status.HTTP_200_OK)
 
@@ -88,7 +87,6 @@ class SnapFilePositionsView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         snap_files = self.get_queryset()
-        print(snap_files)
         for data in request.data:
             snap_file = snap_files.get(id=data['id'])
             snap_file.xPosition = data['position']['x']

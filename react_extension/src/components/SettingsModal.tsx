@@ -2,13 +2,15 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectCh
 import MenuIcon from "@mui/icons-material/Menu";
 import httpService from "../services/HttpService";
 import { useState } from "react";
+import "./SettingsModal.css";
 
 interface SettingsModalProps {
     projectId: string;
     changeLayout: (layoutName: string)=>void;
+    initLayout?: string;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout}) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout, initLayout="preset"}) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     const handleModalClose = () => {
@@ -17,7 +19,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout}) 
     }
 
     const modalStyle = {
-
         position: 'absolute' as const,
         top: '50%',
         left: '50%',
@@ -26,7 +27,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout}) 
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
-        p: 4,
+        p: 4
     } as SxProps;
 
     const hamburgerStyle = {
@@ -53,13 +54,13 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout}) 
         console.log(event.target.value)
     };
 
-    const [lay, setLay] = useState("preset");
+    const [lay, setLay] = useState(initLayout);
 
     const layoutNames = ["null", "dagre", "preset", "random", "grid", "circle", "concentric", "breadthfirst", "cose"]
 
     return (<>
-        <Modal open={modalOpen} onClose={handleModalClose}>
-            <Box sx={modalStyle}>
+        <Modal open={modalOpen} onClose={handleModalClose} style={{border:'none'}}>
+            <Box sx={modalStyle} id={"settingsModal"}>
                 <Stack spacing={2}>
                     <Button variant="contained" onClick={() => {
                         window.open(`${httpService.baseURL}${projectId}`, "_self");
@@ -79,9 +80,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout}) 
                         onChange={handleChange}
                         >
                         {layoutNames.map((name) => (<MenuItem key={name} value={name}>{name}</MenuItem>))}
-                        {/* <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem> */}
                         </Select>
                     </FormControl>
                     </Box>

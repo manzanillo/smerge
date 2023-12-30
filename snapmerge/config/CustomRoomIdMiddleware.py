@@ -19,9 +19,6 @@ class CustomRoomIdMiddleware(BaseMiddleware):
         path_segments = path.split('/')
         room_id = path_segments[-2]
         scope["url_route"] = {'args': (), 'kwargs':{'channels': [room_id]}}
-            #'url_route': {'args': (), 'kwargs': {}}
-        # else:
-        #     print("inscope")
         
     async def __call__(self, scope, receive, send):
         scope = dict(scope)

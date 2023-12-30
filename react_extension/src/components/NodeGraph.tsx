@@ -5,10 +5,10 @@ import {useParams} from 'react-router-dom';
 import {File, useFiles, useUpdateNodePosition, useUpdateNodePositions} from '../services/ApiService';
 import useEffectInit from '../shared/useEffectInit';
 import pushService from '../services/PushService';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {CircularProgress, Fab} from '@mui/material';
+import React, {useEffect, useRef, useState} from 'react';
+import {Fab} from '@mui/material';
 import PublishIcon from '@mui/icons-material/Publish';
-import {debounce, toNumber} from "lodash";
+import {toNumber} from "lodash";
 import {useQueryClient} from '@tanstack/react-query';
 import SettingsModal from './SettingsModal';
 
@@ -31,6 +31,12 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
     const {mutate: positionsMutate} = useUpdateNodePositions();
 
     const lastPositionUpdate = useRef(Date.now());
+
+    const savedLayoutKey = "savedLayout";
+    const savedLayout : string = (()=>{
+        const ret = localStorage.getItem(savedLayoutKey)
+        return ret ?? 'preset';
+    })();
 
     const [layout, setLayout] = useState({
         // name: 'dagre',
@@ -73,19 +79,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
     const ranFirstAgain = useRef(false)
     useEffect(() => {
         if (cy.current && !isLoading) {
-            // rerender();
-
-            // if (layout.name == 'null') {
-            //     nodes?.forEach((node) => {
-            //         if (node.data.id && node.data.position) {
-            //             cy.current?.getElementById(node.data.id)?.position(node.data.position);
-            //         }
-            //     });
-            // }
             setElements([...nodes ?? [], ...edges ?? []]);
-
-            console.log("hallo")
-
 
             cy.current?.on('dblclick', 'node', function (evt) {
                 const node = evt.target;
@@ -96,18 +90,14 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
             });
 
             cy.current?.on("dragfree", "node", (evt) => {
-                console.log(layout.name);
                 if(layout.name !== "preset") return;
 
-                console.log("mutate");
                 positionMutate({id: toNumber(evt.target.data().id), position: evt.target.position()});
                 lastPositionUpdate.current = Date.now();
             });
 
             if (!ranFirstAgain.current) {
                 setTimeout(() => {
-                    console.log("center oder so")
-
                     cy.current?.fit();
                     cy.current?.center();
                 }, 1);
@@ -131,17 +121,34 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
         return selectedNodeData;
     };
 
+    // const loadPreset = () => {
+        
+    //     console.log(savedLayout);
+    //     if(savedLayout){
+    //         setLayout((l) => {
+    //             return {...l, name: savedLayout}
+    //         });
+    //     }
+    // }
 
     useEffectInit(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        pushService.open(projectId ?? "empty", (_) => {
+        pushService.open(projectId ?? "empty", (e) => {
             // prevent refresh for own position change within 300ms
-            console.log("refresh");
+            console.log(e.text);
             if (Date.now() - lastPositionUpdate.current > 300) {
-                // rerender();
                 refresh();
             }
         });
+
+        // change layout after loading to saved if available
+        if(savedLayout != 'preset'){
+            setTimeout(() => {
+                console.log("change layout")
+                changeLayout(savedLayout);
+            }, 100);
+        }
+        // loadPreset();
 
         return () => {
             pushService.close(projectId ?? "empty")
@@ -153,7 +160,6 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
         console.log(getSelectedNodes());
         if (nodes && cy.current) {
             positionsMutate(cy.current.nodes().map((node) => {
-
                 return {id: toNumber(node.data().id), position: node?.position() ?? {x: 0, y: 0}};
             }));
         }
@@ -161,7 +167,8 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
 
 
     const changeLayout = (layoutName: string) => {
-        console.log("Changing name to: ", layoutName)
+        // save selected layout in storage for next loading
+        localStorage.setItem(savedLayoutKey, layoutName);
 
         if (layoutName == "preset") {
             refresh();
@@ -236,7 +243,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
             <Fab sx={{p: "5px"}} size="large" color="success" aria-label="add" onClick={saveGraphPositions}>
                 <PublishIcon/>
             </Fab>
-            <SettingsModal projectId={projectId ?? ""} changeLayout={changeLayout}/>
+            <SettingsModal projectId={projectId ?? ""} changeLayout={changeLayout} initLayout={savedLayout}/>
         </>
     )
 }

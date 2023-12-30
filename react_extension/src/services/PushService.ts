@@ -7,7 +7,7 @@ class PushService{
     private endPoint:string = '/events/';
     private sources:{name:string, es:EventSource, handler:(e: MessageEvent<string>) => void}[] = [];
 
-    public open(channel:string, onMessage:(data: unknown)=>void){
+    public open(channel:string, onMessage:(data: {text:string})=>void){
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const es: EventSource = new ReconnectingEventSource(`${this.endPoint}${channel}/`);
