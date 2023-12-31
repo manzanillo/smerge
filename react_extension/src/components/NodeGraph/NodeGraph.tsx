@@ -2,15 +2,18 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import dagre from 'cytoscape-dagre';
 import Cytoscape, {EdgeDefinition, NodeDefinition} from "cytoscape";
 import {useParams} from 'react-router-dom';
-import {File, useFiles, useUpdateNodePosition, useUpdateNodePositions} from '../services/ApiService';
-import useEffectInit from '../shared/useEffectInit';
-import pushService from '../services/PushService';
+import {File, useFiles, useUpdateNodePosition, useUpdateNodePositions} from '../../services/ApiService';
+import useEffectInit from '../../shared/useEffectInit';
+import pushService from '../../services/PushService';
 import React, {useEffect, useRef, useState} from 'react';
 import {Fab} from '@mui/material';
 import PublishIcon from '@mui/icons-material/Publish';
 import {toNumber} from "lodash";
 import {useQueryClient} from '@tanstack/react-query';
-import SettingsModal from './SettingsModal';
+import SettingsModal from '../SettingsModal';
+import cxtmenu from 'cytoscape-cxtmenu';
+import generateContextMenuSettings from './ContextMenuDefinition';
+import stylesheet from './StyleSheet';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodeGraphProps {
@@ -47,6 +50,8 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
         spacingFactor: 1.2, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
         nodeDimensionsIncludeLabels: true, // Whether labels should be included in determining the space used by a node
     });
+    // keeps track for eventListener...
+    const layoutRef = useRef(layout);
 
 
     const {data, error, isLoading, refresh} = useFiles(String(projectId));
@@ -76,7 +81,9 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
     const [elements, setElements] = useState([...nodes ?? [], ...edges ?? []]);
 
 
-    const ranFirstAgain = useRef(false)
+    const ranFirstAgain = useRef(false);
+    // changed by eventUpdate if whole layout was pushed by others
+    const resize = useRef(false);
     useEffect(() => {
         if (cy.current && !isLoading) {
             setElements([...nodes ?? [], ...edges ?? []]);
@@ -105,6 +112,15 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
                 ranFirstAgain.current = true;
             }
 
+            if (resize.current){
+                setTimeout(() => {
+                    cy.current?.fit();
+                    cy.current?.center();
+                }, 100);
+
+                resize.current = false;
+            }
+
             return () => {
                 console.log("removeListener")
                 cy.current?.removeListener('dblclick', 'node');
@@ -115,12 +131,9 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
     }, [data, layout]);
 
 
-    const getSelectedNodes = () => {
-        const selectedNodes = cy.current?.$('node:selected');
-        const selectedNodeData = selectedNodes?.map((node: { data: () => unknown; }) => node.data());
-        return selectedNodeData;
-    };
-
+    // const getSelectedNodes = () => {
+    //     const selectedNodes = cy.current?.$('node:selected');
+    //     const selectedNodeData = seleimport cxtmenu from 'cytoscape-cxtmenu';
     // const loadPreset = () => {
         
     //     console.log(savedLayout);
@@ -137,7 +150,13 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
             // prevent refresh for own position change within 300ms
             console.log(e.text);
             if (Date.now() - lastPositionUpdate.current > 300) {
-                refresh();
+                // get currentLayout from storage, (prevent snapshot variables like the event...)
+                // const currentLayout = localStorage.getItem(savedLayoutKey);
+                resize.current = e.text.includes('resize');
+                console.log("resize.current: ", resize.current);
+                console.log("layoutName is: " , layoutRef.current.name);
+                console.log("update text: ", e.text);
+                if(e.text.includes('added') || layoutRef.current.name == 'preset') refresh();
             }
         });
 
@@ -148,16 +167,28 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
                 changeLayout(savedLayout);
             }, 100);
         }
-        // loadPreset();
+        
+        // init context menu
+        Cytoscape.use(cxtmenu);
 
         return () => {
             pushService.close(projectId ?? "empty")
         }
     }, [])
 
+    useEffect(() => {
+        // set context menu
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const menu = cy.current?.cxtmenu(generateContextMenuSettings(projectId ?? "", refresh));
+
+        return () => {
+            menu?.destroy();
+        }
+    }, [])
+
 
     const saveGraphPositions = () => {
-        console.log(getSelectedNodes());
         if (nodes && cy.current) {
             positionsMutate(cy.current.nodes().map((node) => {
                 return {id: toNumber(node.data().id), position: node?.position() ?? {x: 0, y: 0}};
@@ -171,10 +202,12 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
         localStorage.setItem(savedLayoutKey, layoutName);
 
         if (layoutName == "preset") {
-            refresh();
+            
             setLayout((l) => {
+                layoutRef.current = {...l, name: "preset"}
                 return {...l, name: "preset"}
             });
+            refresh();
             if (cy.current) {
                 nodes?.forEach((node) => {
                     if (node.data.id && node.data.position) {
@@ -184,6 +217,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
             }
         } else {
             setLayout((l) => {
+                layoutRef.current = {...l, name: "preset"}
                 return {...l, name: layoutName};
             });
         }
@@ -198,35 +232,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
                 layout={layout}
                 autounselectify={false}
                 boxSelectionEnabled={true}
-                stylesheet={[
-                    {
-                        selector: 'node',
-                        style: {
-                            content: 'data(label)',
-                            "text-margin-x": 2,
-                            "text-opacity": 0.8,
-                            "text-valign": 'center',
-                            "text-halign": 'right',
-                            "background-color": 'data(color)',
-                        }
-                    },
-                    {
-                        selector: 'edge',
-                        style: {
-                            "curve-style": 'bezier',
-                            width: 4,
-                            "target-arrow-shape": 'triangle',
-                            "line-color": '#808080',
-                            "target-arrow-color": '#808080',
-                        }
-                    },
-                    {
-                        selector: 'node:selected', // Define style for selected nodes
-                        style: {
-                            'background-color': '#C39EC1', // Change the background color to pink for selected nodes
-                        },
-                    },
-                ]}
+                stylesheet={stylesheet}
                 style={{
                     width: '100%',
                     height: '100%',

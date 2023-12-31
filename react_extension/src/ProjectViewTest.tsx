@@ -2,8 +2,8 @@
 import { Component } from 'react'
 // import CytoscapeComponent from 'react-cytoscapejs'
 
-import "./components/NodeGraph"
-import NodeGraph from "./components/NodeGraph";
+import "./components/NodeGraph/NodeGraph"
+import NodeGraph from "./components/NodeGraph/NodeGraph";
 
 export default class ProjectViewTest extends Component {
     

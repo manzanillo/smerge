@@ -484,7 +484,7 @@ class ToggleColorView(View):
             new_color = default_color()
         file.color = new_color
         file.save()
-        print(new_color)
+        send_event(proj_id, 'message', {'text': 'update'})
         return HttpResponse(new_color)
 
 

@@ -89,7 +89,7 @@ export function useFiles(projectId : string) {
   const queryInfo = useQuery<File[], Error>({queryKey: ['files' , projectId], queryFn: () => getFiles(projectId)});
 
   const refresh = () => {
-      queryInfo.refetch().then(r => console.log(r));
+      queryInfo.refetch();
   };
 
   return {...queryInfo, refresh};

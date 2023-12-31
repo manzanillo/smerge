@@ -60,10 +60,13 @@ class SnapFilePositionView(generics.UpdateAPIView):
     """
     API endpoint that allows for the position of a file to be updated.
     """
-    queryset = SnapFile.objects.all()
     serializer_class = SnapFileSerializer
     lookup_field = 'id'
     permission_classes = [permissions.AllowAny]
+    
+    def get_object(self):
+        file_id = self.kwargs['id']
+        return SnapFile.objects.get(id=file_id)
 
     def put(self, request, *args, **kwargs):
         snap_file = self.get_object()
@@ -71,6 +74,7 @@ class SnapFilePositionView(generics.UpdateAPIView):
         snap_file.yPosition = request.data['y']
         snap_file.save()
 
+        print(str(snap_file.project_id))
         send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
 
         return Response(status=status.HTTP_200_OK)
@@ -80,10 +84,14 @@ class SnapFilePositionsView(generics.UpdateAPIView):
     """
     API endpoint that allows for the position of a file to be updated.
     """
-    queryset = SnapFile.objects.all()
     serializer_class = SnapFileSerializer
     lookup_field = 'id'
     permission_classes = [permissions.AllowAny]
+    
+    def get_queryset(self):
+        file_id = self.kwargs['id']
+        project_id = SnapFile.objects.get(id=file_id).project.id
+        return SnapFile.objects.filter(project=project_id)
 
     def put(self, request, *args, **kwargs):
         snap_files = self.get_queryset()
@@ -93,10 +101,5 @@ class SnapFilePositionsView(generics.UpdateAPIView):
             snap_file.yPosition = data['position']['y']
             snap_file.save()
 
-        # for snap_file in snap_files:
-        #     snap_file.xPosition = request.data['x']
-        #     snap_file.yPosition = request.data['y']
-        #     snap_file.save()
-
-        send_event(str(snap_files[0].project_id), 'message', {'text': 'Update'})
+        send_event(str(snap_files[0].project_id), 'message', {'text': 'Update_resize'})
         return Response(status=status.HTTP_200_OK)
