@@ -89,3 +89,7 @@ secrets/rasp_certs/*
 
 #exclude git data
 Access_Portal/Web_Api/gitWorker/data/*
+
+#exclude vite tmp files
+**/.vite
+**/.vite/**
