@@ -7,6 +7,6 @@ class HomeConfig(AppConfig):
 
     def ready(self):
         print('DEBUG:', settings.DEBUG)
-        print('CORS:', settings.CORS_ALLOW_ALL_ORIGINS)
+        #print('CORS:', settings.CORS_ALLOW_ALL_ORIGINS)
         print('Installed Apps:', settings.INSTALLED_APPS)
         print('Middleware:', settings.MIDDLEWARE)

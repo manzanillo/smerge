@@ -24,7 +24,7 @@ def generateWhitelist():
     
     with app.app_context():
             # Define the output file name
-        output_file = "/home/rs-kubuntu/Desktop/Smerge-Private/Access_Portal/Web_Api/gitWorker/active_ips.txt"
+        output_file = "./Access_Portal/Web_Api/gitWorker/active_ips.txt"
 
         # Get the current date and time
         current_datetime = datetime.utcnow()

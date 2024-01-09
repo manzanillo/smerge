@@ -87,6 +87,8 @@ secrets/smerge/secrets.smerge.json
 
 secrets/rasp_certs/*
 
+secrets/rasp_ssh/*
+
 #exclude git data
 Access_Portal/Web_Api/gitWorker/data/*
 
