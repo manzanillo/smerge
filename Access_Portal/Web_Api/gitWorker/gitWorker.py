@@ -18,11 +18,16 @@
 import os
 import subprocess
 import json
+from pathlib import Path
+
+
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
 bash_script_path = current_directory + "/getAllCommits.sh"
 switch_script_path = current_directory + "/switchToBranchAndCommit.sh"
 folder_path = current_directory + "/data/"
+
+Path(folder_path).mkdir(parents=True, exist_ok=True)
 
 class gitWorker:
     json_data = {}
