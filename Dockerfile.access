@@ -60,8 +60,8 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 RUN npm install
 
-RUN chmod +x ./entrypoint.sh
-RUN ./entrypoint.sh
+RUN chmod +x ./entrypoint_access.sh
+RUN ./entrypoint_access.sh
 
 
 # Install SSH client

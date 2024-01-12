@@ -42,6 +42,12 @@ shell:
 compress:
 	npm install && python $(BASE)/manage.py compress --settings=$(SETTINGS)
 
+access_d_build:
+	docker-compose -f docker-compose-access.yml build
+
+access_d_up:
+	docker-compose -f docker-compose-access.yml up
+
 #for tracking time spend on project :)
 CFLAGS = -g -std=c11 -pedantic -Wall -Werror -D_XOPEN_SOURCE=700 
 CC = gcc

@@ -12,11 +12,13 @@ import { testToken } from "../services/UserService";
 import httpService from "../shared/HttpService";
 import "./Layout.css";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import LockClockIcon from '@mui/icons-material/LockClock';
 import Grid from '@mui/material/Unstable_Grid2';
 import { JSX } from "react/jsx-runtime";
 import Switcher from "./Switcher";
 import Unlock from "./Unlock";
 import AdminPanel from "./AdminPanel";
+import ActiveIpsPanel from "./ActiveIpsPanel";
 
 const Layout = () => {
   const [state, setState] = useState(false);
@@ -161,6 +163,14 @@ const Layout = () => {
                 <ListItemText primary="Admin Panel" />
               </ListItemButton>
             </ListItem>
+            <ListItem key="Active Ips" disablePadding>
+              <ListItemButton onClick={() => navigate("/access/actives")}>
+                <ListItemIcon >
+                  <LockClockIcon />
+                </ListItemIcon>
+                <ListItemText primary="Active Ips" />
+              </ListItemButton>
+            </ListItem>
           </>
           :
           <></>
@@ -221,6 +231,7 @@ const Layout = () => {
             <Route path="/" element={<Unlock />} />
             <Route path="/switch" element={<Switcher/>} />
             <Route path="/admin" element={<AdminPanel/>} />
+            <Route path="/actives" element={<ActiveIpsPanel/>} />
             <Route path="/login" element={<Login onAuthSuccess={onAuthSuccess} />} />
             <Route path="/error/:errorCode" element={<NotFound />} />
             <Route path="*" Component={() => <Navigate to="/access/error/404" />} />

@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Django",
             "type": "python",
@@ -14,6 +15,16 @@
                 "--settings=config.settings_local"
             ],
             "django": true,
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Flask (Access)",
+            "type": "python",
+            "request": "launch",
+            //"python": "${workspaceFolder}/Access_Portal/Web_Api/venv/bin/python",
+            "program": "${workspaceFolder}/Access_Portal/Web_Api/run.py",
+            "args": [
+            ],
             "justMyCode": true
         },
         {

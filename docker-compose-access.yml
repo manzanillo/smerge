@@ -12,6 +12,7 @@ services:
       - ./snapmerge/media:/var/www/snapmerge/snapmerge/media
       - ./snapmerge/database:/var/www/snapmerge/snapmerge/database
       - ./Access_Portal/Web_Api/instance:/app/Access_Portal/Web_Api/instance
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "80:80"
       - "443:443"

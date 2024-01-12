@@ -11,7 +11,8 @@ def upsertSetting(name, value, desc):
         # If the record exists, update its value
         ret = 1
         existing_record.value = value
-        existing_record.desc = desc
+        if(desc != ""):
+            existing_record.desc = desc
     else:
         # If the record doesn't exist, create a new one
         new_record = Settings(name=name, value=value, desc=desc)
@@ -26,6 +27,15 @@ def getSetting(name):
 
 def getAllSettings():
     return Settings.query.all()
+
+def getSettingLocalEditOnly():
+    return getSetting("localEditOnly").value.lower() in ['true', '1']
+
+def getSettingIpLock():
+    return getSetting("ipLock").value.lower() in ['true', '1']
+
+def getSettingTimeout():
+    return int(getSetting("timeout").value)
     
     
 

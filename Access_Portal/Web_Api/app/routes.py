@@ -10,6 +10,8 @@ from functools import wraps
 import jwt
 import re
 from datetime import datetime, timedelta
+from app.DockerAndCommandsHelper import getDockerName, restartDockerContainer, validateCommandName, runCommand
+import subprocess
 
 def token_required(func):
     # decorator factory which invoks update_wrapper() method and passes decorated function as an argument
@@ -270,6 +272,31 @@ def unlockIp():
     # else:
     #     return make_response(request.remote_addr, 404)
     
+
+@app.post('/acapi/access/lock')
+@cross_origin()
+@token_required
+def lockIp():    
+    request_data = request.get_json()
+    ip = None
+    name = None
+    print(request_data)
+    if "ip" in request_data.keys():
+        ip = request_data["ip"]
+    if "name" in request_data.keys():
+        name = request_data["name"]
+    
+    if ip != None:
+        retNum = setIpsLockedForIp(ip)
+    if name != None:
+        retNum = setIpsLockedForUser(name)
+        
+    if ip == None and name == None:
+        return make_response("ip or name is missing!", 404)
+    
+    generateWhitelist()
+    return make_response(f"{retNum} ips locked.", 200)
+    
     
 
 
@@ -285,14 +312,25 @@ def isIpUnlocked():
     else:
         return make_response(request.remote_addr, 404)
     
+# getAllActiveUnlockedIps
+@app.get('/acapi/admin/actives')
+@cross_origin()
+@token_required
+@admin
+def getActives():
+    actives = getAllActiveUnlockedIps()
+    return make_response([u.as_dict() for u in actives], 200)
+
+    
 
 # Tmp for testing...
 @app.route('/acapi/access/delete_ip_byID/<int:ip_id>', methods=['DELETE'])
 @cross_origin()
 @token_required
 def delete_id(ip_id):
-    if(request.remote_addr != "127.0.0.1"):
-        return "Only internal allowed...", 401
+    if(getSettingLocalEditOnly()):
+        if(not "192." in request.remote_addr and not "127." in request.remote_addr):
+            return "Only internal allowed...", 401
     ip_to_delete = getUnlockedIpById(ip_id)
     
     if ip_to_delete:
@@ -309,8 +347,9 @@ def delete_id(ip_id):
 @token_required
 @admin
 def post_setting():
-    if(request.remote_addr != "127.0.0.1"):
-        return "Only internal allowed...", 401
+    if(getSettingLocalEditOnly()):
+        if(not "192." in request.remote_addr and not "127." in request.remote_addr):
+            return "Only internal allowed...", 401
 
     name = None
     value = None
@@ -328,6 +367,10 @@ def post_setting():
             
     if name and value:
         res = upsertSetting(name, value, desc)
+        
+        # reload nginx if ipLock status changed
+        if name == "ipLock":
+            generateWhitelist(True)
         if res == 1:
             return make_response('Setting updated.', 200)
         return make_response('Setting added.', 200)
@@ -391,6 +434,59 @@ def getAdminSetState(username):
     if("admin" in ret):
         return make_response(ret, 200)
     return make_response(ret, 403)
+
+@app.get('/acapi/admin/restart')
+@cross_origin()
+@token_required
+@admin
+def getRestart():
+    # switch between docker run and local run
+    if(__file__.__str__().split("/")[1] == "app"):
+        #subprocess.run(["docker", "restart", ""])
+        output = getDockerName()
+        restartDockerContainer(output)
+        return make_response('Restarting...', 200)
+    else:
+        print("No docker restart on local machine!")
+        return make_response('No docker restart on local machine!', 404)
+    
+@app.get('/acapi/admin/run/<string:commandName>')
+@cross_origin()
+@token_required
+@admin
+def getRunCommand(commandName):
+    if not validateCommandName(commandName):
+        return make_response({'text': f'CommandName "{commandName}" is not known!', 'commandOutput': ''}, 404)
+    
+    if(not __file__.__str__().split("/")[1] == "app"):
+        print("Commands will only be run inside docker container!")
+        return make_response({'text':'Commands can only run inside docker container!', 'commandOutput': ''}, 404)
+    
+    output = runCommand(commandName)
+    return make_response({'text':'Ran command and restarting now...', 'commandOutput': output}, 200)
+
+
+@app.get('/acapi/admin/lastStart')
+@cross_origin()
+@token_required
+@admin
+def getLastStart():
+    return make_response(str(app.config['LAST_START']), 200)
+    
+    # switch between docker run and local run
+    # if(__file__.__str__().split("/")[1] == "app"):
+    #     #subprocess.run(["docker", "restart", ""])
+    #     output = getDockerName()
+    #     restartDockerContainer(output)
+    #     return make_response('Restarting...', 200)
+    # else:
+    #     print("No docker restart on local machine!")
+    #     return make_response('No docker restart on local machine!', 404)
+    
+
+
+
+    
         
 
     

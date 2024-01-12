@@ -1,13 +1,44 @@
 from app import app, db
 from app.models import UnlockedIps
 from datetime import datetime, timedelta
+from app.SettingsRepository import getSetting
 
 
 def getAllUnlockedIps():
     return UnlockedIps.query.all()
 
+def getAllActiveUnlockedIps():
+    return UnlockedIps.query.filter(UnlockedIps.expire_date > datetime.utcnow())
+
 def getUnlockedIpsForUser(name):
     return UnlockedIps.query.filter(UnlockedIps.username == name)
+
+def getUnlockedIpsForIp(ip):
+    return UnlockedIps.query.filter(UnlockedIps.ip_address == ip)
+
+def setIpsLockedForUser(name):
+    timeout = int(getSetting("timeout").value)
+    res = getUnlockedIpsForUser(name)
+    ret = 0
+    current_time = datetime.utcnow()
+    for re in res:
+        if current_time < re.expire_date:
+            re.expire_date = datetime.utcnow() - timedelta(seconds=timeout+60)
+            ret+=1
+    db.session.commit()
+    return ret
+
+def setIpsLockedForIp(ip):
+    timeout = int(getSetting("timeout").value)
+    res = getUnlockedIpsForIp(ip)
+    ret = 0
+    current_time = datetime.utcnow()
+    for re in res:
+        if current_time < re.expire_date:
+            re.expire_date = datetime.utcnow() - timedelta(seconds=timeout+60)
+            ret+=1
+    db.session.commit()
+    return ret
 
 def getUnlockedIpById(id):
     return UnlockedIps.query.get(id)

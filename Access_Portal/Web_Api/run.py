@@ -1,4 +1,5 @@
 from app import app, db
+from app.models import seed_initial_values
 #import argparse
 #from flask_migrate import Migrate
 
@@ -14,4 +15,5 @@ if __name__ == '__main__':
     #else:
     with app.app_context():  
         db.create_all()
+        seed_initial_values()
         app.run(debug=True)
