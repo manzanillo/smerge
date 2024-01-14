@@ -20,7 +20,8 @@ RUN apk add --no-cache \
     freetype-dev \
     libc-dev \
     zlib-dev \
-    make
+    make \
+    g++
 
 RUN apk add --no-cache jq
 
