@@ -19,7 +19,8 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     freetype-dev \
     libc-dev \
-    zlib-dev
+    zlib-dev \
+    make
 
 RUN apk add --no-cache jq
 
