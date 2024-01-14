@@ -11,7 +11,9 @@ cd "$SCRIPT_DIR/Access_Portal/Web_Api"
 
 python run.py 2>&1 &
 
-nginx -g "daemon off;" 2>&1 &
+#nginx -g "daemon off;" 2>&1 &
+
+nginx
 
 # Start the Vite server
 cd "$SCRIPT_DIR/Access_Portal/access_portal"

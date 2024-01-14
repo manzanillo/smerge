@@ -1,9 +1,11 @@
 import re
 import subprocess
+import threading
+import time
 
 # if name of the docker container is changed in the compose file, update!!!
 def getDockerName():
-    output = subprocess.check_output("sudo docker ps -a", shell=True, stderr=subprocess.STDOUT, encoding="UTF-8").split("\n")
+    output = subprocess.check_output(f'{"" if (__file__.__str__().split("/")[1] == "app") else "sudo "}docker ps -a', shell=True, stderr=subprocess.STDOUT, encoding="UTF-8").split("\n")
     output = [re.sub(' +', ' ', x) for x in output if x != ""]
     if (len(output) >= 2):
         nameIndex = getNameIndex(output[0])
@@ -21,7 +23,13 @@ def getNameIndex(li):
     return -1
 
 def restartDockerContainer(name):
-    subprocess.run(f"sudo docker restart {name}")
+    def command():
+        time.sleep(1)  # Wait for 1 second
+        cmd = [x for x in ["" if (__file__.__str__().split("/")[1] == "app") else "sudo ", "docker", "restart", name] if x != ""]
+        subprocess.run(cmd)
+
+    thread = threading.Thread(target=command)
+    thread.start()
     
 def runCommand(commandName):
     absolutePathParts = __file__.__str__().split("/")
@@ -46,7 +54,7 @@ def runCommand(commandName):
                 output = subprocess.check_output("npm install", cwd=headPath, shell=True, stderr=subprocess.STDOUT, encoding="UTF-8")
             case ("pip_i_a"):
                 restartNeeded = True
-                output = subprocess.check_output("pip install -r requirements.txt", cwd=headPath+"Access_Portal/access_portal", shell=True, stderr=subprocess.STDOUT, encoding="UTF-8")
+                output = subprocess.check_output("pip install -r requirements.txt", cwd=headPath+"Access_Portal/Web_Api", shell=True, stderr=subprocess.STDOUT, encoding="UTF-8")
             case ("pip_i_s"):
                 restartNeeded = True
                 output = subprocess.check_output("pip install -r requirements.txt", cwd=headPath, shell=True, stderr=subprocess.STDOUT, encoding="UTF-8")

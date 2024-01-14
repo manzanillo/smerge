@@ -260,7 +260,7 @@ from app import generateWhitelist
 @token_required
 def unlockIp():
     timeSpan = int(getSetting("timeout").value)
-    ret = addUnlockedIp("tmp", request.remote_addr, timeSpan)
+    ret = addUnlockedIp(g.user["name"], request.environ['HTTP_X_FORWARDED_FOR'], timeSpan)
 
     generateWhitelist()
     #store_ip(request.remote_addr)
@@ -472,6 +472,16 @@ def getRunCommand(commandName):
 @admin
 def getLastStart():
     return make_response(str(app.config['LAST_START']), 200)
+
+
+@app.get("/acapi/get_my_ip")
+@cross_origin()
+def get_my_ip():
+    return make_response({'ip_remote': request.remote_addr,
+                          'ip_head': request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr),
+                          'stuff': request.environ['REMOTE_ADDR'],
+                          'stuff2': request.environ['HTTP_X_FORWARDED_FOR'],
+                          'request': str(request.headers)}, 200)
     
     # switch between docker run and local run
     # if(__file__.__str__().split("/")[1] == "app"):
