@@ -70,6 +70,13 @@ class SnapFile(File):
             project=project, file=file, user=user, description=description)
         if (ancestors):
             snap.ancestors.set(ancestors)
+            if(type(ancestors[0]) == str):
+                ancestor_as_file = SnapFile.objects.get(id=int(ancestors[0]))
+                snap.xPosition = ancestor_as_file.xPosition
+                snap.yPosition = ancestor_as_file.yPosition + 100
+            else:
+                snap.xPosition = ancestors[0].xPosition
+                snap.yPosition = ancestors[0].yPosition + 100
 
         snap.save()
         return snap

@@ -101,5 +101,5 @@ class SnapFilePositionsView(generics.UpdateAPIView):
             snap_file.yPosition = data['position']['y']
             snap_file.save()
 
-        send_event(str(snap_files[0].project_id), 'message', {'text': 'Update_resize'})
+        send_event(str(snap_files[0].project_id), 'message', {'text': 'Update_resize_savedLayout'})
         return Response(status=status.HTTP_200_OK)

@@ -14,6 +14,8 @@ import SettingsModal from '../SettingsModal';
 import cxtmenu from 'cytoscape-cxtmenu';
 import generateContextMenuSettings from './ContextMenuDefinition';
 import stylesheet from './StyleSheet';
+import httpService from '../../services/HttpService';
+import MergeButtons from '../MergeButtons';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodeGraphProps {
@@ -81,6 +83,18 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
     const [elements, setElements] = useState([...nodes ?? [], ...edges ?? []]);
 
 
+    // const openLock = React.useRef<boolean>(false);
+    const openSnap = (url: string) => {
+        // if (!openLock.current) {
+            window.open(url, "_blank");
+        //     openLock.current = true;
+        //     setTimeout(() => {
+        //         openLock.current = false;
+        //     }, 500)
+        // }
+    }
+
+
     const ranFirstAgain = useRef(false);
     // changed by eventUpdate if whole layout was pushed by others
     const resize = useRef(false);
@@ -93,7 +107,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
                 console.log(node.position());
 
                 // Open a new tab with a set link
-                // openSnap(`https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` + node.data("file_url").replace("/media/", ""));
+                openSnap(`https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` + node.data("file_url").replace("/media/", ""));
             });
 
             cy.current?.on("dragfree", "node", (evt) => {
@@ -103,10 +117,12 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
                 lastPositionUpdate.current = Date.now();
             });
 
+
             if (!ranFirstAgain.current) {
                 setTimeout(() => {
+                    cy.current?.layout({name: savedLayout}).run();
                     cy.current?.fit();
-                    cy.current?.center();
+                    // cy.current?.center();
                 }, 1);
 
                 ranFirstAgain.current = true;
@@ -115,7 +131,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
             if (resize.current){
                 setTimeout(() => {
                     cy.current?.fit();
-                    cy.current?.center();
+                    // cy.current?.center();
                 }, 100);
 
                 resize.current = false;
@@ -152,21 +168,15 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
             if (Date.now() - lastPositionUpdate.current > 300) {
                 // get currentLayout from storage, (prevent snapshot variables like the event...)
                 // const currentLayout = localStorage.getItem(savedLayoutKey);
+                console.log(savedLayout)
+                if(e.text.includes('savedLayout') && savedLayout != 'preset') return;
                 resize.current = e.text.includes('resize');
-                console.log("resize.current: ", resize.current);
-                console.log("layoutName is: " , layoutRef.current.name);
-                console.log("update text: ", e.text);
+                // console.log("resize.current: ", resize.current);
+                // console.log("layoutName is: " , layoutRef.current.name);
+                // console.log("update text: ", e.text);
                 if(e.text.includes('added') || layoutRef.current.name == 'preset') refresh();
             }
         });
-
-        // change layout after loading to saved if available
-        if(savedLayout != 'preset'){
-            setTimeout(() => {
-                console.log("change layout")
-                changeLayout(savedLayout);
-            }, 100);
-        }
         
         // init context menu
         Cytoscape.use(cxtmenu);
@@ -182,8 +192,17 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
         // @ts-ignore
         const menu = cy.current?.cxtmenu(generateContextMenuSettings(projectId ?? "", refresh));
 
+        // change layout after loading to saved if available
+        let toClean: NodeJS.Timeout;
+        if(savedLayout != 'preset'){
+            toClean = setTimeout(() => {
+                changeLayout(savedLayout);
+            }, 100);
+        }
+
         return () => {
             menu?.destroy();
+            clearTimeout(toClean);
         }
     }, [])
 
@@ -202,7 +221,6 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
         localStorage.setItem(savedLayoutKey, layoutName);
 
         if (layoutName == "preset") {
-            
             setLayout((l) => {
                 layoutRef.current = {...l, name: "preset"}
                 return {...l, name: "preset"}
@@ -246,10 +264,11 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
                 }}/>
 
 
-            <Fab sx={{p: "5px"}} size="large" color="success" aria-label="add" onClick={saveGraphPositions}>
+            {/* <Fab sx={{p: "5px"}} size="large" color="success" aria-label="add" onClick={saveGraphPositions}>
                 <PublishIcon/>
-            </Fab>
-            <SettingsModal projectId={projectId ?? ""} changeLayout={changeLayout} initLayout={savedLayout}/>
+            </Fab> */}
+            <SettingsModal projectId={projectId ?? ""} changeLayout={changeLayout} initLayout={savedLayout} cy={cy} saveGraphPositions={saveGraphPositions}/>
+            <MergeButtons cyRef={cy} refresh={refresh} projectId={projectId??""} />
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Stack, SxProps } from "@mui/material";
+import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Stack, SxProps, Tooltip } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import httpService from "../services/HttpService";
 import { useState } from "react";
@@ -8,9 +8,11 @@ interface SettingsModalProps {
     projectId: string;
     changeLayout: (layoutName: string)=>void;
     initLayout?: string;
+    cy: React.MutableRefObject<cytoscape.Core | undefined>;
+    saveGraphPositions: () => void;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout, initLayout="preset"}) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout, initLayout="preset", cy, saveGraphPositions}) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     const handleModalClose = () => {
@@ -58,17 +60,87 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout, i
 
     const layoutNames = ["null", "dagre", "preset", "random", "grid", "circle", "concentric", "breadthfirst", "cose"]
 
+
+    const handlePositionFileDownload = () => {
+        const json = cy.current?.json();
+
+        // Convert the JSON object to a string
+        const jsonString = JSON.stringify(json);
+
+        // Create a Blob from the JSON string
+        const blob = new Blob([jsonString], {type: "application/json"});
+
+        // Create a URL for the Blob
+        const url = URL.createObjectURL(blob);
+
+        // Create a link element
+        const a = document.createElement('a');
+
+        // Set the href and download attributes of the link
+        a.href = url;
+        a.download = projectId + '_layout_saved.json';
+
+        // Append the link to the body
+        document.body.appendChild(a);
+
+        // Simulate a click on the link
+        a.click();
+
+        // Remove the link from the body
+        document.body.removeChild(a);
+    }
+
+    const handlePositionFileUpload = () => {
+        // Create an input element
+        const input = document.createElement('input');
+
+        // Set the type attribute to 'file'
+        input.type = 'file';
+        input.accept = 'application/JSON';
+
+        // Set the onchange attribute to read the file when it's selected
+        input.onchange = function() {
+            // Create a new FileReader
+            const reader = new FileReader();
+
+            // Set the onload attribute to parse the JSON and restore the graph when the file is read
+            reader.onload = function() {
+                // Parse the JSON
+                const json = JSON.parse(reader.result);
+
+                cy.current?.elements().remove();
+
+                // Restore the graph
+                cy.current?.json(json);
+            };
+
+            // Read the file as text
+            reader.readAsText(input.files[0]);
+        };
+
+        // Simulate a click on the input
+        input.click();
+    }
+
     return (<>
         <Modal open={modalOpen} onClose={handleModalClose} style={{border:'none'}}>
             <Box sx={modalStyle} id={"settingsModal"}>
                 <Stack spacing={2}>
-                    <Button variant="contained" onClick={() => {
-                        window.open(`${httpService.baseURL}${projectId}`, "_self");
-                    }}>Old ProjectView</Button>
+                    <Tooltip enterDelay={500} title={"Save the current layout on the server (as preset layout)"}>
+                        <Button variant="contained" onClick={saveGraphPositions}>Save Graph Position</Button>
+                    </Tooltip>
 
-                    {/* <Button variant="contained" onClick={resetLayout}>Reset Project Layout</Button> */}
+                    <Divider></Divider>
 
-                    {/* <Button variant="contained" onClick={centerRoot}>Center Root</Button> */}
+                    <Tooltip enterDelay={500} title={"Download the current graph, as is into a json file"}>
+                        <Button variant="contained" onClick={handlePositionFileDownload}>Save Current Layout {"(in file)"}</Button>
+                    </Tooltip>
+                    <Tooltip enterDelay={500} title={"Load previous saved graph (.json) into current panel (hit 'Save Graph Position' if the graph should be saved to the server)"}>
+                        <Button variant="contained" onClick={handlePositionFileUpload}>Load Layout From File</Button>
+                    </Tooltip>
+                    
+                    <Divider></Divider>
+
                     <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
                         <InputLabel id="layout-select-label">Layout</InputLabel>
@@ -83,6 +155,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout, i
                         </Select>
                     </FormControl>
                     </Box>
+                    
+                    <Divider></Divider>
+
+                    <Button variant="contained" onClick={() => {
+                        window.open(`${httpService.baseURL}${projectId}`, "_self");
+                    }}>Old ProjectView</Button>
                 </Stack>
             </Box>
         </Modal>

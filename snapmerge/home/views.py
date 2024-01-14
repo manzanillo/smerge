@@ -144,7 +144,8 @@ class MergeView(View):
                           ancestor=ancestor
                           )
                 new_file.xml_job()
-                notify_room(proj.id, new_file.as_dict(), "merge")
+                # notify_room(proj.id, new_file.as_dict(), "merge")
+                send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})
                 return JsonResponse(new_file.as_dict())
 
             except Exception as e:
@@ -179,7 +180,8 @@ class SyncView(View):
 
         new_file.xml_job()
 
-        notify_room(proj.id, new_file.as_dict(), "commit")
+        # notify_room(proj.id, new_file.as_dict(), "commit")
+        send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})
 
         new_url = settings.URL + '/sync/' + \
                   str(proj.id) + '?ancestor=' + str(new_file.id)
@@ -578,7 +580,8 @@ class JsRedirectView(View):
     
 class GetBlockerXMLView(View):
     def get(self, request, file_name) -> HttpResponse:
-        dummy_file: str = create_dummy_file(file_name, f"{request.scheme}://{request.get_host()}")
+        # dummy_file: str = create_dummy_file(file_name, f"{request.scheme}://{request.get_host()}")
+        dummy_file: str = create_dummy_file(file_name, f"https://{request.get_host()}")
         return HttpResponse(dummy_file, content_type='application/xml')
 
 
@@ -674,7 +677,8 @@ def mergeExt(request, proj_id, resolutions):
             
             new_file.xml_job()
             print(new_file.as_dict())
-            notify_room(proj.id, new_file.as_dict(), "merge")
+            # notify_room(proj.id, new_file.as_dict(), "merge")
+            send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})
             return JsonResponse(new_file.as_dict())
 
         except Exception as e:
