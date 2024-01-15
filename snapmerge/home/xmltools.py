@@ -311,8 +311,8 @@ def create_dummy_file(file_name: str, host: str) -> str:
         cImport_blank_data: str = dummy_template.read()
         url = host
         # quick fix to make link agnostic to server location...
-        if ".org" in url:
-            url = url.replace('http', 'https')
+        # if ".org" in url:
+        #     url = url.replace('http', 'https')
         cImport_blank_data = cImport_blank_data.replace('{{url}}', f"{url}/media/{file_name}")
         return cImport_blank_data
 
