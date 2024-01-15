@@ -9,8 +9,8 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./snapmerge/media:/var/www/snapmerge/snapmerge/media
-      - ./snapmerge/database:/var/www/snapmerge/snapmerge/database
+      - ./snapmerge/media:/app/snapmerge/media
+      - ./snapmerge/database:/app/snapmerge/database
       - ./Access_Portal/Web_Api/instance:/app/Access_Portal/Web_Api/instance
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
