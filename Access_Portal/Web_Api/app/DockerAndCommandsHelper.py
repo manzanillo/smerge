@@ -5,16 +5,16 @@ import time
 
 # if name of the docker container is changed in the compose file, update!!!
 def getDockerName():
-    output = subprocess.check_output(f'{"" if (__file__.__str__().split("/")[1] == "app") else "sudo "}docker ps -a', shell=True, stderr=subprocess.STDOUT, encoding="UTF-8").split("\n")
-    output = [re.sub(' +', ' ', x) for x in output if x != ""]
-    if (len(output) >= 2):
-        nameIndex = getNameIndex(output[0])
-        output = [x.split(" ") for x in output]
-        for i in range(1, len(output)-1):
-            if "smerge_server_access" in output[i][nameIndex]:
-                return output[i][nameIndex]
-        return ""
-    return ""
+    # output = subprocess.check_output(f'{"" if (__file__.__str__().split("/")[1] == "app") else "sudo "}docker ps -a', shell=True, stderr=subprocess.STDOUT, encoding="UTF-8").split("\n")
+    # output = [re.sub(' +', ' ', x) for x in output if x != ""]
+    # if (len(output) >= 2):
+    #     nameIndex = getNameIndex(output[0])
+    #     output = [x.split(" ") for x in output]
+    #     for i in range(1, len(output)-1):
+    #         if "smerge_server_access" in output[i][nameIndex]:
+    #             return output[i][nameIndex]
+    #     return ""
+    return "smerge_server_access"
 
 def getNameIndex(li):
     for i,l in enumerate(li):
