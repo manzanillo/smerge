@@ -37,7 +37,17 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ projectId, changeLayout, 
     } as SxProps;
 
     return (<>
-        <Modal open={modalOpen} onClose={handleModalClose} style={{ overflow:"auto", border: 'none', display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <Modal open={modalOpen} onClose={handleModalClose} 
+            style={{ overflow:"auto", border: 'none', display: "flex", justifyContent: "center", alignItems: "center", width:"100dvw", height:"100dvh"}}
+            slotProps={{
+                backdrop: {
+                  sx: {
+                    width: '100dvw',
+                    height: '100dvh'
+                  },
+                },
+              }}
+            >
             <Box id={"settingsModal"} style={{overflow:"auto", padding:"20px", maxHeight: "calc(100vh - 40px)"}}>
                 <Accordion style={{borderRadius: "10px 10px 2px 2px"}} defaultExpanded sx={{bgcolor:"transparent"}}>
                     <AccordionSummary
