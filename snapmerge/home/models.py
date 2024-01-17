@@ -61,8 +61,8 @@ class SnapFile(File):
         FileExtensionValidator(['xml', 'XML'])])
     # thumbnail = models.ImageField(_("Thumbnail"), null=True, blank=True)
     user = models.CharField(_("user"), max_length=30, null=True)
-    xPosition = models.FloatField(_("xPosition"), null=True)
-    yPosition = models.FloatField(_("yPosition"), null=True)
+    xPosition = models.FloatField(_("xPosition"), default=0)
+    yPosition = models.FloatField(_("yPosition"), default=0)
 
     @classmethod
     def create_and_save(cls, project, file, ancestors=None, user=None, description=''):
