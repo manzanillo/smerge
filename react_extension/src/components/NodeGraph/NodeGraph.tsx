@@ -16,15 +16,19 @@ import generateContextMenuSettings from './ContextMenuDefinition';
 import stylesheet from './StyleSheet';
 import httpService from '../../services/HttpService';
 import MergeButtons from '../MergeButtons';
+import ProjectDto from '../models/ProjectDto';
+import ProjectStats from '../ProjectStats';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodeGraphProps {
-    projectId: string;
+    // projectId: string;
+    projectData: ProjectDto;
+    setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
 }
 
 Cytoscape.use(dagre);
 
-const NodeGraph: React.FC<NodeGraphProps> = () => {
+const NodeGraph: React.FC<NodeGraphProps> = ({projectData, setProjectData}) => {
     const {projectId} = useParams();
     const queryClient = useQueryClient();
 
@@ -243,6 +247,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
 
     return (
         <>
+            <ProjectStats projectData={projectData} />
             <CytoscapeComponent
                 elements={elements}
                 minZoom={0.5}
@@ -263,11 +268,7 @@ const NodeGraph: React.FC<NodeGraphProps> = () => {
                     cy.current = inp;
                 }}/>
 
-
-            {/* <Fab sx={{p: "5px"}} size="large" color="success" aria-label="add" onClick={saveGraphPositions}>
-                <PublishIcon/>
-            </Fab> */}
-            <SettingsModal projectId={projectId ?? ""} changeLayout={changeLayout} initLayout={savedLayout} cy={cy} saveGraphPositions={saveGraphPositions}/>
+            <SettingsModal projectId={projectId ?? ""} changeLayout={changeLayout} initLayout={savedLayout} cy={cy} saveGraphPositions={saveGraphPositions} projectData={projectData} setProjectData={setProjectData}/>
             <MergeButtons cyRef={cy} refresh={refresh} projectId={projectId??""} />
         </>
     )

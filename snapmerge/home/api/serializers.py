@@ -10,7 +10,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'description', 'pin')
 
 
 class SnapFileSerializer(serializers.ModelSerializer):

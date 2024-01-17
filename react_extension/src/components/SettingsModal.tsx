@@ -1,36 +1,29 @@
-import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Stack, SxProps, Tooltip } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Divider, Fab, FormControl, InputLabel, MenuItem, Modal, Paper, PropTypes, Select, SelectChangeEvent, Stack, SxProps, Tooltip } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import httpService from "../services/HttpService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./SettingsModal.css";
+import OldSettingControls from "./OldSettingControls";
+import ProjectDto from "./models/ProjectDto";
+import NewSettingControls from "./NewSettingControls";
 
 interface SettingsModalProps {
     projectId: string;
-    changeLayout: (layoutName: string)=>void;
+    changeLayout: (layoutName: string) => void;
     initLayout?: string;
     cy: React.MutableRefObject<cytoscape.Core | undefined>;
     saveGraphPositions: () => void;
+    projectData: ProjectDto;
+    setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout, initLayout="preset", cy, saveGraphPositions}) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({ projectId, changeLayout, initLayout = "preset", cy, saveGraphPositions, projectData, setProjectData}) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     const handleModalClose = () => {
-        console.log("close Modal");
         setModalOpen(false);
     }
-
-    const modalStyle = {
-        position: 'absolute' as const,
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4
-    } as SxProps;
 
     const hamburgerStyle = {
         position: 'absolute',
@@ -40,134 +33,44 @@ const SettingsModal: React.FC<SettingsModalProps> = ({projectId, changeLayout, i
         width: 50,
         height: 50,
         color: 'black',
+        bgcolor: 'transparent',
     } as SxProps;
 
-
-    // const centerRoot = () => {
-    //     //get root nodes cytoscape
-    //     cyRef?.current?.nodes().roots().forEach((root) => positionMutate({id: toNumber(root.id()), position: null}));
-    // }
-
-    
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setLay(event.target.value as string);
-        changeLayout(event.target.value as string);
-        console.log(event.target.value)
-    };
-
-    const [lay, setLay] = useState(initLayout);
-
-    const layoutNames = ["null", "dagre", "preset", "random", "grid", "circle", "concentric", "breadthfirst", "cose"]
-
-
-    const handlePositionFileDownload = () => {
-        const json = cy.current?.json();
-
-        // Convert the JSON object to a string
-        const jsonString = JSON.stringify(json);
-
-        // Create a Blob from the JSON string
-        const blob = new Blob([jsonString], {type: "application/json"});
-
-        // Create a URL for the Blob
-        const url = URL.createObjectURL(blob);
-
-        // Create a link element
-        const a = document.createElement('a');
-
-        // Set the href and download attributes of the link
-        a.href = url;
-        a.download = projectId + '_layout_saved.json';
-
-        // Append the link to the body
-        document.body.appendChild(a);
-
-        // Simulate a click on the link
-        a.click();
-
-        // Remove the link from the body
-        document.body.removeChild(a);
-    }
-
-    const handlePositionFileUpload = () => {
-        // Create an input element
-        const input = document.createElement('input');
-
-        // Set the type attribute to 'file'
-        input.type = 'file';
-        input.accept = 'application/JSON';
-
-        // Set the onchange attribute to read the file when it's selected
-        input.onchange = function() {
-            // Create a new FileReader
-            const reader = new FileReader();
-
-            // Set the onload attribute to parse the JSON and restore the graph when the file is read
-            reader.onload = function() {
-                // Parse the JSON
-                const json = JSON.parse(reader.result);
-
-                cy.current?.elements().remove();
-
-                // Restore the graph
-                cy.current?.json(json);
-            };
-
-            // Read the file as text
-            reader.readAsText(input.files[0]);
-        };
-
-        // Simulate a click on the input
-        input.click();
-    }
-
     return (<>
-        <Modal open={modalOpen} onClose={handleModalClose} style={{border:'none'}}>
-            <Box sx={modalStyle} id={"settingsModal"}>
-                <Stack spacing={2}>
-                    <Tooltip enterDelay={500} title={"Save the current layout on the server (as preset layout)"}>
-                        <Button variant="contained" onClick={saveGraphPositions}>Save Graph Position</Button>
-                    </Tooltip>
-
-                    <Divider></Divider>
-
-                    <Tooltip enterDelay={500} title={"Download the current graph, as is into a json file"}>
-                        <Button variant="contained" onClick={handlePositionFileDownload}>Save Current Layout {"(in file)"}</Button>
-                    </Tooltip>
-                    <Tooltip enterDelay={500} title={"Load previous saved graph (.json) into current panel (hit 'Save Graph Position' if the graph should be saved to the server)"}>
-                        <Button variant="contained" onClick={handlePositionFileUpload}>Load Layout From File</Button>
-                    </Tooltip>
+        <Modal open={modalOpen} onClose={handleModalClose} style={{ overflow:"auto", border: 'none', display: "flex", justifyContent: "center", alignItems: "center"}}>
+            <Box id={"settingsModal"} style={{overflow:"auto", padding:"20px", maxHeight: "calc(100vh - 40px)"}}>
+                <Accordion style={{borderRadius: "10px 10px 2px 2px"}} defaultExpanded sx={{bgcolor:"transparent"}}>
+                    <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
                     
-                    <Divider></Divider>
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                    >
+                    <h1 style={{margin:0}}>Project Settings</h1>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <OldSettingControls projectData={projectData} setProjectData={setProjectData}/>
+                    </AccordionDetails>
+                </Accordion>
 
-                    <Box sx={{ minWidth: 120 }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="layout-select-label">Layout</InputLabel>
-                        <Select
-                        labelId="layout-select-label"
-                        id="layout-select"
-                        value={lay}
-                        label="Layout"
-                        onChange={handleChange}
-                        >
-                        {layoutNames.map((name) => (<MenuItem key={name} value={name}>{name}</MenuItem>))}
-                        </Select>
-                    </FormControl>
-                    </Box>
-                    
-                    <Divider></Divider>
-
-                    <Button variant="contained" onClick={() => {
-                        window.open(`${httpService.baseURL}${projectId}`, "_self");
-                    }}>Old ProjectView</Button>
-                </Stack>
+                <Accordion style={{borderRadius: "2px 2px 10px 10px"}} sx={{bgcolor:"transparent"}}>
+                    <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2-content"
+                    id="panel2-header"
+                    >
+                    <h1 style={{margin:0}}>Graph Settings</h1>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <NewSettingControls projectId={projectId} changeLayout={changeLayout} initLayout={initLayout} cy={cy} saveGraphPositions={saveGraphPositions} />
+                    </AccordionDetails>
+                </Accordion>
+                
             </Box>
         </Modal>
-        <MenuIcon onClick={() => {
-            setModalOpen(true);
-        }
-        } sx={hamburgerStyle} />
+        <Fab sx={hamburgerStyle} size="large" onClick={() => setModalOpen(true)}>
+            <MenuIcon />
+        </Fab>
     </>
     )
 }

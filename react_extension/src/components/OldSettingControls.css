@@ -1,0 +1,10 @@
+.oldSettingsButton{
+    height: 40px;
+    width: 85px;
+}
+
+.oldSettingsTextBox{
+    margin-Left:10px;
+    margin-Top:20px;
+    width: calc(100% - 20px);
+}

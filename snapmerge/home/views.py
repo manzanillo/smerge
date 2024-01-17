@@ -27,6 +27,8 @@ from .Merger_Two_ElectricBoogaloo.merger import merge, Conflict, Resolution, Ste
 from uuid import uuid4
 from django_eventstream import send_event
 
+import bcrypt
+
 
 def generate_unique_PIN():
     size = 6
@@ -46,6 +48,24 @@ def notify_room(proj_id, new_node, event_type="commit"):
         })
     except:
         print("redis not available")
+        
+
+def hashPassword(password):
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode("utf-8")
+
+def check_password(username, password_hashed):
+    user = getUser(username)
+    if not user:
+        return "False"
+    
+    if bcrypt.checkpw(password_hashed.encode("utf-8"), user.password.encode("utf-8")):
+        if not user.activated:
+            return "Please wait till account is activated."
+        return "True"
+    else:
+        return "False"
 
 
 # Create your views here.
@@ -210,6 +230,11 @@ class CreateProjectView(View):
 
             proj_instance = proj_form.save(commit=False)
             proj_instance.pin = generate_unique_PIN()
+            
+            # disabled until reset link path generation available
+            # change password to hashed variant
+            # proj_instance.password = hashPassword(proj_instance.password)
+            
             proj_instance.save()
 
             # verify xml if a snap file is given, else insert blank snap file
@@ -317,7 +342,8 @@ class RestoreInfoView(View):
                 send_mail(
                     _('Your smerge.org projects'),
                     content_text,
-                    'noreply@smerge.org',
+                    #'noreply@smerge.org',
+                    settings.EMAIL_SENDER,
                     [email],
                     fail_silently=False,
                     html_message=content_html,
@@ -452,6 +478,7 @@ class DeleteProjectView(View):
     def post(self, request, proj_id):
 
         password = request.POST.get('password', None)
+        print(password)
 
         if password != None:
             try:
