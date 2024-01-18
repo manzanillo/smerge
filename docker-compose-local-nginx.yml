@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  nginx:
+    image: nginx:1.15-alpine
+    container_name: smerge_nginx
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/nginx_access:/etc/nginx/conf.d
+      - ./secrets/rasp_certs/:/etc/letsencrypt/live/idpsmerge.duckdns.org/
+      - /opt/smerge/allowed_ips.conf:/etc/nginx/allowed_ips.conf
