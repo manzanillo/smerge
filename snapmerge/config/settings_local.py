@@ -49,4 +49,4 @@ EMAIL_HOST = 'in-v3.mailjet.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = secrets["EMAIL_API_KEY"]
 
-EMAIL_USE_TLS = False
+EMAIL_USE_TLS = True
