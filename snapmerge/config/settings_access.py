@@ -1,4 +1,5 @@
 from .settings_base import *
+import json
 
 URL = 'https://idpsmerge.duckdns.org'
 
