@@ -78,9 +78,6 @@ snapmerge/media/*
 #Compiled css and js
 snapmerge/static/CACHE/**
 
-#secrets file
-secrets/smerge/secrets.smerge.json
-
 #exclude git data
 Access_Portal/Web_Api/gitWorker/data/*
 
