@@ -1,6 +1,7 @@
 import downloadIcon from '../../assets/download.png'
 import colorIcon from '../../assets/color.png'
 import editIcon from '../../assets/edit.png'
+import collapseIcon from '../../assets/collapse.png'
 import httpService from '../../services/HttpService'
 import { CollectionStyle, Singular } from 'cytoscape'
 
@@ -34,7 +35,7 @@ const generateContextMenuSettings = (projectId: string, refresh: () => void) => 
             },
             {
                 fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
-                content: `<img src="${editIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
+                content: `<img src="${collapseIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
                 select: function (ele: CytoscapeContextElement) {
                     // console.log(ele);
                     // console.log(typeof(ele))
@@ -48,6 +49,14 @@ const generateContextMenuSettings = (projectId: string, refresh: () => void) => 
                         ele.successors().addClass('hidden');
                     }
                     
+                }
+            },
+            {
+                fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+                content: `<img src="${editIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
+                select: function (ele: CytoscapeContextElement) {
+                    console.log(ele);
+                    console.log("Edit");
                 }
             },
             {

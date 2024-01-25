@@ -1,0 +1,33 @@
+FROM python:alpine3.19
+
+RUN apk --no-cache add \
+    nodejs \
+    npm \
+    make \
+    g++
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY /requirements.txt /app
+COPY /package.json /app
+
+RUN pip install -r requirements.txt
+RUN npm install
+
+COPY ./secrets /app/secrets/
+
+RUN mkdir -p /app/snapmerge/media
+RUN mkdir -p /app/snapmerge/database
+COPY ./snapmerge /app/snapmerge/
+COPY ./launch_daphne.sh /app
+
+RUN chmod +x ./launch_daphne.sh
+
+WORKDIR /app/snapmerge
+
+EXPOSE 8001
+
+ENTRYPOINT ["/app/launch_daphne.sh"]
+
+# sudo docker build -t smerge_daphne . -f Dockerfile.daphne

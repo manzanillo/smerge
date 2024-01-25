@@ -1,21 +1,22 @@
 // import { useParams } from "react-router-dom";
-import { Component, useEffect, useState } from 'react'
+import { Component, useEffect, useState } from "react";
 // import CytoscapeComponent from 'react-cytoscapejs'
 
-import "./components/NodeGraph/NodeGraph"
+import "./components/NodeGraph/NodeGraph";
 import NodeGraph from "./components/NodeGraph/NodeGraph";
-import { getProjectData } from './services/ProjectService';
-import { useParams } from 'react-router-dom';
-import ProjectDto from './components/models/ProjectDto';
+import { getProjectData } from "./services/ProjectService";
+import { useParams } from "react-router-dom";
+import ProjectDto from "./components/models/ProjectDto";
+import HelpDisplay from "./components/HelpMenu/HelpDisplay";
 
 const ProjectView: React.FC = () => {
   const { projectId } = useParams();
 
   const [projectData, setProjectData] = useState<ProjectDto>(null);
 
-  useEffect(()=>{
-    console.log("Project data changed")
-  }, [projectData])
+  useEffect(() => {
+    console.log("Project data changed");
+  }, [projectData]);
 
   useEffect(() => {
     const gatherData = async () => {
@@ -23,7 +24,7 @@ const ProjectView: React.FC = () => {
       if (res) {
         setProjectData(res);
       }
-    }
+    };
 
     gatherData();
   }, [projectId]);
@@ -36,8 +37,11 @@ const ProjectView: React.FC = () => {
     // ];
 
     // return <CytoscapeComponent elements={elements} style={ { width: '100%', height: '100%' } } />;
-    <NodeGraph projectData={projectData} setProjectData={setProjectData}/>
+    <>
+      <NodeGraph projectData={projectData} setProjectData={setProjectData} />
+      <HelpDisplay></HelpDisplay>
+    </>
   );
-}
+};
 
 export default ProjectView;

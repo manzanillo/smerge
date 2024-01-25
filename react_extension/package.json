@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview --port 5069"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -23,10 +23,14 @@
     "cytoscape": "^3.27.0",
     "cytoscape-cxtmenu": "^3.5.0",
     "cytoscape-dagre": "^2.5.0",
+    "i18next": "^23.7.18",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "i18next-http-backend": "^2.4.2",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^14.0.1",
     "react-router-dom": "^6.15.0",
     "react-split": "^2.0.14",
     "react-toastify": "^9.1.3",

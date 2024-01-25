@@ -4,6 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        {
+            "name": "Launch Edge",
+            "request": "launch",
+            "type": "msedge",
+            "url": "https://rs-kubuntu.local/ext/project_view/46926613-3cca-439d-a4f3-9897753b9940",
+            "webRoot": "${workspaceFolder}/react_extension/src/"
+        },
 
         {
             "name": "Python: Django",

@@ -21,7 +21,6 @@ const PasswordField: React.FC<PasswordFieldProps> = ({name, handleChange, labelT
             error={error}
             name={name}
             onChange={handleChange}
-            id="filled-adornment-password"
             type={showPassword ? 'text' : 'password'}
             endAdornment={
               <InputAdornment position="end">

@@ -4,5 +4,10 @@
         "cytoscapejs",
         "dagre",
         "tanstack"
-    ]
+    ],
+    "i18n-ally.localesPaths": [
+        "react_extension/public/locales",
+        "snapmerge/static/locale"
+    ],
+    "i18n-ally.keystyle": "nested"
 }

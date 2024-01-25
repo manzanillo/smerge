@@ -7,7 +7,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django_eventstream import routing, consumers
 from .CustomRoomIdMiddleware import CustomRoomIdMiddlewareStack
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "snapmerge.config.settings_local")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings_daphne")
 
 
 application = ProtocolTypeRouter({
@@ -20,4 +20,5 @@ application = ProtocolTypeRouter({
 })
 
 # dep mode?
-#daphne snapmerge.config.asgi:application
+# cd snapmerge
+# daphne config.asgi:application

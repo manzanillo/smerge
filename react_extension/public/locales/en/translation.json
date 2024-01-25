@@ -1,0 +1,66 @@
+{
+  "main": {
+    "test": "test text oder so..."
+  },
+  "SettingsModal": {
+    "old_title": "Project Settings",
+    "graph_title": "Graph Settings"
+  },
+  "OldSettingControls": {
+    "project_pin": "Project Pin:",
+    "change_password": "Change Password:",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "change": "Change",
+    "change_project_name": "Change Project Name:",
+    "change_project_desc": "Change Project Description:",
+    "language": "Language:",
+    "delete_project": "Delete Project"
+  },
+  "NewSettingControls": {
+    "save_graph_pos": "Save Graph Position",
+    "save_current_layout": "Save Current Layout (in file)",
+    "load_layout": "Load Layout From File",
+    "layout": "Layout",
+    "dagre": "Dagre",
+    "preset": "Server-Saved",
+    "random": "Random",
+    "grid": "Grid",
+    "circle": "Circle",
+    "concentric": "Concentric",
+    "breadthfirst": "Breadth First",
+    "cose": "Force (Cose)",
+    "wheel_sensitivity_popover": {
+      "text": "Be careful! This setting will RELOAD the page and is SAVED on the pc. (Default is 1)",
+      "button": "Open"
+    },
+    "old_projectview": "Old Project View",
+    "scroll_speed": "Change Scroll Speed:",
+    "save_graph_pos_tooltip": "Save the current layout on the server (as \"Server-Saved\" layout)",
+    "save_current_layout_tooltip": "Download the current graph, as is into a json file",
+    "load_layout_tooltip": "Load previous saved graph (.json) into current panel (hit \"Save Graph Position\" if you want the loaded graph to be saved as the server layout)"
+  },
+  "HelpPages": {
+    "page0": {
+      "header": "General Usage",
+      "item0": {
+        "header": "Movement",
+        "footer": "**__General Movement:\n -Click and drag the mouse on a node to move it\n  -Only in \"Server-Saved\" layout will each move be saved and shared\n -Click and drag outside of a node to move the graph\n -Scroll to zoom in and out"
+      },
+      "item1": {
+        "header": "Select Objects",
+        "footer": "**__Selecting nodes:\n -Hold Shift or Ctrl and click on nodes to select them\n  -Selected nodes have a pink color\n -Hold Shift and drag the mouse to create a selection box"
+      },
+      "item2": {
+        "footer": "**__Right click a node to open the context menu:\n - Download: Download corresponding snap file.\n - Favor: Mark a node for all to see.\n - Edit: Change node values.\n - Collapse: Collapse all nodes beneath into one.",
+        "header": "Context Menu"
+      }
+    },
+    "page1": {
+      "header": "Snap"
+    },
+    "page2": {
+      "header": "Merge"
+    }
+  }
+}

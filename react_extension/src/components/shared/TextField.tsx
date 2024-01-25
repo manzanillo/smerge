@@ -18,7 +18,6 @@ const TextField: React.FC<TextFieldProps> = ({name, handleChange, defaultValue, 
             defaultValue={defaultValue}
             name={name}
             onChange={handleChange}
-            id="filled-adornment-text"
             type={'text'}
           />
         )

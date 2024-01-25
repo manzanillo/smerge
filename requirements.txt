@@ -15,3 +15,5 @@ django-eventstream
 
 requests
 bcrypt
+
+Twisted[tls,http2]

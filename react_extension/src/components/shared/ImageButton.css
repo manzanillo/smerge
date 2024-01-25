@@ -1,0 +1,27 @@
+.GlassButtonDarker{
+    border: none;
+    backdrop-filter: blur(5px) saturate(115%);
+    background-color: rgba(27, 32, 39, 0.219) !important;
+
+    border-radius: 8px;
+    outline: none;
+    box-shadow: inset 3px 3px 5px rgba(255, 255, 255, 0.3), inset -3px -3px 5px rgba(255, 255, 255, 0.2), 8px 8px 10px rgba(2, 2, 2, 0.226) !important;
+}
+
+.GlassButtonDarker:hover{
+    background-color: rgba(105, 105, 105, 0.349)!important;
+    transition: 100ms;
+}
+
+.ImageButtonSelected {
+    box-shadow: inset 3px 3px 5px rgba(255, 255, 255, 0.3), inset -3px -3px 5px rgba(255, 255, 255, 0.2), 4px 4px 8px #d5d5d57d, -4px -4px 8px #d5d5d57d !important;
+}
+
+.GlassButtonDarker:hover > img{
+    opacity: 0.9;
+    transition: 100ms;
+}
+
+.GlassButtonDarker > img{
+    border-radius: 40px !important;
+}

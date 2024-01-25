@@ -18,8 +18,8 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({cyRef, refresh, projectId}) 
     const fabStyle = {
         position: 'absolute',
         borderRadius: '32px',
-        bottom: 16,
-        right: 16,
+        bottom: 20,
+        right: 20,
     } as SxProps;
 
     const [mergeFabColor, setMergeFabColor] = useState<"success" | "error" | "info" | "warning" | PropTypes.Color>("primary");
@@ -105,7 +105,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({cyRef, refresh, projectId}) 
     const id = open ? 'simple-popover' : undefined;
 
     return (
-        <Box sx={fabStyle}>
+        <Box>
             <Popover
                 id={id}
                 open={open}

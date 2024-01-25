@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  django:
+    container_name: smerge_daphne
+    build:
+      context: .
+      dockerfile: Dockerfile.daphne
+    image: daphne_docker
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./snapmerge/media:/app/snapmerge/media
+      - ./snapmerge/database:/app/snapmerge/database
+    ports:
+      - "8001:8001"
+  react_ext:
+    container_name: smerge_ext
+    build:
+      context: .
+      dockerfile: Dockerfile.react.ext.depl
+    image: react_ext_docker
+    stdin_open: true
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"

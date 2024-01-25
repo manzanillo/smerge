@@ -1,0 +1,52 @@
+# !!! Start Working !!!
+# production environment
+FROM nginx:stable-alpine
+WORKDIR /app
+COPY react_extension/dist /app
+# new
+COPY data/nginx_deploy/nginx_ext.conf /etc/nginx/conf.d/default.conf
+
+RUN mkdir -p /etc/letsencrypt/live/idpsmerge.duckdns.org
+COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
+COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
+
+EXPOSE 80
+EXPOSE 443
+CMD ["nginx", "-g", "daemon off;"]
+# !!! End Working !!!
+
+
+
+
+
+#FROM lipanski/docker-static-website:latest
+
+# Copy your static files
+#COPY react_extension/dist ./ext
+
+#CMD ["/busybox", "httpd", "-f", "-v", "-p", "5069", "-c", "httpd.conf"]
+
+# sudo docker build -t react-ext-deploy . -f Dockerfile.react.ext.depl
+# sudo docker run -d -p 5069:5069 react-ext-deploy
+
+
+
+
+
+# Use an official Node.js runtime as the base image
+# FROM node:21-alpine
+
+# # Set the working directory in the container to /app
+# WORKDIR /app
+
+# # Copy the local 'dist' folder (your built Vite app) to the /app folder in the container
+# COPY ./react_extension/dist /app
+
+# # Install 'serve' in the container
+# RUN npm install -g serve
+
+# # Make port 5000 available outside the container
+# EXPOSE 5069
+
+# # Run 'serve' when the container launches
+# CMD ["serve", "-s", ".", "-l", "5069"]
