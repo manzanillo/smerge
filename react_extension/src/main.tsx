@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <div style={{ width: "100vw", position: "absolute", left: "0", top: "0" }}><Layout /></div>
         <div style={{ position: "absolute", top: "64px", bottom: "0px", width: "100vw", overflow: "scroll" }}>
             <QueryClientProvider client={queryClient}>
-                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+                 <ReactQueryDevtools initialIsOpen={false} />
               <Router>
                 <Routes>
                     <Route path="ext/project_view/:projectId" element={<ProjectView />}></Route>

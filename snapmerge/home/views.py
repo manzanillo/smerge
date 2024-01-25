@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonRespons
 from django.utils.translation import gettext_lazy as _
 
 from . import models
-from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, MergeConflict, Hunk
+from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, MergeConflict, Hunk, NodeTypes
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
@@ -648,6 +648,8 @@ def mergeExt(request, proj_id, resolutions):
         new_file.save()
 
         try:
+            for file in files:
+                file.type = NodeTypes.MERGING.value
             file1 = files.pop()
             file2 = files.pop()
             ancestor_id = gca(file1.id, file2.id, parents=parents)
