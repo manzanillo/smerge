@@ -4,6 +4,11 @@ RUN apk --no-cache add \
     nodejs \
     npm \
     make \
+    libffi-dev \
+    libressl-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libjpeg-turbo-dev \
     gcc \
     g++
 
