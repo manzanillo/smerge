@@ -47,7 +47,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         }}
       >
         <QueryClientProvider client={queryClient}>
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <ReactQueryDevtools initialIsOpen={false} />
           <Router>
             <Routes>
               <Route
@@ -60,7 +60,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<ConflictStepper />}
               ></Route>
               <Route path="ext/eventTest" element={<EventTest />}></Route>
-              <Route path="ext/*" element={<Test></Test>}></Route>
+              <Route path="ext/*" element={<h1>404</h1>}></Route>
             </Routes>
           </Router>
         </QueryClientProvider>

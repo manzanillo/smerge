@@ -4,12 +4,16 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from .xmltools import analyze_file, include_sync_button
+from enum import Enum
 import uuid
 
 
 def default_color():
     return '#076AAB'
 
+class NodeTypes(Enum):
+    DEFAULT = "default"
+    MERGING = "merging"
 
 class Project(models.Model):
     name = models.CharField(_("Name"), max_length=100)
@@ -63,6 +67,9 @@ class SnapFile(File):
     user = models.CharField(_("user"), max_length=30, null=True)
     xPosition = models.FloatField(_("xPosition"), default=0)
     yPosition = models.FloatField(_("yPosition"), default=0)
+    collapsed = models.BooleanField(_("collapsed"), default=False)
+    hidden = models.BooleanField(_("hidden"), default=False)
+    type = models.CharField(_("type"), max_length=30, null=True, default=NodeTypes.DEFAULT.value)
 
     @classmethod
     def create_and_save(cls, project, file, ancestors=None, user=None, description=''):
@@ -104,7 +111,10 @@ class SnapFile(File):
             'number_sprites': self.number_sprites,
             'color': self.color,
             'xPosition': self.xPosition,
-            'yPosition': self.yPosition
+            'yPosition': self.yPosition,
+            'collapsed': self.collapsed,
+            'hidden': self.hidden,
+            'type': self.type
         }
 
     def get_media_path(self):
