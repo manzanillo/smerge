@@ -161,7 +161,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
           }
           cy.current?.fit();
           // cy.current?.center();
-        }, 1);
+        }, 100);
 
         ranFirstAgain.current = true;
       }
@@ -237,7 +237,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     if (savedLayout != "preset") {
       toClean = setTimeout(() => {
         changeLayout(savedLayout);
-      }, 100);
+      }, 150);
     }
 
     return () => {

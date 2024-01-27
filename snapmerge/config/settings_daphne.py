@@ -1,7 +1,8 @@
 from .settings_base import *
 import json
 
-URL = 'http://127.0.0.1:8000'
+URL = 'http://0.0.0.0:8000'
+POST_BACK_URL = 'https://rs-kubuntu.local'
 
 SECRET_KEY = '()fvd?-m+=quyxz*_3v+gjg!d)8n0(wbo*k)(0kwtwuryr4nil'
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -12,7 +12,7 @@ services:
       - ./snapmerge/media:/app/snapmerge/media
       - ./snapmerge/database:/app/snapmerge/database
     ports:
-      - "8001:8001"
+      - "8000:8000"
   react_ext:
     container_name: smerge_ext
     build:
@@ -22,5 +22,4 @@ services:
     stdin_open: true
     tty: true
     ports:
-      - "80:80"
-      - "443:443"
+      - "5069:5069"

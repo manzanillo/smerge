@@ -241,7 +241,7 @@ def include_sync_button(file, proj_id, me):
     with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
         sync_file = f.read()
         sync_file = sync_file.replace(
-            '{{url}}', settings.URL + '/sync/' + str(proj_id) + '?ancestor=' + str(me))
+            '{{url}}', settings.POST_BACK_URL + '/sync/' + str(proj_id) + '?ancestor=' + str(me))
         sync_button = ET.fromstring(sync_file)
 
         target = ET.parse(settings.BASE_DIR + file)

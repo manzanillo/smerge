@@ -16,9 +16,13 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY /requirements.txt /app
-COPY /package.json /app
+RUN mkdir -p /app/snapmerge
+COPY /package.json /app/snapmerge/
 
 RUN pip install -r requirements.txt
+
+
+WORKDIR /app/snapmerge
 RUN npm install
 
 COPY ./secrets /app/secrets/
@@ -28,12 +32,14 @@ RUN mkdir -p /app/snapmerge/database
 COPY ./snapmerge /app/snapmerge/
 COPY ./launch_daphne.sh /app
 
+WORKDIR /app
 RUN chmod +x ./launch_daphne.sh
 
 WORKDIR /app/snapmerge
 
-EXPOSE 8001
+EXPOSE 8000
 
 ENTRYPOINT ["/app/launch_daphne.sh"]
 
 # sudo docker build -t smerge_daphne . -f Dockerfile.daphne
+# sudo docker run -d -p 8000:8000 smerge_daphne

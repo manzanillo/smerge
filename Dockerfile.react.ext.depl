@@ -10,8 +10,7 @@ RUN mkdir -p /etc/letsencrypt/live/idpsmerge.duckdns.org
 COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
 COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
 
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5069
 CMD ["nginx", "-g", "daemon off;"]
 # !!! End Working !!!
 
