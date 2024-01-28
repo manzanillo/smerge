@@ -17,7 +17,7 @@ import NewSettingControls from "./NewSettingControls";
 import { useTranslation } from "react-i18next";
 
 interface SettingsModalProps {
-  projectId: string;
+  projectDto: ProjectDto;
   changeLayout: (layoutName: string) => void;
   initLayout?: string;
   cy: React.MutableRefObject<cytoscape.Core | undefined>;
@@ -26,10 +26,11 @@ interface SettingsModalProps {
   setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
   wheelSensitivity: number;
   setWheelSensitivity: (val: number) => void;
+  reloadData: () => void;
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
-  projectId,
+  projectDto,
   changeLayout,
   initLayout = "preset",
   cy,
@@ -38,6 +39,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   setProjectData,
   wheelSensitivity,
   setWheelSensitivity,
+  reloadData,
 }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -121,13 +123,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             </AccordionSummary>
             <AccordionDetails>
               <NewSettingControls
-                projectId={projectId}
+                projectDto={projectDto}
                 changeLayout={changeLayout}
                 initLayout={initLayout}
                 cy={cy}
                 saveGraphPositions={saveGraphPositions}
                 wheelSensitivity={wheelSensitivity}
                 setWheelSensitivity={setWheelSensitivity}
+                reloadData={reloadData}
+                setProjectData={setProjectData}
               />
             </AccordionDetails>
           </Accordion>

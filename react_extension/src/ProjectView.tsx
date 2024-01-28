@@ -1,5 +1,5 @@
 // import { useParams } from "react-router-dom";
-import { Component, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 // import CytoscapeComponent from 'react-cytoscapejs'
 
 import "./components/NodeGraph/NodeGraph";
@@ -14,20 +14,16 @@ const ProjectView: React.FC = () => {
 
   const [projectData, setProjectData] = useState<ProjectDto>(null);
 
-  useEffect(() => {
-    console.log("Project data changed");
-  }, [projectData]);
-
-  useEffect(() => {
-    const gatherData = async () => {
-      const res = await getProjectData(projectId ?? "");
-      if (res) {
-        setProjectData(res);
-      }
-    };
-
-    gatherData();
+  const gatherProjectData = useCallback(async () => {
+    const res = await getProjectData(projectId ?? "");
+    if (res) {
+      setProjectData(res);
+    }
   }, [projectId]);
+
+  useEffect(() => {
+    gatherProjectData();
+  }, [gatherProjectData, projectId]);
 
   return (
     // const elements = [
@@ -38,7 +34,11 @@ const ProjectView: React.FC = () => {
 
     // return <CytoscapeComponent elements={elements} style={ { width: '100%', height: '100%' } } />;
     <>
-      <NodeGraph projectData={projectData} setProjectData={setProjectData} />
+      <NodeGraph
+        projectData={projectData}
+        setProjectData={setProjectData}
+        gatherProjectData={gatherProjectData}
+      />
       <HelpDisplay></HelpDisplay>
     </>
   );

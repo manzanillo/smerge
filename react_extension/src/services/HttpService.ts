@@ -73,6 +73,12 @@ class HttpService {
         });
     }
 
+    getAsyncText<T>(endpoint: string): Promise<T> {
+        return new Promise((resolve, reject) => {
+            this.get(endpoint, (xHttp) => resolve(xHttp.responseText as T), reject, reject, true, false);
+        });
+    }
+
     get(endpoint: string, onSuccess: (_: XMLHttpRequest) => void, onFail: (_: XMLHttpRequest) => void, onRedirect: (_: XMLHttpRequest) => void, suppressNotificationSuccess = false, suppressNotificationFail = false) {
         const xhttp = new XMLHttpRequest();
         xhttp.open("GET", this.baseURL + endpoint, true);

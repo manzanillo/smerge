@@ -15,6 +15,9 @@ urlpatterns = [
     path('api/update/project/<str:id>', api_views.ProjectDetailUpdateView.as_view()),
     path('api/update/password/<str:id>', api_views.ProjectChangePasswordView.as_view()),
     path('api/delete/project/<str:id>', api_views.ProjectDeleteView.as_view()),
+    path('api/delete/conflict/<str:id>', api_views.MergeConflictDeleteView.as_view()),
+    path('api/update/project_colors/<str:id>', api_views.ProjectColorUpdateView.as_view()),
+    path('api/update/node_desc/<str:id>', api_views.NodeLabelUpdateView.as_view()),
     
     
     path('api/file/<int:id>', api_views.SnapFileDetailView.as_view()),
@@ -46,6 +49,7 @@ urlpatterns = [
     re_path(r'^tmp/(?P<proj_id>[-\w]+)$', views.TmpView.as_view(), name='tmp'),
     re_path(r'^new_merge/(?P<proj_id>[-\w]+)$', views.NewMergeView.as_view(), name='new_merge'),
     re_path(r'^res_hunk/(?P<proj_id>[-\w]+)$', views.ResolveHunkView.as_view(), name='res_hunk'),
+    re_path(r'^collapse_node/(?P<node_id>[-\w]+)$', views.ToggleCollapseView.as_view(), name='collapse_node'),
     re_path(r'^tmptmp/(?P<proj_id>[-\w]+)$', views.TmpTmpView.as_view(), name='tmptmp'),
     re_path(r'^jsredirect/(?P<file_id>[-\w]+)$', views.JsRedirectView.as_view(), name='jsredirect'),
     re_path(r'blockerXML/(?P<file_name>[-./\w]+)$',views.GetBlockerXMLView.as_view(), name='getBlockXML'),

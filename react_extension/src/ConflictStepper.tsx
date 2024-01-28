@@ -1,20 +1,20 @@
 import { useParams } from "react-router-dom";
-import MergeConflictView from "./MergeConflictView"
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import "./ConflictStepper.css"
+import MergeConflictView from "./MergeConflictView";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import StepContent from "@mui/material/StepContent";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import "./ConflictStepper.css";
 import { useEffect, useRef, useState } from "react";
 import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
-import ScriptTag from "react-script-tag";
+import useScriptLoader from "./components/shared/useScriptLoader";
 
 interface ConflictVM {
   hunks: ConflictDto[];
@@ -41,8 +41,7 @@ interface FileDto {
   color: string;
 }
 
-interface ConflictStepperProps {
-}
+interface ConflictStepperProps {}
 
 function getCookie(key: string) {
   const b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -53,12 +52,14 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   const { code } = useParams();
 
   const [loadingConflict, setLoadingConflict] = useState(true);
-  const [loadingConfictText, setLoadingConflictText] = useState("Loading conflicts...")
+  const [loadingConfictText, setLoadingConflictText] = useState(
+    "Loading conflicts..."
+  );
   const [conflictData, setConflictData] = useState<ConflictDto[]>();
 
-  const projectId = useRef<string>("")
-  const leftId = useRef<number>(0)
-  const rightId = useRef<number>(0)
+  const projectId = useRef<string>("");
+  const leftId = useRef<number>(0);
+  const rightId = useRef<number>(0);
 
   useEffect(() => {
     debouncedLoadData();
@@ -67,7 +68,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   const loadData = () => {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", `/tmp/${code}`, true);
-    const csrftoken = getCookie('csrftoken');
+    const csrftoken = getCookie("csrftoken");
     xhttp.setRequestHeader("X-CSRFToken", csrftoken ?? "");
     xhttp.send();
 
@@ -79,30 +80,33 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
         projectId.current = resJson.projectId;
         leftId.current = resJson.leftId;
         rightId.current = resJson.rightId;
-        
+
         console.log(conflictData);
       } else {
-        if (xhttp.status >= 400){
+        if (xhttp.status >= 400) {
           console.log(`Conflict ${code} not found.`);
           toast.warning(`Conflict ${code} not found.`, {
-            position: 'top-right',
+            position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
           });
         }
       }
-    }
-  }
+    };
+  };
 
   const sendChoices = () => {
     const url = `/new_merge/${projectId.current}?file=${leftId.current}&file=${rightId.current}`;
     // return url;
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", url, true);
-    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    const csrftoken = getCookie('csrftoken');
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    const csrftoken = getCookie("csrftoken");
     xhttp.setRequestHeader("X-CSRFToken", csrftoken ?? "");
-    const data = conflictData?.map(conflict => `{"choice":"${conflict.choice}", "data":""}`).join(',')??"";
+    const data =
+      conflictData
+        ?.map((conflict) => `{"choice":"${conflict.choice}", "data":""}`)
+        .join(",") ?? "";
     xhttp.send(`resolutions=${data}`);
 
     xhttp.onreadystatechange = function () {
@@ -110,28 +114,26 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
         setLoadingConflict(false);
         window.close();
         toast.success(xhttp.responseText, {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-          });
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+        });
       } else {
-        if (xhttp.readyState === 4 && xhttp.status >= 400){
+        if (xhttp.readyState === 4 && xhttp.status >= 400) {
           console.log(`Conflict ${code} not found.`);
           toast.warning(`Merge ${code} failed.`, {
-            position: 'top-right',
+            position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
           });
         }
       }
-    }
-  }
+    };
+  };
 
   const debouncedLoadData = debounce(loadData, 50);
 
-  useEffect(() => {
-
-  }, [conflictData])
+  useEffect(() => {}, [conflictData]);
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -140,12 +142,11 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
       conflictData[activeStep].choice = left ? "left" : "right";
     }
 
-    if (activeStep >= conflictData.length - 1){
+    if (activeStep >= conflictData.length - 1) {
       finish();
       return;
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-
   };
 
   const handleBack = () => {
@@ -157,12 +158,12 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   };
 
   const leftButtonAction = () => {
-    handleNext(true)
-  }
+    handleNext(true);
+  };
 
   const rightButtonAction = () => {
-    handleNext(false)
-  }
+    handleNext(false);
+  };
 
   const finish = () => {
     console.log("fin");
@@ -172,7 +173,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
     for (const conflict of conflictData as ConflictDto[]) {
       if (conflict.choice == undefined) {
         toast.error(`Conflict ${c} not set.`, {
-          position: 'top-right',
+          position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
         });
@@ -187,50 +188,234 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
     setLoadingConflictText("Awaiting merge result...");
     setLoadingConflict(true);
     toast.success(sendChoices(), {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,
     });
     // setTimeout(()=>{window.location.reload();
     // }, 1000)
+  };
+
+  const scripts = [
+    "/ext/csnap/morphic.js",
+    "/ext/csnap/symbols.js",
+    "/ext/csnap/widgets.js",
+    "/ext/csnap/blocks.js",
+    "/ext/csnap/threads.js",
+    "/ext/csnap/objects.js",
+    "/ext/csnap/scenes.js",
+    "/ext/csnap/gui.js",
+    "/ext/csnap/paint.js",
+    "/ext/csnap/lists.js",
+    "/ext/csnap/byob.js",
+    "/ext/csnap/tables.js",
+    "/ext/csnap/sketch.js",
+    "/ext/csnap/video.js",
+    "/ext/csnap/maps.js",
+    "/ext/csnap/extensions.js",
+    "/ext/csnap/xml.js",
+    "/ext/csnap/store.js",
+    "/ext/csnap/locale.js",
+    "/ext/csnap/cloud.js",
+    "/ext/csnap/api.js",
+    "/ext/csnap/sha512.js",
+    "/ext/csnap/FileSaver.min.js",
+  ];
+
+  const [error, scriptsLoaded] = useScriptLoader(scripts);
+
+  if (error) {
+    console.error("Error loading scripts:", error);
   }
 
-  const [scriptsLoaded, setScriptsLoaded] = useState<number>(0)
-
-  return (<>
-
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/morphic.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/api.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/symbols.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/widgets.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/blocks.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/threads.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/objects.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/scenes.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/gui.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/paint.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/lists.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/byob.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/tables.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/sketch.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/video.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/maps.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/extensions.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/xml.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/store.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/locale.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/cloud.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/sha512.js" type="text/javascript" />
-      <ScriptTag onLoad={()=>{setScriptsLoaded(scriptsLoaded + 1)}} src="/ext/csnap/FileSaver.min.js" type="text/javascript" />
-
-        {loadingConflict ?
-    <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><Stack alignItems={"center"}><CircularProgress size="64px" /><h1>{loadingConfictText}</h1></Stack></Box> :
-    <Box sx={{ p: "20px" }}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {conflictData?.map((step, index) => (
-          <Step key={step.id}>
-            <StepLabel
-
+  return (
+    <>
+      <>
+        {/* <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/morphic.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/api.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/symbols.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/widgets.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/blocks.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/threads.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/objects.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/scenes.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/gui.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/paint.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/lists.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/byob.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/tables.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/sketch.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/video.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/maps.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/extensions.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/xml.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/store.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/locale.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/cloud.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+        }}
+        src="/ext/csnap/sha512.js"
+        type="text/javascript"
+      />
+      <ScriptTag
+        onLoad={() => {
+          setScriptsLoaded((prev) => prev + 1);
+          console.log(scriptsLoaded);
+        }}
+        src="/ext/csnap/FileSaver.min.js"
+        type="text/javascript"
+      /> */}
+      </>
+      {/* <ScriptLoader scripts={scripts}> */}
+      {loadingConflict || !scriptsLoaded ? (
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Stack alignItems={"center"}>
+            <CircularProgress size="64px" />
+            <h1>{loadingConfictText}</h1>
+          </Stack>
+        </Box>
+      ) : (
+        <Box sx={{ p: "20px" }}>
+          <Stepper activeStep={activeStep} orientation="vertical">
+            {conflictData?.map((step, index) => (
+              <Step key={step.id}>
+                <StepLabel
                   optional={
                     index === conflictData.length - 1 ? (
                       <Typography variant="caption">Last step</Typography>
@@ -241,17 +426,30 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                 </StepLabel>
                 <StepContent>
                   <div className="stepCard">
-                    <MergeConflictView leftButtonAction={leftButtonAction} rightButtonAction={rightButtonAction} code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`} leftLink={step.left.file_url} rightLink={step.right.file_url} isActive={index == activeStep} isText={step.left.file_url.includes(".txt")} isImage={step.left.file_url.includes(".base64")} />
+                    <MergeConflictView
+                      leftButtonAction={leftButtonAction}
+                      rightButtonAction={rightButtonAction}
+                      code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`}
+                      leftLink={step.left.file_url}
+                      rightLink={step.right.file_url}
+                      isActive={index == activeStep}
+                      isText={step.left.file_url.includes(".txt")}
+                      isImage={step.left.file_url.includes(".base64")}
+                    />
                   </div>
 
                   <Box sx={{ mb: 2 }}>
                     <div>
                       <Button
                         variant="contained"
-                        onClick={() => { handleNext(true) }}
+                        onClick={() => {
+                          handleNext(true);
+                        }}
                         sx={{ mt: 1, mr: 1 }}
                       >
-                        {index === conflictData.length - 1 ? 'Finish' : 'Continue'}
+                        {index === conflictData.length - 1
+                          ? "Finish"
+                          : "Continue"}
                       </Button>
                       <Button
                         disabled={index === 0}
@@ -266,17 +464,22 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
               </Step>
             ))}
           </Stepper>
-          {activeStep > conflictData.length - 1 && (
+          {activeStep > (conflictData?.length ?? 9999) - 1 && (
             <Paper square elevation={0} sx={{ p: 3 }}>
-              <Typography>All steps completed - you&apos;re finished</Typography>
+              <Typography>
+                All steps completed - you&apos;re finished
+              </Typography>
               <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
                 Reset
               </Button>
             </Paper>
           )}
-        </Box>}</>
-  )
+        </Box>
+      )}
+      {/* </ScriptLoader> */}
+    </>
+  );
   //<MergeConflictView code={code}/>
-}
+};
 
-export default ConflictStepper
+export default ConflictStepper;

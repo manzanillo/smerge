@@ -90,3 +90,62 @@ export const postProjectSettingsChange = async (projectId: string, project: Proj
         });
     }
 }
+
+export const putColorChange = async (projectId: string, default_color?: string, favor_color?: string, conflict_color?:string) => {
+    const colorObject = {
+        "default_color": default_color,
+        "favor_color": favor_color,
+        "conflict_color": conflict_color
+    }
+    
+    try{
+        const res = await httpService.postAsync<string>(`api/update/project_colors/${projectId}`, colorObject, "PUT", true, true);
+
+        if (res) {
+            toast.success(`Colors Changed.`, {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err){
+        console.log("Changing color failed.");
+        console.log(err);
+    }
+}
+
+export const putLabelChange = async(fileId: string, label: string) => {
+    const labelObject = {
+        "label": label,
+    }
+    
+    try{
+        const res = await httpService.postAsync<string>(`api/update/node_desc/${fileId}`, labelObject, "PUT", true, true);
+
+        if (res) {
+            toast.success(`Label Changed.`, {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err){
+        console.log("Changing label failed.");
+        console.log(err);
+    }
+}
+
+export const getToggleCollapse = async (nodeId: string) => {
+    try{
+        const res = await httpService.getAsyncText<string>(`collapse_node/${nodeId}`);
+
+        if (res) {
+            return res;
+        }
+    } catch (err){
+        console.log("Collapsing node failed.");
+        console.log(err);
+    }
+}

@@ -35,7 +35,7 @@ export const HelpDisplay = () => {
         >
           <Carousel timeout={800}>
             <Page0 />
-            <Page1 />
+            {/* <Page1 /> */}
           </Carousel>
         </Backdrop>
       </Fade>

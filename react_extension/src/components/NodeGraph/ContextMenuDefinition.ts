@@ -4,18 +4,20 @@ import editIcon from '../../assets/edit.png'
 import collapseIcon from '../../assets/collapse.png'
 import httpService from '../../services/HttpService'
 import { CollectionStyle, Singular } from 'cytoscape'
+import { getToggleCollapse } from '../../services/ProjectService'
 
-interface CytoscapeContextElement extends Singular {
+export interface CytoscapeContextElement extends Singular {
     successors(): ExtendedCollectionStyle;
 }
 interface ExtendedCollectionStyle extends CollectionStyle {
     map(e: unknown): unknown;
 }
 
-const generateContextMenuSettings = (projectId: string, refresh: () => void) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const generateContextMenuSettings:any = (projectId: string, refresh: () => void, openNodeDialog: (ele: CytoscapeContextElement)=>void) => {
     return {
         menuRadius: 75, // the radius of the circular menu in pixels
-        selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
+        selector: 'node.default', // elements matching this Cytoscape.js selector will trigger cxtmenus
         commands: [
             {
                 fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
@@ -41,22 +43,35 @@ const generateContextMenuSettings = (projectId: string, refresh: () => void) => 
                     // console.log(typeof(ele))
                     // console.log(ele.classes());
                     // console.log(ele.successors().map((e: { classes: () => unknown }) => {console.log(e.classes())}))
-                    if(ele.classes().includes("collapsed")){
-                        ele.removeClass('collapsed')
-                        ele.successors().removeClass('hidden');
-                    } else {
-                        ele.addClass('collapsed')
-                        ele.successors().addClass('hidden');
-                    }
+
+                    getToggleCollapse(ele.data("id"))
+
+                    // if(ele.classes().includes("collapsed")){
+                    //     ele.removeClass('collapsed')
+                    //     ele.successors().removeClass('hidden');
+                    // } else {
+                    //     ele.addClass('collapsed')
+                    //     ele.successors().addClass('hidden');
+                    // }
                     
                 }
             },
+            // {
+            //     fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+            //     content: `<img alt="Conf" />`, // html/text content to be displayed in the menu
+            //     select: function (ele: CytoscapeContextElement) {
+            //             ele.addClass('conflict')
+            //         }
+                    
+
+            // },
             {
                 fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
                 content: `<img src="${editIcon}" alt="Edit" />`, // html/text content to be displayed in the menu
                 select: function (ele: CytoscapeContextElement) {
                     console.log(ele);
                     console.log("Edit");
+                    openNodeDialog(ele);
                 }
             },
             {

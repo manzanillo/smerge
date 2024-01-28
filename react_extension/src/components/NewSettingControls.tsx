@@ -14,7 +14,6 @@ import {
   Slider,
   Stack,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import httpService from "../services/HttpService";
@@ -22,25 +21,31 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ConfirmButton from "./ConfirmButton";
+import ProjectDto from "./models/ProjectDto";
+import ProjectColorMenu from "./ProjectColorMenu";
 
 interface NewSettingControlsProps {
-  projectId: string;
+  projectDto: ProjectDto;
   changeLayout: (layoutName: string) => void;
   initLayout?: string;
   cy: React.MutableRefObject<cytoscape.Core | undefined>;
   saveGraphPositions: () => void;
   wheelSensitivity: number;
   setWheelSensitivity: (val: number) => void;
+  reloadData: () => void;
+  setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
 }
 
 const NewSettingControls: React.FC<NewSettingControlsProps> = ({
-  projectId,
+  projectDto,
   changeLayout,
   initLayout = "preset",
   cy,
   saveGraphPositions,
   wheelSensitivity,
   setWheelSensitivity,
+  reloadData,
+  setProjectData,
 }) => {
   const handleChange = (event: SelectChangeEvent) => {
     setLay(event.target.value as string);
@@ -81,7 +86,7 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
 
     // Set the href and download attributes of the link
     a.href = url;
-    a.download = projectId + "_layout_saved.json";
+    a.download = projectDto.id + "_layout_saved.json";
 
     // Append the link to the body
     document.body.appendChild(a);
@@ -143,7 +148,13 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
           enterDelay={500}
           title={t("NewSettingControls.save_graph_pos_tooltip")}
         >
-          <Button variant="contained" onClick={saveGraphPositions}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setLay("preset");
+              saveGraphPositions();
+            }}
+          >
             {t("NewSettingControls.save_graph_pos")}
           </Button>
         </Tooltip>
@@ -247,6 +258,30 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
           </ConfirmButton>
         </div>
 
+        <Accordion sx={{ bgcolor: "transparent" }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+          >
+            <div
+              style={{
+                textDecoration: "underline",
+                fontWeight: 900,
+                height: "20px",
+              }}
+            >
+              {t("NewSettingControls.color_style")}
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ProjectColorMenu
+              projectDto={projectDto}
+              reloadData={reloadData}
+              setProjectData={setProjectData}
+            ></ProjectColorMenu>
+          </AccordionDetails>
+        </Accordion>
+
         <Divider></Divider>
 
         <Button
@@ -261,5 +296,8 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
     </Paper>
   );
 };
+
+// const [color, setColor] = useState("#aabbcc");
+// return
 
 export default NewSettingControls;

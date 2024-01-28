@@ -38,7 +38,13 @@
     "scroll_speed": "Change Scroll Speed:",
     "save_graph_pos_tooltip": "Save the current layout on the server (as \"Server-Saved\" layout)",
     "save_current_layout_tooltip": "Download the current graph, as is into a json file",
-    "load_layout_tooltip": "Load previous saved graph (.json) into current panel (hit \"Save Graph Position\" if you want the loaded graph to be saved as the server layout)"
+    "load_layout_tooltip": "Load previous saved graph (.json) into current panel (hit \"Save Graph Position\" if you want the loaded graph to be saved as the server layout)",
+    "color_style": "Change Project Colors",
+    "colorPicker": {
+      "primary": "Normal",
+      "favor": "Favored",
+      "conflict": "Conflict"
+    }
   },
   "HelpPages": {
     "page0": {
@@ -62,5 +68,12 @@
     "page2": {
       "header": "Merge"
     }
+  },
+  "NameDialog": {
+    "title": "Change node name",
+    "description": "The given value will be displayed as name for this node in the graph.",
+    "label": "Node Name",
+    "cancel": "Cancel",
+    "confirm": "Change"
   }
 }

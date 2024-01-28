@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonRespons
 from django.utils.translation import gettext_lazy as _
 
 from . import models
-from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, MergeConflict, Hunk, NodeTypes
+from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, default_conflict_color, default_favor_color, MergeConflict, Hunk, NodeTypes
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
@@ -507,10 +507,12 @@ class DeleteProjectView(View):
 class ToggleColorView(View):
     def get(self, request, proj_id, file_id):
         file = SnapFile.objects.get(id=file_id, project=proj_id)
-        if file.color == default_color():
-            new_color = '#FF0000'
+        if file.type == "conflict": return HttpResponse("Conflict color can't be changed!")
+        project = Project.objects.get(id=proj_id)
+        if file.color == project.default_color:
+            new_color = project.favor_color
         else:
-            new_color = default_color()
+            new_color = project.default_color
         file.color = new_color
         file.save()
         send_event(proj_id, 'message', {'text': 'update'})
@@ -630,6 +632,8 @@ class NewMergeView(View):
         
     def get(self, request, proj_id):
         return mergeExt(request, proj_id, [])
+    
+from django.db.models import Q
         
 def mergeExt(request, proj_id, resolutions):
     file_ids = request.GET.getlist('file')
@@ -641,9 +645,22 @@ def mergeExt(request, proj_id, resolutions):
                 for i in range(len(all_files))}
 
     if len(files) > 1:
-
-        new_file = SnapFile.create_and_save(
-            project=proj, ancestors=file_ids, file='')
+        fileIds = [file.id for file in files]
+        # check if a conflict exists and the file can be overwritten
+        result_conflict_query = MergeConflict.objects.filter(Q(project_id=proj_id) & Q(left_id__in=fileIds) | Q(project_id=proj_id) & Q(right_id__in=fileIds))
+        result_conflicts = result_conflict_query.all()
+        if(len(result_conflicts) > 0):
+            new_file = SnapFile.objects.filter(id=result_conflicts[0].connected_file.id).first()
+            new_file.type = "default"
+            new_file.color = default_color()
+            new_file.description = ""
+        else:
+            new_file = SnapFile.create_and_save(
+                project=proj, ancestors=file_ids, file='')
+            
+        if new_file == None:
+            new_file = SnapFile.create_and_save(
+                project=proj, ancestors=file_ids, file='')
         new_file.file = str(new_file.id) + '.xml'
         new_file.save()
 
@@ -665,10 +682,10 @@ def mergeExt(request, proj_id, resolutions):
                     f.write(result)
                     #result.write(f)
             else:
-                new_file.delete()
+                # new_file.delete()
                 
                 # Create new conflict with both files
-                merge_conflict = models.MergeConflict(left=file1, right=file2, project=proj)
+                merge_conflict = models.MergeConflict(left=file1, right=file2, project=proj, connected_file=new_file)
                 merge_conflict.save()
                 
                 for conf in conflicts:
@@ -697,6 +714,13 @@ def mergeExt(request, proj_id, resolutions):
                     # print(ret.right)
                 
                 print(conflicts)
+                new_file.file = str(merge_conflict.id) + '.conflict'
+                new_file.type = "conflict"
+                new_file.description = "Active Conflict"
+                new_file.color = default_conflict_color()
+                new_file.save()
+                
+                send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})
                 # response = HttpResponseRedirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
                 # response.status_code = 303
                 # return response
@@ -706,6 +730,14 @@ def mergeExt(request, proj_id, resolutions):
             
             new_file.xml_job()
             print(new_file.as_dict())
+            # delete old conflict on resolved
+            if(len(result_conflicts) > 0):
+                conf_id = result_conflicts[0].id
+                result_conflicts[0].delete()
+                connected_hunks = Hunk.objects.filter(mergeConflict=conf_id)
+                for hun in connected_hunks:
+                    hun.delete()
+                
             # notify_room(proj.id, new_file.as_dict(), "merge")
             send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})
             return JsonResponse(new_file.as_dict())
@@ -747,6 +779,72 @@ class ResolveHunkView(View):
             return HttpResponse('invalid data ', status=400)
         except:
             return HttpResponse('Hunk not found', status=400)
+        
+        
+class ToggleCollapseView(View):
+    def get(self, request, node_id):
+        try:
+            snap_file = SnapFile.objects.get(id=node_id)
+            singleConnected = getSingleChildNodes(snap_file)
+            toSet = not snap_file.collapsed
+            for sc in singleConnected:
+                sc.hidden = toSet
+                sc.save()
+            snap_file.collapsed = toSet
+            snap_file.save()
+            send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
+            return HttpResponse('Node collapsed', status=200)
+        except:
+            return HttpResponse('File not found', status=400)
+        
+        
+        
+def getSingleChildNodes(snap_file: SnapFile):
+    allProjectFiles_query = SnapFile.objects.filter(project=snap_file.project)
+    allProjectFiles = allProjectFiles_query.all()
+    baseNode = allProjectFiles_query.filter(ancestors=None).first()
+    connected = []
+    prev = []
+    for c in range(0, len(allProjectFiles)):
+        if c != 0 and fileArrayEqual(prev, connected):
+            print(c)
+            break
+        prev = [x for x in connected]
+        for file in allProjectFiles:
+            if file.id == baseNode.id:
+                continue
+            if allInside(file.ancestors.all(), ([snap_file]+connected)):
+                if file not in connected:
+                    connected.append(file)
+    return connected
+
+# returns if e1 is a subset of e2
+def allInside(e1, e2):
+    if e1 == []: 
+        return False
+    e2_ids = [e.id for e in e2]
+    for i in range(0, len(e1)):
+        if e1[i].id not in e2_ids:
+            return False
+    return True
+
+
+def fileArrayEqual(e1, e2):
+    if len(e1) != len(e2):
+        return False
+    e1_ids = [e.id for e in e1]
+    e2_ids = [e.id for e in e2]
+    for i in range(0, len(e1_ids)):
+        if e1_ids[i] != e2_ids[i]:
+            return False
+    return True
+        
+        
+        
+        
+        
+        
+        
         
         
         

@@ -10,25 +10,28 @@ import {
 } from "../../services/ApiService";
 import useEffectInit from "../../shared/useEffectInit";
 import pushService from "../../services/PushService";
-import React, { useEffect, useRef, useState } from "react";
-import { Fab } from "@mui/material";
-import PublishIcon from "@mui/icons-material/Publish";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { debounce, toNumber } from "lodash";
 import { useQueryClient } from "@tanstack/react-query";
 import SettingsModal from "../SettingsModal";
 import cxtmenu from "cytoscape-cxtmenu";
-import generateContextMenuSettings from "./ContextMenuDefinition";
+import generateContextMenuSettings, {
+  CytoscapeContextElement,
+} from "./ContextMenuDefinition";
 import stylesheet from "./StyleSheet";
 import httpService from "../../services/HttpService";
 import MergeButtons from "../MergeButtons";
 import ProjectDto from "../models/ProjectDto";
 import ProjectStats from "../ProjectStats";
+import NameDialog from "../shared/NameDialog";
+import { putLabelChange } from "../../services/ProjectService";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodeGraphProps {
   // projectId: string;
   projectData: ProjectDto;
   setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
+  gatherProjectData: () => Promise<void>;
 }
 
 Cytoscape.use(dagre);
@@ -36,6 +39,7 @@ Cytoscape.use(dagre);
 const NodeGraph: React.FC<NodeGraphProps> = ({
   projectData,
   setProjectData,
+  gatherProjectData,
 }) => {
   const { projectId } = useParams();
   const queryClient = useQueryClient();
@@ -53,10 +57,11 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const lastPositionUpdate = useRef(Date.now());
 
   const savedLayoutKey = "savedLayout";
-  const savedLayout: string = (() => {
+  const getSavedLayout = () => {
     const ret = localStorage.getItem(savedLayoutKey);
     return ret ?? "dagre";
-  })();
+  };
+  const savedLayout = useRef(getSavedLayout());
 
   const savedWheelSensitivityKey = "wheelSensitivity";
   const savedWheelSensitivity: number = (() => {
@@ -95,6 +100,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         !file.xPosition || !file.yPosition
           ? undefined
           : { x: file.xPosition, y: file.yPosition },
+      classes:
+        file.type +
+        (file.collapsed ? " collapsed" : "") +
+        (file.hidden ? " hidden" : ""),
     };
     return nodeDefinition;
   });
@@ -114,7 +123,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   ]);
 
   // const openLock = React.useRef<boolean>(false);
-  const openSnap = (url: string) => {
+  const openTab = (url: string) => {
     // if (!openLock.current) {
     window.open(url, "_blank");
     //     openLock.current = true;
@@ -134,15 +143,24 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       cy.current?.on("dblclick", "node", function (evt) {
         const node = evt.target;
 
-        // Open a new tab with a set link
-        openSnap(
-          `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` +
-            node.data("file_url").replace("/media/", "")
-        );
+        if (node.data("file_url").includes(".conflict")) {
+          openTab(
+            `${window.location.origin}/ext/merge/${node
+              .data("file_url")
+              .replace("/media/", "")
+              .replace(".conflict", "")}`
+          );
+        } else {
+          // Open a new tab with a set link
+          openTab(
+            `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` +
+              node.data("file_url").replace("/media/", "")
+          );
+        }
       });
 
       cy.current?.on("dragfree", "node", (evt) => {
-        if (layout.name !== "preset") return;
+        if (savedLayout.current !== "preset") return;
 
         positionMutate({
           id: toNumber(evt.target.data().id),
@@ -153,11 +171,11 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
       if (!ranFirstAgain.current) {
         setTimeout(() => {
-          if (savedLayout == "dagre") {
-            console.log("Ran first: ", savedLayout);
+          if (savedLayout.current == "dagre") {
+            // console.log("Ran first: ", savedLayout.current);
             cy.current?.layout(dagre).run();
           } else {
-            cy.current?.layout({ name: savedLayout }).run();
+            cy.current?.layout({ name: savedLayout.current }).run();
           }
           cy.current?.fit();
           // cy.current?.center();
@@ -169,6 +187,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       if (resize.current) {
         setTimeout(() => {
           cy.current?.fit();
+          cy.current?.layout({ name: savedLayout.current }).run();
           // cy.current?.center();
         }, 100);
 
@@ -176,7 +195,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       }
 
       return () => {
-        console.log("removeListener");
+        // console.log("removeListener");
         cy.current?.removeListener("dblclick", "node");
         cy.current?.removeListener("dragfree", "node");
       };
@@ -197,24 +216,37 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   //     }
   // }
 
-  useEffectInit(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    pushService.open(projectId ?? "empty", (e) => {
+  const handleMessage = useCallback(
+    (e: { text: string }) => {
       // prevent refresh for own position change within 300ms
-      console.log(e.text);
       if (Date.now() - lastPositionUpdate.current > 300) {
         // get currentLayout from storage, (prevent snapshot variables like the event...)
-        // const currentLayout = localStorage.getItem(savedLayoutKey);
-        console.log(savedLayout);
-        if (e.text.includes("savedLayout") && savedLayout != "preset") return;
+        // console.log("Got text: ", e.text);
+        // console.log("SavedLayout: ", savedLayout.current);
+        // console.log("Layout state: ", layout);
+
+        if (e.text.includes("projectChange")) {
+          setTimeout(() => gatherProjectData(), 5);
+        }
+        // if (e.text.includes("savedLayout") && savedLayout.current != "preset")
+        //   return;
         resize.current = e.text.includes("resize");
-        // console.log("resize.current: ", resize.current);
-        // console.log("layoutName is: " , layoutRef.current.name);
-        // console.log("update text: ", e.text);
-        if (e.text.includes("added") || layoutRef.current.name == "preset")
+        if (
+          e.text.includes("added") ||
+          e.text.includes("color") ||
+          e.text.includes("savedLayout") ||
+          savedLayout.current == "preset"
+        ) {
           refresh();
+        }
       }
-    });
+    },
+    [gatherProjectData, refresh]
+  );
+
+  useEffectInit(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    pushService.open(projectId ?? "empty", handleMessage);
 
     // init context menu
     Cytoscape.use(cxtmenu);
@@ -224,19 +256,26 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     };
   }, []);
 
+  const editNodeRef = useRef<CytoscapeContextElement>();
+  const handleNodeEdit = (ele: CytoscapeContextElement) => {
+    editNodeRef.current = ele;
+    setNameDefaultValue(ele.data("label") ?? "");
+    setNameDialogOpen(true);
+  };
+
   useEffect(() => {
     // set context menu
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const menu = cy.current?.cxtmenu(
-      generateContextMenuSettings(projectId ?? "", refresh)
+      generateContextMenuSettings(projectId ?? "", refresh, handleNodeEdit)
     );
 
     // change layout after loading to saved if available
     let toClean: NodeJS.Timeout;
-    if (savedLayout != "preset") {
+    if (savedLayout.current != "preset") {
       toClean = setTimeout(() => {
-        changeLayout(savedLayout);
+        changeLayout(savedLayout.current);
       }, 150);
     }
 
@@ -244,6 +283,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       menu?.destroy();
       clearTimeout(toClean);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const saveGraphPositions = () => {
@@ -256,12 +296,19 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
           };
         })
       );
+      setTimeout(() => {
+        localStorage.setItem(savedLayoutKey, "preset");
+        setTimeout(() => {
+          window.location.reload();
+        }, 200);
+      }, 100);
     }
   };
 
   const changeLayout = (layoutName: string) => {
     // save selected layout in storage for next loading
     localStorage.setItem(savedLayoutKey, layoutName);
+    savedLayout.current = layoutName;
 
     if (layoutName == "preset") {
       setLayout((l) => {
@@ -279,8 +326,9 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         });
       }
     } else {
+      resize.current = true;
       setLayout((l) => {
-        layoutRef.current = { ...l, name: "preset" };
+        layoutRef.current = { ...l, name: layoutName };
         return { ...l, name: layoutName };
       });
     }
@@ -300,6 +348,13 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const reloadDebounced = debounce(() => {
     window.location.reload();
   }, 1000);
+
+  // default color #076AAB
+  // favorite color #417505
+  // conflict color #d0021b
+
+  const [nameDialogOpen, setNameDialogOpen] = useState(false);
+  const [nameDefaultValue, setNameDefaultValue] = useState("");
 
   return (
     <>
@@ -326,17 +381,28 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       />
 
       <SettingsModal
-        projectId={projectId ?? ""}
+        projectDto={projectData ?? ""}
         changeLayout={changeLayout}
-        initLayout={savedLayout}
+        initLayout={savedLayout.current}
         cy={cy}
         saveGraphPositions={saveGraphPositions}
         projectData={projectData}
         setProjectData={setProjectData}
         wheelSensitivity={wheelSensitivity}
         setWheelSensitivity={setWheelSensitivity}
+        reloadData={refresh}
       />
       <MergeButtons cyRef={cy} refresh={refresh} projectId={projectId ?? ""} />
+      <NameDialog
+        open={nameDialogOpen}
+        setOpen={setNameDialogOpen}
+        onClose={(res) => {
+          //   console.log("Input: ", res);
+          //   console.log("And node ref is: ", editNodeRef.current?.data("label")); //label
+          putLabelChange(editNodeRef.current?.data("id"), res);
+        }}
+        def={nameDefaultValue}
+      ></NameDialog>
     </>
   );
 };

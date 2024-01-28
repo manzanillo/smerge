@@ -9,7 +9,7 @@ import {
   Paper,
   Stack,
 } from "@mui/material";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PasswordField from "./shared/PasswordField";
 import ProjectDto from "./models/ProjectDto";
 import TextField from "./shared/TextField";

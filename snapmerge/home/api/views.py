@@ -3,8 +3,8 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 
-from ..models import SnapFile, Project
-from .serializers import SnapFileSerializer, ProjectSerializer
+from ..models import SnapFile, Project, MergeConflict
+from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer
 from django.shortcuts import get_object_or_404
 from django_eventstream import send_event
 
@@ -74,6 +74,7 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         
+        send_event(str(instance.id), 'message', {'text': 'projectChange'})
         return Response(data=serializer.data, status=200)
     
     # def get_object(self):
@@ -192,6 +193,80 @@ class ProjectDeleteView(generics.DestroyAPIView):
         else:
             return Response(data='Wrong Password!', status=403)
         return self.destroy(request, *args, **kwargs)
+    
+
+class MergeConflictDeleteView(generics.DestroyAPIView):
+    queryset = MergeConflict.objects.all()
+    lookup_field = 'id'
+    permission_classes = [permissions.AllowAny]
+    
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        return self.destroy(request, *args, **kwargs)
+    
+    
+class ProjectColorUpdateView(generics.UpdateAPIView):
+    """
+    API endpoint that allows for the position of a file to be updated.
+    """
+    queryset = Project.objects.all()
+    lookup_field = 'id'
+    permission_classes = [permissions.AllowAny]
+    
+    def put(self, request, *args, **kwargs):
+        project = self.get_object()
+        old_default = project.default_color
+        old_favor = project.favor_color
+        old_conflict = project.conflict_color
+        
+        default_nodes = list(SnapFile.objects.filter(project=project, color=old_default))
+        favor_nodes = list(SnapFile.objects.filter(project=project, color=old_favor))
+        conflict_nodes = list(SnapFile.objects.filter(project=project, color=old_conflict))
+        
+        if 'default_color' in request.data.keys():
+            project.default_color = request.data["default_color"]
+            for node in default_nodes:
+                node.color = request.data["default_color"]
+                node.save()
+    
+        if 'favor_color' in request.data.keys():
+            project.favor_color = request.data["favor_color"]
+            for node in favor_nodes:
+                node.color = request.data["favor_color"]
+                node.save()
+        
+        if 'conflict_color' in request.data.keys():
+            project.conflict_color = request.data["conflict_color"]
+            for node in conflict_nodes:
+                node.color = request.data["conflict_color"]
+                node.save()
+             
+        project.save()
+        print(project.id)
+        # notify room
+        send_event(str(project.id), 'message', {'text': 'projectChange_color'})
+        return Response(data="Updated Colors.", status=200)
+    
+class NodeLabelUpdateView(generics.UpdateAPIView):
+    """
+    API endpoint that allows for the description of a file to be updated.
+    """
+    queryset = SnapFile.objects.all()
+    lookup_field = 'id'
+    permission_classes = [permissions.AllowAny]
+    
+    def put(self, request, *args, **kwargs):
+        snap_file = self.get_object()
+        
+        if 'label' in request.data.keys():
+            snap_file.description = request.data["label"]
+            snap_file.save()
+            
+            send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
+            return Response(data="Updated Description.", status=200)
+        else:
+            return Response(data="Missing label value!", status=400)
+        
 
 # class ProjectDetailView(generics.RetrieveAPIView):
 #     """

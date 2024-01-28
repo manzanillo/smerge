@@ -11,6 +11,12 @@ import uuid
 def default_color():
     return '#076AAB'
 
+def default_favor_color():
+    return '#417505'
+
+def default_conflict_color():
+    return '#d0021b'
+
 class NodeTypes(Enum):
     DEFAULT = "default"
     MERGING = "merging"
@@ -26,6 +32,9 @@ class Project(models.Model):
     id = models.UUIDField(_("Id"), primary_key=True,
                           default=uuid.uuid4, editable=False)
     email = models.EmailField(_("Email"), null=True, blank=True)
+    default_color = models.CharField(_("node_color"), max_length=7, default=default_color())
+    favor_color = models.CharField(_("favor_color"), max_length=7, default=default_favor_color())
+    conflict_color = models.CharField(_("conflict_color"), max_length=7, default=default_conflict_color())
 
     @classmethod
     def create_and_save(cls, name, picture, description):
@@ -62,7 +71,7 @@ class File(models.Model):
 class SnapFile(File):
     # validates only naming of file
     file = models.FileField(_("File"), blank=True, validators=[
-        FileExtensionValidator(['xml', 'XML'])])
+        FileExtensionValidator(['xml', 'XML', 'conflict'])])
     # thumbnail = models.ImageField(_("Thumbnail"), null=True, blank=True)
     user = models.CharField(_("user"), max_length=30, null=True)
     xPosition = models.FloatField(_("xPosition"), default=0)
@@ -198,6 +207,7 @@ class MergeConflict(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     left = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="leftFile")
     right = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="rightFile")
+    connected_file = models.ForeignKey(SnapFile, on_delete=models.DO_NOTHING, related_name="connected_file", null=True)
     hunks = models.fields
 
 
