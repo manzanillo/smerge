@@ -32,14 +32,14 @@ CHANNEL_LAYERS = {
 }
 
 CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
-    'https://rs-kubuntu.local', 'https://air.local'
+    'https://rs-kubuntu.local', 'https://air.local', "https://idpsmerge.duckdns.org"
 ]
 
 CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + ['https://rs-kubuntu.local' , "https://idpsmerge.duckdns.org"] + ['https://air.local']
 
 ALLOWED_HOSTS = ['127.0.0.1', 'faui20s.cs.fau.de', 'faui20s.informatik.uni-erlangen.de', 'smerge.org', 'idpsmerge.duckdns.org', 'smerge_server', 'rs-kubuntu.local', 'air.local']
 
-DEBUG = True
+DEBUG = False
 
 SECRET_PATH = '../secrets/smerge/secrets.smerge.json'
 secret_file = open(SECRET_PATH).read()

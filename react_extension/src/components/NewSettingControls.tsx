@@ -287,7 +287,7 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
         <Button
           variant="contained"
           onClick={() => {
-            window.open(`${httpService.baseURL}${projectId}`, "_self");
+            window.open(`${httpService.baseURL}${projectDto.id}`, "_self");
           }}
         >
           {t("NewSettingControls.old_projectview")}
