@@ -2,7 +2,8 @@ from .settings_base import *
 import json
 
 URL = 'http://0.0.0.0:8000'
-POST_BACK_URL = 'https://rs-kubuntu.local'
+# POST_BACK_URL = 'https://rs-kubuntu.local'
+POST_BACK_URL = 'https://idpsmerge.duckdns.org'
 
 SECRET_KEY = '()fvd?-m+=quyxz*_3v+gjg!d)8n0(wbo*k)(0kwtwuryr4nil'
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
