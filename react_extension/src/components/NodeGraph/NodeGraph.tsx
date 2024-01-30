@@ -221,6 +221,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         // console.log("removeListener");
         cy.current?.removeListener("dblclick", "node");
         cy.current?.removeListener("dragfree", "node");
+        cy.current?.removeListener("taphold", "node");
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -238,6 +239,11 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   //         });
   //     }
   // }
+
+  function randomIntFromInterval(min: number, max: number) {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
 
   const handleMessage = useCallback(
     (e: { text: string }) => {
@@ -260,7 +266,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
           e.text.includes("savedLayout") ||
           savedLayout.current == "preset"
         ) {
-          refresh();
+          // "load-balancing" :P
+          setTimeout(() => {
+            refresh();
+          }, randomIntFromInterval(5, 400));
         }
       }
     },
