@@ -37,7 +37,7 @@ class Project(models.Model):
     conflict_color = models.CharField(_("conflict_color"), max_length=7, default=default_conflict_color())
 
     @classmethod
-    def create_and_save(cls, name, picture, description):
+    def create_and_save(cls, name, picture, description, password=""):
         proj = cls.objects.create(
             name=name, picture=picture, description=description, password=password)
         proj.save()

@@ -125,15 +125,19 @@ def merge(file1Path: str, file2Path: str, resolutions: list[Resolution]=[]) -> t
         
     # Merge simple till scenes
     for i in range(len(leftRoot)):
+        # ignore project thumbnail, since it changes all the time and will be rendered new on a run
+        if leftRoot[i].tag == "thumbnail":
+            continue
         if leftRoot[i].tag != "scenes":
             simConflict, _ = mergeSimple(leftRoot[i], rightRoot[i], resolutions)
             if simConflict:
                 for con in simConflict:
                     conflicts.append(con)
-        scenesConflicts = mergeScenes(leftRoot[i], rightRoot[i], resolutions)
-        if scenesConflicts:
-            for con in scenesConflicts:
-                conflicts.append(con)
+        else:
+            scenesConflicts = mergeScenes(leftRoot[i], rightRoot[i], resolutions)
+            if scenesConflicts:
+                for con in scenesConflicts:
+                    conflicts.append(con)
     
     # if no conflicts were found during merge, save the file, otherwise handle conflicts
     if len(conflicts) > 0:
@@ -414,6 +418,7 @@ def getNodeMatchByDef(nodeList, node, onlyCheck=""):
     for i, n in enumerate(nodeList):
         if compareNodesDefinition(n, node, onlyCheck):
             return n, i
+    return None, 0
         
         
 def mergeScenes(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
@@ -550,11 +555,11 @@ def mergeSprites(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[
     leftNodeList = [n for n in leftNode]
     retConflicts = []
     for rNode in rightNode:
-        cont = containsNode(leftNodeList, rNode, onlyCheck="id")
+        cont = containsNode(leftNodeList, rNode, onlyCheck="name")
         if cont == 0:
             leftNode.append(rNode)
         elif cont == 2:
-            conflictingLeftNode, cIndex = getNodeMatchByDef(leftNodeList, rNode, onlyCheck="id")
+            conflictingLeftNode, cIndex = getNodeMatchByDef(leftNodeList, rNode, onlyCheck="name")
             confs = mergeSprite(conflictingLeftNode, rNode, resolutions)
             retConflicts = retConflicts + confs
     return retConflicts

@@ -133,6 +133,42 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     // }
   };
 
+  const debouncedUpdatePosition = debounce(() => {
+    updatePositions();
+  }, 20);
+
+  const nodeRef = useRef<Cytoscape.NodeSingular[]>([]);
+  const updatePositions = () => {
+    positionsMutate(
+      nodeRef.current.map((node) => {
+        return {
+          id: toNumber(node.data().id),
+          position: node?.position() ?? { x: 0, y: 0 },
+        };
+      })
+    );
+    nodeRef.current = [];
+  };
+
+  const handleFileOpen = (evt: Cytoscape.EventObject) => {
+    const node = evt.target;
+
+    if (node.data("file_url").includes(".conflict")) {
+      openTab(
+        `${window.location.origin}/ext/merge/${node
+          .data("file_url")
+          .replace("/media/", "")
+          .replace(".conflict", "")}`
+      );
+    } else {
+      // Open a new tab with a set link
+      openTab(
+        `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` +
+          node.data("file_url").replace("/media/", "")
+      );
+    }
+  };
+
   const ranFirstAgain = useRef(false);
   // changed by eventUpdate if whole layout was pushed by others
   const resize = useRef(false);
@@ -140,32 +176,19 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     if (cy.current && !isLoading) {
       setElements([...(nodes ?? []), ...(edges ?? [])]);
 
-      cy.current?.on("dblclick", "node", function (evt) {
-        const node = evt.target;
-
-        if (node.data("file_url").includes(".conflict")) {
-          openTab(
-            `${window.location.origin}/ext/merge/${node
-              .data("file_url")
-              .replace("/media/", "")
-              .replace(".conflict", "")}`
-          );
-        } else {
-          // Open a new tab with a set link
-          openTab(
-            `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` +
-              node.data("file_url").replace("/media/", "")
-          );
-        }
-      });
+      cy.current?.on("dblclick", "node", handleFileOpen);
+      cy.current?.on("taphold", "node", handleFileOpen);
 
       cy.current?.on("dragfree", "node", (evt) => {
         if (savedLayout.current !== "preset") return;
 
-        positionMutate({
-          id: toNumber(evt.target.data().id),
-          position: evt.target.position(),
-        });
+        nodeRef.current.push(evt.target);
+        debouncedUpdatePosition();
+
+        // positionMutate({
+        //   id: toNumber(evt.target.data().id),
+        //   position: evt.target.position(),
+        // });
         lastPositionUpdate.current = Date.now();
       });
 

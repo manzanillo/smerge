@@ -41,6 +41,7 @@
             "program": "${workspaceFolder}/snapmerge/manage.py",
             "args": [
                 "test",
+                "home.tests",
                 "--settings=config.settings_test"
             ],
             "django": true,

@@ -733,10 +733,17 @@ def mergeExt(request, proj_id, resolutions):
             # delete old conflict on resolved
             if(len(result_conflicts) > 0):
                 conf_id = result_conflicts[0].id
-                result_conflicts[0].delete()
                 connected_hunks = Hunk.objects.filter(mergeConflict=conf_id)
                 for hun in connected_hunks:
+                    # cleanup local files and db
+                    files = [hun.left.file, hun.right.file]
+                    for file in files:
+                        if os.path.exists(file.path):
+                            os.remove(file.path)
+                    hun.left.delete()
+                    hun.right.delete()
                     hun.delete()
+                result_conflicts[0].delete()
                 
             # notify_room(proj.id, new_file.as_dict(), "merge")
             send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})
@@ -792,7 +799,7 @@ class ToggleCollapseView(View):
                 sc.save()
             snap_file.collapsed = toSet
             snap_file.save()
-            send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
+            send_event(str(snap_file.project_id), 'message', {'text': 'Update_added'})
             return HttpResponse('Node collapsed', status=200)
         except:
             return HttpResponse('File not found', status=400)
