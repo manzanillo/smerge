@@ -253,9 +253,9 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         // console.log("Got text: ", e.text);
         // console.log("SavedLayout: ", savedLayout.current);
         // console.log("Layout state: ", layout);
-
+        const timeout = randomIntFromInterval(20, 500);
         if (e.text.includes("projectChange")) {
-          setTimeout(() => gatherProjectData(), 5);
+          setTimeout(() => gatherProjectData(), timeout);
         }
         // if (e.text.includes("savedLayout") && savedLayout.current != "preset")
         //   return;
@@ -269,7 +269,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
           // "load-balancing" :P
           setTimeout(() => {
             refresh();
-          }, randomIntFromInterval(5, 400));
+          }, timeout);
         }
       }
     },
