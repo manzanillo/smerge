@@ -72,7 +72,8 @@ def check_password(username, password_hashed):
 class HomeView(View):
     def get(self, request):
         context = {
-            'devAdd': '(DEV)' if settings.DEBUG else ''
+            'devAdd': '(DEV)' if settings.DEBUG else '',
+            'icon': 'icon/icon_debug.svg' if settings.BETA else 'icon/icon.svg'
         }
         return render(request, 'home.html', context)
 

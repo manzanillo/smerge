@@ -24,6 +24,7 @@ ALLOWED_HOSTS = []
 
 #
 DEBUG = False
+BETA = False
 
 # Application definition
 

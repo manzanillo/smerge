@@ -8,7 +8,7 @@
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
-            "url": "https://rs-kubuntu.local/ext/project_view/46926613-3cca-439d-a4f3-9897753b9940",
+            "url": "https://rs-kubuntu.local/ext/project_view/4d45d49a2fff4f6e821e1b8f744cd7da",
             "webRoot": "${workspaceFolder}/react_extension/src/"
         },
 
