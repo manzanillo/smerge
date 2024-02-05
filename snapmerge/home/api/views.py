@@ -262,7 +262,7 @@ class NodeLabelUpdateView(generics.UpdateAPIView):
             snap_file.description = request.data["label"]
             snap_file.save()
             
-            send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
+            send_event(str(snap_file.project_id), 'message', {'text': 'Update_added'})
             return Response(data="Updated Description.", status=200)
         else:
             return Response(data="Missing label value!", status=400)

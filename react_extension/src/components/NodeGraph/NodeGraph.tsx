@@ -247,13 +247,14 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
   const handleMessage = useCallback(
     (e: { text: string }) => {
+      console.log(e.text);
       // prevent refresh for own position change within 300ms
       if (Date.now() - lastPositionUpdate.current > 300) {
         // get currentLayout from storage, (prevent snapshot variables like the event...)
         // console.log("Got text: ", e.text);
         // console.log("SavedLayout: ", savedLayout.current);
         // console.log("Layout state: ", layout);
-        const timeout = randomIntFromInterval(20, 500);
+        const timeout = randomIntFromInterval(20, 100);
         if (e.text.includes("projectChange")) {
           setTimeout(() => gatherProjectData(), timeout);
         }
@@ -268,6 +269,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         ) {
           // "load-balancing" :P
           setTimeout(() => {
+            console.log("Reloading data...")
             refresh();
           }, timeout);
         }

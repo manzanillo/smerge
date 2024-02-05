@@ -1,6 +1,9 @@
 {
   "main": {
-    "test": "test text oder so..."
+    "test": "test text oder so...",
+    "nav_back": "Zurück",
+    "nav_howto": "How To Smerge",
+    "nav_impressum": "Impressum"
   },
   "SettingsModal": {
     "old_title": "Projekt Einstellungen",

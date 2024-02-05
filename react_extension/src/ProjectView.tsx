@@ -25,6 +25,7 @@ const ProjectView: React.FC = () => {
     gatherProjectData();
   }, [gatherProjectData, projectId]);
 
+
   return (
     // const elements = [
     //    { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },

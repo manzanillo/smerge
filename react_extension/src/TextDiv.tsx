@@ -16,12 +16,16 @@ const styleLeft: React.CSSProperties = {
   textAlign: "center",
   borderTopLeftRadius: "20px",
   borderBottomLeftRadius: "20px",
+  overflow: "auto",
+  maxHeight: "600px",
   width: "100%",
 };
 const styleRight: React.CSSProperties = {
   textAlign: "center",
   borderTopRightRadius: "20px",
   borderBottomRightRadius: "20px",
+  overflow: "auto",
+  maxHeight: "600px",
   width: "100%",
 };
 

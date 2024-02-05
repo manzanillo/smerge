@@ -65,7 +65,7 @@ button:focus-visible {
 } */
 
 
-nav {
+/* nav {
   height: var(--nav-heigth);
   display: flex;
   justify-content: space-around;
@@ -77,24 +77,9 @@ nav {
   width: 100%;
   box-sizing: inherit;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
-}
-
-/* .logo {
-  font-size: 1.08em !important;
-  padding: 0px 0px 1px 0px !important;
-  letter-spacing: 0.15em !important;
-  font-family: "Overpass", sans-serif !important;
-
-  text-decoration: none;
-  text-transform: uppercase;
-  color: white; */
-  /* font-size: 1.25em;
-  letter-spacing: 0.15em; */
-  /* position: absolute;
-  left: 2%;
 } */
 
-.logo {
+/* .logo {
   text-decoration: none;
     text-transform: uppercase;
     color: white;
@@ -102,16 +87,16 @@ nav {
     letter-spacing: 0.2em !important;
     position: absolute;
     /* padding-top: 11px !important; */
-    margin-left: -15px !important;
+    /* margin-left: -15px !important;
     left: 2%;
 
   background-color: transparent;
   box-sizing: inherit;
   line-height: 64px;
   font-weight: normal;
-}
+} */ 
 
-nav ul {
+/* nav ul {
   position: absolute;
   right: 2%;
   padding-left: 0;
@@ -135,7 +120,7 @@ nav ul {
   padding: 12px 12px 12px 12px;
   display: inline-flex;
 } */
-.navlinks > li {
+/* .navlinks > li {
   transition: background-color .3s;
   float: left;
   padding: 0;
@@ -143,15 +128,15 @@ nav ul {
   list-style-type: none;
   line-height: 64px;
   color: #fff;
-}
+} */
 
-nav a {
+/* nav a {
   text-decoration: none;
   text-transform: uppercase;
   color: white;
-  font-size: 0.92em !important;
+  font-size: 0.92em !important; */
   /* letter-spacing: -0.01em; */
-  padding-bottom: 4px !important;
+  /* padding-bottom: 4px !important;
 
   -webkit-transition: background-color .3s;
   transition: background-color .3s;
@@ -164,7 +149,7 @@ nav a {
 
   list-style-type: none;
   line-height: 64px;
-}
+}  */
 
 /* nav a {
   text-decoration: none;

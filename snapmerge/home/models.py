@@ -6,6 +6,8 @@ from django.core.validators import FileExtensionValidator
 from .xmltools import analyze_file, include_sync_button
 from enum import Enum
 import uuid
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 
 
 def default_color():
@@ -91,7 +93,7 @@ class SnapFile(File):
                 snap.xPosition = ancestor_as_file.xPosition
                 snap.yPosition = ancestor_as_file.yPosition + 100
             else:
-                snap.xPosition = ancestors[0].xPosition
+                snap.xPosition = sum([a.xPosition for a in ancestors]) / len(ancestors)
                 snap.yPosition = ancestors[0].yPosition + 100
 
         snap.save()
@@ -159,26 +161,22 @@ class ConflictFile(File):
     # validates only naming of file
     file = models.FileField(_("File"), blank=True, validators=[
         FileExtensionValidator(['xml', 'XML', 'txt', 'TXT', 'base64', 'BASE64'])])
+    cx = models.FloatField("cx", null=True)
+    cy = models.FloatField("cy", null=True)
+    name = models.CharField("name", max_length=200, null=True, blank=True)
 
     @classmethod
-    def create_and_save(cls, project, file, ancestors=None, description=''):
+    def create_and_save(cls, project, file, cx, cy, ancestors=None, description='', name=''):
         confl = cls.objects.create(
             project=project, file=file, description=description)
+        confl.cx = cx
+        confl.cy = cy
+        confl.name = name
         if (ancestors):
             confl.ancestors.set(ancestors)
 
         confl.save()
         return confl
-
-    # def xml_job(self):
-    #     include_sync_button(self.get_media_path(),
-    #                         proj_id=self.project.id, me=self.id)
-
-    #     stats = analyze_file(self.get_media_path())
-    #     self.number_scripts = stats[0]
-    #     self.number_sprites = stats[1]
-
-    #     self.save()
 
     def as_dict(self):
         ancestor_ids = [x.id for x in self.ancestors.all()]
@@ -192,7 +190,10 @@ class ConflictFile(File):
             'timestamp': str(self.timestamp),
             'number_scripts': self.number_scripts,
             'number_sprites': self.number_sprites,
-            'color': self.color
+            'color': self.color,
+            'cx': self.cx if self.cx else "",
+            'cy': self.cy if self.cy else "",
+            'name': self.name if self.name else "",
         }
 
     def get_media_path(self):
@@ -204,23 +205,64 @@ class ConflictFile(File):
 
 
 class MergeConflict(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, default="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    left = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="leftFile")
-    right = models.ForeignKey(SnapFile, on_delete=models.CASCADE, related_name="rightFile")
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, default="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    left = models.ForeignKey(SnapFile, on_delete=models.DO_NOTHING, related_name="leftFile")
+    right = models.ForeignKey(SnapFile, on_delete=models.DO_NOTHING, related_name="rightFile")
     connected_file = models.ForeignKey(SnapFile, on_delete=models.DO_NOTHING, related_name="connected_file", null=True)
-    hunks = models.fields
+    #hunks = models.fields
 
 
 class Hunk(models.Model):
-    mergeConflict = models.ForeignKey(MergeConflict, on_delete=models.CASCADE)
+    mergeConflict = models.ForeignKey(MergeConflict, on_delete=models.DO_NOTHING)
     left = models.ForeignKey(ConflictFile, on_delete=models.CASCADE, related_name="leftHunk")
     right = models.ForeignKey(ConflictFile, on_delete=models.CASCADE, related_name="rightHunk")
     choice = models.CharField(_("choice"), max_length=30, null=True)
+    parentPath = models.CharField("parentPath", max_length=255, null=True)
+    parentImage = models.FileField("parentImageFile", blank=True, validators=[
+        FileExtensionValidator(['base64', 'BASE64'])])
 
+    @classmethod
+    def create_and_save(cls, left, right, mergeConflict, parentPath, parentImage):
+        hunk = cls.objects.create(left=left, right=right, mergeConflict=mergeConflict, parentPath=parentPath, parentImage=parentImage)
+
+        hunk.save()
+        return hunk
+    
     def as_dict(self):
         return {
             'id': self.id,
             'left': self.left.as_dict(),
             'right': self.right.as_dict(),
-            'choice': self.choice if self.choice != None else ""
+            'choice': self.choice if self.choice != None else "",
+            'parentPath': self.parentPath,
+            'parentImage': self.get_media_path()
         }
+        
+    def get_media_path(self):
+        return settings.MEDIA_URL + str(self.parentImage)
+
+
+class SettingsObjectTypes(Enum):
+    """
+    Enum Description: 
+    Specify the settings object type (for display purposes...)
+    [int, string, bool]
+    """
+    typeInt = "int"
+    typeString = "string"
+    typeBoolean = "boolean"
+    
+class Settings(models.Model):
+    name = models.CharField(max_length=255, null=False, unique=True)
+    value = models.CharField(max_length=64, null=False)
+    desc = models.CharField(max_length=255)
+    type = models.CharField(max_length=30, null=True, default=SettingsObjectTypes.typeString.value)
+    
+
+# auto add default rows after migration if not found in db
+@receiver(post_migrate)
+def add_default_rows(sender, **kwargs):
+    if not Settings.objects.filter(name='info_header_visible').exists():
+        Settings.objects.create(name='info_header_visible', value="false", desc="Set the notification banner on the main page visible.", type=SettingsObjectTypes.typeBoolean.value)
+    if not Settings.objects.filter(name='info_header_text').exists():
+        Settings.objects.create(name='info_header_text', value="", desc="The text visible in the notification banner of the main page.", type=SettingsObjectTypes.typeString.value)

@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import Layout from "./Layout.tsx";
-import { ThemeProvider, createTheme } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import ConflictStepper from "./ConflictStepper.tsx";
@@ -11,8 +10,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "react-toastify/dist/ReactToastify.css";
 import EventTest from "./EventTest.tsx";
-import Test from "./components/HelpMenu/HelpDisplay.tsx";
 import "./shared/i18n.ts";
+
+import { ThemeProvider, createTheme } from "@mui/material";
 
 // const lightTheme: PartialTheme = {
 //   semanticColors: {
@@ -43,6 +43,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           top: "64px",
           bottom: "0px",
           width: "100vw",
+          background:"#2d2d2d",
           overflow: "scroll",
         }}
       >

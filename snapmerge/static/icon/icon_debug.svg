@@ -3,7 +3,7 @@
    viewBox="0 0 359 102"
    version="1.1"
    id="svg79"
-   sodipodi:docname="icon.svg"
+   sodipodi:docname="icon_debug.svg"
    xml:space="preserve"
    width="359"
    height="102"
@@ -26,7 +26,7 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="4.3036212"
-     inkscape:cx="189.84013"
+     inkscape:cx="190.18867"
      inkscape:cy="45.078317"
      inkscape:window-width="2560"
      inkscape:window-height="1372"
@@ -344,10 +344,7 @@
          inkscape:label="high_top" /></g></g><text
      xml:space="preserve"
      id="text977"
-     style="font-size:32px;white-space:pre;shape-inside:url(#rect979);fill:#ff2a2a;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
-     transform="rotate(19.013239,299.46836,155.23367)"
-     inkscape:transform-center-x="0.18923071"
-     inkscape:transform-center-y="1.2809786"><tspan
-       x="243.2832"
-       y="35.389443"
-       id="tspan1879">BETA</tspan></text></svg>
+     style="font-size:30.0233px;white-space:pre;shape-inside:url(#rect979);display:none;fill:#ff2a2a;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
+     transform="matrix(1.0076895,0.3472358,-0.3472358,1.0076895,47.360541,-95.126294)"
+     inkscape:transform-center-x="0.20170061"
+     inkscape:transform-center-y="1.3653143" /></svg>

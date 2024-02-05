@@ -20,15 +20,29 @@ def nodeToReadable(node: ET.Element):
     return f"<{node.tag}{' ' if attribs != '' else ''}{attribs}>"
 
 
+class ConflictTypes(Enum):
+    ELEMENT = "Element"
+    TEXT = "Text"
+    IMAGE = "Image"
+    CUSTOMBLOCK = "CustomBlock"
+    WATCHER = "Watcher"
+    AUDIO = "Audio"
+
 class Conflict:
-    def __init__(self, leftElement, rightElement, conflictType="Element", s="", category=""):
+    def __init__(self, leftElement, rightElement, conflictType="Element", s="", category="", parentPath="", parentImage="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", cxl=None, cyl=None, cxr=None, cyr=None):
         self.leftElement = leftElement
         self.rightElement = rightElement
-        if conflictType not in ["Element", "Text", "Image", "CustomBlock"]:
-            raise ValueError("Invalid conflictType. It must be one of 'Element', 'Text', or 'Image'.")
+        if conflictType not in [e.value for e in ConflictTypes]:
+            raise ValueError(f"Invalid conflictType. It must be one of {[e.value for e in ConflictTypes]}.")
         self.conflictType = conflictType
         self.s = s
         self.category = category
+        self.parentPath = parentPath
+        self.parentImage = parentImage
+        self.cxl = cxl
+        self.cyl = cyl
+        self.cxr = cxr
+        self.cyr = cyr
         
     def __str__(self):
         return f"Conflict ({self.conflictType}): {self.leftElement} <-> {self.rightElement}"
@@ -116,8 +130,12 @@ def merge(file1Path: str, file2Path: str, resolutions: list[Resolution]=[]) -> t
     leftRoot = treeLeft.getroot()
     rightRoot = treeRight.getroot()
     
+    parentPath = "/"
+    # white transparent pixel 1x1
+    parentImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    
     # Merge project definition
-    defConflict, merged = mergeDoc(leftRoot,rightRoot, resolutions)
+    defConflict, merged = mergeDoc(leftRoot,rightRoot, resolutions, parentPath)
     if defConflict:
         conflicts.append(defConflict)
     else:
@@ -127,14 +145,15 @@ def merge(file1Path: str, file2Path: str, resolutions: list[Resolution]=[]) -> t
     for i in range(len(leftRoot)):
         # ignore project thumbnail, since it changes all the time and will be rendered new on a run
         if leftRoot[i].tag == "thumbnail":
+            parentImage = leftRoot[i].text
             continue
         if leftRoot[i].tag != "scenes":
-            simConflict, _ = mergeSimple(leftRoot[i], rightRoot[i], resolutions)
+            simConflict, _ = mergeSimple(leftRoot[i], rightRoot[i], resolutions, parentPath, parentImage)
             if simConflict:
                 for con in simConflict:
                     conflicts.append(con)
         else:
-            scenesConflicts = mergeScenes(leftRoot[i], rightRoot[i], resolutions)
+            scenesConflicts = mergeScenes(leftRoot[i], rightRoot[i], resolutions, parentPath, parentImage)
             if scenesConflicts:
                 for con in scenesConflicts:
                     conflicts.append(con)
@@ -143,6 +162,7 @@ def merge(file1Path: str, file2Path: str, resolutions: list[Resolution]=[]) -> t
     if len(conflicts) > 0:
         return conflicts, None
     print("Save merged xml")
+    print(conflicts)
     return None, ET.tostring(leftRoot, encoding="UTF-8")
     
     # tmp function store...
@@ -188,13 +208,13 @@ def compareVersionName(leftNodeText, rightNodeText):
 
 # merge both projects definitions, check if name has changed and return text conflict in case
 # in addition chose newest version
-def mergeDoc(leftNode, rightNode, resolutions=[]):
+def mergeDoc(leftNode, rightNode, resolutions=[], parentPath=""):
     # if project names mismatch, add conflict
     if leftNode.attrib['name'] != rightNode.attrib['name']:
         tmpRes = getResolution(resolutions)
         if tmpRes:
             return None, tmpRes.resolve(leftNode, rightNode)
-        return Conflict(leftNode.attrib['name'], rightNode.attrib['name'], conflictType="Text"), leftNode
+        return Conflict(leftNode.attrib['name'], rightNode.attrib['name'], conflictType="Text", parentPath=parentPath), leftNode
     
     # if the right version is higher, chose that one, otherwise use the left
     if compareVersionName(leftNode.attrib['app'], rightNode.attrib['app']) == -1:
@@ -265,7 +285,7 @@ def compareNodesSame(leftNode, rightNode, onlyCheck=""):
 
 
 # expects left and right node have same definition and values, only child nodes differ
-def mergeSimple(leftNode: ET.Element, rightNode: ET.Element, resolutions:list[Resolution]=[]) -> tuple[list[Conflict], ET.Element]:
+def mergeSimple(leftNode: ET.Element, rightNode: ET.Element, resolutions:list[Resolution]=[], parentPath: str="", parentImage: str=None) -> tuple[list[Conflict], ET.Element]:
     """Simply merges two nodes 
 
     Parameters
@@ -308,14 +328,14 @@ def mergeSimple(leftNode: ET.Element, rightNode: ET.Element, resolutions:list[Re
                 return None, leftNode[cIndex]
             
             if(leftNode.tag == "thumbnail"):
-                retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image"))
+                retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image", parentPath=parentPath, parentImage=parentImage))
             elif ("script" not in conflictNode.tag):
                 if "pentrails" in conflictNode.tag:
-                    retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image"))
+                    retConflicts.append(Conflict(conflictNode.text, rNode.text, conflictType="Image", parentPath=parentPath, parentImage=parentImage))
                 else:
-                    retConflicts.append(Conflict(pretty_print_xml(leftNode), pretty_print_xml(rightNode), conflictType="Text"))
+                    retConflicts.append(Conflict(pretty_print_xml(leftNode), pretty_print_xml(rightNode), conflictType="Text", parentPath=parentPath, parentImage=parentImage))
             else:
-                retConflicts.append(Conflict(conflictNode, rNode))
+                retConflicts.append(Conflict(conflictNode, rNode, parentPath=parentPath, parentImage=parentImage))
     
     if len(leftNodeList) == 0:
         if not compareNodesSame(leftNode, rightNode, onlyCheck=""):
@@ -324,14 +344,14 @@ def mergeSimple(leftNode: ET.Element, rightNode: ET.Element, resolutions:list[Re
                 leftNode = tmpRes.resolve(leftNode, rightNode)
                 return None, leftNode
             if(leftNode.tag == "thumbnail"):
-                retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image"))
+                retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image", parentPath=parentPath, parentImage=parentImage))
             elif ("script" not in leftNode.tag):
                 if "pentrails" in leftNode.tag:
-                    retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image"))
+                    retConflicts.append(Conflict(leftNode.text, rightNode.text, conflictType="Image", parentPath=parentPath, parentImage=parentImage))
                 else:
-                    retConflicts.append(Conflict(pretty_print_xml(leftNode), pretty_print_xml(rightNode), conflictType="Text"))
+                    retConflicts.append(Conflict(pretty_print_xml(leftNode), pretty_print_xml(rightNode), conflictType="Text", parentPath=parentPath, parentImage=parentImage))
             else:
-                retConflicts.append(Conflict(leftNode, rightNode))
+                retConflicts.append(Conflict(leftNode, rightNode, parentPath=parentPath, parentImage=parentImage))
             
     if len(retConflicts) != 0:
         return retConflicts, None
@@ -419,9 +439,12 @@ def getNodeMatchByDef(nodeList, node, onlyCheck=""):
         if compareNodesDefinition(n, node, onlyCheck):
             return n, i
     return None, 0
+
+def getItemNodeMatchByDef(nodeList, node, onlyCheck=""):
+    return getNodeMatchByDef([n[0] for n in nodeList], node[0], onlyCheck)
         
         
-def mergeScenes(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+def mergeScenes(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     leftNodeList = [n for n in leftNode]
     nodesToAdd = []
     retConflicts = []
@@ -430,12 +453,12 @@ def mergeScenes(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[R
     for rNode in rightNode:
         matchingLeftSubNode, cIndex = getNodeMatchByDef(leftNodeList, rNode, onlyCheck="name")
         # if none found in the left side, just add rNode since the sub node is a new node in this case
-        if matchingLeftSubNode == None:   
+        if matchingLeftSubNode == None: 
             nodesToAdd.append(rNode)
             continue
         
         # if node is found, check if merge needs to happen
-        res = mergeScene(matchingLeftSubNode, rNode, resolutions)
+        res = mergeScene(matchingLeftSubNode, rNode, resolutions, parentPath, parentImage)
         if res == None:
             continue
         
@@ -459,24 +482,25 @@ def mergeScenes(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[R
         return retConflicts
 
 
-def mergeScene(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+def mergeScene(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     conflicts = []
+    parentPath += f'{leftNode.attrib["name"]}/'
     for i in range(len(leftNode)):
         tmp = leftNode[i]
         # catch specials
         if leftNode[i].tag == "blocks":
-            resConf = mergeBlocks(leftNode[i], rightNode[i],resolutions)
+            resConf = mergeBlocks(leftNode[i], rightNode[i],resolutions, parentPath=parentPath, parentImage=parentImage)
             if resConf:
                 conflicts = conflicts + resConf
             continue
         if leftNode[i].tag == "stage":
-            simConflict = mergeStage(leftNode[i], rightNode[i], resolutions)
+            simConflict = mergeStage(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
             if simConflict:
                 conflicts = conflicts + simConflict
             continue
         
         # the rest of the basic objects can be merged easy with the simpleMerge
-        simConflict, merged = mergeSimple(leftNode[i], rightNode[i])
+        simConflict, merged = mergeSimple(leftNode[i], rightNode[i], parentPath=parentPath, parentImage=parentImage)
         if simConflict:
             conflicts = conflicts + simConflict
     if len(conflicts) > 0:
@@ -491,7 +515,7 @@ def mergeScene(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Re
 #     #     return simConflict
 #     return []
 
-def mergeBlocks(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+def mergeBlocks(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     leftNodeList = [n for n in leftNode]
     retConflicts = []
     for rNode in rightNode:
@@ -508,13 +532,13 @@ def mergeBlocks(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[R
                 leftNode[cIndex] = tmpResolution.resolve(conflictingLeftNode, rNode)
                 continue
             
-            confs = mergeBlockDef(conflictingLeftNode, rNode, resolutions)
+            confs = mergeBlockDef(conflictingLeftNode, rNode, resolutions, parentPath, parentImage)
             if confs:
                 retConflicts.append(confs)
     if len(retConflicts) > 0:
         return retConflicts
     
-def mergeBlockDef(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+def mergeBlockDef(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     for i, subNode in enumerate(leftNode):
         if "script" in subNode.tag:
             l = copyElement(subNode)
@@ -523,71 +547,121 @@ def mergeBlockDef(leftNode: ET.Element, rightNode: ET.Element, resolutions: list
             rBlockName = "Conflict-Block-Content: " + str(rightNode.attrib["s"])
             l.insert(0, ET.Element('custom-block', {'s': lBlockName}))
             r.insert(0, ET.Element('custom-block', {'s': rBlockName}))
-            return Conflict(l, r, conflictType="CustomBlock", s=lBlockName, category=str(leftNode.attrib["category"]))
+            return Conflict(l, r, conflictType="CustomBlock", s=lBlockName, category=str(leftNode.attrib["category"], parentPath=parentPath, parentImage=parentImage))
         
-def mergeStage(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+def mergeStage(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     conflicts = []
     for i in range(len(leftNode)):
         if leftNode[i].tag == "blocks":
-            resConfs = mergeBlocks(leftNode[i], rightNode[i], resolutions)
+            resConfs = mergeBlocks(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
             if resConfs:
                 conflicts = conflicts + resConfs
             continue
             
         if leftNode[i].tag == "scripts":
-            simConflict = mergeScripts(leftNode[i], rightNode[i], resolutions)
+            simConflict = mergeScripts(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
             if simConflict:
                 conflicts = conflicts + simConflict
             continue
         
         if leftNode[i].tag == "sprites":
-            conflicts = conflicts + mergeSprites(leftNode[i], rightNode[i], resolutions)
+            conflicts = conflicts + mergeSprites(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
+            continue
+        
+        if leftNode[i].tag == "costumes":
+            simConflict = mergeCostumes(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
+            if simConflict:
+                conflicts = conflicts + simConflict
+            continue
+        
+        if leftNode[i].tag == "sounds":
+            simConflict = mergeSounds(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
+            if simConflict:
+                conflicts = conflicts + simConflict
+            continue
+        
+        if leftNode[i].tag == "pentrails":
+            parentImage = leftNode[i].text
+            # prevent pentrail merge, since that can be ignored since it changes all the time...
             continue
             
         # the rest of the basic objects can be merged easy with the simpleMerge
-        simConflict, merged = mergeSimple(leftNode[i], rightNode[i])
+        simConflict, merged = mergeSimple(leftNode[i], rightNode[i], parentPath=f'{parentPath}{leftNode.attrib["name"]}/', parentImage=parentImage)
         if simConflict:
             conflicts = conflicts + simConflict
     return conflicts
 
 
-def mergeSprites(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+def mergeSprites(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     leftNodeList = [n for n in leftNode]
     retConflicts = []
     for rNode in rightNode:
-        cont = containsNode(leftNodeList, rNode, onlyCheck="name")
-        if cont == 0:
-            leftNode.append(rNode)
-        elif cont == 2:
-            conflictingLeftNode, cIndex = getNodeMatchByDef(leftNodeList, rNode, onlyCheck="name")
-            confs = mergeSprite(conflictingLeftNode, rNode, resolutions)
-            retConflicts = retConflicts + confs
+        # special case for watcher variables that can happen here...
+        if rNode.tag == "watcher":
+            # switch between user ("var") and system inbuilt variables ("s")
+            toCheckAttrib = "s" if "s" in rNode.keys() else "var"
+            cont = containsNode(leftNodeList, rNode, onlyCheck=toCheckAttrib)
+            if cont == 0:
+                leftNode.append(rNode)
+            elif cont == 2:
+                conflictingLeftNode, cIndex = getNodeMatchByDef(leftNodeList, rNode, onlyCheck=toCheckAttrib)
+                confs = mergeWatcher(conflictingLeftNode, rNode, resolutions, parentPath=parentPath, parentImage=parentImage)
+                retConflicts = retConflicts + confs
+        else:
+            cont = containsNode(leftNodeList, rNode, onlyCheck="name")
+            if cont == 0:
+                leftNode.append(rNode)
+            elif cont == 2:
+                conflictingLeftNode, cIndex = getNodeMatchByDef(leftNodeList, rNode, onlyCheck="name")
+                confs = mergeSprite(conflictingLeftNode, rNode, resolutions, parentPath=parentPath, parentImage=parentImage)
+                retConflicts = retConflicts + confs
     return retConflicts
 
 
-def mergeSprite(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+def mergeSprite(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     conflicts = []
+    parentPath += f"{leftNode.attrib['name']}/"
     for i in range(len(leftNode)):
         if leftNode[i].tag == "blocks":
-            retConf = mergeBlocks(leftNode[i], rightNode[i], resolutions)
+            retConf = mergeBlocks(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
             if retConf != None:
                 conflicts = conflicts + retConf
             continue
             
         if leftNode[i].tag == "scripts":
-            simConflict = mergeScripts(leftNode[i], rightNode[i], resolutions)
+            simConflict = mergeScripts(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
+            if simConflict:
+                conflicts = conflicts + simConflict
+            continue
+        
+        if leftNode[i].tag == "costumes":
+            costumeNum = int(leftNode.attrib["costume"])
+            if costumeNum > 0:
+                parentImage = leftNode[i][0][costumeNum-1][0].attrib["image"]
+            simConflict = mergeCostumes(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
+            if simConflict:
+                conflicts = conflicts + simConflict
+            continue
+        
+        if leftNode[i].tag == "sounds":
+            simConflict = mergeSounds(leftNode[i], rightNode[i], resolutions, parentPath=parentPath, parentImage=parentImage)
             if simConflict:
                 conflicts = conflicts + simConflict
             continue
             
         # the rest of the basic objects can be merged easy with the simpleMerge
-        simConflict, merged = mergeSimple(leftNode[i], rightNode[i])
+        simConflict, merged = mergeSimple(leftNode[i], rightNode[i], parentPath=parentPath, parentImage=parentImage)
         if simConflict:
             conflicts = conflicts + simConflict
     return conflicts
 
+# to reduce merge conflicts, just use the left by default...
+def mergeWatcher(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
+    conflicts = []
+    return conflicts
 
-def mergeScripts(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | list[Conflict]:
+
+def mergeScripts(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
     """Merger for the scenes node. Matches each scene by id and then tries to merge the individual scenes
 
     Parameters
@@ -616,7 +690,7 @@ def mergeScripts(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[
             continue
         
         # if node is found, check if merge needs to happen
-        res = mergeScript(matchingLeftSubNode, rNode)
+        res = mergeScript(matchingLeftSubNode, rNode, parentPath=parentPath, parentImage=parentImage)
         if res == None:
             continue
         
@@ -650,7 +724,7 @@ def mergeScripts(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[
 
 
 
-def mergeScript(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[]) -> None | ET.Element | Conflict:
+def mergeScript(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | ET.Element | Conflict:
     """Checks if two script nodes can be merged, or generate a conflict
 
     Parameters
@@ -679,14 +753,15 @@ def mergeScript(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[R
                 if lcd != rcd:
                     return rightNode
                 else:
-                    return Conflict(leftNode, rightNode)
+                    return Conflict(leftNode, rightNode, parentPath=parentPath, parentImage=parentImage)
         else:
-            return Conflict(leftNode, rightNode)
+            return Conflict(leftNode, rightNode, parentPath=parentPath, parentImage=parentImage)
     return None
 
 
-def compareCustomDataNodes(leftNode: ET.Element, rightNode: ET.Element) -> bool:
-    """Compares two nodes with a customData attribute
+def compareCustomDataNodes(leftNode: ET.Element, rightNode: ET.Element, whitelist: list[str] = []) -> bool:
+    """Compares two nodes with a customData attribute\n
+    If customData exists, only compares it, otherwise compares all attributes on the whitelist
 
     Parameters
     ----------
@@ -694,6 +769,8 @@ def compareCustomDataNodes(leftNode: ET.Element, rightNode: ET.Element) -> bool:
         Left node (probably script)
     rightNode : ET.Element
         Right node (probably script)
+    whitelist : list[str]
+        Attribute whitelist for the compare (when [] compares all attributes), default []
 
     Returns
     -------
@@ -707,10 +784,6 @@ def compareCustomDataNodes(leftNode: ET.Element, rightNode: ET.Element) -> bool:
     
     if leftNode.text != rightNode.text:
         return False
-    
-    # atomic escape
-    if len(leftNode) == 0:
-        return True
     
     # first nodes should contain customData, then only check the id, otherwise all attributes
     if "customData" in leftNode.keys():
@@ -729,14 +802,19 @@ def compareCustomDataNodes(leftNode: ET.Element, rightNode: ET.Element) -> bool:
             return False
         for lKey in leftNode.keys():
             # if leftKey doesn't exist in the right, nodes differ
-            try:
-                lVal = leftNode.attrib[lKey]
-                rVal = rightNode.attrib[lKey]
-                
-                if lVal != rVal:
+            if lKey in whitelist or len(whitelist) == 0:
+                try:
+                    lVal = leftNode.attrib[lKey]
+                    rVal = rightNode.attrib[lKey]
+                    
+                    if lVal != rVal:
+                        return False
+                except KeyError:
                     return False
-            except KeyError:
-                return False
+            
+    # atomic escape
+    if len(leftNode) == 0:
+        return True
     
     # recursive check child nodes if same
     nodePairs = zip(leftNode, rightNode)
@@ -744,13 +822,199 @@ def compareCustomDataNodes(leftNode: ET.Element, rightNode: ET.Element) -> bool:
         if not compareCustomDataNodes(l, r):
             return False
     return True
+
+
+def mergeCostumes(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
+    """Merger for the costumes node. Matches each scene by id and then tries to merge the individual scenes
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Root node for the left side of the single script merge.
+    rightNode : ET.Element
+        Root node for the right side of the single script merge.
+    resolutions : list[Resolution]
+        List of resolutions to be poped, by default []
+
+    Returns
+    -------
+    None | list[Conflict]
+        Returns either None if the list of conflicts from all sub scripts
+    """
+    leftNodeList = [n for n in leftNode[0]]
+    nodesToAdd = []
+    retConflicts = []
+    # compare all script nodes from the right side with the left (to prevent disordering to some cases, nodes get matched in the next step and not only zipped)
+    for rNode in rightNode[0]:
+        matchingLeftSubNode, cIndex = getItemNodeMatchByDef(leftNodeList, rNode, onlyCheck="name")
+        # if none found in the left side, just add rNode since the sub node is a new node in this case
+        if matchingLeftSubNode == None:   
+            nodesToAdd.append(rNode)
+            continue
+        
+        # if node is found, check if merge needs to happen
+        res = mergeCostume(matchingLeftSubNode, rNode[0], parentPath=parentPath, parentImage=parentImage)
+        if res == None:
+            continue
+        
+        # If node is returned, then it needs to be added to the parent
+        if type(res) == ET.Element:
+            nodesToAdd.append(res)
+            continue
+        
+        # In case of a conflict, check if resolution exist and apply, otherwise propagate the conflict
+        tmpResolution = getResolution(resolutions)
+        if tmpResolution:
+            # replace the left sub node with the resolution result since the left node is always used as last return / accumulator
+            leftNode[0][cIndex][0] = tmpResolution.resolve(matchingLeftSubNode, rNode[0])
+        else:
+            retConflicts.append(res)
+            
+    for nta in nodesToAdd:
+        leftNode[0].append(nta)        
+    
+    if len(retConflicts) > 0:
+        return retConflicts
     
     
+def mergeCostume(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | ET.Element | Conflict:
+    """Checks if two costume nodes can be merged, or generate a conflict
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Root node for the left side of the single costume merge.
+    rightNode : ET.Element
+        Root node for the right side of the single costume merge.
+    resolutions : list[Resolution]
+        List of resolutions to be poped
+
+    Returns
+    -------
+    None | ET.Element | list[Conflict]
+        Returns None if nothing needs to happen, a Element if right node needs to be added to the result or otherwise a Conflict
+    -------
+    """
+    
+    if not compareCustomDataNodes(leftNode, rightNode, ["name", "image"]):
+        if "name" in leftNode.keys():
+            if "name" in rightNode.keys():
+                lId = leftNode.attrib["name"]
+                rId = rightNode.attrib["name"]
+                
+                # if different ids, nodes differ
+                if lId != rId:
+                    return rightNode
+                else:
+                    return Conflict(leftNode.attrib["image"], rightNode.attrib["image"], conflictType="Image", parentPath=parentPath, parentImage=parentImage, cxl=leftNode.attrib["center-x"], cyl=leftNode.attrib["center-y"], cxr=rightNode.attrib["center-x"], cyr=rightNode.attrib["center-y"])
+        else:
+            return Conflict(leftNode.attrib["image"], rightNode.attrib["image"], conflictType="Image", parentPath=parentPath, parentImage=parentImage, cxl=leftNode.attrib["center-x"], cyl=leftNode.attrib["center-y"], cxr=rightNode.attrib["center-x"], cyr=rightNode.attrib["center-y"])
+    return None
+
+
+def mergeSounds(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | list[Conflict]:
+    """Merger for the sounds node. Matches each sound by id and then tries to merge the individual sound
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Root node for the left side of the single sound merge.
+    rightNode : ET.Element
+        Root node for the right side of the single sound merge.
+    resolutions : list[Resolution]
+        List of resolutions to be poped, by default []
+
+    Returns
+    -------
+    None | list[Conflict]
+        Returns either None if the list of conflicts from all sub sounds
+    """
+    leftNodeList = [n for n in leftNode[0]]
+    nodesToAdd = []
+    retConflicts = []
+    # compare all script nodes from the right side with the left (to prevent disordering to some cases, nodes get matched in the next step and not only zipped)
+    for rNode in rightNode[0]:
+        matchingLeftSubNode, cIndex = getItemNodeMatchByDef(leftNodeList, rNode, onlyCheck="name")
+        # if none found in the left side, just add rNode since the sub node is a new node in this case
+        if matchingLeftSubNode == None:   
+            nodesToAdd.append(rNode)
+            continue
+        
+        # if node is found, check if merge needs to happen
+        res = mergeSound(matchingLeftSubNode, rNode[0], parentPath=parentPath, parentImage=parentImage)
+        if res == None:
+            continue
+        
+        # If node is returned, then it needs to be added to the parent
+        if type(res) == ET.Element:
+            nodesToAdd.append(res)
+            continue
+        
+        # In case of a conflict, check if resolution exist and apply, otherwise propagate the conflict
+        tmpResolution = getResolution(resolutions)
+        if tmpResolution:
+            # replace the left sub node with the resolution result since the left node is always used as last return / accumulator
+            leftNode[0][cIndex][0] = tmpResolution.resolve(matchingLeftSubNode, rNode[0])
+        else:
+            retConflicts.append(res)
+            
+    for nta in nodesToAdd:
+        leftNode[0].append(nta)        
+    
+    if len(retConflicts) > 0:
+        return retConflicts
+    
+    
+def mergeSound(leftNode: ET.Element, rightNode: ET.Element, resolutions: list[Resolution]=[], parentPath:str="", parentImage:str="") -> None | ET.Element | Conflict:
+    """Checks if two sound nodes can be merged, or generate a conflict
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Root node for the left side of the single sound merge.
+    rightNode : ET.Element
+        Root node for the right side of the single sound merge.
+    resolutions : list[Resolution]
+        List of resolutions to be poped
+
+    Returns
+    -------
+    None | ET.Element | list[Conflict]
+        Returns None if nothing needs to happen, a Element if right node needs to be added to the result or otherwise a Conflict
+    -------
+    """
+    
+    if not compareCustomDataNodes(leftNode, rightNode, ["name", "sound"]):
+        if "name" in leftNode.keys():
+            if "name" in rightNode.keys():
+                lId = leftNode.attrib["name"]
+                rId = rightNode.attrib["name"]
+                
+                # if different ids, nodes differ
+                if lId != rId:
+                    return rightNode
+                else:
+                    return Conflict(leftNode.attrib["sound"], rightNode.attrib["sound"], conflictType="Audio", parentPath=parentPath, parentImage=parentImage, cxl=leftNode.attrib["name"], cxr=rightNode.attrib["name"])
+        else:
+            return Conflict(leftNode.attrib["sound"], rightNode.attrib["sound"], conflictType="Audio", parentPath=parentPath, parentImage=parentImage, cxl=leftNode.attrib["name"], cxr=rightNode.attrib["name"])
+    return None
         
 
 conflicts = []
 
 if __name__ == '__main__':
+    filePath1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/106.xml"
+    filePath2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/109.xml"
+    res = merge(filePath1, filePath2, [])
+    # if res:
+        # print(res)
+        # try:
+        #     for elems in res[0]:
+        #         print(str(elems),"\n")
+        # except:
+        #     pass
+        
+        
     # tagLeft = ET.Element('project', {'name': "tmp", 'app': "123", 'version': '2'})
     # tagLeft = ET.Element('project', {'name': "tmp", 'app': "123", 'version': '2'})
     # ET.SubElement(tagLeft, "test", {'v': '1'})
@@ -788,30 +1052,34 @@ if __name__ == '__main__':
     # if res:
     #     print(pretty_print_xml(res))
     
-    tmp = SnapFileGenerator(projectName="project", appName="Snap! 9.0, https://snap.berkeley.edu")
-    tmp.addScene(SnapScene("test"))
-    # tmp.addScene(SnapScene("tes2"))
-    snap = tmp.generate()
-    original = copyElement(snap)
-    SnapFileGenerator.alterScripts(snap)
     
-    tree1 = ET.ElementTree(original)
-    tree2 = ET.ElementTree(snap)
+    
+    
+    
+    # tmp = SnapFileGenerator(projectName="project", appName="Snap! 9.0, https://snap.berkeley.edu")
+    # tmp.addScene(SnapScene("test"))
+    # # tmp.addScene(SnapScene("tes2"))
+    # snap = tmp.generate()
+    # original = copyElement(snap)
+    # SnapFileGenerator.alterScripts(snap)
+    
+    # tree1 = ET.ElementTree(original)
+    # tree2 = ET.ElementTree(snap)
 
-    # Write the ElementTree object to an XML file
-    with open('/tmp/snap_test_file_orig.xml', 'wb') as file:
-        tree1.write(file)
-    with open('/tmp/snap_test_file_altered.xml', 'wb') as file:
-        tree2.write(file)
+    # # Write the ElementTree object to an XML file
+    # with open('/tmp/snap_test_file_orig.xml', 'wb') as file:
+    #     tree1.write(file)
+    # with open('/tmp/snap_test_file_altered.xml', 'wb') as file:
+    #     tree2.write(file)
         
-    res = merge("/tmp/snap_test_file_orig.xml", "/tmp/snap_test_file_altered.xml", resolutions=[Resolution(Step.LEFT),Resolution(Step.LEFT)])
-    if res:
-        print(res)
-        try:
-            for elems in res[0][0]:
-                print(str(elems))
-        except:
-            pass
+    # res = merge("/tmp/snap_test_file_orig.xml", "/tmp/snap_test_file_altered.xml", resolutions=[Resolution(Step.LEFT),Resolution(Step.LEFT)])
+    # if res:
+    #     print(res)
+    #     try:
+    #         for elems in res[0][0]:
+    #             print(str(elems))
+    #     except:
+    #         pass
 
     
     

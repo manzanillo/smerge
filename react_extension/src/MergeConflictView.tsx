@@ -5,10 +5,20 @@ import SnapDiv from "./SnapDiv";
 import TurnSlightLeftIcon from "@mui/icons-material/TurnSlightLeft";
 import TurnSlightRightIcon from "@mui/icons-material/TurnSlightRight";
 // import Button from '@mui/material/Button';
-import { Box, Button, ButtonProps, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonProps,
+  CircularProgress,
+  Paper,
+  Typography,
+} from "@mui/material";
 import Stack from "@mui/material/Stack";
 import TextDiv from "./TextDiv";
 import ImageDiv from "./ImageDiv";
+import httpService from "./services/HttpService";
+import { FileDto } from "./ConflictStepper";
+import AudioDiv from "./AudioDiv";
 
 interface MergeConflictViewProps {
   leftButtonAction: () => void;
@@ -17,8 +27,13 @@ interface MergeConflictViewProps {
   isActive?: boolean;
   isText?: boolean;
   isImage?: boolean;
+  isAudio?: boolean;
   leftLink?: string;
   rightLink?: string;
+  parentPath?: string;
+  parentImage?: string;
+  left?: FileDto;
+  right?: FileDto;
 }
 
 const MergeConflictView: React.FC<MergeConflictViewProps> = ({
@@ -30,6 +45,11 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
   isActive,
   isText = false,
   isImage = false,
+  isAudio = false,
+  parentPath = "",
+  parentImage = "",
+  left,
+  right,
 }) => {
   const serverEndpoint = "";
 
@@ -48,21 +68,68 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
 
   useEffect(() => {
     console.log("onstart");
+    console.log(left);
+    console.log(right);
 
     return () => {
       console.log("onunload");
     };
   }, []);
 
+  const [iconLoading, setIconLoading] = useState(true);
+  const [iconData, setIconData] = useState("");
+
+  useEffect(() => {
+    httpService.get(
+      parentImage.substring(1),
+      (req) => {
+        setIconData(req.response);
+        setIconLoading(false);
+      },
+      (req) => {
+        console.log(req);
+      },
+      () => {},
+      true,
+      true
+    );
+  }, [parentImage]);
+
   return (
     <>
       {!isLoaded && isActive && xml1 != "" && xml2 != "" ? (
         <div className="merge_main_space">
+          <Stack
+            height={"40px"}
+            paddingBottom={"10px"}
+            alignItems="center"
+            direction={"row"}
+            spacing={3}
+          >
+            <Typography variant="h5" style={{ textDecoration: "underline" }}>
+              Conflict inside:
+            </Typography>
+            <Typography variant="body1">{parentPath}</Typography>
+            {iconLoading ? (
+              <CircularProgress style={{ width: "24px", height: "24px" }} />
+            ) : (
+              <Paper style={{ width: "48px", height: "36px" }} elevation={8}>
+                <img
+                  style={{ borderRadius: "5px" }}
+                  width="48px"
+                  height="36px"
+                  src={iconData}
+                />
+              </Paper>
+            )}
+          </Stack>
           <div className="merge_main_pane">
             {isText ? (
               <TextDiv text1={xml1} text2={xml2} />
             ) : isImage ? (
-              <ImageDiv text1={xml1} text2={xml2} />
+              <ImageDiv text1={xml1} text2={xml2} left={left} right={right} />
+            ) : isAudio ? (
+              <AudioDiv text1={xml1} text2={xml2} left={left} right={right} />
             ) : (
               <SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>
             )}

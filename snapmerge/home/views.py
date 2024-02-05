@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonRespons
 from django.utils.translation import gettext_lazy as _
 
 from . import models
-from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, default_conflict_color, default_favor_color, MergeConflict, Hunk, NodeTypes
+from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, default_conflict_color, default_favor_color, MergeConflict, Hunk, NodeTypes, Settings, SettingsObjectTypes
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
@@ -23,7 +23,7 @@ from .ancestors import gca
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
-from .Merger_Two_ElectricBoogaloo.merger import merge, Conflict, Resolution, Step
+from .Merger_Two_ElectricBoogaloo.merger import merge, Conflict, Resolution, Step, ConflictTypes
 from uuid import uuid4
 from django_eventstream import send_event
 
@@ -66,14 +66,20 @@ def check_password(username, password_hashed):
         return "True"
     else:
         return "False"
+    
+baseContext = {
+    'devAdd': ' (DEV)' if settings.DEBUG else ' (BETA)' if settings.BETA else '',
+    'inBeta': settings.BETA,
+}
 
 
 # Create your views here.
 class HomeView(View):
     def get(self, request):
         context = {
-            'devAdd': '(DEV)' if settings.DEBUG else '',
-            'icon': 'icon/icon_debug.svg' if settings.BETA else 'icon/icon.svg'
+            **baseContext,
+            'notification_visible' : Settings.objects.get(name="info_header_visible").value == "true",
+            'notification_text' : Settings.objects.get(name="info_header_text").value
         }
         return render(request, 'home.html', context)
 
@@ -81,6 +87,7 @@ class HomeView(View):
 class NavView(View):
     def get(self, request):
         context = {
+            **baseContext,
         }
         return render(request, 'nav.html', context)
 
@@ -88,6 +95,7 @@ class NavView(View):
 class HowToView(View):
     def get(self, request):
         context = {
+            **baseContext,
         }
         return render(request, 'how_to.html', context)
 
@@ -95,6 +103,7 @@ class HowToView(View):
 class ImpressumView(View):
     def get(self, request):
         context = {
+            **baseContext,
         }
         return render(request, 'impressum.html', context)
 
@@ -108,11 +117,12 @@ class ProjectView(View):
         files = [obj.as_dict()
                  for obj in SnapFile.objects.filter(project=proj_id)]
         context = {
+            **baseContext,
             'proj_name': proj.name,
             'proj_description': proj.description,
             'proj_id': proj.id,
             'proj_pin': proj.pin,
-            'files': files
+            'files': files,
         }
         return render(request, 'proj.html', context)
 
@@ -204,7 +214,7 @@ class SyncView(View):
         # notify_room(proj.id, new_file.as_dict(), "commit")
         send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})
 
-        new_url = settings.URL + '/sync/' + \
+        new_url = settings.POST_BACK_URL + '/sync/' + \
                   str(proj.id) + '?ancestor=' + str(new_file.id)
         return JsonResponse({'message': _('OK'), 'url': new_url})
 
@@ -215,9 +225,9 @@ class CreateProjectView(View):
         file_form = SnapFileForm(prefix='snap_form')
         proj_form = ProjectForm(prefix='proj_form')
         context = {
+            **baseContext,
             'file_form': file_form,
-            'proj_form': proj_form
-
+            'proj_form': proj_form,
         }
         return render(request, 'create_proj.html', context)
 
@@ -280,9 +290,10 @@ class InfoView(View):
         except Project.DoesNotExist:
             raise Http404
         context = {
+            **baseContext,
             'proj_pin': proj.pin,
             'proj_password': proj.password,
-            'proj_id': proj.id
+            'proj_id': proj.id,
         }
         return render(request, 'info_proj.html', context)
 
@@ -291,7 +302,8 @@ class OpenProjectView(View):
     def get(self, request):
         form = OpenProjectForm()
         context = {
-            'form': form
+            **baseContext,
+            'form': form,
         }
         return render(request, 'open_proj.html', context)
 
@@ -324,7 +336,8 @@ class RestoreInfoView(View):
     def get(self, request):
         form = RestoreInfoForm()
         context = {
-            'form': form
+            **baseContext,
+            'form': form,
         }
         return render(request, 'restore_info.html', context)
 
@@ -523,6 +536,7 @@ class ToggleColorView(View):
 class ReactMergeView(View):
     def get(self, request):
         context = {
+            **baseContext,
         }
         return render(request, 'merge_react.html', context)
 
@@ -648,10 +662,10 @@ def mergeExt(request, proj_id, resolutions):
     if len(files) > 1:
         fileIds = [file.id for file in files]
         # check if a conflict exists and the file can be overwritten
-        result_conflict_query = MergeConflict.objects.filter(Q(project_id=proj_id) & Q(left_id__in=fileIds) | Q(project_id=proj_id) & Q(right_id__in=fileIds))
+        result_conflict_query = MergeConflict.objects.filter((Q(project_id=proj_id) & Q(left_id__in=fileIds)) & (Q(project_id=proj_id) & Q(right_id__in=fileIds)))
         result_conflicts = result_conflict_query.all()
         if(len(result_conflicts) > 0):
-            new_file = SnapFile.objects.filter(id=result_conflicts[0].connected_file.id).first()
+            new_file = result_conflicts[0].connected_file#SnapFile.objects.filter(id=result_conflicts[0].connected_file.id).first()
             new_file.type = "default"
             new_file.color = default_color()
             new_file.description = ""
@@ -695,18 +709,31 @@ def mergeExt(request, proj_id, resolutions):
                             ending = ".txt"
                         case "Image":
                             ending = ".base64"
+                        case ConflictTypes.AUDIO.value:
+                            ending = ".abase64"
                         case _:
                             ending = ".xml"
-                    left = models.ConflictFile.create_and_save(project=proj,
-                                                            file=f"{uuid4()}{ending}")
-                    left.save()
-                    right = models.ConflictFile.create_and_save(project=proj,
-                                                            file=f"{uuid4()}{ending}")
-                    right.save()
+                    if conf.conflictType == ConflictTypes.AUDIO.value:
+                        left = models.ConflictFile.create_and_save(project=proj,
+                                                                file=f"{uuid4()}{ending}", cx=0, cy=0, name=conf.cxl)
+                        left.save()
+                        right = models.ConflictFile.create_and_save(project=proj,
+                                                                file=f"{uuid4()}{ending}", cx=0, cy=0, name=conf.cxr)
+                        right.save()
+                    else:
+                        left = models.ConflictFile.create_and_save(project=proj,
+                                                                file=f"{uuid4()}{ending}", cx=conf.cxl, cy=conf.cyl)
+                        left.save()
+                        right = models.ConflictFile.create_and_save(project=proj,
+                                                                file=f"{uuid4()}{ending}", cx=conf.cxr, cy=conf.cyr)
+                        right.save()
                     
                     conf.toFile(settings.BASE_DIR + left.get_media_path(), settings.BASE_DIR + right.get_media_path())
                     
-                    hunk = models.Hunk(left=left, right=right, mergeConflict=merge_conflict)
+                    hunk = Hunk.create_and_save(left=left, right=right, mergeConflict=merge_conflict, parentPath=conf.parentPath, parentImage=f"{uuid4()}.base64")
+                    # set image...
+                    with open(settings.BASE_DIR + hunk.get_media_path(), "w") as f:
+                        f.write(conf.parentImage)
                     hunk.save()
 
                     
@@ -733,18 +760,23 @@ def mergeExt(request, proj_id, resolutions):
             print(new_file.as_dict())
             # delete old conflict on resolved
             if(len(result_conflicts) > 0):
-                conf_id = result_conflicts[0].id
-                connected_hunks = Hunk.objects.filter(mergeConflict=conf_id)
+                # conf_id = result_conflicts[0].id
+                # connected_hunks = Hunk.objects.filter(mergeConflict=conf_id)
+                connected_hunks = result_conflicts[0].hunk_set.all()
                 for hun in connected_hunks:
                     # cleanup local files and db
                     files = [hun.left.file, hun.right.file]
                     for file in files:
                         if os.path.exists(file.path):
                             os.remove(file.path)
+                    if os.path.exists(hun.parentImage.path):
+                        os.remove(hun.parentImage.path)
                     hun.left.delete()
                     hun.right.delete()
                     hun.delete()
+                    # hun.save()
                 result_conflicts[0].delete()
+                # result_conflicts[0].save()
                 
             # notify_room(proj.id, new_file.as_dict(), "merge")
             send_event(str(proj_id), 'message', {'text': 'Update_added_resize'})

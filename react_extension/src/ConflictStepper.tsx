@@ -23,14 +23,16 @@ interface ConflictVM {
   rightId: number;
 }
 
-interface ConflictDto {
+export interface ConflictDto {
   id: number;
   left: FileDto;
   right: FileDto;
   choice: string;
+  parentPath: string;
+  parentImage: string;
 }
 
-interface FileDto {
+export interface FileDto {
   id: number;
   description: string;
   ancestors: undefined;
@@ -39,6 +41,9 @@ interface FileDto {
   number_scripts: number;
   number_sprites: number;
   color: string;
+  cx: number;
+  cy: number;
+  name: string;
 }
 
 interface ConflictStepperProps {}
@@ -80,8 +85,6 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
         projectId.current = resJson.projectId;
         leftId.current = resJson.leftId;
         rightId.current = resJson.rightId;
-
-        console.log(conflictData);
       } else {
         if (xhttp.status >= 400) {
           console.log(`Conflict ${code} not found.`);
@@ -411,7 +414,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
           </Stack>
         </Box>
       ) : (
-        <Box sx={{ p: "20px" }}>
+        <Box sx={{ p: "20px", background: "#2d2d2d" }}>
           <Stepper activeStep={activeStep} orientation="vertical">
             {conflictData?.map((step, index) => (
               <Step key={step.id}>
@@ -435,6 +438,11 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                       isActive={index == activeStep}
                       isText={step.left.file_url.includes(".txt")}
                       isImage={step.left.file_url.includes(".base64")}
+                      isAudio={step.left.file_url.includes(".abase64")}
+                      parentPath={step.parentPath}
+                      parentImage={step.parentImage}
+                      left={step.left}
+                      right={step.right}
                     />
                   </div>
 
