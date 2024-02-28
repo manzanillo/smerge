@@ -232,7 +232,7 @@ def create_xml_head(projectName, versionName, version, asTree=False):
     #scene = ET.SubElement(scenes, 'scene', {'name': projectName})
     if asTree:
         tree = ET.ElementTree(project)
-        return treedecode
+        return tree
     return project, scenes
 
 

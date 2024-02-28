@@ -2,6 +2,7 @@ BASE = ./snapmerge
 REACT_BASE= ./react_extension
 SETTINGS = config.settings_local
 SETTINGS_TESTSERVER = config.settings_test
+APPNAME= "snapmerge"
 
 .PHONY: run startapp makemigrations migrate test
 

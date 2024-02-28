@@ -1,7 +1,7 @@
 import unittest
-from generator import create_xml_head, pretty_print_xml
+from .merger import create_xml_head, pretty_print_xml
 import xml.etree.ElementTree as ET
-from merger import *
+from .merger import *
 
 
 class TestMergeDoc(unittest.TestCase):
@@ -9,8 +9,8 @@ class TestMergeDoc(unittest.TestCase):
     def testCollision(self):
         projectName = "project"
         versionName = "Snap! 9.0, https://snap.berkeley.edu"
-        xml1 = create_xml_head(projectName, versionName, asTree=True).getroot()
-        xml2 = create_xml_head(projectName, versionName, asTree=True).getroot()
+        xml1 = create_xml_head(projectName, versionName, asTree=True, version="9.0").getroot()
+        xml2 = create_xml_head(projectName, versionName, asTree=True, version="9.0").getroot()
         conflict, merged = mergeDoc(xml1, xml2)
         self.assertEqual(conflict, None)
         self.assertEqual(merged, xml1)
@@ -20,8 +20,8 @@ class TestMergeDoc(unittest.TestCase):
         projectName = "project"
         versionName = "Snap! 9.0, https://snap.berkeley.edu"
         versionName2 = "Snap! 9.0.1, https://snap.berkeley.edu"
-        xml1 = create_xml_head(projectName, versionName, asTree=True).getroot()
-        xml2 = create_xml_head(projectName, versionName2, asTree=True).getroot()
+        xml1 = create_xml_head(projectName, versionName, asTree=True, version="9.0").getroot()
+        xml2 = create_xml_head(projectName, versionName2, asTree=True, version="9.0.1").getroot()
         conflict, merged = mergeDoc(xml1, xml2)
         self.assertEqual(conflict, None)
         self.assertEqual(merged, xml2)
@@ -30,8 +30,8 @@ class TestMergeDoc(unittest.TestCase):
         projectName = "project"
         projectName2 = "project_false"
         versionName = "Snap! 9.0, https://snap.berkeley.edu"
-        xml1 = create_xml_head(projectName, versionName, asTree=True).getroot()
-        xml2 = create_xml_head(projectName2, versionName, asTree=True).getroot()
+        xml1 = create_xml_head(projectName, versionName, asTree=True, version="9.0").getroot()
+        xml2 = create_xml_head(projectName2, versionName, asTree=True, version="9.0").getroot()
         conflict, merged = mergeDoc(xml1, xml2)
         self.assertEqual(str(conflict), "Conflict (Text): project <-> project_false")
         self.assertEqual(merged, xml1)
@@ -40,8 +40,8 @@ class TestMergeDoc(unittest.TestCase):
         projectName = "project"
         projectName2 = "project_false"
         versionName = "Snap! 9.0, https://snap.berkeley.edu"
-        xml1 = create_xml_head(projectName, versionName, asTree=True).getroot()
-        xml2 = create_xml_head(projectName2, versionName, asTree=True).getroot()
+        xml1 = create_xml_head(projectName, versionName, asTree=True, version="9.0").getroot()
+        xml2 = create_xml_head(projectName2, versionName, asTree=True, version="9.0").getroot()
         conflict, merged = mergeDoc(xml1, xml2, resolutions=[Resolution(Step.LEFT)])
         self.assertEqual(conflict, None)
         self.assertEqual(merged, xml1)
