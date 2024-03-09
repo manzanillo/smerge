@@ -11,10 +11,12 @@ from itertools import groupby, starmap
 
 reference_file_base_path = "./snapmerge/test/snapfiles/"
 reference_collision_files_base_path = reference_file_base_path + "collisions/"
+reference_no_collision_files_base_path = reference_file_base_path + "no_collisions/"
 
 
-def read_collisions() -> List[Tuple[str, str]]:
-    files = os.listdir(reference_collision_files_base_path)
+
+def get_file_pairs(directory_path) -> List[Tuple[str, str]]:
+    files = os.listdir(directory_path)
     # split files by separotor char _ from right to left
     prefix_list: List[Tuple[str, str]] = list(map(lambda x: (x.rsplit('_', 1)[0], x), files))
 
@@ -27,7 +29,8 @@ def read_collisions() -> List[Tuple[str, str]]:
         result.append((values[0][1], values[1][1]))
     return result
 
-testFiles = read_collisions()
+collision_test_files = get_file_pairs(reference_collision_files_base_path)
+no_collision_test_files = get_file_pairs(reference_no_collision_files_base_path)
 
 class TestMerge(TestCase):
 
@@ -58,7 +61,7 @@ class TestMerge(TestCase):
         self.assertNotEqual(merged_accept_left, right_et)
         self.assertNotEqual(merged_accept_right, left_et)
 
-    @parameterized.expand(testFiles)
+    @parameterized.expand(collision_test_files)
     def testCollisions(self, leftFile, rightFile):
         left = reference_collision_files_base_path + leftFile
         right = reference_collision_files_base_path + rightFile
@@ -66,6 +69,19 @@ class TestMerge(TestCase):
             conflict, merged = merge(left, right)
             self.assertIsInstance(conflict[0], Conflict)
             self.assertEqual(merged is None, True)
+        except Exception as e:
+            print(e)
+            self.fail("Unexpected exception")
+
+
+    @parameterized.expand(no_collision_test_files)
+    def testNoCollisions(self, leftFile, rightFile):
+        left = reference_no_collision_files_base_path + leftFile
+        right = reference_no_collision_files_base_path + rightFile
+        try:
+            conflict, merged = merge(left, right)
+            self.assertEqual(conflict is None, True)
+            self.assertNotEqual(merged, None)
         except Exception as e:
             print(e)
             self.fail("Unexpected exception")
