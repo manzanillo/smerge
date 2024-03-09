@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonRespons
 from django.utils.translation import gettext_lazy as _
 
 from . import models
-from .models import ProjectForm, SnapFileForm, SnapFile, Project, default_color, default_conflict_color, default_favor_color, MergeConflict, Hunk, NodeTypes, Settings, SettingsObjectTypes
+from .models import ProjectForm, SnapFileForm, SnapFile, Project, PasswordResetToken, default_color, default_conflict_color, default_favor_color, MergeConflict, Hunk, NodeTypes, Settings, SettingsObjectTypes
 from .forms import OpenProjectForm, RestoreInfoForm
 from xml.etree import ElementTree as ET
 from django.template.loader import render_to_string
@@ -15,6 +15,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 from django.core.mail import send_mail
+from email_validator import validate_email, EmailNotValidError
 from shutil import copyfile
 import random
 import string
@@ -28,6 +29,7 @@ from uuid import uuid4
 from django_eventstream import send_event
 
 import bcrypt
+import secrets
 
 
 def generate_unique_PIN():
@@ -342,10 +344,29 @@ class RestoreInfoView(View):
         return render(request, 'restore_info.html', context)
 
     def post(self, request):
+
+        base_url = request.scheme + "://" + request.get_host()
+
         form = RestoreInfoForm(request.POST)
         email = request.POST['email']
+
+        try:
+            emailinfo = validate_email(email, check_deliverability=False)
+            email = emailinfo.normalized
+
+        except EmailNotValidError as e:
+            messages.warning(request, _('Invalid Email.' + str(e)))
+            return HttpResponseRedirect(reverse('restore_info'))
+
         if form.is_valid():
             projects = Project.objects.filter(email=email)
+
+            for project in projects:
+                token = secrets.token_urlsafe(None)
+                # create Passwortreset token for each project
+                PasswordResetToken.objects.create( project=project, token=token)
+                project.reset_url = token
+
 
             content_text = render_to_string(
                 'mail/mail.txt', {'projects': projects})
