@@ -245,9 +245,7 @@ class CreateProjectView(View):
             proj_instance = proj_form.save(commit=False)
             proj_instance.pin = generate_unique_PIN()
 
-            # disabled until reset link path generation available
-            # change password to hashed variant
-            # proj_instance.password = hashPassword(proj_instance.password)
+            proj_instance.password = hashPassword(proj_instance.password)
 
             proj_instance.save()
 
