@@ -8,6 +8,8 @@ from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSeri
 from django.shortcuts import get_object_or_404
 from django_eventstream import send_event
 
+from ..views import check_password
+
 
 # class ListSnapFilesView(generics.ListAPIView):
 #     """
@@ -66,7 +68,7 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
         if 'password' not in request.data.keys():
             request.data['password'] = ""
             
-        if instance.password != None and instance.password != request.data["password"]:
+        if instance.password is not None and not check_password(request.data["password"], instance.password):
             return Response(data="Wrong Password!", status=403)
         partial = kwargs.pop('partial', False)
         
@@ -166,8 +168,8 @@ class ProjectChangePasswordView(generics.UpdateAPIView):
         
         if 'old-password' not in request.data.keys() or 'new-password' not in request.data.keys():
             return Response(data="Missing Values!", status=400)
-        
-        if instance.password == None or instance.password == request.data["old-password"]:
+
+        if instance.password is None or check_password(request.data["old-password"], instance.password):
             if request.data["new-password"] == "":
                 instance.password = None
             else:
@@ -187,7 +189,7 @@ class ProjectDeleteView(generics.DestroyAPIView):
         instance = self.get_object()
         if 'password' not in request.data.keys():
             return Response(data="Missing Password!", status=400)
-        if instance.password == None or instance.password == request.data["password"]:
+        if instance.password == None or check_password(request.data["password"], instance.password):
             #instance.delete()
             return Response(data="Project Deleted!", status=300)
         else:

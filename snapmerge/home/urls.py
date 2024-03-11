@@ -33,6 +33,7 @@ urlpatterns = [
     re_path(r'^impressum/$', views.ImpressumView.as_view(), name='impressum'),
     re_path(r'^open_project/$', views.OpenProjectView.as_view(), name='open_proj'),
     re_path(r'^restore_info/$', views.RestoreInfoView.as_view(), name='restore_info'),
+    path('reset_password/<str:token>', views.ResetPasswordView.as_view(), name='reset_passwd'),
     re_path(r'^howto/$', views.HowToView.as_view(), name='howto'),
     re_path(r'^create_project/$', views.CreateProjectView.as_view(), name='create_proj'),
     re_path(r'^(?P<proj_id>[-\w]+)$', views.ProjectView.as_view(), name='proj'),

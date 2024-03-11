@@ -242,6 +242,20 @@ class Hunk(models.Model):
         return settings.MEDIA_URL + str(self.parentImage)
 
 
+class PasswordResetToken(models.Model):
+    token = models.CharField(max_length=255, null=False, unique=True)
+    timestamp = models.DateTimeField(
+        _("Timestamp"), auto_now_add=True, auto_now=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+
+    @classmethod
+    def create_and_save(cls, token, project):
+        token = cls.objects.create(token=token, project=project)
+
+        token.save()
+        return token
+
+
 class SettingsObjectTypes(Enum):
     """
     Enum Description: 
