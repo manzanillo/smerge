@@ -5,7 +5,7 @@ import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import "../../shared/i18n";
 import { useTranslation } from "react-i18next";
 
-import { Page0, Page1 } from "./Pages";
+import { Page0, Page1, Page2, Page3 } from "./Pages";
 
 export const HelpDisplay = () => {
   const [carouselOpen, setCarouselOpen] = useState(false);
@@ -35,7 +35,9 @@ export const HelpDisplay = () => {
         >
           <Carousel timeout={800}>
             <Page0 />
-            {/* <Page1 /> */}
+            <Page1 />
+            <Page2 />
+            <Page3 />
           </Carousel>
         </Backdrop>
       </Fade>
