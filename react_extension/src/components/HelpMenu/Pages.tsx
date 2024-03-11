@@ -55,19 +55,19 @@ export const Page1 = () => {
         parentHeight={basePageHeight}
         header={t("HelpPages.page1.item0.header")}
         footer={t("HelpPages.page1.item0.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/open.png"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page1.item1.header")}
         footer={t("HelpPages.page1.item1.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/data_importer.png"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page1.item2.header")}
         footer={t("HelpPages.page1.item2.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/upload_msg.png"
       />
     </HelpDisplayItem>
   );
@@ -90,19 +90,19 @@ export const Page2 = () => {
         parentHeight={basePageHeight}
         header={t("HelpPages.page2.item0.header")}
         footer={t("HelpPages.page2.item0.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/merge.png"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page2.item1.header")}
         footer={t("HelpPages.page2.item1.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/conflict.png"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page2.item2.header")}
         footer={t("HelpPages.page2.item2.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/merge.png"
       />
     </HelpDisplayItem>
   );
@@ -125,19 +125,19 @@ export const Page3 = () => {
         parentHeight={basePageHeight}
         header={t("HelpPages.page3.item0.header")}
         footer={t("HelpPages.page3.item0.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/settings.png"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page3.item1.header")}
         footer={t("HelpPages.page3.item1.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/graph_settings.png"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page3.item2.header")}
         footer={t("HelpPages.page3.item2.footer")}
-        src="/ext/img/help_move_0.gif"
+        src="/ext/img/graph_settings.png"
       />
     </HelpDisplayItem>
   );

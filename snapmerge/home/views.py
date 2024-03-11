@@ -174,7 +174,7 @@ class MergeView(View):
             new_file = SnapFile.create_and_save(
                 project=proj, ancestors=file_ids, file=""
             )
-            new_file.file = str(new_file.id) + ".xml"
+            new_file.file = str(uuid4()) + ".xml"
             new_file.save()
 
             try:
@@ -237,9 +237,10 @@ class SyncView(View):
         new_file = SnapFile.create_and_save(
             project=proj, ancestors=ancestor, file="", description=commit_message
         )
-        with open(settings.MEDIA_ROOT + "/" + str(new_file.id) + ".xml", "wb") as f:
+        uuid = str(uuid4())
+        with open(settings.MEDIA_ROOT + "/" + uuid + ".xml", "wb") as f:
             f.write(data)
-        new_file.file = str(new_file.id) + ".xml"
+        new_file.file = uuid + ".xml"
         new_file.save()
 
         new_file.xml_job()
@@ -305,7 +306,7 @@ class CreateProjectView(View):
                 snap_file = SnapFile.create_and_save(
                     project=proj_instance, description=snap_description, file=""
                 )
-                snap_file.file = str(snap_file.id) + ".xml"
+                snap_file.file = str(uuid4()) + ".xml"
                 copyfile(
                     settings.BASE_DIR + "/static/snap/blank_proj.xml",
                     settings.BASE_DIR + snap_file.get_media_path(),
@@ -757,7 +758,7 @@ def mergeExt(request, proj_id, resolutions):
             new_file = SnapFile.create_and_save(
                 project=proj, ancestors=file_ids, file=""
             )
-        new_file.file = str(new_file.id) + ".xml"
+        new_file.file = str(uuid4()) + ".xml"
         new_file.save()
 
         try:
