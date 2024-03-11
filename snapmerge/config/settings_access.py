@@ -56,6 +56,7 @@ ALLOWED_HOSTS = [
 ]
 
 DEBUG = True
+BETA = True
 
 SECRET_PATH = "secrets/smerge/secrets.smerge.json"
 secret_file = open(SECRET_PATH).read()
