@@ -1,5 +1,6 @@
 Django
 django-cors-headers==3.10.1
+django-eventstream==4.5.1
 django-compressor
 django-compressor-toolkit
 asgiref
@@ -11,7 +12,6 @@ djangorestframework==3.14.0
 Markdown==3.5.1
 
 daphne
-django-eventstream
 
 requests
 bcrypt
