@@ -351,6 +351,10 @@ class OpenProjectView(View):
         if form.is_valid():
             proj_pin = request.POST["pin"]
             proj_password = request.POST["password"]
+            if not proj_password:
+                proj_password = ""
+            print("pass")
+            print(proj_password)
 
             try:
                 proj = Project.objects.get(pin=proj_pin)
@@ -359,7 +363,8 @@ class OpenProjectView(View):
                 messages.warning(request, _("No such project or wrong password"))
                 return HttpResponseRedirect(reverse("open_proj"))
 
-            if proj.password and proj.password != proj_password:
+            # if proj.password and proj.password != proj_password:
+            if not check_password(proj_password, proj.password):
                 messages.warning(request, _("No such project or wrong password"))
             else:
                 return redirect(f"/ext/project_view/{proj.id}")
