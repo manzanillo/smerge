@@ -248,15 +248,24 @@ def include_sync_button(file, proj_id, me):
 
         # adds uid to each script element that does not have an id already
         all_current_ids = get_all_ids(target)
-        for script_tag in target.findall(".//script"):
-            keys = script_tag.keys()
-            if "customData" in keys:
-                print("found")
-            elif len(keys) > 0:
+        wantedTags = ["script", "block-definition", "scene", "stage", "sprite", "costume", "sound", "project"]
+        for tag in wantedTags:
+            if(tag == "project"):
                 new_uid = get_uid(all_current_ids)
-                script_tag.attrib['customData'] = get_uid(all_current_ids)
+                target.getroot().attrib['customData'] = get_uid(all_current_ids)
                 all_current_ids.append(new_uid)
-                print(script_tag.attrib)
+                continue
+            for script_tag in target.findall(f".//{tag}"):
+                if(tag == "project"):
+                    print(script_tag)
+                keys = script_tag.keys()
+                if "customData" in keys:
+                    #print("found")
+                    pass
+                elif len(keys) > 0:
+                    new_uid = get_uid(all_current_ids)
+                    script_tag.attrib['customData'] = get_uid(all_current_ids)
+                    all_current_ids.append(new_uid)
 
         if target.find(".//block-definition[@s='Post to smerge...']") != None:
             for scenes in target.findall(".//scene"):
