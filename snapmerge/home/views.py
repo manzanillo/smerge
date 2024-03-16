@@ -63,11 +63,7 @@ def hashPassword(password):
 
 
 def check_password(blank_password, password_hashed):
-    # if password hashed begins with '$' TODO REMOVE
-    if password_hashed[0] == "$":
-        return bcrypt.checkpw(blank_password.encode("utf-8"), password_hashed.encode("utf-8"))
-    else:
-        return blank_password == password_hashed
+    return bcrypt.checkpw(blank_password.encode("utf-8"), password_hashed.encode("utf-8"))
 
 
 baseContext = {
@@ -284,21 +280,6 @@ class CreateProjectView(View):
             return HttpResponseRedirect(reverse('create_proj'))
 
 
-class InfoView(View):
-    def get(self, request, proj_id):
-        try:
-            proj = Project.objects.get(id=proj_id)
-        except Project.DoesNotExist:
-            raise Http404
-        context = {
-            **baseContext,
-            'proj_pin': proj.pin,
-            'proj_password': proj.password,
-            'proj_id': proj.id,
-        }
-        return render(request, 'info_proj.html', context)
-
-
 class OpenProjectView(View):
     def get(self, request):
         form = OpenProjectForm()
@@ -322,7 +303,7 @@ class OpenProjectView(View):
                     'No such project or wrong password'))
                 return HttpResponseRedirect(reverse('open_proj'))
 
-            if proj.password and proj.password != proj_password:
+            if proj.password and not check_password(proj_password, proj.password):
                 messages.warning(request, _(
                     'No such project or wrong password'))
             else:
@@ -422,38 +403,6 @@ class AddFileToProjectView(View):
             return HttpResponseBadRequest({'message': _('no valid xml')})
 
 
-class ChangePasswordView(View):
-
-    def post(self, request, proj_id):
-
-        old_password = request.POST.get('old-password', None)
-        new_password = request.POST.get('new-password', None)
-
-        if new_password != None:
-            try:
-                proj = Project.objects.get(id=proj_id)
-                actual_password = proj.password
-
-            except Project.DoesNotExist:
-                messages.warning(request, _(
-                    'No such project or wrong password'))
-                return HttpResponseRedirect(reverse('open_proj'))
-
-            if (actual_password and actual_password == old_password) or actual_password == None:
-                proj.password = new_password
-                proj.save()
-                messages.success(request, _('Password changed'))
-                # JsonResponse({'message': _('Password changed')})
-                return redirect('proj', proj_id=proj.id)
-
-            else:
-                messages.warning(request, _('Wrong password'))
-                # JsonResponse({'message': _('Something went wrong')})
-                return redirect('proj', proj_id=proj.id)
-
-        return JsonResponse({'message': _('something went wrong')})
-
-
 class ChangeNameView(View):
 
     def post(self, request, proj_id):
@@ -472,7 +421,6 @@ class ChangeNameView(View):
                 return HttpResponseRedirect(reverse('proj'))
 
             messages.success(request, _('Project Name changed'))
-            # JsonResponse({'message': _('Password changed')})
             return redirect('proj', proj_id=proj.id)
 
         else:
@@ -513,7 +461,7 @@ class DeleteProjectView(View):
         password = request.POST.get('password', None)
         print(password)
 
-        if password != None:
+        if password is not None:
             try:
                 proj = Project.objects.get(id=proj_id)
                 actual_password = proj.password
@@ -523,18 +471,16 @@ class DeleteProjectView(View):
                     'No such project or wrong password'))
                 return HttpResponseRedirect(reverse('open_proj'))
 
-            if (actual_password and actual_password == password) or actual_password == None:
+            if (actual_password and check_password(password, actual_password)) or actual_password is None:
                 proj.delete()
                 messages.success(request, _('Project deleted'))
-                # JsonResponse({'message': _('Password changed')})
                 return redirect('home')
 
             else:
                 messages.warning(request, _('Wrong password'))
-                # JsonResponse({'message': _('Something went wrong')})
                 return redirect('proj', proj_id=proj.id)
 
-        return JsonResponse({'message': _('something went wrong')})
+        return HttpResponseBadRequest({'message': _('Something went wrong. Please try again!')})
 
 
 class ToggleColorView(View):
