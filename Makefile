@@ -25,6 +25,9 @@ startapp:
 makemigrations:
 	python $(BASE)/manage.py makemigrations --settings=$(SETTINGS)
 
+createdatamigration:
+	python $(BASE)/manage.py makemigrations --settings=$(SETTINGS) --empty "home"
+
 migrate:
 	python $(BASE)/manage.py migrate --settings=$(SETTINGS)
 
