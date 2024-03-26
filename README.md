@@ -19,6 +19,12 @@ Stuff how files and secret keys / certs...
 
 
 ## Index
+Rough list of project files with short descriptors as direction guide. Files not listed, should be artefact or not important for the current iteration anymore (, for the most part :D).
+
+<details>
+<summary><span style="font-weight: 900;">Django:</summary>
+<br>
+
 | File / Folder | Short description |
 | ---------- | ----------------- |
 | 📁 snapmerge | Base folder for the Django project |
@@ -30,9 +36,92 @@ Stuff how files and secret keys / certs...
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 wsgi*.py | Artefact from old connection handling |
 | &nbsp;&nbsp;&nbsp;&nbsp;📁 database | Contains sqlite3 db file (only exists after first run...) |
 | &nbsp;&nbsp;&nbsp;&nbsp;📁 home | Main Django and merger logic |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 admin.py | Extra table definitions for admin panel |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 ancestors.py | Used by old merger to determine ancestors in segments |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 apps.py | Django app definition for the snapmerge project |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 consumers.py | Endpoint for Server Sent Event setup and messaging |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 forms.py | Django form definitions |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 models.py | Django db entry (table) definitions (Only update db with this as base and then run the django migration commands) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 routing.py | Artefact from old sync try with websockets |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 urls.py | Url path definitions for most app endpoints |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 views.py | All app endpoints connected to the paths from urls |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 xmltools.py | old merger utility (still used for sync button injection) |
 | &nbsp;&nbsp;&nbsp;&nbsp;📁 media | Contains all static user uploaded / created snap files and merge conflict files |
 | &nbsp;&nbsp;&nbsp;&nbsp;📁 static | Contains js, css and more static page related files for django |
 | &nbsp;&nbsp;&nbsp;&nbsp;📁 templates | Contains template bases for all used Django pages |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 manage.py | Entry and management point of django app |
+</details>
+
+<br>
+
+<details>
+<summary><span style="font-weight: 900;">React:</summary>
+<br>
+
+| File / Folder | Short description |
+| ---------- | ----------------- |
+| 📁 react_extension | Contains the frontend code for the react extension (vite) |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 public | Contains public accessible files like language or images |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 csnap | Copy of snap for diff view (lower strain on snaps onw server) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 img | Contain the help menu resources |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 locales | Contain the language files, used by i18next |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 src | Contains all react (typescript) components (very bad sorted :P) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 csnap | Copy of snap for diff view (lower strain on snaps onw server) |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 index.html | Base and entry point for the react app |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 package.json | Contains list of all needed node packages |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 tsconfig.json | linter and compile configs |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 vite.config.ts | vite config |
+</details>
+
+<br>
+
+<details>
+<summary><span style="font-weight: 900;">Access Portal:</summary>
+<br>
+
+| File / Folder | Short description |
+| ---------- | ----------------- |
+| 📁 ... | ... |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 ... | ... |
+</details>
+
+<br>
+
+<details>
+<summary><span style="font-weight: 900;">Secrets:</summary>
+<br>
+
+| File / Folder | Short description |
+| ---------- | ----------------- |
+| 📁 secrets | Top level folder |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 rasp_certs | Contains ssl certificates for the public nginx server (mostly for docker) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 fullchain.pem | Public ssl key for nginx |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 privkey.pem | Private ssl key for nginx |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 rasp_ssh | Contains ssh certificate stuff for the Access Portal |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 id_rsa | Private key connected to the public (store only inside the container) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 id_rsa.pub | Ssh public key (needs to be added to your github repo) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 known_hosts | Current github public keys for a github webhook with the Access Portal |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 smerge | Contains secret json |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 secrets.smerge.json | Contains important django config parts like sec.key, email host pw and email api key |
+</details>
+
+<br>
+
+<details>
+<summary><span style="font-weight: 900;">Toplevel:</summary>
+<br>
+
+| File / Folder | Short description |
+| ---------- | ----------------- |
+| 📁 data | multiple nginx configs (old and new) |
+| 📄 docker-compose-access.yml | Compose file for the Access Portal |
+| 📄 docker-compose-local-nginx.yml | Compose for a local nginx router |
+| 📄 docker-compose-mail-dummy.yml | Used for mail relay activation (for us mailjet) |
+| 📄 docker-compose-prod.yml | New production setup (make sure to compile React before build) |
+| 📄 docker-compose.fub.yml | Old Berlin setup |
+| 📄 docker-compose.yml | Old local docker build |
+| 📄 ... | ...|
+</details>
 
 
 
