@@ -1,4 +1,4 @@
-<h1 style="font-size: 50px; display: flex; align-items:center; justify-content:space-between;"> SMERGE <img height=80px src="./snapmerge/static/icon/logo_norm.svg"/> </h1>
+# SMERGE <img height=80px align="right" src="./snapmerge/static/icon/logo_norm.svg" />
 Smerge is a basic version management system for the block based programming language Snap!. It offers a simple user interface to manage a project and merge different branches with relative ease.
 
 # History lesson
