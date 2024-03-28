@@ -140,6 +140,26 @@ Rough list of project files with short descriptors as direction guide. Files not
 <br>
 <br>
 
+
+## Password Reset Token Invalidation
+In order to reset passwords Smerge uses a token-based password reset mechanism.  
+After their usage, the tokens get deleted from the database automatically and therefore, they get invalidated. For unused tokens, it may be desired to invalidate them from time to time.  
+This may prevent abuse of the tokens.  
+
+By default, Smerge runs a task after starting the server that invalidates old unused password reset tokens.
+Every day, the task gets rescheduled.   
+The task deletes all password reset tokens that are older than one week.  
+
+The default task can be disabled by setting the following in the django settings:  
+```DISABLE_TOKEN_INVALIDATION = True```
+
+
+If you have disabled the automatically scheduled invalidation task within django you can still invalidate tokens via a django management command.  
+The same command gets executed for the scheduled task. 
+ 
+For more information execute: 
+```python snapmerge/manage.py  resettokencleanup --h --settings=config.settings_local```
+
 # Old Readme
 # TMP - README...
 This is a private "fork" of [smerge](https://github.com/manzanillo/smerge) and used to develope the application further on a local basis.
