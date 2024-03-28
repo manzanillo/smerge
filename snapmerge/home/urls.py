@@ -7,6 +7,23 @@ from rest_framework import routers, serializers, viewsets
 import django_eventstream
 from . import consumers
 
+from apscheduler.schedulers.background import BackgroundScheduler
+from django.core import management
+
+
+def setup_token_invalidator_job():
+    scheduler = BackgroundScheduler()
+    # Execute the job immediately
+    scheduler.add_job(run_token_invalidator)
+    # Execute the job every 30 seconds
+    scheduler.add_job(run_token_invalidator, 'interval', days=1)
+    scheduler.start()
+
+
+def run_token_invalidator():
+    management.call_command('resettokencleanup', W=1)
+
+
 router = routers.DefaultRouter()
 
 urlpatterns = [
@@ -56,3 +73,7 @@ urlpatterns = [
 
 # concat urlpatterns and router.urls
 urlpatterns += router.urls
+
+# schedule each day a job that deletes password reset tokens that are older than one week
+if not hasattr(settings, 'DISABLE_TOKEN_INVALIDATION') or not settings.DISABLE_TOKEN_INVALIDATION:
+    setup_token_invalidator_job()
