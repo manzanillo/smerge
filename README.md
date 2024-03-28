@@ -1,7 +1,7 @@
-# Smerge
+<h1 style="font-size: 50px; display: flex; align-items:center; justify-content:space-between;"> SMERGE <img height=80px src="./snapmerge/static/icon/logo_norm.svg"/> </h1>
 Smerge is a basic version management system for the block based programming language Snap!. It offers a simple user interface to manage a project and merge different branches with relative ease.
 
-## History lesson
+# History lesson
 The project was first written purely with django and due to access limitations could only merge different scripts via cartesian location. This worked well for a lesser interactive page from the beginning, but with new features the project part was migrated to a react frontend. Due to time constraints and simplicity, project creation and a few other static pages are still using django and the in conjunction django templates as base.
 
 The docker "production" setup was therefore also only made with only a simple django setup in mind, but with some hefty roundabout constraints due to the deployment on the TU Berlin servers and their restrictions. (This includes  [Dockerfile](/Dockerfile), [dockear-compose.yml](/docker-compose.yml), [docker-compose.fub.yml](/docker-compose.fub.yml) and [entrypoint.sh](/entrypoint.sh))
@@ -124,7 +124,10 @@ Rough list of project files with short descriptors as direction guide. Files not
 </details>
 
 
-
+## Setup
+### Local
+### Docker
+### Access Portal
 
 
 <br>
