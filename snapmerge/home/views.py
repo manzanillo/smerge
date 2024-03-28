@@ -954,14 +954,14 @@ class ResetPasswordView(View):
         sanitized_token = sanitize_token(token)
         if sanitized_token is None:
             messages.warning(request, _('Invalid token'))
-            return HttpResponseRedirect(reverse('reset_passwd', token))
+            return HttpResponseRedirect(reverse('reset_passwd', args=[token]))
         if not request.POST.get('new_password') or not request.POST.get('new_password_repeated'):
             messages.warning(request, _('Please fill in both fields'))
-            return HttpResponseRedirect(reverse('reset_passwd', token))
+            return HttpResponseRedirect(reverse('reset_passwd', args=[token]))
 
         if request.POST.get('new_password') != request.POST.get('new_password_repeated'):
             messages.warning(request, _('Passwords do not match'))
-            return HttpResponseRedirect(reverse('reset_passwd', token))
+            return HttpResponseRedirect(reverse('reset_passwd', args=[token]))
 
         try:
             token_object = PasswordResetToken.objects.get(token=sanitized_token)
@@ -971,11 +971,11 @@ class ResetPasswordView(View):
         except Exception as e:
             messages.warning(request, _('Something went wrong.'))
             logging.log(logging.WARNING, f"Something went wrong retrieving token: {e}")
-            return HttpResponseRedirect(reverse('reset_passwd'), token)
+            return HttpResponseRedirect(reverse('reset_passwd', args=token))
 
         proj = token_object.project
         token_object.delete()
         proj.password = hashPassword(request.POST.get('new_password'))
         proj.save()
         messages.success(request, _('Password changed'))
-        return HttpResponseRedirect("/ext/" + str(proj.id))
+        return HttpResponseRedirect(f"/ext/project_view/{proj.id}")
