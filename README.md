@@ -141,6 +141,41 @@ Rough list of project files with short descriptors as direction guide. Files not
 <br>
 
 
+## Test Infrastructure
+The main focus of the test infrastructure is the merger algorithm as it is the core of Smerge.  
+
+For the merger, the tests are based on reference files.  
+This means that the Snap! files to be tested with are stored within the Smerge git repository.  
+In particular, the files are stored under:
+```
+snapmerge -> test -> snapfiles
+```
+
+### Merging Test Case Generation
+For convenience, there exists a small convention-based test framework for generating tests that test, whether a conflict should be raised or not when two files get merged.
+
+In order to generate new test cases files can be added either to the ```collisions``` or the ```no_collisions``` folder.  
+For each merging test, two files must be placed into those folders.
+If a collision is the expected outcome of merging the two files they must be placed into the ```collisions``` folder. Otherwise, in the ```no_collisions``` folder. 
+
+The files must adhere to the following naming convention: 
+```
+prefix_suffix.xml
+```
+The files get matched by their prefix, i.e. the prefix must be the same for the files to be merged together for the test.  
+As a best practice, the prefix should be a description of what is to be tested.
+The suffix can be anything.  
+For example, it can extend the description of the particular test with individual information of the file, or it can be just a number. 
+It is important to separate the prefix from the suffix with a "_". Otherwise, the matching can not be successfully executed.
+
+### Other Reference File Based Tests
+It is recommended to store all files involved in the merger test into the ```snapfiles``` folder.  
+They can either be stored directly into the folder itself or into subfolders for clarity.  
+
+As these tests cannot be auto-generated, the tests need to be implemented manually. It is recommended to implement the tests directly into the folder with the implementation to be tested, following the django naming scheme for test files.   
+
+
+
 ## Password Reset Token Invalidation
 In order to reset passwords Smerge uses a token-based password reset mechanism.  
 After their usage, the tokens get deleted from the database automatically and therefore, they get invalidated.  
