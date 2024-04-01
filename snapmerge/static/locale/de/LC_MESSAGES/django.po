@@ -589,7 +589,7 @@ msgid ""
 "registered with this mail-address. In the following you find all your "
 "projects and the corresponding information you need to login."
 msgstr ""
-"Du hast das Passwort oder die Punk deiner Smerge-Projekte vergessen?Im "
+"Du hast das Passwort oder die PIN deiner Smerge-Projekte vergessen?Im "
 "Folgenden findest du all deine Projekte und die dazugehörigen Login "
 "Informationen."
 

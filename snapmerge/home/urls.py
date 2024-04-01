@@ -7,6 +7,23 @@ from rest_framework import routers, serializers, viewsets
 import django_eventstream
 from . import consumers
 
+from apscheduler.schedulers.background import BackgroundScheduler
+from django.core import management
+
+
+def setup_token_invalidator_job():
+    scheduler = BackgroundScheduler()
+    # Execute the job immediately
+    scheduler.add_job(run_token_invalidator)
+    # Execute the job every 30 seconds
+    scheduler.add_job(run_token_invalidator, 'interval', days=1)
+    scheduler.start()
+
+
+def run_token_invalidator():
+    management.call_command('resettokencleanup', W=1)
+
+
 router = routers.DefaultRouter()
 
 urlpatterns = [
@@ -33,14 +50,13 @@ urlpatterns = [
     re_path(r'^impressum/$', views.ImpressumView.as_view(), name='impressum'),
     re_path(r'^open_project/$', views.OpenProjectView.as_view(), name='open_proj'),
     re_path(r'^restore_info/$', views.RestoreInfoView.as_view(), name='restore_info'),
+    path('reset_password/<str:token>', views.ResetPasswordView.as_view(), name='reset_passwd'),
     re_path(r'^howto/$', views.HowToView.as_view(), name='howto'),
     re_path(r'^create_project/$', views.CreateProjectView.as_view(), name='create_proj'),
     re_path(r'^(?P<proj_id>[-\w]+)$', views.ProjectView.as_view(), name='proj'),
-    re_path(r'^info/(?P<proj_id>[-\w]+)$', views.InfoView.as_view(), name='info'),
     re_path(r'^merge/(?P<proj_id>[-\w]+)$', views.MergeView.as_view(), name='merge'),
     re_path(r'^sync/(?P<proj_id>[-\w]+)$', views.SyncView.as_view(), name='sync'),
     re_path(r'add/(?P<proj_id>[-\w]+)$',views.AddFileToProjectView.as_view(), name='add'),
-    re_path(r'change_password/(?P<proj_id>[-\w]+)$', views.ChangePasswordView.as_view(), name='change_passwd'),
     re_path(r'change_name/(?P<proj_id>[-\w]+)$', views.ChangeNameView.as_view(), name='change_name'),
     re_path(r'change_description/(?P<proj_id>[-\w]+)$', views.ChangeDescriptionView.as_view(), name='change_description'),
     re_path(r'delete_proj/(?P<proj_id>[-\w]+)$', views.DeleteProjectView.as_view(), name='delete_proj'),
@@ -57,3 +73,7 @@ urlpatterns = [
 
 # concat urlpatterns and router.urls
 urlpatterns += router.urls
+
+# schedule each day a job that deletes password reset tokens that are older than one week
+if not hasattr(settings, 'DISABLE_TOKEN_INVALIDATION') or not settings.DISABLE_TOKEN_INVALIDATION:
+    setup_token_invalidator_job()
