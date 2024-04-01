@@ -1,30 +1,30 @@
 # SMERGE <img height=80px align="right" src="./snapmerge/static/icon/logo_norm.svg" />
-Smerge is a basic version management system for the block based programming language Snap!. It offers a simple user interface to manage a project and merge different branches with relative ease.
+Smerge is a basic version management system for the block-based programming language Snap!. It offers a simple user interface to manage a project and merge different branches with relative ease.
 
 ## History lesson
-The project was first written purely with django and due to access limitations could only merge different scripts via cartesian location. This worked well for a lesser interactive page from the beginning, but with new features the project part was migrated to a react frontend. Due to time constraints and simplicity, project creation and a few other static pages are still using django and the in conjunction django templates as base.
+The project was first written purely with Django and due to access limitations could only merge different scripts via cartesian location. This worked well for a less interactive page in the beginning, but with new features the project part was migrated to a React frontend. Due to time constraints and simplicity, project creation and a few other static pages are still using django and the in conjunction Django templates as base.
 
-The docker "production" setup was therefore also only made with only a simple django setup in mind, but with some hefty roundabout constraints due to the deployment on the TU Berlin servers and their restrictions. (This includes  [Dockerfile](/Dockerfile), [dockear-compose.yml](/docker-compose.yml), [docker-compose.fub.yml](/docker-compose.fub.yml) and [entrypoint.sh](/entrypoint.sh))
+The Docker "production" setup was therefore also only made with only a simple Django setup in mind, but with some hefty roundabout constraints due to the deployment on the TU Berlin servers and their restrictions. (This includes  [Dockerfile](/Dockerfile), [docker-compose.yml](/docker-compose.yml), [docker-compose.fub.yml](/docker-compose.fub.yml) and [entrypoint.sh](/entrypoint.sh))
 
-The database was and still is a sqlite3 file (/snapmerge/database/db.sqlite3). Since the database is currently very small with low bandwidth, this works fine. In the future this should probably be extended to a full blown db instance in the docker setup or separate.
+The database was and still is an sqlite3 file (/snapmerge/database/db.sqlite3). Since the database is currently very small with low bandwidth, this works well. In the future this should probably be extended to a full blown database instance in the Docker setup (or separately).
 
 ## Basic Project Structure
 ### Django:
-As mentioned above, the project currently uses Django as "static" page host and API. The api part is mostly contained in the "snapmerge/home/api" folder and uses Django Rest Api as base. During production django is not ran with its internal server anymore (`python manage.py runserver...`), instead it relies on Daphne, a separate asgi server for Django, designed to handle the whole communication process and django instantiation.
+As mentioned above, the project currently uses Django as "static" page host and API. The API part is mostly contained in the "snapmerge/home/api" folder and uses Django Rest API as base. During production Django is not ran with its internal server anymore (`python manage.py runserver...`), instead it relies on Daphne, a separate asgi server for Django, designed to handle the whole communication process and Django instantiation.
 
-The main configuration are located in the "snapmerge/home/config" folder and contain different settings for different launch situations. For example settings_production.py disable debug and beta mode in addition to enforcing some security measures and changing the base urls to the right server locations. For most of the configuration to work, some secrets need to be set in advance inside the "snapmerge/secrets" folder. More details in the the secret section below.
+The main configuration is located in the "snapmerge/home/config" folder and contains different settings for different launch situations. For example, settings_production.py disable debug and beta mode in addition to enforcing some security measures and changing the base URLs to the right server locations. For most of the configuration to work, some secrets need to be set in advance inside the "snapmerge/secrets" folder. More details in the the secret section below.
 
-The home folder and "views.py" contain most of the logic for the django part, the merger and api as mentioned above. The old merger is also contained in the "views.py" with more parts inside "ancestors.py" and "xmltools.py". These can still be accessed from the project page with switching the merge mode, but where not modified from the old state. The new merger is contained inside the directory "Merger_Two_ElectricBoogaloo". 
+The home folder and "views.py" contain most of the logic for the Django part, the merger and API as mentioned above. The old merger is also contained in the "views.py" with more parts inside "ancestors.py" and "xmltools.py". These can still be accessed from the project page with switching the merge mode, but were not modified from the old state. The new merger is contained inside the directory "Merger_Two_ElectricBoogaloo". 
 
-The basic premies of the old merger was to combine all scripts / blocks of a snap file with cartesian coordinates since they were the only "stable" part to differentiate each block. This approach works for basic combination but couldn't differentiate between moved and changed in addition to mishandling hidden xml parts like watcher and states. The new merger probably still mishandles some states changed internally by sanp, but hopefully less then the old one :D. We added a activation step between the user opening snap and their program. Since js activation inside snap was mandatory from the beginning, we extended this part and added the mentioned step there. When a user opens a project node, a dummy is loaded with a single button that in turn loads the real file after js was activated and the button pressed. In the same step we have overwritten the serialize and deserialize logic of django to enable a extra value inside the xml tags. This "customData" value is in turn filled with a uuid4 when the file is posted back to the server. With this addition the new merger can differentiate most cases better then a simple x / y comparison. (Be careful since snap can and will delete script node from time to time internally, resulting in a loss of uuid... pre / post pass might be necessary in the future.)The merger itself steps structured through the given xml files, determines the node type and then uses a specific merger for each case. More information inside the merger comments. This approach is longer than a generalized merger but at least a bit easier to understand, extend and workable.
+The basic premise of the old merger was to combine all scripts / blocks of a snap file with cartesian coordinates since they were the only "stable" part to differentiate each block. This approach works for basic combination but couldn't differentiate between moved and changed in addition to mishandling hidden xml parts like watcher and states. The new merger probably still mishandles some states changed internally by Snap!, but hopefully less then the old one :D. We added an activation step between the user opening Snap! and their program. Since js activation inside Snap! was mandatory from the beginning, we extended this part and added the mentioned step there. When a user opens a project node, a dummy is loaded with a single button that in turn loads the real file after js was activated and the button pressed. In the same step we have overwritten the serialize and deserialize logic of Django to enable an extra value inside the xml tags. This "customData" value is in turn filled with a uuid4 when the file is posted back to the server. With this addition, the new merger can differentiate most cases better then a simple x / y comparison. (Be careful since Snap! can and will delete script nodes from time to time internally, resulting in a loss of uuid... pre / post pass might be necessary in the future.)The merger itself steps structured through the given xml files, determines the node type and then uses a specific merger for each case. More information can be found inside the merger comments. This approach is longer than a generalized merger but at least a bit easier to understand, extend and workable.
 
-If you wan't to set a message of the day on the main page, use the admin panel of django and change the bool and text inside the settings table. The admin panel can be reached by the default /admin route of django or by hovering the mouse in the bottom left corner of the Smerge Homepage and then pressing the appearing shield icon while holding ctrl + shift + alt combined.
+If you want to set a message of the day on the main page, use the admin panel of Django and change the bool and text inside the settings table. The admin panel can be reached by the default / admin route of Django or by hovering the mouse in the bottom left corner of the Smerge homepage and then pressing the appearing shield icon while holding ctrl + shift + alt combined.
 
 ### Secrets:
-The secrets folder is excluded from git for the most part, to remove a potential leak of secret information's like the django key or certificates. The basic structure can be seen in the index and more information's to the creation of each part can be found in the setup step. Since most of these steps have an abundance of tutorials online, only general guidance was written down.
+The secrets folder is excluded from git for the most part, to remove a potential leak of secret information like the Django key or certificates. The basic structure can be seen in the index and more information on the creation of each part can be found in the setup step. Since most of these steps have an abundance of tutorials online, only general guidance was written down.
 
 ### React extension
-The react extension currently holds the main project view panel and the conflict stepper. Most parts are the same as the old view just more *reactiv* :P. The graph is still created using cytoscape just in a typescript wrapper package. The sync was changed to a server sent event approach (instead of websocket) and should be extendable by changing the "consumer.py" logic. The language package of the react app is i18next and currently separate from the django translation parts du to some format inconsistencies of django.
+The react extension currently holds the main project view panel and the conflict stepper. Most parts are the same as the old view, just more *reactive* :P. The graph is still created using cytoscape, just in a TypeScript wrapper package. The sync was changed to a server sent event approach (instead of websocket) and should be extendable by changing the "consumer.py" logic. The language package of the React app is i18next and currently separate from the Django translation parts due to some format inconsistencies of Django.
 
 The conflict stepper is reached on a merge conflict and lists each problem in a separate step.
 
@@ -33,10 +33,10 @@ The conflict stepper is reached on a merge conflict and lists each problem in a 
 #### React:
 
 #### Flask:
-A quick list what the flask server dose:
-- Runs with a sqlite3 db to manage user and settings
-- exposes api for the react frontend to manage user / ip access and some (git) commands
-- in the background the server will use the copied .git directory and keeps the repo on your wanted state
+A quick list of what the flask server does:
+- Runs with an sqlite3 db to manage users and settings
+- exposes the API for the React frontend to manage user / ip access and some (git) commands
+- in the background, the server will use the copied .git directory and keep the repo on your wanted state
 - a webhook endpoint at `https://<your-domain>/acapi/git` exists, that can be added to github to enable the server to auto reload (run fetch) if a new commit happened in the repo to update the selection list
 - the selection list for all branches with all commits is built during runtime by the gitworker and updated with the hook if connected and enables the frontend to display all commits / branches
 
@@ -44,12 +44,12 @@ A quick list what the flask server dose:
 
 
 # Setup
-Each setup kind of the project has a few differences, but overall allot of similar steps are involved. We would advice to use Linux or Mac as the development environment since windows can get a bit complicated, with as a probable must have for the project to build under it.
+Each setup kind of the project has a few differences, but overall a lot of similar steps are involved. We would advise to use Linux or Mac as the development environment since Windows can get a bit complicated, with wsl as a probable must have for the project to build under it.
 
-In addition look through some of the settings files used in the following and change local paths or urls to yours. Local paths should hopefully not be used anymore but we have surely missed some. Inside the django setting you definitely have to add your domains to the allowed addresses and co. to be able to use it.
+In addition, look through some of the settings files used in the following and change local paths or URLs to yours. Local paths should hopefully not be used anymore but we have surely missed some. Inside the Django setting you definitely have to add your domains to the allowed addresses and co. to be able to use it.
 
 ## Local
-To run Smerge and all parts on your local machine, first make sure python3 is on your system and install all django requirements contained in the requirements.txt inside the main folder. (The use of conda or venv make your life allot easier during development for this step...).
+To run Smerge and all parts on your local machine, first make sure python3 is on your system and install all Django requirements contained in the requirements.txt inside the main folder. (The use of conda or venv make your life a lot easier during development for this step...).
 Next you need to have node.js (we had v18.13.0) installed on your system and install all npm modules for django. This can also be done with the package.json inside the main folder.
 
 ```sh
@@ -59,20 +59,20 @@ pip install -r requirements.txt
 npm install
 ```
 
-Since npm should already work in this step, also install all npm modules for the react part of the project. They are contained inside the *react_extension* 📁.
+Since npm should already work in this step, also install all npm modules for the React part of the project. They are contained inside the *react_extension* 📁.
 
 ```sh
 # inside ./react_extension also run
 npm install
 ```
 
-After this make sure you have the right right folder structure and files inside the *secrets* 📁, like listed in the index. For this rename the sample.secrets.json to secrets.smerge.json and fill in the needed values. *SECRET_KEY* can be every string you want, and django even has a built in utility to create one.
+After this, make sure you have the right folder structure and files inside the *secrets* 📁, like listed in the index. For this, rename the sample.secrets.json to secrets.smerge.json and fill in the needed values. *SECRET_KEY* can be every string you want, and django even has a built-in utility to create one.
 
 ```sh
 python ./snapmerge/manage.py shell -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())" --settings=config.settings_local
 ```
 
-For the *EMAIL_HOST_PASSWORD* and *EMAIL_API_KEY* you need to set up a mail relay yourself or a mail relay service like Mailjet. The production server has its own relay and therefore this approach was taken in the beginning. If you don't want to use the mail relay, but still like to test a feature with sending mails, you can change Djangos mail behavior to print the mail into the console by changing the settings file you are using.
+For the *EMAIL_HOST_PASSWORD* and *EMAIL_API_KEY*, you need to set up a mail relay yourself or use a mail relay service like Mailjet. The production server has its own relay and therefore this approach was taken in the beginning. If you don't want to use the mail relay but would still like to test a feature with sending mails, you can change Django's mail behavior to print the mail into the console by changing the settings file you are using.
 
 The *rasp_certs* folder should contain a public and private key for your nginx server. The keys from there are only used inside the docker container.
 
