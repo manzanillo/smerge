@@ -85,9 +85,11 @@ snapmerge/static/CACHE/**
 #secrets file
 secrets/smerge/secrets.smerge.json
 
-secrets/rasp_certs/*
+secrets/rasp_certs/fullchain.pem
+secrets/rasp_certs/privkey.pem
 
-secrets/rasp_ssh/*
+secrets/rasp_ssh/id_rsa
+secrets/rasp_ssh/id_rsa.pub
 
 #exclude git data
 Access_Portal/Web_Api/gitWorker/data/*

@@ -205,3 +205,8 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_ENABLED = True
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
+
+# Disables the token cleanup job that deletes every day all password reset tokens that are older than one week. Use
+# this if you want to schedule the token cleanup manually with the management command.
+# For example, this can be done via crontab.
+DISABLE_TOKEN_INVALIDATION = False

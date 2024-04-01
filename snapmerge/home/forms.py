@@ -13,7 +13,6 @@ class RestoreInfoForm(forms.Form):
 
 class ResetPasswordForm(forms.Form):
     new_password = forms.CharField(label=_('New Password'), widget=forms.PasswordInput(render_value=True),
-                                   help_text=_('Enter a new password.'), min_length=8, max_length=64)
+                                   help_text=_('Enter a new password.'), required=True)
     new_password_repeated = forms.CharField(label=_('Repeat Password'), widget=forms.PasswordInput(render_value=True),
-                                            help_text=_('Enter the same password as before, for verification.'),
-                                            min_length=8, max_length=64)
+                                            help_text=_('Enter the same password as before, for verification.'), required=True)
