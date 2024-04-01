@@ -17,3 +17,5 @@ requests
 bcrypt
 
 Twisted[tls,http2]
+
+parameterized==0.9.0
