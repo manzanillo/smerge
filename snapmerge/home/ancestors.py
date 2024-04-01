@@ -1,5 +1,6 @@
 import heapq
 
+
 # Licensed under the Creative Commons attribution-noncommercial-sharealike License by Giovanni Gherdovich
 # Original version can be found at
 # http://www.gghh.name/dibtp/2014/02/25/how-does-mercurial-select-the-greatest-common-ancestor.html
@@ -9,6 +10,17 @@ def depthf(a, b, pfunc):
     print(str(a) + '  ' + str(b))
     a, b = sorted([a, b])
     # find depth from root of all ancestors
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     # depth is stored as a negative for heapq
     parentcache = {}
     visit = [a, b]

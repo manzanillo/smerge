@@ -99,3 +99,5 @@ Access_Portal/Web_Api/gitWorker/data/*
 **/.vite/**
 
 **/test_files/**
+
+**/venv/**
