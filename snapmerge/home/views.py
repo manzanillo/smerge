@@ -280,6 +280,21 @@ class CreateProjectView(View):
             return HttpResponseRedirect(reverse('create_proj'))
 
 
+class InfoView(View):
+    def get(self, request, proj_id):
+        try:
+            proj = Project.objects.get(id=proj_id)
+        except Project.DoesNotExist:
+            raise Http404
+        context = {
+            **baseContext,
+            "proj_pin": proj.pin,
+            "proj_password": proj.password,
+            "proj_id": proj.id,
+        }
+        return render(request, "info_proj.html", context)
+
+
 class OpenProjectView(View):
     def get(self, request):
         form = OpenProjectForm()
