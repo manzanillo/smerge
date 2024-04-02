@@ -13,7 +13,7 @@ def hash_passwords(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0027_passwordresettoken'),
+        ('home', '0028_alter_project_password'),
     ]
 
     operations = [
