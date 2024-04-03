@@ -47,13 +47,14 @@ from .ancestors import gca
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
-from .Merger_Two_ElectricBoogaloo.merger import (
-    merge,
-    Conflict,
-    Resolution,
-    Step,
-    ConflictTypes,
-)
+# from .Merger_Two_ElectricBoogaloo.merger import (
+#     merge,
+#     Conflict,
+#     Resolution,
+#     Step,
+#     ConflictTypes,
+# )
+from .Merger_Two_ElectricBoogaloo.merger_v2_2 import *
 from uuid import uuid4
 from django_eventstream import send_event
 
@@ -733,7 +734,7 @@ def mergeExt(request, proj_id, resolutions):
             if ancestor_id != None:
                 ancestor = SnapFile.objects.get(id=ancestor_id).get_media_path()
 
-            conflicts, result = merge(
+            conflicts, result = merge2(
                 settings.BASE_DIR + file1.get_media_path(),
                 settings.BASE_DIR + file2.get_media_path(),
                 resolutions,

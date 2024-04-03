@@ -48,8 +48,8 @@
             "program": "${workspaceFolder}/snapmerge/manage.py",
             "args": [
                 "test",
-                "home.tests",
-                "--settings=config.settings_test"
+                "snapmerge",
+                "--settings=config.settings_local"
             ],
             "django": true,
             "justMyCode": true

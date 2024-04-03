@@ -609,11 +609,14 @@ def compareNodesDefinition(
                 if leftNode.attrib[onlyCheck] != rightNode.attrib[onlyCheck]:
                     return False
     else:
-        if leftNode.keys() != rightNode.keys():
+        if leftNode.keys().sort() != rightNode.keys().sort():
             return False
 
     if leftNode.text and rightNode.text:
-        if leftNode.text != rightNode.text:
+        if (
+            leftNode.text.replace("\n", "").strip()
+            != rightNode.text.replace("\n", "").strip()
+        ):
             return False
 
     if (leftNode.text is None and rightNode.text is not None) or (
@@ -622,11 +625,8 @@ def compareNodesDefinition(
         return False
 
     if len(keysToCheck) == 0:
-        for i in range(len(leftNode.attrib)):
-            if (
-                leftNode.attrib[leftNode.keys()[i]]
-                != rightNode.attrib[rightNode.keys()[i]]
-            ):
+        for key in leftNode.keys():
+            if leftNode.attrib[key] != rightNode.attrib[key]:
                 return False
     return True
 
@@ -1281,8 +1281,8 @@ def mergeStage(
             # only check same, since only one stage can exist so both can't be unique at this point (at least without bugs...)
             case 1:
                 print("Error: Stage nodes are unique!")
-                print(leftNode)
-                print(rightNode)
+                print(pretty_print_xml(leftNode))
+                print(pretty_print_xml(rightNode))
                 return False
             case default:
                 ad.addAndSwitch(leftNode)
@@ -1406,11 +1406,21 @@ def filterWatcher(nodes: list[ET.Element]) -> list[ET.Element]:
         if node.tag != "watcher":
             ret.append(node)
         else:
-            if not any(
-                n.tag == "watcher" and n.attrib["var"] == node.attrib["var"]
-                for n in ret
-            ):
-                ret.append(node)
+            # separate watcher between scoped and not
+            if "s" in node.keys():
+                if not any(
+                    "s" in n.keys()
+                    and n.attrib["s"] == node.attrib["s"]
+                    and n.attrib["scope"] == node.attrib["scope"]
+                    for n in ret
+                ):
+                    ret.append(node)
+            else:
+                if not any(
+                    "var" in n.keys() and n.attrib["var"] == node.attrib["var"]
+                    for n in ret
+                ):
+                    ret.append(node)
     return ret
 
 
@@ -1662,6 +1672,9 @@ if __name__ == "__main__":
     fileCol1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/n1.xml"
     fileCol2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/n2.xml"
 
+    t1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/test/snapfiles/collisions/customPrintHelloWorld_1.xml"
+    t2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/test/snapfiles/collisions/customPrintHelloWorld_2.xml"
+
     treeLeft = ET.parse(fileCol1)
     treeRight = ET.parse(fileCol2)
 
@@ -1675,7 +1688,7 @@ if __name__ == "__main__":
 
     # res = mergeSimple(leftRoot[0], rightRoot[0], ad)
     # Resolution(Step.RIGHT)
-    confs, res = merge2(fileCol1, fileCol2, [], outputAsET=True)
+    confs, res = merge2(t1, t2, [], outputAsET=True)
 
     # res = mergeStage(leftRoot, rightRoot, ad)
 
