@@ -143,7 +143,7 @@ class Conflict:
         self.cyr = cyr
 
     def __str__(self):
-        return f"Conflict ({self.conflictType}): {self.leftElement} <-> {self.rightElement}"
+        return f"Conflict ({self.conflictType}): {self.leftElement} <-> {self.rightElement} (Path: {self.parentPath})"
 
     def toFile(self, leftFilePath, rightFilePath):
         if self.conflictType == "Element" or self.conflictType == "CustomBlock":
@@ -259,7 +259,7 @@ class AdditionalData:
         return "".join(self.currentPath)
 
     def addImage(self, image: str):
-        self.currentImage = image
+        self.currentImage.append(image)
 
     def popImage(self):
         if len(self.currentImage) == 1:
@@ -609,11 +609,14 @@ def compareNodesDefinition(
                 if leftNode.attrib[onlyCheck] != rightNode.attrib[onlyCheck]:
                     return False
     else:
-        if leftNode.keys() != rightNode.keys():
+        if leftNode.keys().sort() != rightNode.keys().sort():
             return False
 
     if leftNode.text and rightNode.text:
-        if leftNode.text != rightNode.text:
+        if (
+            leftNode.text.replace("\n", "").strip()
+            != rightNode.text.replace("\n", "").strip()
+        ):
             return False
 
     if (leftNode.text is None and rightNode.text is not None) or (
@@ -622,11 +625,8 @@ def compareNodesDefinition(
         return False
 
     if len(keysToCheck) == 0:
-        for i in range(len(leftNode.attrib)):
-            if (
-                leftNode.attrib[leftNode.keys()[i]]
-                != rightNode.attrib[rightNode.keys()[i]]
-            ):
+        for key in leftNode.keys():
+            if leftNode.attrib[key] != rightNode.attrib[key]:
                 return False
     return True
 
@@ -704,6 +704,28 @@ def getNodesCombinationState(
     return 1
 
 
+def isDefaultListType(node: ET.Element) -> bool:
+    """Check if a node is a default list i.e. has only atomic list children or sub items filled with data
+
+    Parameters
+    ----------
+    node : ET.Element
+        Node to be checked
+
+    Returns
+    -------
+    bool
+        Returns if the node is a default list type or not
+    """
+    if len(node) == 0:
+        return False
+    return (
+        node[0].tag == "list"
+        and "struct" in node[0].keys()
+        and node[0].attrib["struct"] == "atomic"
+    )
+
+
 # -------------------------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------  MERGE FUNCTIONS  ---------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------------------
@@ -763,6 +785,7 @@ def merge2(
         match leftNode.tag:
             case "thumbnail":
                 ad.addImage(leftNode.text)
+                ad.currentElement.append(leftNode)
                 continue
             # Merge scenes
             case "scenes":
@@ -930,7 +953,51 @@ def atomicMerge(
                 ad.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
                 return True
             else:
-                ad.conflicts.append(Conflict(leftNode, rightNode))
+                match (leftNode.tag):
+                    case "costume":
+                        ad.conflicts.append(
+                            Conflict(
+                                leftNode.attrib["image"],
+                                rightNode.attrib["image"],
+                                conflictType=ConflictTypes.IMAGE.value,
+                                parentPath=ad.getCurrentPath(),
+                                parentImage=ad.getCurrentImage(),
+                                cxl=leftNode.attrib["center-x"],
+                                cyl=leftNode.attrib["center-y"],
+                                cxr=rightNode.attrib["center-x"],
+                                cyr=rightNode.attrib["center-y"],
+                            )
+                        )
+                    case "sound":
+                        ad.conflicts.append(
+                            Conflict(
+                                leftNode.attrib["sound"],
+                                rightNode.attrib["sound"],
+                                conflictType="Audio",
+                                parentPath=ad.getCurrentPath(),
+                                parentImage=ad.getCurrentImage(),
+                                cxl=leftNode.attrib["name"],
+                                cxr=rightNode.attrib["name"],
+                            )
+                        )
+                    case "l":
+                        name = ad.currentElement.attrib["name"]
+                        ad.conflicts.append(
+                            Conflict(
+                                f"Variable '{name}' value: {leftNode.text}",
+                                f"Variable '{name}' value: {rightNode.text}",
+                                conflictType="Text",
+                                parentPath=ad.getCurrentPath(),
+                                parentImage=ad.getCurrentImage(),
+                            )
+                        )
+                    case default:
+                        ad.conflicts.append(
+                            Conflict(leftNode, rightNode),
+                            parentPath=ad.getCurrentPath(),
+                            parentImage=ad.getCurrentImage(),
+                        )
+
         return False
 
     if leftNode.tag != rightNode.tag:
@@ -1015,7 +1082,7 @@ def mergeScene(
     bool
         Returns if merge was successful or not
     """
-    with ACM(ad.currentPath, leftNode.attrib["name"]):
+    with ACM(ad.currentPath, leftNode.attrib["name"] + "/"):
         nodeState = getNodesCombinationState(leftNode, rightNode)
         # fin merge if same or unique, otherwise go deeper
         match nodeState:
@@ -1028,12 +1095,14 @@ def mergeScene(
                 return True
             case 2:
                 ad.addAndSwitch(leftNode)
+                currentSave = ad.currentElement
                 zips, uniqueNodes = zipMatchingNodesByTag(leftNode, rightNode)
                 for unique in uniqueNodes:
                     ad.currentElement.append(unique)
                 res = True
                 for i, (left, right) in enumerate(zips):
                     res &= mergeDecider(left, right, ad)
+                    ad.currentElement = currentSave
                 return res
 
 
@@ -1060,11 +1129,22 @@ def mergeDecider(
     """
     match leftNode.tag:
         case "pentrails":
+            ad.currentElement.append(leftNode)
             return True
         case "blocks":
             return mergeBlocks(leftNode, rightNode, ad)
         case "stage":
             return mergeStage(leftNode, rightNode, ad)
+        case "costumes":
+            return modularListMerge(leftNode, rightNode, ad, "costumes")
+        case "sounds":
+            return modularListMerge(leftNode, rightNode, ad, "sounds")
+        case "sprites":
+            return mergeSprites(leftNode, rightNode, ad)
+        case "scripts":
+            return mergeScripts(leftNode, rightNode, ad)
+        case "notes":
+            return mergeNotes(leftNode, rightNode, ad)
         case default:
             return mergeSimple(leftNode, rightNode, ad)
 
@@ -1092,8 +1172,15 @@ def mergeBlocks(
     """
     ad.addAndSwitch(leftNode)
     zips, uniqueNodes = zipMatchingNodesByAttribute(leftNode, rightNode, "customData")
+    addedUploadOnce = False
     for unique in uniqueNodes:
-        ad.currentElement.append(unique)
+        if "s" in unique.keys() and "Post to smerge" in unique.attrib["s"]:
+            if addedUploadOnce:
+                continue
+            ad.currentElement.append(unique)
+            addedUploadOnce = True
+        else:
+            ad.currentElement.append(unique)
 
     res = True
     for i, (left, right) in enumerate(zips):
@@ -1192,8 +1279,14 @@ def mergeStage(
                 ad.currentElement.append(leftNode)
                 return True
             # only check same, since only one stage can exist so both can't be unique at this point (at least without bugs...)
+            case 1:
+                print("Error: Stage nodes are unique!")
+                print(pretty_print_xml(leftNode))
+                print(pretty_print_xml(rightNode))
+                return False
             case default:
                 ad.addAndSwitch(leftNode)
+                currentSave = ad.currentElement
                 res = True
                 zips, uniqueNodes = zipMatchingNodesByTag(leftNode, rightNode)
                 for unique in uniqueNodes:
@@ -1206,6 +1299,7 @@ def mergeStage(
                 with ACM(ad.currentImage, pentrails):
                     for i, (left, right) in enumerate(zips):
                         res &= mergeDecider(left, right, ad)
+                        ad.currentElement = currentSave
                 return res
 
 
@@ -1234,35 +1328,256 @@ def modularListMerge(
         Returns if merge was successful or not
     """
     ad.addAndSwitch(leftNode)
-    zips, uniqueNodes = zipMatchingNodesByAttributeForLists(
-        leftNode, rightNode, "customData"
-    )
+    # check default list or not
+    if isDefaultListType(leftNode):
+        zips, uniqueNodes = zipMatchingNodesByAttribute(leftNode, rightNode, "id")
+        for unique in uniqueNodes:
+            ad.currentElement.append(unique)
+        for left, right in zips:
+            ad.currentElement.append(left)
+        return True
+    else:
+        ad.addAndSwitch(shallowCopyNode(leftNode[0]))
+        zips, uniqueNodes = zipMatchingNodesByAttributeForLists(
+            leftNode[0], rightNode[0], "customData"
+        )
+        for unique in uniqueNodes:
+            ad.currentElement.append(unique)
+
+        res = True
+        for i, (left, right) in enumerate(zips):
+            res &= mergeSimple(left, right, ad, "")
+        return res
+
+
+def mergeSprites(
+    leftNode: ET.Element,
+    rightNode: ET.Element,
+    ad: AdditionalData,
+    matchAttribs: list[str] = [],
+) -> bool:
+    """Merge for sprites node type, checks if the sprites are the same, unique or differ and runs the needed sub mergers
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Left node to compare
+    rightNode : ET.Element
+        Right node to compare
+    ad : AdditionalData
+        Object containing all needed additional data
+
+    Returns
+    -------
+    bool
+        Returns if merge was successful or not
+    """
+    ad.addAndSwitch(leftNode)
+    currentElementBackup = ad.currentElement
+    zips, uniqueNodes = zipMatchingNodesByAttribute(leftNode, rightNode, "customData")
+
+    res = True
+    for i, (left, right) in enumerate(zips):
+        res &= mergeSprite(left, right, ad)
+
+    # watcher filter
+    uniqueNodes = filterWatcher(uniqueNodes)
+    for unique in uniqueNodes:
+        currentElementBackup.append(unique)
+
+    return res
+
+
+def filterWatcher(nodes: list[ET.Element]) -> list[ET.Element]:
+    """Filter out duplicate watcher nodes from a list of elements
+
+    Parameters
+    ----------
+    nodes : list[ET.Element]
+        List of nodes to filter
+
+    Returns
+    -------
+    list[ET.Element]
+        Returns the filtered list
+    """
+    ret = []
+    for node in nodes:
+        if node.tag != "watcher":
+            ret.append(node)
+        else:
+            # separate watcher between scoped and not
+            if "s" in node.keys():
+                if not any(
+                    "s" in n.keys()
+                    and n.attrib["s"] == node.attrib["s"]
+                    and n.attrib["scope"] == node.attrib["scope"]
+                    for n in ret
+                ):
+                    ret.append(node)
+            else:
+                if not any(
+                    "var" in n.keys() and n.attrib["var"] == node.attrib["var"]
+                    for n in ret
+                ):
+                    ret.append(node)
+    return ret
+
+
+def mergeSprite(
+    leftNode: ET.Element,
+    rightNode: ET.Element,
+    ad: AdditionalData,
+) -> bool:
+    """Merge for sprite node type, checks if two single sprite nodes are the same, unique or can conflict
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Left node to compare
+    rightNode : ET.Element
+        Right node to compare
+    ad : AdditionalData
+        Object containing all needed additional data
+
+    Returns
+    -------
+    bool
+        Returns if merge was successful or not
+    """
+    with ACM(ad.currentPath, leftNode.attrib["name"] + "/"):
+        nodeState = getNodesCombinationState(leftNode, rightNode)
+        # fin merge if same or unique, otherwise go deeper
+        match nodeState:
+            case 0:
+                ad.currentElement.append(leftNode)
+                return True
+            case 1:
+                ad.currentElement.append(leftNode)
+                ad.currentElement.append(rightNode)
+                return True
+            case 2:
+                ad.addAndSwitch(leftNode)
+                currentSave = ad.currentElement
+                zips, uniqueNodes = zipMatchingNodesByTag(leftNode, rightNode)
+                for unique in uniqueNodes:
+                    ad.currentElement.append(unique)
+                res = True
+                for i, (left, right) in enumerate(zips):
+                    res &= mergeDecider(left, right, ad)
+                    ad.currentElement = currentSave
+                return res
+
+
+def mergeScripts(
+    leftNode: ET.Element,
+    rightNode: ET.Element,
+    ad: AdditionalData,
+    matchAttribs: list[str] = [],
+) -> bool:
+    """Merge for scripts node type, checks if the scripts are the same, unique or differ and runs the needed sub mergers
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Left node to compare
+    rightNode : ET.Element
+        Right node to compare
+    ad : AdditionalData
+        Object containing all needed additional data
+
+    Returns
+    -------
+    bool
+        Returns if merge was successful or not
+    """
+    ad.addAndSwitch(leftNode)
+    zips, uniqueNodes = zipMatchingNodesByAttribute(leftNode, rightNode, "customData")
     for unique in uniqueNodes:
         ad.currentElement.append(unique)
 
     res = True
     for i, (left, right) in enumerate(zips):
-        # just add one if upload script since url always changes and is set right after merge
-        if "s" in left.keys():
-            if "Post to smerge" in left.attrib["s"]:
-                ad.currentElement.append(left)
-                continue
-
-        res &= mergeBlock(left, right, ad)
+        res &= mergeScript(left, right, ad)
     return res
-    return True
 
 
-# needed merger
-## atomicMerger (bsp. thumbnail only body text)
-## simpleMergerByAttribs (merge by comparing first attribs given and then content)
-# simpleMergerList
-# scenesMerger
-# sceneMerger
-# blocksMerger
-# blockMerger
-# scriptsMerger
-# scriptMerger
+def mergeScript(
+    leftNode: ET.Element,
+    rightNode: ET.Element,
+    ad: AdditionalData,
+) -> bool:
+    """Merge for script node type, checks if two single script nodes are the same, unique or can conflict
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Left node to compare
+    rightNode : ET.Element
+        Right node to compare
+    ad : AdditionalData
+        Object containing all needed additional data
+
+    Returns
+    -------
+    bool
+        Returns if merge was successful or not
+    """
+    nodeState = getNodesCombinationState(leftNode, rightNode, ["customData"])
+    # fin merge if same or unique, otherwise go deeper
+    match nodeState:
+        case 0:
+            ad.currentElement.append(leftNode)
+            return True
+        case 1:
+            ad.currentElement.append(leftNode)
+            ad.currentElement.append(rightNode)
+            return True
+        case 2:
+            # extend with possible auto resolves for top / bottom changes later
+            tmpResolution = getResolution(ad.resolutions)
+            if tmpResolution:
+                ad.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
+                return True
+            else:
+                ad.conflicts.append(
+                    Conflict(
+                        leftNode,
+                        rightNode,
+                        parentPath=ad.getCurrentPath(),
+                        parentImage=ad.getCurrentImage(),
+                    )
+                )
+                return False
+
+
+def mergeNotes(leftNode: ET.Element, rightNode: ET.Element, ad: AdditionalData) -> bool:
+    """Merge notes nodes together to reduce conflicts (simple combination does not affect snap, therefore just merge)
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Left node to compare
+    rightNode : ET.Element
+        Right node to compare
+    ad : AdditionalData
+        Object containing all needed additional data
+
+    Returns
+    -------
+    bool
+        Returns if merge was successful or not
+    """
+    nodeState = getNodesCombinationState(leftNode, rightNode, ["customData"])
+    # fin merge if same or unique, otherwise go deeper
+    match nodeState:
+        case 0:
+            ad.currentElement.append(leftNode)
+            return True
+        case default:
+            leftNode.text = leftNode.text + "\n" + rightNode.text
+            ad.currentElement.append(leftNode)
+            return True
 
 
 ########################################################################################################
@@ -1354,8 +1669,14 @@ if __name__ == "__main__":
     fileCostumesPath1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/costumes_list_0.xml"
     fileCostumesPath2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/costumes_list_1.xml"
 
-    treeLeft = ET.parse(fileCostumesPath1)
-    treeRight = ET.parse(fileCostumesPath2)
+    fileCol1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/n1.xml"
+    fileCol2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/n2.xml"
+
+    t1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/test/snapfiles/collisions/customPrintHelloWorld_1.xml"
+    t2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/test/snapfiles/collisions/customPrintHelloWorld_2.xml"
+
+    treeLeft = ET.parse(fileCol1)
+    treeRight = ET.parse(fileCol2)
 
     leftRoot = treeLeft.getroot()
     rightRoot = treeRight.getroot()
@@ -1366,17 +1687,21 @@ if __name__ == "__main__":
     ad.resolutions = []
 
     # res = mergeSimple(leftRoot[0], rightRoot[0], ad)
-    # confs, res = merge2(filePath1, filePath2, [Resolution(Step.LEFT)], outputAsET=True)
+    # Resolution(Step.RIGHT)
+    confs, res = merge2(t1, t2, [], outputAsET=True)
 
-    # print(confs)
-    # if res:
-    #     print(pretty_print_xml(res))
+    # res = mergeStage(leftRoot, rightRoot, ad)
 
-    print(
-        zipMatchingNodesByAttributeForLists(
-            leftRoot[0][0], rightRoot[0][0], "customData"
-        )
-    )
+    if confs:
+        print([c.__str__() for c in confs])
+    if res:
+        print(pretty_print_xml(res))
+
+    # print(
+    #     zipMatchingNodesByAttributeForLists(
+    #         leftRoot[0][0], rightRoot[0][0], "customData"
+    #     )
+    # )
 
     # treeLeft = ET.parse(filePath1)
     # treeRight = ET.parse(filePath2)
