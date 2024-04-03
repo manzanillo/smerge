@@ -61,7 +61,6 @@ urlpatterns = [
         r"^create_project/$", views.CreateProjectView.as_view(), name="create_proj"
     ),
     re_path(r"^(?P<proj_id>[-\w]+)$", views.ProjectView.as_view(), name="proj"),
-    re_path(r'^info/(?P<proj_id>[-\w]+)$', views.InfoView.as_view(), name='info'),
     re_path(r"^merge/(?P<proj_id>[-\w]+)$", views.MergeView.as_view(), name="merge"),
     re_path(r"^sync/(?P<proj_id>[-\w]+)$", views.SyncView.as_view(), name="sync"),
     re_path(

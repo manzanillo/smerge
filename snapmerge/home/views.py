@@ -240,7 +240,7 @@ class CreateProjectView(View):
 
             proj_instance = proj_form.save(commit=False)
             proj_instance.pin = generate_unique_PIN()
-
+            unhashed_pw = proj_instance.password
             proj_instance.password = hashPassword(proj_instance.password)
 
             proj_instance.save()
@@ -273,26 +273,18 @@ class CreateProjectView(View):
 
             snap_file.xml_job()
 
-            return redirect('info', proj_id=proj_instance.id)
+            context = {
+                **baseContext,
+                "proj_pin": proj_instance.pin,
+                "proj_password": unhashed_pw,
+                "proj_id": proj_instance.id,
+            }
+            return render(request, "info_proj.html", context)
 
         else:
             messages.warning(request, _('Invalid Data.'))
             return HttpResponseRedirect(reverse('create_proj'))
 
-
-class InfoView(View):
-    def get(self, request, proj_id):
-        try:
-            proj = Project.objects.get(id=proj_id)
-        except Project.DoesNotExist:
-            raise Http404
-        context = {
-            **baseContext,
-            "proj_pin": proj.pin,
-            "proj_password": proj.password,
-            "proj_id": proj.id,
-        }
-        return render(request, "info_proj.html", context)
 
 
 class OpenProjectView(View):
