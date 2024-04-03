@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 
-import "./Layout.css"
+import "./Layout.css";
 import { useTranslation } from "react-i18next";
 
 // function Layout() {
@@ -48,7 +48,7 @@ function Layout() {
     setMobileOpen((prevState) => !prevState);
   };
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const container = window.document.body;
 
@@ -58,7 +58,7 @@ function Layout() {
         {navItems.map((item) => (
           <ListItem key={item.name} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }} onClick={item.foo}>
-              <ListItemText primary={t(item.name)} className="nav_text"/>
+              <ListItemText primary={t(item.name)} className="nav_text" />
             </ListItemButton>
           </ListItem>
         ))}
@@ -68,30 +68,68 @@ function Layout() {
 
   return (
     // <div>test</div>
-    <Box sx={{ display: "flex", paddingLeft: "0px", height: "64px"}}>
+    <Box sx={{ display: "flex", paddingLeft: "0px", height: "64px" }}>
       <CssBaseline />
-      <AppBar component="nav" sx={{pl:"0px"}} style={{height:"64px", background:"rgb(15,3,3);"}}>
-        <Toolbar sx={{width:"100%", paddingLeft:"0px !important", paddingRight: "1.8% !important", background:"rgb(15,3,3);"}}>
-            <a href="/" className="logo">
-              {document.title.includes("DEV")?"SMERGE (DEV)":document.title.includes("BETA")?"SMERGE (BETA)":"SMERGE"}
-            </a>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "flex", paddingRight:"11px", paddingBottom:"0px" }, justifyContent:"end"}}>
+      <AppBar
+        component="nav"
+        sx={{ pl: "0px" }}
+        style={{ height: "64px", background: "rgb(15,3,3)" }}
+      >
+        <Toolbar
+          sx={{
+            width: "100%",
+            paddingLeft: "0px !important",
+            paddingRight: "1.8% !important",
+            background: "rgb(15,3,3);",
+          }}
+        >
+          <a href="/" className="logo">
+            {document.title.includes("DEV")
+              ? "SMERGE (DEV)"
+              : document.title.includes("BETA")
+              ? "SMERGE (BETA)"
+              : "SMERGE"}
+          </a>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: "none",
+                sm: "flex",
+                paddingRight: "11px",
+                paddingBottom: "0px",
+              },
+              justifyContent: "end",
+            }}
+          >
             {navItems.map((item) => (
-              <Button className="nav_text" key={item.name} sx={{ color: "#fff" }} onClick={item.foo}>
+              <Button
+                className="nav_text"
+                key={item.name}
+                sx={{ color: "#fff" }}
+                onClick={item.foo}
+              >
                 {t(item.name)}
               </Button>
             ))}
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", sm: "none" }, justifyContent:"end"}} style={{height:"64px"}}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2 , display: { sm: "none"}}}
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", sm: "none" },
+              justifyContent: "end",
+            }}
+            style={{ height: "64px" }}
           >
-            <MenuIcon fontSize={"large"} />
-          </IconButton>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon fontSize={"large"} />
+            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>

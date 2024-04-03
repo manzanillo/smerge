@@ -70,7 +70,9 @@ class File(models.Model):
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True, auto_now=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     # https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.ManyToManyField.symmetrical
-    ancestors = models.ManyToManyField("self", symmetrical=False)
+    ancestors = models.ManyToManyField(
+        "self", symmetrical=False, related_name="children"
+    )
     description = models.CharField(
         _("Description"), max_length=200, null=True, blank=True
     )
@@ -95,6 +97,13 @@ class SnapFile(File):
     yPosition = models.FloatField(_("yPosition"), default=0)
     collapsed = models.BooleanField(_("collapsed"), default=False)
     hidden = models.BooleanField(_("hidden"), default=False)
+    collapsed_under = models.ForeignKey(
+        "self",
+        on_delete=models.DO_NOTHING,
+        null=True,
+        default=None,
+        related_name="collapsed_above",
+    )
     type = models.CharField(
         _("type"), max_length=30, null=True, default=NodeTypes.DEFAULT.value
     )
@@ -134,11 +143,13 @@ class SnapFile(File):
 
     def as_dict(self):
         ancestor_ids = [x.id for x in self.ancestors.all()]
+        children_ids = [x.id for x in self.children.all()]
 
         return {
             "id": self.id,
             "description": self.description,
             "ancestors": ancestor_ids,
+            "children": children_ids,
             "file_url": self.get_media_path(),
             "timestamp": str(self.timestamp),
             "number_scripts": self.number_scripts,

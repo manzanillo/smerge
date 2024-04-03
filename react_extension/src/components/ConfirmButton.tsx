@@ -72,7 +72,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(event.currentTarget);
+    // console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 

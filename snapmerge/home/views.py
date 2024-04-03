@@ -904,81 +904,69 @@ class ResolveHunkView(View):
             return HttpResponse("Hunk not found", status=400)
 
 
+import time
+
+
 class ToggleCollapseView(View):
     def get(self, request, node_id):
         try:
             snap_file = SnapFile.objects.get(id=node_id)
-            singleConnected = getSingleChildNodes(snap_file)
-            toSet = not snap_file.collapsed
-            for sc in singleConnected:
-                sc.hidden = toSet
-                sc.save()
-            snap_file.collapsed = toSet
+            allChildren = getAllChildNodes(snap_file)
+            doHide = not snap_file.collapsed
+            snap_file.collapsed = doHide
             snap_file.save()
+            for i in range(0, len(allChildren)):
+                changed = 0
+                toUpdate = []
+                for sc in allChildren:
+                    if doHide:
+                        if all(s.collapsed or s.hidden for s in sc.ancestors.all()):
+                            sc.hidden = doHide
+                            if sc.collapsed_under == None:
+                                sc.collapsed_under = snap_file
+                            # sc.save()
+                            toUpdate.append(sc)
+                            changed += 1
+                    else:
+                        if any(
+                            not s.collapsed or not s.hidden for s in sc.ancestors.all()
+                        ):
+                            if sc.collapsed_under == snap_file:
+                                sc.hidden = False
+                                sc.collapsed_under = None
+                                # sc.save()
+                                toUpdate.append(sc)
+                                changed += 1
+                if changed == 0:
+                    break
+                SnapFile.objects.bulk_update(toUpdate, ["hidden", "collapsed_under"])
+                allChildren = [a for a in allChildren if a not in toUpdate]
+
             send_event(str(snap_file.project_id), "message", {"text": "Update_added"})
             return HttpResponse("Node collapsed", status=200)
-        except:
+        except Exception as e:
+            print(e)
             return HttpResponse("File not found", status=400)
 
 
-def getSingleChildNodes(snap_file: SnapFile):
-    allProjectFiles_query = SnapFile.objects.filter(project=snap_file.project)
-    allProjectFiles = allProjectFiles_query.all()
-    baseNode = allProjectFiles_query.filter(ancestors=None).first()
-    connected = []
-    prev = []
-    for c in range(0, len(allProjectFiles)):
-        if c != 0 and fileArrayEqual(prev, connected):
-            print(c)
+def getAllChildNodes(snap_file: SnapFile):
+    allChildren = list(snap_file.children.all())
+    for i in range(
+        0, max(1, int(len(SnapFile.objects.filter(project=snap_file.project)) / 2))
+    ):
+        added = 0
+        for childFile in allChildren:
+            for file in childFile.children.all():
+                if file.id == snap_file.id:
+                    continue
+                if file in allChildren:
+                    continue
+                allChildren.append(file)
+                added += 1
+        if added == 0:
             break
-        prev = [x for x in connected]
-        for file in allProjectFiles:
-            if file.id == baseNode.id:
-                continue
-            if allInside(file.ancestors.all(), ([snap_file] + connected)):
-                if file not in connected:
-                    connected.append(file)
-    return connected
 
-
-# returns if e1 is a subset of e2
-def allInside(e1, e2):
-    if e1 == []:
-        return False
-    e2_ids = [e.id for e in e2]
-    for i in range(0, len(e1)):
-        if e1[i].id not in e2_ids:
-            return False
-    return True
-
-
-def fileArrayEqual(e1, e2):
-    if len(e1) != len(e2):
-        return False
-    e1_ids = [e.id for e in e1]
-    e2_ids = [e.id for e in e2]
-    for i in range(0, len(e1_ids)):
-        if e1_ids[i] != e2_ids[i]:
-            return False
-    return True
-
-
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-
-
-def send_message_to_group(message):
-    # Get the channel layer
-    channel_layer = get_channel_layer()
-
-    # Send a message to the group
-    async_to_sync(channel_layer.group_send)(
-        "test",  # The name of the group
-        {
-            "type": "chat_message",  # The type of the message
-            "message": message,  # The message
-        },
-    )
+    return allChildren
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -999,30 +987,6 @@ class SendEventPing(View):
             return HttpResponse("Missing roomId!", status=400)
         except:
             return HttpResponse("Something went wrong!", status=400)
-
-
-# import asyncio
-
-# from django.http import StreamingHttpResponse
-# import time
-
-
-# async def sse_stream(request):
-#     """
-#     Sends server-sent events to the client.
-#     """
-#     async def event_stream():
-#         print("Events")
-#         emojis = ["🚀", "🐎", "🌅", "🦾", "🍇"]
-#         i = 0
-#         while True:
-#             yield f'data: {random.choice(emojis)} {i}\n\n'
-#             i += 1
-#             print("jeet")
-#             time.sleep(1)
-#             # await asyncio.sleep(1)
-
-#     return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
 
 
 def index(request):

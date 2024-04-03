@@ -23,6 +23,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ConfirmButton from "./ConfirmButton";
 import ProjectDto from "./models/ProjectDto";
 import ProjectColorMenu from "./ProjectColorMenu";
+import { getProjectUnhideAll } from "../services/ProjectService";
 
 interface NewSettingControlsProps {
   projectDto: ProjectDto;
@@ -292,6 +293,17 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
         >
           {t("NewSettingControls.old_projectview")}
         </Button>
+        <ConfirmButton
+          handleConfirm={() => {
+            getProjectUnhideAll(projectDto.id);
+          }}
+          text={t("NewSettingControls.unhide_all")}
+          confirmColor="warning"
+          cancelColor="primary"
+          confirmText={t("NewSettingControls.unhide_popover.button")}
+          cancelText={t("NewSettingControls.unhide_popover.button_cancel")}
+          popoverText={t("NewSettingControls.unhide_popover.text")}
+        />
       </Stack>
     </Paper>
   );

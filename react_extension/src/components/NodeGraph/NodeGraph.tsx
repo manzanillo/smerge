@@ -108,14 +108,51 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     return nodeDefinition;
   });
 
-  const edges: EdgeDefinition[] | undefined = data?.flatMap((file: File) => {
-    return file.ancestors.map((ancestor: number) => {
-      const edgeDefinition: EdgeDefinition = {
-        data: { source: ancestor.toString(), target: file.id.toString() },
-      };
-      return edgeDefinition;
+  const edges: EdgeDefinition[] | undefined = (():
+    | EdgeDefinition[]
+    | undefined => {
+    let edgeList = data?.flatMap((file: File) => {
+      return file.ancestors.map((ancestor: number) => {
+        const edgeDefinition = {
+          data: { source: ancestor.toString(), target: file.id.toString() },
+          targetNode: file,
+        };
+        return edgeDefinition;
+      });
     });
-  });
+
+    // filter duplicates and edges with collapsed source and not default target
+    edgeList = edgeList?.filter((edge, index, self) => {
+      const source = edge.data.source;
+      const sourceNode = nodes?.find((node) => node.data.id == source);
+      return (
+        (!self
+          .slice(0, index)
+          .some(
+            (e) =>
+              e.data.source === edge.data.source &&
+              e.data.target === edge.data.target
+          ) &&
+          !sourceNode?.classes?.includes("collapsed")) ||
+        !edge.targetNode.collapsed
+      );
+    });
+
+    // edgeList = edgeList?.filter((edge, index, self) => {
+    //   const source = edge.data.source;
+    //   const sourceNode = nodes?.find((node) => node.data.id == source);
+    //   return (
+    //     !self
+    //       .slice(0, index)
+    //       .some(
+    //         (e) =>
+    //           e.data.source === edge.data.source &&
+    //           e.data.target === edge.data.target
+    //       ) && !sourceNode?.classes?.includes("collapsed") &&
+    //   );
+    // });
+    return edgeList;
+  })();
 
   const [elements, setElements] = useState([
     ...(nodes ?? []),
@@ -269,7 +306,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         ) {
           // "load-balancing" :P
           setTimeout(() => {
-            console.log("Reloading data...")
+            console.log("Reloading data...");
             refresh();
           }, timeout);
         }

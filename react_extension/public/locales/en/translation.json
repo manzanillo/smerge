@@ -47,6 +47,12 @@
       "primary": "Normal",
       "favor": "Favored",
       "conflict": "Conflict"
+    },
+    "unhide_all": "Unhide / Expand All",
+    "unhide_popover": {
+      "text": "Are you sure to unhide / expand all nodes?",
+      "button": "Yes",
+      "button_cancel": "No"
     }
   },
   "HelpPages": {

@@ -38,7 +38,13 @@
     "save_current_layout_tooltip": "Laden Sie den aktuellen Graph in einer JSON-Datei herunter",
     "load_layout_tooltip": "Laden Sie das zuvor gespeicherte Diagramm (.json) in das aktuelle Panel (klicken Sie auf \"Graphposition speichern\", wenn Sie möchten, dass das geladene Diagramm als Serverlayout gespeichert wird).",
     "scroll_speed": "Zoomgeschwindigkeit ändern:",
-    "color_style": "Projektfarben ändern:"
+    "color_style": "Projektfarben ändern:",
+    "unhide_all": "Alles Einblenden / Aufklappen",
+    "unhide_popover": {
+      "text": "Sind Sie sicher, dass alle Knoten eingeblendet / expandiert werden sollen?",
+      "button": "Ja",
+      "button_cancel": "Nein"
+    }
   },
   "HelpPages": {
     "page0": {

@@ -30,6 +30,7 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path("api/project/<str:id>/files", api_views.ListSnapFilesView.as_view()),
     path("api/project/<str:id>", api_views.ProjectDetailView.as_view()),
+    path("api/project/<str:id>/unhide_all", api_views.UnhideAllView.as_view()),
     path("api/update/project/<str:id>", api_views.ProjectDetailUpdateView.as_view()),
     path("api/update/password/<str:id>", api_views.ProjectChangePasswordView.as_view()),
     path("api/delete/project/<str:id>", api_views.ProjectDeleteView.as_view()),
