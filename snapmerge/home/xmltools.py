@@ -312,6 +312,9 @@ def include_sync_button(file, proj_id, me):
 
         target = ET.parse(settings.BASE_DIR + file)
 
+        # the duplicate action / button in snap can duplicate uuids, so we need to clean up the file before continuing
+        cleanDupedIds(target)
+
         # adds uid to each script element that does not have an id already
         all_current_ids = get_all_ids(target)
         wantedTags = [
@@ -369,6 +372,21 @@ def get_all_ids(tree) -> list[str]:
         if "customData" in keys:
             ret.append(script_tag.attrib["customData"])
     return ret
+
+
+def cleanDupedIds(tree):
+    """removes all duplicate ids from the given tree
+
+    @param tree:
+    @return: the cleaned tree
+    """
+    # find all tags with the customData attribute in the element tree
+    ids = []
+    for found in tree.findall(".//*[@customData]"):
+        if found.attrib["customData"] in ids:
+            found.attrib["customData"] = get_uid(ids)
+        else:
+            ids.append(found.attrib["customData"])
 
 
 def get_uid(allocated):

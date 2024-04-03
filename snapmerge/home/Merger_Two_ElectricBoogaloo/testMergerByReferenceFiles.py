@@ -17,9 +17,9 @@ reference_no_collision_files_base_path = reference_file_base_path + "no_collisio
 
 def get_file_pairs(directory_path) -> List[Tuple[str, str]]:
     files = os.listdir(directory_path)
-    # split files by separotor char _ from right to left
+    # split files by separator char _ from right to left
     prefix_list: List[Tuple[str, str]] = list(
-        map(lambda x: (x.rsplit("_", 1)[0], x), files)
+        map(lambda x: (x.split("_")[0], x), files)
     )
 
     # group files by prefix
@@ -28,7 +28,16 @@ def get_file_pairs(directory_path) -> List[Tuple[str, str]]:
     prefix_list = groupby(prefix_list, lambda x: x[0])
     for _, values in prefix_list:
         values = list(values)
-        result.append((values[0][1], values[1][1]))
+        if len(values) != 2:
+            if all("_0" not in y for y in [x[1] for x in values]):
+                print("To many files or missing zero matcher pair for: ", values[0][0])
+            else:
+                zeroMatcher = [x for x in values if "_0" in x[1]][0]
+                toMatch = [x for x in values if "_0" not in x[1]]
+                for matchFile in toMatch:
+                    result.append((zeroMatcher[1], matchFile[1]))
+        else:
+            result.append((values[0][1], values[1][1]))
     return result
 
 
@@ -77,11 +86,24 @@ class TestMerge(TestCase):
         right = reference_collision_files_base_path + rightFile
         try:
             conflict, merged = merge2(left, right)
-            self.assertIsInstance(conflict[0], Conflict)
-            self.assertEqual(merged is None, True)
+            comp = getCheckTypeFromName(left + right)
+            if comp == Conflict:
+                self.assertIsInstance(
+                    conflict[0], Conflict, msg=f"Left: {left}, Right: {right}"
+                )
+            else:
+                self.assertEqual(
+                    conflict[0].conflictType,
+                    comp.value,
+                    msg=f"Left: {left}, Right: {right}",
+                )
+            self.assertEqual(merged is None, True, msg=f"Left: {left}, Right: {right}")
         except Exception as e:
-            print(e)
-            self.fail("Unexpected exception")
+            if "'NoneType' object is not subscriptable" in str(e):
+                self.fail("Expected conflict, got None!")
+            else:
+                print(e)
+                self.fail("Unexpected exception")
 
     @parameterized.expand(no_collision_test_files)
     def testNoCollisions(self, leftFile, rightFile):
@@ -89,11 +111,29 @@ class TestMerge(TestCase):
         right = reference_no_collision_files_base_path + rightFile
         try:
             conflict, merged = merge2(left, right)
-            self.assertEqual(conflict is None, True)
-            self.assertNotEqual(merged, None)
+            self.assertEqual(
+                conflict is None, True, msg=f"Left: {left}, Right: {right}"
+            )
+            self.assertNotEqual(merged, None, msg=f"Left: {left}, Right: {right}")
         except Exception as e:
             print(e)
             self.fail("Unexpected exception")
+
+
+def getCheckTypeFromName(name):
+    if "type_image" in name.lower():
+        return ConflictTypes.IMAGE
+    if "type_element" in name.lower():
+        return ConflictTypes.ELEMENT
+    if "type_text" in name.lower():
+        return ConflictTypes.TEXT
+    if "type_customBlock" in name.lower():
+        return ConflictTypes.CUSTOMBLOCK
+    if "type_watcher" in name.lower():
+        return ConflictTypes.WATCHER
+    if "type_audio" in name.lower():
+        return ConflictTypes.AUDIO
+    return Conflict
 
 
 def compareXMLSame(left, right):

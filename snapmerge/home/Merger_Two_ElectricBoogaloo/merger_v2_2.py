@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 import re
 
-# from .generator import *
+from .generator import *
 from enum import Enum
 from typing import Callable
 
@@ -226,21 +226,18 @@ class AdditionalData:
     like current path or images for better conflict visualization
     """
 
-    workCopy: ET.Element
-    currentElement: ET.Element
-    currentPath: list[str] = ["/"]
-    currentImage: list[str] = [
-        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-    ]
-    conflicts: list[Conflict] = []
-    resolutions: list[Resolution]
-
     def __init__(self, workCopy: ET.Element, resolutions: list[Resolution] = []):
-        self.workCopy = workCopy
-        self.resolutions = resolutions
+        self.workCopy: ET.Element = workCopy
+        self.resolutions: list[Resolution] = resolutions
+        self.currentElement: ET.Element
+        self.currentPath: list[str] = ["/"]
+        self.currentImage: list[str] = [
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+        ]
+        self.conflicts: list[Conflict] = []
 
     def __str__(self):
-        return f"AdditionalData: {self.currentPath}, {self.currentImage[:30]}"
+        return f"AdditionalData: {self.currentPath}, {self.currentImage[-1][:30]}"
 
     def addAndSwitch(self, newElement: ET.Element):
         tmp = shallowCopyNode(newElement)
@@ -701,7 +698,38 @@ def getNodesCombinationState(
     if leftNode.tag == "l" and len(leftNode.keys()) == 0:
         if leftNode.text != rightNode.text:
             return 2
+    mismatchKeys = getCompareNodesDefinitionMismatchKeys(leftNode, rightNode)
+    if leftNode.tag == "sprite" and (
+        ["costume"] == mismatchKeys or ["id"] == mismatchKeys
+    ):
+        return 2
     return 1
+
+
+def getCompareNodesDefinitionMismatchKeys(
+    leftNode: ET.Element, rightNode: ET.Element
+) -> list[str]:
+    """Get the list of keys that are different between two nodes
+
+    Parameters
+    ----------
+    leftNode : ET.Element
+        Left node to compare
+    rightNode : ET.Element
+        Right node to compare
+
+    Returns
+    -------
+    list[str]
+        List of keys that are different between the two nodes
+    """
+    mismatchKeys = []
+    for key in leftNode.keys():
+        if key not in rightNode.keys():
+            mismatchKeys.append(key)
+        elif leftNode.attrib[key] != rightNode.attrib[key]:
+            mismatchKeys.append(key)
+    return mismatchKeys
 
 
 def isDefaultListType(node: ET.Element) -> bool:
@@ -946,7 +974,7 @@ def atomicMerge(
         Returns if merge was successful or not
     """
 
-    def retConflict(leftNode, rightNode):
+    def retConflict(leftNode, rightNode, nameConflict=False):
         if not virtual:
             tmpResolution = getResolution(ad.resolutions)
             if tmpResolution:
@@ -955,8 +983,8 @@ def atomicMerge(
             else:
                 match (leftNode.tag):
                     case "costume":
-                        ad.conflicts.append(
-                            Conflict(
+                        if not nameConflict:
+                            conf = Conflict(
                                 leftNode.attrib["image"],
                                 rightNode.attrib["image"],
                                 conflictType=ConflictTypes.IMAGE.value,
@@ -967,37 +995,50 @@ def atomicMerge(
                                 cxr=rightNode.attrib["center-x"],
                                 cyr=rightNode.attrib["center-y"],
                             )
-                        )
-                    case "sound":
-                        ad.conflicts.append(
-                            Conflict(
-                                leftNode.attrib["sound"],
-                                rightNode.attrib["sound"],
-                                conflictType="Audio",
+                        else:
+                            conf = Conflict(
+                                f"Costume name changed:\n '{leftNode.attrib['name']}'",
+                                f"Costume name changed:\n '{rightNode.attrib['name']}'",
+                                conflictType=ConflictTypes.TEXT.value,
                                 parentPath=ad.getCurrentPath(),
                                 parentImage=ad.getCurrentImage(),
-                                cxl=leftNode.attrib["name"],
-                                cxr=rightNode.attrib["name"],
                             )
+                    case "sound":
+                        # if not nameConflict:
+                        conf = Conflict(
+                            leftNode.attrib["sound"],
+                            rightNode.attrib["sound"],
+                            conflictType="Audio",
+                            parentPath=ad.getCurrentPath(),
+                            parentImage=ad.getCurrentImage(),
+                            cxl=leftNode.attrib["name"],
+                            cxr=rightNode.attrib["name"],
                         )
+                    # else:
+                    #     conf = Conflict(
+                    #         f"Audio name changed:\n '{leftNode.attrib['name']}'",
+                    #         f"Audio name changed:\n '{rightNode.attrib['name']}'",
+                    #         conflictType=ConflictTypes.TEXT.value,
+                    #         parentPath=ad.getCurrentPath(),
+                    #         parentImage=ad.getCurrentImage(),
+                    #     )
                     case "l":
                         name = ad.currentElement.attrib["name"]
-                        ad.conflicts.append(
-                            Conflict(
-                                f"Variable '{name}' value: {leftNode.text}",
-                                f"Variable '{name}' value: {rightNode.text}",
-                                conflictType="Text",
-                                parentPath=ad.getCurrentPath(),
-                                parentImage=ad.getCurrentImage(),
-                            )
-                        )
-                    case default:
-                        ad.conflicts.append(
-                            Conflict(leftNode, rightNode),
+                        conf = Conflict(
+                            f"Variable '{name}' value: {leftNode.text}",
+                            f"Variable '{name}' value: {rightNode.text}",
+                            conflictType="Text",
                             parentPath=ad.getCurrentPath(),
                             parentImage=ad.getCurrentImage(),
                         )
-
+                    case default:
+                        conf = Conflict(
+                            leftNode,
+                            rightNode,
+                            parentPath=ad.getCurrentPath(),
+                            parentImage=ad.getCurrentImage(),
+                        )
+                ad.conflicts.append(conf)
         return False
 
     if leftNode.tag != rightNode.tag:
@@ -1006,14 +1047,17 @@ def atomicMerge(
         return retConflict(leftNode, rightNode)
     if len(leftNode.attrib) != len(rightNode.attrib):
         return retConflict(leftNode, rightNode)
-    leftKeys = leftNode.keys()
-    rightKeys = rightNode.keys()
-    for i in range(min(len(leftNode.attrib), len(rightNode.attrib))):
-        v1 = leftNode.attrib[leftKeys[i]]
-        v2 = rightNode.attrib[rightKeys[i]]
-        if leftKeys[i] != rightKeys[i]:
+    for key in leftNode.keys():
+        # snap id can change all the time, so ignore
+        if key == "id":
+            continue
+        v1 = leftNode.attrib[key]
+        v2 = rightNode.attrib[key]
+        if not key in rightNode.keys():
             return retConflict(leftNode, rightNode)
         if v1 != v2:
+            if key == "name":
+                return retConflict(leftNode, rightNode, True)
             return retConflict(leftNode, rightNode)
     if not virtual:
         ad.currentElement.append(leftNode)
@@ -1295,7 +1339,7 @@ def mergeStage(
                 pentrails = leftNode.find("pentrails")
                 # ensure image
                 if not pentrails:
-                    pentrails = ad.getCurrentImage
+                    pentrails = ad.getCurrentImage()
                 with ACM(ad.currentImage, pentrails):
                     for i, (left, right) in enumerate(zips):
                         res &= mergeDecider(left, right, ad)
@@ -1346,7 +1390,7 @@ def modularListMerge(
 
         res = True
         for i, (left, right) in enumerate(zips):
-            res &= mergeSimple(left, right, ad, "")
+            res &= mergeSimple(left, right, ad, "", "customData")
         return res
 
 
@@ -1672,8 +1716,8 @@ if __name__ == "__main__":
     fileCol1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/n1.xml"
     fileCol2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/n2.xml"
 
-    t1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/test/snapfiles/collisions/customPrintHelloWorld_1.xml"
-    t2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/test/snapfiles/collisions/customPrintHelloWorld_2.xml"
+    t1 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/tmp_spesific_conflicts/should_work/costume_base.xml"
+    t2 = "/home/rs-kubuntu/Desktop/Smerge-Private/snapmerge/home/Merger_Two_ElectricBoogaloo/test_files/tmp_spesific_conflicts/should_work/costume_second_added.xml"
 
     treeLeft = ET.parse(fileCol1)
     treeRight = ET.parse(fileCol2)

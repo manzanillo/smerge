@@ -87,7 +87,7 @@ const TextDiv: React.FC<TextDivProps> = ({ text1, text2 }) => {
           gutterAlign="center"
           snapOffset={200}
           sizes={[49.5, 50.5]}
-          style={{ height: "600px" }}
+          // style={{ minHeight: "80px" }}
         >
           <div>{getTextPane(text1Data, true)}</div>
           <div>{getTextPane(text2Data, false)}</div>

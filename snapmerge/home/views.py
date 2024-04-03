@@ -325,7 +325,6 @@ class CreateProjectView(View):
             return HttpResponseRedirect(reverse("create_proj"))
 
 
-
 class OpenProjectView(View):
     def get(self, request):
         form = OpenProjectForm()
@@ -698,12 +697,27 @@ def mergeExt(request, proj_id, resolutions):
         )
         result_conflicts = result_conflict_query.all()
         if len(result_conflicts) > 0:
+            activeIndexList = [
+                i
+                for i, x in enumerate(result_conflicts)
+                if x.connected_file.type == "conflict"
+            ]
+            if len(activeIndexList) > 0:
+                activeIndex = activeIndexList[0]
+            else:
+                activeIndex = 0
             new_file = result_conflicts[
-                0
+                activeIndex
             ].connected_file  # SnapFile.objects.filter(id=result_conflicts[0].connected_file.id).first()
-            new_file.type = "default"
-            new_file.color = default_color()
-            new_file.description = ""
+            # if type is default conflict was resolved ahead of time and needs cleaning / start fresh...
+            if new_file.type == "default":
+                new_file = SnapFile.create_and_save(
+                    project=proj, ancestors=file_ids, file=""
+                )
+            else:
+                new_file.type = "default"
+                new_file.color = default_color()
+                new_file.description = ""
         else:
             new_file = SnapFile.create_and_save(
                 project=proj, ancestors=file_ids, file=""
@@ -830,10 +844,8 @@ def mergeExt(request, proj_id, resolutions):
             new_file.xml_job()
             print(new_file.as_dict())
             # delete old conflict on resolved
-            if len(result_conflicts) > 0:
-                # conf_id = result_conflicts[0].id
-                # connected_hunks = Hunk.objects.filter(mergeConflict=conf_id)
-                connected_hunks = result_conflicts[0].hunk_set.all()
+            for current_res_conf in result_conflicts:
+                connected_hunks = current_res_conf.hunk_set.all()
                 for hun in connected_hunks:
                     # cleanup local files and db
                     files = [hun.left.file, hun.right.file]
@@ -845,9 +857,7 @@ def mergeExt(request, proj_id, resolutions):
                     hun.left.delete()
                     hun.right.delete()
                     hun.delete()
-                    # hun.save()
-                result_conflicts[0].delete()
-                # result_conflicts[0].save()
+                current_res_conf.delete()
 
             # notify_room(proj.id, new_file.as_dict(), "merge")
             send_event(str(proj_id), "message", {"text": "Update_added_resize"})

@@ -107,9 +107,15 @@ class SnapFile(File):
         if ancestors:
             snap.ancestors.set(ancestors)
             if type(ancestors[0]) == str:
-                ancestor_as_file = SnapFile.objects.get(id=int(ancestors[0]))
-                snap.xPosition = ancestor_as_file.xPosition
-                snap.yPosition = ancestor_as_file.yPosition + 100
+                ancestors_as_files = SnapFile.objects.filter(id__in=ancestors).all()
+                newX = sum([a.xPosition for a in ancestors_as_files]) / len(
+                    ancestors_as_files
+                )
+                newY = sum([a.yPosition for a in ancestors_as_files]) / len(
+                    ancestors_as_files
+                )
+                snap.xPosition = newX
+                snap.yPosition = newY + 100
             else:
                 snap.xPosition = sum([a.xPosition for a in ancestors]) / len(ancestors)
                 snap.yPosition = ancestors[0].yPosition + 100

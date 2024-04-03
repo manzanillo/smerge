@@ -12,6 +12,13 @@
             "program": "${file}",
         },
         {
+            "name": "Python: Merger_v2 main",
+            "type": "python",
+            "request": "launch",
+            "module": "snapmerge.home.Merger_Two_ElectricBoogaloo.merger_v2_2",
+            "cwd": "${workspaceFolder}"
+        },
+        {
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
