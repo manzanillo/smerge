@@ -29,6 +29,8 @@ services:
       - ./data/nginx_deploy/nginx.conf:/etc/nginx/nginx.conf
       - ./secrets/rasp_certs/:/etc/letsencrypt/live/idpsmerge.duckdns.org/
       - ./snapmerge/static:/static
+      - /etc/letsencrypt/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
+      - /etc/letsencrypt/ssl-dhparams.pem:/etc/letsencrypt/ssl-dhparams.pem
     ports:
       - "80:80"
       - "443:443"
