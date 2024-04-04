@@ -25,7 +25,8 @@ class HomeConfig(AppConfig):
         # print('CORS:', settings.CORS_ALLOW_ALL_ORIGINS)
         print("Installed Apps:", settings.INSTALLED_APPS)
         print("Middleware:", settings.MIDDLEWARE)
-        print("Generating dynamic static data...")
-        generateDataImportXML()
-        generateSyncBlockXML()
-        print("Generating finished.")
+        if settings.DEBUG:
+            print("Generating dynamic static data...")
+            generateDataImportXML()
+            generateSyncBlockXML()
+            print("Generating finished.")

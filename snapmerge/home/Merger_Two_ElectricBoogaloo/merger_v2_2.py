@@ -801,6 +801,10 @@ def merge2(
         # only done the first time to init the working copy with the base node
         ad.workCopy = ad.workCopy[0]
         ad.currentElement = ad.workCopy
+    else:
+        # on def conflict
+        ad.workCopy = shallowCopyNode(leftRoot)
+        ad.currentElement = ad.workCopy
 
     zippedNodes, uniqueNodes = zipMatchingNodesByTag(leftRoot, rightRoot)
 
@@ -1361,7 +1365,7 @@ def modularListMerge(
         Left node to compare
     rightNode : ET.Element
         Right node to compare
-    ad : AdditionalData
+    ad : AdditionalDatatoast
         Object containing all needed additional data
     tag : str
         Tag inside the item nodes of the list (like "costume" for the \<item><costume ... />\</item> structure)

@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     {
       name: "index-html-build-replacement",
-      apply: 'build',
+      apply: "build",
       transformIndexHtml(html) {
         return html
           .replace(/<title>(.*?)<\/title>/, `<title>SMERGE (BETA)</title>`)
@@ -23,5 +23,8 @@ export default defineConfig({
   server: {
     port: 5069,
     strictPort: true,
+  },
+  preview: {
+    port: 5069,
   },
 });
