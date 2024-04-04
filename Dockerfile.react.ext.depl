@@ -3,12 +3,7 @@
 FROM nginx:stable-alpine
 WORKDIR /app
 COPY react_extension/dist /app
-# new
 COPY data/nginx_deploy/nginx_ext.conf /etc/nginx/conf.d/default.conf
-
-RUN mkdir -p /etc/letsencrypt/live/idpsmerge.duckdns.org
-COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
-COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
 
 EXPOSE 5069
 CMD ["nginx", "-g", "daemon off;"]
