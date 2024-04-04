@@ -27,10 +27,15 @@ services:
     image: nginx:latest
     volumes:
       - ./data/nginx_deploy/nginx.conf:/etc/nginx/nginx.conf
-      - ./secrets/rasp_certs/:/etc/letsencrypt/live/idpsmerge.duckdns.org/
       - ./snapmerge/static:/static
-      - /etc/letsencrypt/options-ssl-nginx.conf:/etc/nginx/options-ssl-nginx.conf
-      - /etc/letsencrypt/ssl-dhparams.pem:/etc/nginx/ssl-dhparams.pem
+      - ./secrets/rasp_certs:/etc/letsencrypt
     ports:
       - "80:80"
       - "443:443"
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./secrets/rasp_certs:/etc/letsencrypt
+    command: certonly --webroot --webroot-path=/var/www/html --email your.email@example.com --agree-tos -d idpsmerge.duckdns.org
+    depends_on:
+      - nginx
