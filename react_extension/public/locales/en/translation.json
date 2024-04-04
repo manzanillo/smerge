@@ -98,7 +98,7 @@
       },
       "item2": {
         "header": "Using the Old Smerge Version",
-        "footer": "To change to the old Smerge merger, right click on the \"New Merge\" button in the lower right corner. "
+        "footer": "To change to the old Smerge merger, right click on the \"New Merge\" button in the lower right corner. The color will change to orange, indicating the change.\nHint: The old merger is capable of merging more than two files at once."
       }
     },
     "page3": {
@@ -123,5 +123,11 @@
     "label": "Node Name",
     "cancel": "Cancel",
     "confirm": "Change"
+  },
+  "UploadZone": {
+    "dropText": "Upload Snap! file as new node.",
+    "fileUploadSuccess": "Snap! File Added",
+    "fileUploadFail": "No Snap! file found!",
+    "noXmlFile": "Wrong file type (only .xml)!"
   }
 }

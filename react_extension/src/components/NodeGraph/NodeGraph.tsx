@@ -342,6 +342,13 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       generateContextMenuSettings(projectId ?? "", refresh, handleNodeEdit)
     );
 
+    // const canvasMenu = cy.current?.cxtmenu(
+    //   generateCanvasContextMenuSettings((x: number, y: number) => {
+    //     setModalOpen(true);
+    //     setPosition({ x, y });
+    //   })
+    // );
+
     // change layout after loading to saved if available
     let toClean: NodeJS.Timeout;
     if (savedLayout.current != "preset") {
@@ -352,6 +359,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
     return () => {
       menu?.destroy();
+      // canvasMenu?.destroy();
       clearTimeout(toClean);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

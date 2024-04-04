@@ -73,8 +73,8 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
     e.preventDefault();
 
     const selected = getSelectedNodes();
-    if (selected?.length != 2) {
-      toast.warning(`Please select two nodes for a merge.`, {
+    if (selected?.length != 2 && mergeFabColor == "primary") {
+      toast.warning(`Please select only two nodes for a merge.`, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -116,7 +116,9 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
   };
 
   const mergeOld = (selected: { id: string }[]) => {
-    const url = `merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
+    const fileParams = selected.map((item) => `file=${item.id}`).join("&");
+    const url = `merge/${projectId}?${fileParams}`;
+
     httpService.get(
       url,
       (req) => {

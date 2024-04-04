@@ -435,6 +435,7 @@ class AddFileToProjectView(View):
             )
             snap_file.xml_job()
 
+            send_event(str(proj_id), "message", {"text": "Update_added_resize"})
             return JsonResponse(snap_file.as_dict())
         else:
             return HttpResponseBadRequest({"message": _("no valid xml")})

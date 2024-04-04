@@ -65,7 +65,7 @@
                     <div class="smerge-digit-field col s1">{{proj_pin.5}}</div>
                     <div class="col s3"></div>
             </div>
-            <p>{% trans "Password" %}</p>
+            {% comment %} <p>{% trans "Password" %}</p>
             <form class="col s12" action="{% url 'change_passwd' proj_id=proj_id %}" method="post">
                 {% csrf_token %}
                 <div class="row">
@@ -114,7 +114,7 @@
                     <input type ="submit" class ="btn waves-effect waves-light" value = "{% trans "Change" %}"/>
                 </div>
                 </div>
-            </form>
+            </form> {% endcomment %}
 
             <p>{% trans "Delete Project" %}</p>
             <form class="col s12" action="{% url 'delete_proj' proj_id=proj_id %}" method="post">
