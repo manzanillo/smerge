@@ -282,27 +282,8 @@ def merge(file1, file2, output, file1_description, file2_description, ancestor=N
         ref.write(f)
 
 
-# def include_sync_button(file, proj_id, me):
-#     with open(settings.BASE_DIR + '/static/snap/sync_block_simple.xml', 'r') as f:
-#         sync_file = f.read()
-#         sync_file = sync_file.replace(
-#             '{{url}}', settings.URL + '/sync/' + str(proj_id) + '?ancestor=' + str(me))
-#         sync_button = ET.fromstring(sync_file)
-
-#         target = ET.parse(settings.BASE_DIR + file)
-#         if target.find(".//block-definition[@s='Post to smerge...']") != None:
-#             for scenes in target.findall(".//scene"):
-#                 for blocks in scenes.findall("blocks"):
-#                     for sync_block in blocks.findall("block-definition[@s='Post to smerge...']"):
-#                         blocks.remove(sync_block)
-#         for scenes in target.findall(".//scene"):
-#             scenes.find('blocks').append(sync_button)
-#         with open(settings.BASE_DIR + file, 'wb') as x:
-#             target.write(x)
-
-
 def include_sync_button(file, proj_id, me):
-    with open(settings.BASE_DIR + "/static/snap/sync_block_simple.xml", "r") as f:
+    with open(settings.BASE_DIR + "/static/snap/simple_sync_block.xml", "r") as f:
         sync_file = f.read()
         sync_file = sync_file.replace(
             "{{url}}",

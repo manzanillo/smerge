@@ -257,12 +257,12 @@ snapmerge -> test -> snapfiles
 For convenience, there exists a small convention-based test framework for generating tests that test, whether a conflict should be raised or not when two files get merged.
 
 In order to generate new test cases files can be added either to the ```collisions``` or the ```no_collisions``` folder.  
-For each merging test, two files must be placed into those folders.
+For each merging test, 'two' files must be placed into those folders.
 If a collision is the expected outcome of merging the two files they must be placed into the ```collisions``` folder. Otherwise, in the ```no_collisions``` folder. 
 
 The files must adhere to the following naming convention: 
 ```
-prefix_suffix.xml
+prefix_<ignored>_suffix.xml
 ```
 The files get matched by their prefix, i.e. the prefix must be the same for the files to be merged together for the test.  
 As a best practice, the prefix should be a description of what is to be tested.
@@ -270,12 +270,25 @@ The suffix can be anything.
 For example, it can extend the description of the particular test with individual information of the file, or it can be just a number. 
 It is important to separate the prefix from the suffix with a "_". Otherwise, the matching can not be successfully executed.
 
+If you have multiple test that rely on the same input for one half, you can reduce the number of files by a base matcher. If for example more than two files with the same prefix are found, the tests will search for a base file with the suffix "_0". If it is found, test cases will be generated with each other file and the base case.
+
+As example these input xml files ["test_0", "test_1", "test_2", "other_1", "other_2"] result in these test combinations -> [("test_0", "test_1"), ("test_0", "test_2"), ("other_1", "other_2")].
+
+In addition if you want to test for a specific conflict type you expect, you can add a type to the name, that the generator uses to match against. Add one of the following into the `<ignored>` section of the filename (at least in one of both files, if both files have different types, the conflict will test against the first found in the list):
+- "type_image" -> `ConflictTypes.IMAGE`
+- "type_element" -> `ConflictTypes.ELEMENT`
+- "type_text" -> `ConflictTypes.TEXT`
+- "type_customBlock" -> `ConflictTypes.CUSTOMBLOCK`
+- "type_watcher" -> `ConflictTypes.WATCHER`
+- "type_audio" -> `ConflictTypes.AUDIO`
+
+
+
 ### Other Reference File Based Tests
 It is recommended to store all files involved in the merger test into the ```snapfiles``` folder.  
 They can either be stored directly into the folder itself or into subfolders for clarity.  
 
 As these tests cannot be auto-generated, the tests need to be implemented manually. It is recommended to implement the tests directly into the folder with the implementation to be tested, following the django naming scheme for test files.   
-
 
 
 ## Password Reset Token Invalidation
@@ -299,7 +312,13 @@ For more information execute:
 ```python snapmerge/manage.py  resettokencleanup --h --settings=config.settings_local```
 
 
+## Good to know:
+### XMLBlocker / Post Block
+Since snap already needs js to be activated for the post back button to work, we decided to implement a blocker step to force a user in activating js before the real project file is even loaded. During this step snaps serializer and deserializer functions get modified to allow the new customData attribute, currently used for uuids. In addition the post back button also reloads the file inside snap with the request return link, to update all uuids inside a running snap instance.
 
+Both xmlBlocker js and the post back button js are watched by django for changes and rebuild the xml part for the snap file on start of django or on a hot reload trigger. Therefore if you want to change these code parts, just edit the js files inside `./snapmerge/static/snap/` while django is running.
+
+To add more files apart from python files to the django auto watch, register them inside the `app.py` files `extra_reload_files` list and add a builder if needed to the `ready` function.
 
 
 --------------

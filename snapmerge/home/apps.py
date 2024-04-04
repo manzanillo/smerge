@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 from django.conf import settings
-from home.dataImportHelper import generateDataImportXML
+from home.dataImportHelper import generateDataImportXML, generateSyncBlockXML
 
 from pathlib import Path
 from django.utils import autoreload
@@ -12,6 +12,7 @@ class HomeConfig(AppConfig):
     extra_reload_files = [
         Path(__file__).parent / ".env",
         Path(__file__).parent.parent / "static/snap/data_importer.js",
+        Path(__file__).parent.parent / "static/snap/simple_sync_block.js",
     ]
 
     def add_extra_files(self, sender: autoreload.StatReloader, **kwargs):
@@ -26,4 +27,5 @@ class HomeConfig(AppConfig):
         print("Middleware:", settings.MIDDLEWARE)
         print("Generating dynamic static data...")
         generateDataImportXML()
+        generateSyncBlockXML()
         print("Generating finished.")

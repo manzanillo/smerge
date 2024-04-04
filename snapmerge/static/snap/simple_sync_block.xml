@@ -1,0 +1,15 @@
+<block-definition s="Post to smerge..." type="command" category="other">
+    <header></header>
+    <code></code>
+    <translations>de:Poste auf smerge... </translations>
+    <inputs></inputs>
+    <script>
+        <block s="doRun">
+            <block s="reportJSFunction">
+                <list></list>
+                <l>var ide = window.world.root().children[0];&#xD;&#xD;async function loadFile(url) {&#xD;  var res = await fetch(url);&#xD;  var xml = await res.text();&#xD;  var ide = window.world.root().children[0];&#xD;  ide.loadProjectXML(xml);&#xD;  ide.showMessage("Synced...");&#xD;}&#xD;&#xD;new DialogBoxMorph(&#xD;  this,&#xD;  function (message) {&#xD;    var url = "{{url}}";&#xD;    if (window.newUrl) {&#xD;      var url = window.newUrl;&#xD;    }&#xD;    url += "&amp;message=" + message;&#xD;    var data = ide.getProjectXML();&#xD;    var r = new XMLHttpRequest();&#xD;    r.open("POST", url, true);&#xD;    r.setRequestHeader("Content-Type", "application/xml");&#xD;    r.onreadystatechange = function () {&#xD;      if (r.readyState === 4 &amp;&amp; r.status === 200) {&#xD;        ide.showMessage("exported...");&#xD;        new_url = JSON.parse(r.response)["url"];&#xD;        ide.showMessage("Start block sync...");&#xD;        loadFile(new_url);&#xD;      }&#xD;    };&#xD;    r.send(data);&#xD;  },&#xD;  this&#xD;).prompt("commit message", "", window.world, null);</l>
+            </block>
+            <list></list>
+        </block>
+    </script>
+</block-definition>

@@ -245,13 +245,7 @@ class SyncView(View):
         # notify_room(proj.id, new_file.as_dict(), "commit")
         send_event(str(proj_id), "message", {"text": "Update_added_resize"})
 
-        new_url = (
-            settings.POST_BACK_URL
-            + "/sync/"
-            + str(proj.id)
-            + "?ancestor="
-            + str(new_file.id)
-        )
+        new_url = settings.POST_BACK_URL + new_file.get_media_path()
         return JsonResponse({"message": _("OK"), "url": new_url})
 
 
@@ -902,9 +896,6 @@ class ResolveHunkView(View):
             return HttpResponse("invalid data ", status=400)
         except:
             return HttpResponse("Hunk not found", status=400)
-
-
-import time
 
 
 class ToggleCollapseView(View):
