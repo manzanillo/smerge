@@ -33,8 +33,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - certbot
     restart: on-failure
   certbot:
     image: certbot/certbot
@@ -42,3 +40,5 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     command: certonly --webroot --webroot-path=/var/www/certbot --email richieschmid@live.de --agree-tos -d thorstest.hopto.org
+    depends_on:
+      - nginx
