@@ -27,4 +27,9 @@ export default defineConfig({
   preview: {
     port: 5069,
   },
+  define: {
+    __BUILD_HASH__: JSON.stringify(
+      [...Array(8)].map(() => Math.random().toString(16)[2]).join("")
+    ),
+  },
 });
