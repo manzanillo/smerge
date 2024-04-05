@@ -20,6 +20,10 @@ X_FRAME_OPTIONS = "DENY"
 
 COMPRESS_OFFLINE = True
 
+# invalidate csrf token after 12 hours
+# ("force" login via the main page and not a direct url)
+# extreme naive version to ensure password check without real login
+CSRF_COOKIE_AGE = 43200
 
 # allow cross for testing...
 # CORS_ALLOW_ALL_ORIGINS = True
