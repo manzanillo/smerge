@@ -32,7 +32,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
 
-# ASGI_APPLICATION = "routing.application"
+ASGI_APPLICATION = "routing.application"
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -77,6 +77,7 @@ BETA = True
 SECRET_PATH = "../secrets/smerge/secrets.smerge.json"
 secret_file = open(SECRET_PATH).read()
 secrets = json.loads(secret_file)
+SECRET_KEY = secrets["SECRET_KEY"]
 EMAIL_HOST_PASSWORD = secrets["EMAIL_HOST_PASSWORD"]
 EMAIL_SENDER = "idppi@idpsmerge.duckdns.org"
 

@@ -1,9 +1,26 @@
 #!/bin/sh
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-
 cd "$SCRIPT_DIR/snapmerge"
+
+# Function to gracefully stop Daphne
+graceful_shutdown() {
+    echo "Received SIGTERM, gracefully shutting down Daphne..."
+    kill -TERM "$PID"
+    wait "$PID"
+    echo "Daphne gracefully stopped."
+    exit 0
+}
+
+# Trap SIGTERM signal and call graceful_shutdown function
+trap 'graceful_shutdown' SIGTERM
+
+# Run migrations
 python manage.py migrate --settings=config.settings_daphne 
-daphne -p 8000 -b 0.0.0.0 config.asgi:application
-# python manage.py runserver 8000 --settings=config.settings_daphne 
-#-w 4 -t 4
+
+# Start Daphne
+daphne -p 8000 -b 0.0.0.0 config.asgi:application &
+PID=$!
+
+# Wait for PID to exit
+wait "$PID"

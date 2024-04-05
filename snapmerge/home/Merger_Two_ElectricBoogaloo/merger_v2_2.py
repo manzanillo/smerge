@@ -363,7 +363,7 @@ def zipMatchingNodesByAttributeForLists(
     leftRoot: ET.Element, rightRoot: ET.Element, attribute: str = "name"
 ) -> tuple[list[tuple[ET.Element, ET.Element]], list[ET.Element]]:
     """Combines nodes with the same attribute given from both sides and returns a zipped list.
-    Unique attributed nodes are returned in a separate list. Works for lists type nodes and checks attributes inside the \<item>
+    Unique attributed nodes are returned in a separate list. Works for lists type nodes and checks attributes inside the {item} node
 
     Parameters
     ----------
@@ -1368,7 +1368,7 @@ def modularListMerge(
     ad : AdditionalDatatoast
         Object containing all needed additional data
     tag : str
-        Tag inside the item nodes of the list (like "costume" for the \<item><costume ... />\</item> structure)
+        Tag inside the item nodes of the list (like "costume" for the {item}{costume ... /}{/item} structure)
 
     Returns
     -------
