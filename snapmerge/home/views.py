@@ -46,14 +46,6 @@ import os
 from .ancestors import gca
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-
-# from .Merger_Two_ElectricBoogaloo.merger import (
-#     merge,
-#     Conflict,
-#     Resolution,
-#     Step,
-#     ConflictTypes,
-# )
 from .Merger_Two_ElectricBoogaloo.merger_v2_2 import *
 from uuid import uuid4
 from django_eventstream import send_event
@@ -934,7 +926,9 @@ class ToggleCollapseView(View):
                 SnapFile.objects.bulk_update(toUpdate, ["hidden", "collapsed_under"])
                 allChildren = [a for a in allChildren if a not in toUpdate]
 
-            send_event(str(snap_file.project_id), "message", {"text": "Update_added"})
+            send_event(
+                str(snap_file.project_id), "message", {"text": "Update_added_resize"}
+            )
             return HttpResponse("Node collapsed", status=200)
         except Exception as e:
             print(e)

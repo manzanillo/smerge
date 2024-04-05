@@ -129,5 +129,10 @@
     "fileUploadSuccess": "Snap! File Added",
     "fileUploadFail": "No Snap! file found!",
     "noXmlFile": "Wrong file type (only .xml)!"
+  },
+  "CsfrMissing": {
+    "missingText": "Please open the project via the main page and not a direct link.",
+    "buttonText": "To Main Page",
+    "missingTextHeader": "Missing Token:"
   }
 }

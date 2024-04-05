@@ -13,6 +13,7 @@ import EventTest from "./EventTest.tsx";
 import "./shared/i18n.ts";
 
 import { ThemeProvider, createTheme } from "@mui/material";
+import CsfrMissing from "./CsfrMissing.tsx";
 
 // const lightTheme: PartialTheme = {
 //   semanticColors: {
@@ -32,24 +33,25 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={darkTheme}>
-      <div
-        style={{ width: "100vw", position: "absolute", left: "0", top: "0" }}
-      >
-        <Layout />
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          top: "64px",
-          bottom: "0px",
-          width: "100vw",
-          background:"#2d2d2d",
-          overflow: "scroll",
-        }}
-      >
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <Router>
+      <Router>
+        <div
+          style={{ width: "100vw", position: "absolute", left: "0", top: "0" }}
+        >
+          <Layout />
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            top: "64px",
+            bottom: "0px",
+            width: "100vw",
+            background: "#2d2d2d",
+            overflow: "scroll",
+          }}
+        >
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+
             <Routes>
               <Route
                 path="ext/project_view/:projectId"
@@ -61,11 +63,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<ConflictStepper />}
               ></Route>
               <Route path="ext/eventTest" element={<EventTest />}></Route>
+              <Route path="ext/csfr_missing" element={<CsfrMissing />}></Route>
               <Route path="ext/*" element={<h1>404</h1>}></Route>
             </Routes>
-          </Router>
-        </QueryClientProvider>
-      </div>
+          </QueryClientProvider>
+        </div>
+      </Router>
     </ThemeProvider>
     <ToastContainer theme="dark" />
   </React.StrictMode>

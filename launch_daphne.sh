@@ -15,7 +15,12 @@ graceful_shutdown() {
 # Trap SIGTERM signal and call graceful_shutdown function
 trap 'graceful_shutdown' SIGTERM
 
+# compress files
+echo "Compressing files..."
+python manage.py compress --settings=config.settings_daphne
+
 # Run migrations
+echo "Apply migrations..."
 python manage.py migrate --settings=config.settings_daphne 
 
 # Start Daphne

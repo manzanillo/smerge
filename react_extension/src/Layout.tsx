@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 
 import "./Layout.css";
 import { useTranslation } from "react-i18next";
+import httpService from "./services/HttpService";
+import { useNavigate } from "react-router-dom";
 
 // function Layout() {
 
@@ -49,6 +51,15 @@ function Layout() {
   };
 
   const { t } = useTranslation();
+
+  // check if csfr token was set and redirect to missing page if not
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (httpService.csrftoken === "") {
+      // react router to missing page
+      navigate("/ext/csfr_missing");
+    }
+  }, []);
 
   const container = window.document.body;
 

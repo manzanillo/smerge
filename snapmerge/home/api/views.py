@@ -8,6 +8,8 @@ from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSeri
 from django.shortcuts import get_object_or_404
 from django_eventstream import send_event
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
 
 from ..views import check_password
 
@@ -38,7 +40,7 @@ class ListSnapFilesView(generics.ListAPIView):
         """
         project_id = self.kwargs.get(self.lookup_field)
         project = get_object_or_404(Project, id=project_id)
-        return SnapFile.objects.filter(project=project)
+        return SnapFile.objects.filter(project=project, hidden=False)
 
 
 class ProjectDetailView(generics.RetrieveAPIView):
@@ -338,24 +340,5 @@ class UnhideAllView(generics.GenericAPIView):
         SnapFile.objects.bulk_update(
             snap_files, ["hidden", "collapsed", "collapsed_under"]
         )
-        send_event(str(project.id), "message", {"text": "Update_added"})
+        send_event(str(project.id), "message", {"text": "Update_added_resize"})
         return Response(data="Unhide / uncollapsed all nodes", status=200)
-
-
-# class ProjectDetailView(generics.RetrieveAPIView):
-#     """
-#     API endpoint that allows file details to be viewed.
-#     """
-#     permission_classes = [permissions.AllowAny]
-
-#     def get_queryset(self):
-#         file_id = self.kwargs['id']
-#         projects = Project.objects.get(id=file_id)
-#         return projects
-
-#     def get(self, request, *args, **kwargs):
-#         projects = self.get_queryset()
-#         if len(projects) != 1:
-#             return HttpResponse('invalid id', status=400)
-#         else:
-#             return HttpResponse(projects[0].pin, status=400)

@@ -5,5 +5,10 @@
         "footer": "Um zum alten Smerge Merger zu wechseln, mit der rechten Maustaste auf die Schaltfläche \"Neue Zusammenführung\" in der unteren rechten Ecke klicken. Als Indikation des wechsels, wird sich die Farbe des Knopfes zu Orange ändern.\nTipp: Der alte merger kann mehr als zwei Datein auf einmal mergen."
       }
     }
+  },
+  "CsfrMissing": {
+    "missingText": "Bitte öffnen Sie das Projekt über die Hauptseite und nicht über eine direkte URL.",
+    "buttonText": "Zur Hauptseite",
+    "missingTextHeader": "Fehlender Token:"
   }
 }

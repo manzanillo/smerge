@@ -24,10 +24,22 @@ async function updateNodePosition(positionUpdate: PositionUpdate) {
   const url =
     httpService.baseURL + "api/file/" + positionUpdate.id + "/position";
   if (positionUpdate.position == null) {
-    const { status } = await axios.put(url, { x: null, y: null });
+    const { status } = await axios.put(
+      url,
+      { x: null, y: null },
+      {
+        headers: {
+          "X-CSRFToken": httpService.csrftoken,
+        },
+      }
+    );
     return status;
   } else {
-    const { status } = await axios.put(url, positionUpdate.position);
+    const { status } = await axios.put(url, positionUpdate.position, {
+      headers: {
+        "X-CSRFToken": httpService.csrftoken,
+      },
+    });
     return status;
   }
 }
@@ -37,7 +49,11 @@ async function updateNodePositions(positionUpdates: PositionUpdate[]) {
   // return 200;
   const url =
     httpService.baseURL + "api/file/" + positionUpdates[0].id + "/positions";
-  const { status } = await axios.put(url, positionUpdates);
+  const { status } = await axios.put(url, positionUpdates, {
+    headers: {
+      "X-CSRFToken": httpService.csrftoken,
+    },
+  });
   return status;
 }
 
