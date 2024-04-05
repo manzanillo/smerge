@@ -1,16 +1,26 @@
 from .settings_base import *
 import json
 
+# internal url the server listens on
 URL = "http://0.0.0.0:8000"
 # POST_BACK_URL = 'https://rs-kubuntu.local'
 # POST_BACK_URL = 'https://idpsmerge.duckdns.org'
+
+# url used in snap blocks to find the server
 POST_BACK_URL = "https://thorstest.hopto.org"
 
-SECRET_KEY = "()fvd?-m+=quyxz*_3v+gjg!d)8n0(wbo*k)(0kwtwuryr4nil"
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-COMPRESS_OFFLINE = False
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+X_FRAME_OPTIONS = "DENY"
+
+COMPRESS_OFFLINE = True
+
 
 # allow cross for testing...
 # CORS_ALLOW_ALL_ORIGINS = True
@@ -23,14 +33,14 @@ USE_X_FORWARDED_HOST = True
 
 
 # ASGI_APPLICATION = "routing.application"
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
-        },
-    },
-}
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("localhost", 6379)],
+#         },
+#     },
+# }
 
 CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
     "https://rs-kubuntu.local",
@@ -39,15 +49,15 @@ CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
     "https://thorstest.hopto.org",
 ]
 
-CSRF_TRUSTED_ORIGINS = (
-    CSRF_TRUSTED_ORIGINS
-    + [
-        "https://rs-kubuntu.local",
-        "https://idpsmerge.duckdns.org",
-        "https://thorstest.hopto.org",
-    ]
-    + ["https://air.local"]
-)
+# CSRF_TRUSTED_ORIGINS = (
+#     CSRF_TRUSTED_ORIGINS
+#     + [
+#         "https://rs-kubuntu.local",
+#         "https://idpsmerge.duckdns.org",
+#         "https://thorstest.hopto.org",
+#     ]
+#     + ["https://air.local"]
+# )
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
