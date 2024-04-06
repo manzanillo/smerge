@@ -748,9 +748,11 @@ def mergeExt(request, proj_id, resolutions):
 
                 for conf in conflicts:
                     match conf.conflictType:
-                        case "Text":
+                        case ConflictTypes.TEXT.value:
                             ending = ".txt"
-                        case "Image":
+                        case ConflictTypes.ATTRIBUTE.value:
+                            ending = ".atxt"
+                        case ConflictTypes.IMAGE.value:
                             ending = ".base64"
                         case ConflictTypes.AUDIO.value:
                             ending = ".abase64"

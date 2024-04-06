@@ -173,7 +173,7 @@ class SnapFilePositionsView(generics.UpdateAPIView):
         send_event(
             str(snap_files[0].project_id),
             "message",
-            {"text": "Update_resize_savedLayout"},
+            {"text": "Update_savedLayout"},
         )
         return Response(status=status.HTTP_200_OK)
 

@@ -101,6 +101,8 @@ def cap_string(input_string, max_length=50):
 #             with open(rightFilePath, "w") as f:
 #                 f.write(self.rightElement)
 
+ATOMIC_SPRITE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKUAAACCCAYAAAAngghUAAAAxXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjabVBRDsMgCP33FDsC8tDicezqkt1gxx8WurTNXuITeeQJpPF5v9JjgrMkKYvWVisZpEnjboGSo++cSXb2VAktX/NJOQS2FOyGP7VG/ZHPPwO/ukXlbPQMYb0KTcJfb0bxEWZHs4ktjFoYgV3IYdB9LKpNl/MI66Ar1E+atIYrxfz3tyy2va3YP2AeyCBjQLwBzCMJ3QLZuVohoVkMqDHjGNUW8m9PB9IXk9NaDuOfsZgAAAGFaUNDUElDQyBwcm9maWxlAAB4nH2RPUjDQBiG3/5oRSoOdhBxyFBdtIuKdKxVKEKFUCu06mBy6R80aUhSXBwF14KDP4tVBxdnXR1cBUHwB8TZwUnRRUr8Lim0iPGO4x7e+96Xu+8Af7PKVDOYAFTNMjKppJDLrwqhVwTRSzOOCYmZ+pwopuE5vu7h4/tdjGd51/05BpSCyQCfQJxgumERbxDPblo6533iCCtLCvE58aRBFyR+5Lrs8hvnksN+nhkxspl54gixUOpiuYtZ2VCJZ4ijiqpRvj/nssJ5i7NarbP2PfkLwwVtZZnrtEaRwiKWIEKAjDoqqMJCjHaNFBMZOk96+Eccv0gumVwVMHIsoAYVkuMH/4PfvTWL01NuUjgJ9LzY9scYENoFWg3b/j627dYJEHgGrrSOv9YE4p+kNzpa9AgY3AYurjuavAdc7gDDT7pkSI4UoOUvFoH3M/qmPDB0C/SvuX1rn+P0AchSr9I3wMEhMF6i7HWPd/d19+3fmnb/fgC8nnLE3bUJugAADXhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDQuNC4wLUV4aXYyIj4KIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgIHhtbG5zOkdJTVA9Imh0dHA6Ly93d3cuZ2ltcC5vcmcveG1wLyIKICAgIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIgogICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIgogICB4bXBNTTpEb2N1bWVudElEPSJnaW1wOmRvY2lkOmdpbXA6N2E4NmFkMWUtYmU2MS00ODVkLTkwZDgtMWRjZThmYjA0MWFjIgogICB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmExOTliOGRhLTE1YzItNGJjZC1hYTZlLWZkODUxNzYzMGRlZSIKICAgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjk5ODRmYzQ5LWQ0NzctNDFlZi1iZTgyLTkzOWRmMjAxYTU5OSIKICAgZGM6Rm9ybWF0PSJpbWFnZS9wbmciCiAgIEdJTVA6QVBJPSIyLjAiCiAgIEdJTVA6UGxhdGZvcm09IkxpbnV4IgogICBHSU1QOlRpbWVTdGFtcD0iMTcxMjM4OTEwNjk0MDE5OCIKICAgR0lNUDpWZXJzaW9uPSIyLjEwLjM0IgogICB0aWZmOk9yaWVudGF0aW9uPSIxIgogICB4bXA6Q3JlYXRvclRvb2w9IkdJTVAgMi4xMCIKICAgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyNDowNDowNlQwOTozODoyNSswMjowMCIKICAgeG1wOk1vZGlmeURhdGU9IjIwMjQ6MDQ6MDZUMDk6Mzg6MjUrMDI6MDAiPgogICA8eG1wTU06SGlzdG9yeT4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJzYXZlZCIKICAgICAgc3RFdnQ6Y2hhbmdlZD0iLyIKICAgICAgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo2ZGQzN2M5NC0zYTlmLTQ0YzEtOWVmYi1kOTk2NjQzMjFkNDciCiAgICAgIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkdpbXAgMi4xMCAoTGludXgpIgogICAgICBzdEV2dDp3aGVuPSIyMDI0LTA0LTA2VDA5OjM4OjI2KzAyOjAwIi8+CiAgICA8L3JkZjpTZXE+CiAgIDwveG1wTU06SGlzdG9yeT4KICA8L3JkZjpEZXNjcmlwdGlvbj4KIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAKPD94cGFja2V0IGVuZD0idyI/Pr6OTUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfoBAYHJhrd26aIAAAGUklEQVR42u3dT0ybdRzH8e/TQrfnz6gyF4mJ8cFTlw1I6EbCxmhvXpoNTRYvjFETBeYgsrG4jv3z0jIWQwebmBgPxi3rCdjBHbi7LDExHrh4MjFGExOj/DkYL/XgSgghE0b//J7f7/057++vL572vfKsIowxxhhjjDHGGKvR7t+//1JPT09xfHy8yGkwpWCmUqliMpksnj59unjv3r1POBVW6VnbgVkoFP5cW1v77ydYlrS0tMj09LTF8bGaoNwKZmme50lXV9fPly9ffoOjZFVFKSLy4MED9+HDh2ubYZbW3NwsyWQydvbs2R85VlYVlNuBKSISiUTkyJEjks1meXpnlUe5XZilHThwQBKJxMT58+czHDWrGMqdwizF0eHDh2VmZoarJ6sMyheBuTGOjh8//lsmk3mN42dlRbkbmMQRqxjKcsAkjljZUZYLJnHEyoqy3DCJI1CKqjCJI1AqDZM4AqXSMIkjUCoLkzgCpdIwiSNQKguTOAKl0jA3xlEikWjp7+9f4iEHpTIwiSNQKgtzYxx1d3d/Ojw8PAYDg1GqBrMUR4cOHZK7d+9y9TQVpYowN8XRH5lM5hVoGIZSZZjEkcEogwCTODIQZVBgEkeGoQwaTOLIEJRBhEkcGYAyyDCJI41R6gCTONIQpS4wiSPNUOoGkzjSBKWOMIkjDVA+g1lfKBT+WV1d1fIBaG5ulu7u7ng6nf4ejgFBaQLMUhzF43HJ5XIWKAMyE2BuiqOZ4eHhEVACkzgCJTB3EkfHjh1buXLlShSUwCSOQAlM0+Mo0H8ZYOoZR4H/CgOmfnGkxWUfmHrFkTavRYCpTxxp9QIZmHrEkXb/KAvM4MeRlu8UADPYcaTt21fADG4caf2eKjCDGUdGvNF/8uTJ4srKCspecPX19RKPx2ViYsICJTCVjKMTJ058PjIyMgRKYBoTR8Z9lzMwKxNHnZ2df4+Pj9ugBKZy831fEolEZzqdfgpKYGoTR0bfpHTq1Kni8vIyghSLI+PvnAOmenEUMv2genp64nCpzorFoiwtLUkymSymUqliLpf7dasfV2f6Qa2urr4Pl+pdKSORiDiOI42NjRKNRvM8fW/a9PT07Nzc3CBcKru6ujqxbVtc15VYLCY3b960eE0JyJpcFffu3SuO40hTU5N0dHRs++OwLUCyci4SiYht27Jv3z5pa2v77tKlSx07Bg1IttuFw2GxbVts2xbf9+X27du7cmUBkpUjWuLx+Mfnzp2bLMuvbcoh3rlz58v5+fn34LT7aHEcRxzHkYMHD8qNGzf4hgxA1uaqaNv2xmh5s6+v76eK/X6AZM+LFsdxpKGhQVpbW78dGxvrqsoXASDZVtHiOI74vi+Tk5NVN2IBklmWJXv27NkYLaNDQ0P5mv15AEm0VDJaQAlI5aLFeJSAVC9ajEYJSDWjxViUgFQ3WoxECUi1o8U4lKaDDEK0GIXSZJBBihZjUJoIMqjRYgRKk0DqEC3ao8zn818vLCz0mhAtruuu39Ny/fp1PgYPkLWLFtd1pampSY4ePfp6X1/fL0YGHCBrHy2u65buaVm8ePHiW2L4LEDWLlpc1xXf9+XWrVvG/08lgUGpE8hStLiuW4qWDwcHBz+DYIBQ6gLS9GjRBmXQQRItmqEMMkiiRUOUQQRJtGiMMkggiRYDUAYFJNFiCErVQRIthqFUGSTRYiBKFUESLQajVAkk0QJKyefzhYWFhXdViRbP8yQWi8m1a9e4KpqIstYgQ6HQ5mh59cyZM7/DwFCUtQQZiUTE87zSPS3fXLhwIcVDbzjKWoAMh8PiOM56tFTrs6pZAFBWE2TpEwlc15X9+/dLe3v7BwMDA1/wMIOy6iCJFlAqAZJoAaUyIIkWUCoBkmgBpRIgiRZQKgOSaGGWCiCJFlZWlLsBSbSwsqN8EZBEC6sYyp2AJFpYxVFOTU3NPXr06O3tRIvneevRcvXqVa6KrPwo/w9kKBRaf3p+Fi0v9/b2/sVRs4qgfB7IUrREo1FpbW2dHx0dfYfjZRVFuRXIcDi8fsup7/uSy+V4embVQTk5OfnD48eP2zZGi+d50tjYKO3t7f0DAwNfcZSsaiiz2ezy4uJiA9HClECZzWaXnzx50kC0MCU2Ozv7UTqdLk5NTc1xGowxxhhjjDHGGGM67V9nExK6Z+bJ2AAAAABJRU5ErkJggg=="
+
 
 class ConflictTypes(Enum):
     ELEMENT = "Element"
@@ -109,6 +111,7 @@ class ConflictTypes(Enum):
     CUSTOMBLOCK = "CustomBlock"
     WATCHER = "Watcher"
     AUDIO = "Audio"
+    ATTRIBUTE = "Attribute"
 
 
 class Conflict:
@@ -116,7 +119,7 @@ class Conflict:
         self,
         leftElement,
         rightElement,
-        conflictType="Element",
+        conflictType=ConflictTypes.ELEMENT,
         s="",
         category="",
         parentPath="",
@@ -609,17 +612,20 @@ def compareNodesDefinition(
         if leftNode.keys().sort() != rightNode.keys().sort():
             return False
 
+    # check for text difference when both exist
     if leftNode.text and rightNode.text:
         if (
             leftNode.text.replace("\n", "").strip()
             != rightNode.text.replace("\n", "").strip()
         ):
             return False
-
-    if (leftNode.text is None and rightNode.text is not None) or (
-        leftNode.text is not None and rightNode.text is None
-    ):
-        return False
+    else:
+        # formatting fuckerie will cause problems with comparing text,
+        # so a postpass for empty spaces and new lines is needed
+        if leftNode.text and len(leftNode.text.replace("\n", "").strip()) > 0:
+            return False
+        if rightNode.text and len(rightNode.text.replace("\n", "").strip()) > 0:
+            return False
 
     if len(keysToCheck) == 0:
         for key in leftNode.keys():
@@ -698,16 +704,11 @@ def getNodesCombinationState(
     if leftNode.tag == "l" and len(leftNode.keys()) == 0:
         if leftNode.text != rightNode.text:
             return 2
-    mismatchKeys = getCompareNodesDefinitionMismatchKeys(leftNode, rightNode)
-    if leftNode.tag == "sprite" and (
-        ["costume"] == mismatchKeys or ["id"] == mismatchKeys
-    ):
-        return 2
     return 1
 
 
 def getCompareNodesDefinitionMismatchKeys(
-    leftNode: ET.Element, rightNode: ET.Element
+    leftNode: ET.Element, rightNode: ET.Element, keysToCheck: list[str] = []
 ) -> list[str]:
     """Get the list of keys that are different between two nodes
 
@@ -717,6 +718,8 @@ def getCompareNodesDefinitionMismatchKeys(
         Left node to compare
     rightNode : ET.Element
         Right node to compare
+    keysToCheck : list[str], optional
+        Whitelist of keys to match, on empty checks all, by default []
 
     Returns
     -------
@@ -725,11 +728,49 @@ def getCompareNodesDefinitionMismatchKeys(
     """
     mismatchKeys = []
     for key in leftNode.keys():
+        if len(keysToCheck) != 0 and key not in keysToCheck:
+            continue
         if key not in rightNode.keys():
             mismatchKeys.append(key)
         elif leftNode.attrib[key] != rightNode.attrib[key]:
             mismatchKeys.append(key)
     return mismatchKeys
+
+
+def getAttributeConflictStrings(
+    leftNode: ET.Element, rightNode: ET.Element, keysToCheck: list[str] = []
+) -> (str, str):
+    """Generate strings for the attribute conflict type.
+
+
+    Parameters
+    leftNode : ET.Element
+        Left node to match
+    rightNode : ET.Element
+        Right node to match
+    keysToCheck : list[str], optional
+        Whitelist of keys to match, on empty checks all, by default []
+
+    Returns
+    -------
+    list[str]
+        The string is a ;;; separated list for all mismatching attributes ("key1_left:::value1_left;;;key2_left:::value2_left" , "key1_right:::value1_right;;;key2_right:::value2_right")
+    """
+    mismatchKeys = getCompareNodesDefinitionMismatchKeys(
+        leftNode, rightNode, keysToCheck
+    )
+    leftParts = []
+    rightParts = []
+    for key in mismatchKeys:
+        if key == "costume":
+            leftParts.append(f"{key}:::{getCostumeString(leftNode)}")
+            rightParts.append(f"{key}:::{getCostumeString(rightNode)}")
+            continue
+        leftParts.append(f"{key}:::{leftNode.attrib[key]}")
+        rightParts.append(f"{key}:::{rightNode.attrib[key]}")
+    leftString = ";;;".join(leftParts)
+    rightString = ";;;".join(rightParts)
+    return leftString, rightString
 
 
 def isDefaultListType(node: ET.Element) -> bool:
@@ -752,6 +793,30 @@ def isDefaultListType(node: ET.Element) -> bool:
         and "struct" in node[0].keys()
         and node[0].attrib["struct"] == "atomic"
     )
+
+
+def getCostumeString(node: ET.Element) -> str:
+    """Get the costume string from a node
+
+    Parameters
+    ----------
+    node : ET.Element
+        Node to get the costume string from
+
+    Returns
+    -------
+    str
+        Returns the costume string
+    """
+    if "costume" in node.keys():
+        index = int(node.attrib["costume"])
+        if index == 0:
+            return ATOMIC_SPRITE
+        else:
+            allCost = node.findall(".//costume")
+            if index > len(allCost):
+                return ATOMIC_SPRITE
+            return allCost[index - 1].attrib["image"]
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------
@@ -1001,9 +1066,9 @@ def atomicMerge(
                             )
                         else:
                             conf = Conflict(
-                                f"Costume name changed:\n '{leftNode.attrib['name']}'",
-                                f"Costume name changed:\n '{rightNode.attrib['name']}'",
-                                conflictType=ConflictTypes.TEXT.value,
+                                f"Name:{leftNode.attrib['name']}",
+                                f"Name:{rightNode.attrib['name']}",
+                                conflictType=ConflictTypes.ATTRIBUTE.value,
                                 parentPath=ad.getCurrentPath(),
                                 parentImage=ad.getCurrentImage(),
                             )
@@ -1099,6 +1164,8 @@ def mergeScenes(
         Returns if merge was successful or not
     """
     ad.addAndSwitch(leftNode)
+    currentSave = ad.currentElement
+
     zips, uniqueNodes = zipMatchingNodesByAttribute(leftNode, rightNode, "customData")
     for unique in uniqueNodes:
         ad.currentElement.append(unique)
@@ -1106,6 +1173,7 @@ def mergeScenes(
     res = True
     for i, (left, right) in enumerate(zips):
         res &= mergeScene(left, right, ad)
+        ad.currentElement = currentSave
     return res
 
 
@@ -1219,6 +1287,7 @@ def mergeBlocks(
         Returns if merge was successful or not
     """
     ad.addAndSwitch(leftNode)
+    currentSave = ad.currentElement
     zips, uniqueNodes = zipMatchingNodesByAttribute(leftNode, rightNode, "customData")
     addedUploadOnce = False
     for unique in uniqueNodes:
@@ -1239,6 +1308,7 @@ def mergeBlocks(
                 continue
 
         res &= mergeBlock(left, right, ad)
+        ad.currentElement = currentSave
     return res
 
 
@@ -1321,21 +1391,39 @@ def mergeStage(
         Returns if merge was successful or not
     """
     with ACM(ad.currentPath, f'{leftNode.attrib["name"]}/'):
-        nodeState = getNodesCombinationState(leftNode, rightNode)
+        checkKeys = ["name", "width", "height", "customData"]
+        nodeState = getNodesCombinationState(leftNode, rightNode, checkKeys)
         match nodeState:
             case 0:
                 ad.currentElement.append(leftNode)
                 return True
-            # only check same, since only one stage can exist so both can't be unique at this point (at least without bugs...)
-            case 1:
-                print("Error: Stage nodes are unique!")
-                print(pretty_print_xml(leftNode))
-                print(pretty_print_xml(rightNode))
-                return False
             case default:
-                ad.addAndSwitch(leftNode)
-                currentSave = ad.currentElement
                 res = True
+                currentNodeSet = False
+                if nodeState == 1:
+                    tmpResolution = getResolution(ad.resolutions)
+                    if tmpResolution:
+                        ad.addAndSwitch(tmpResolution.resolve(leftNode, rightNode))
+                        currentNodeSet = True
+                    else:
+                        leftString, rightString = getAttributeConflictStrings(
+                            leftNode, rightNode, checkKeys
+                        )
+                        ad.conflicts.append(
+                            Conflict(
+                                leftString,
+                                rightString,
+                                conflictType=ConflictTypes.ATTRIBUTE.value,
+                                parentPath=ad.getCurrentPath(),
+                                parentImage=ad.getCurrentImage(),
+                            )
+                        )
+                        res = False
+
+                if not currentNodeSet:
+                    ad.addAndSwitch(leftNode)
+                currentSave = ad.currentElement
+
                 zips, uniqueNodes = zipMatchingNodesByTag(leftNode, rightNode)
                 for unique in uniqueNodes:
                     ad.currentElement.append(unique)
@@ -1427,6 +1515,7 @@ def mergeSprites(
     res = True
     for i, (left, right) in enumerate(zips):
         res &= mergeSprite(left, right, ad)
+        ad.currentElement = currentElementBackup
 
     # watcher filter
     uniqueNodes = filterWatcher(uniqueNodes)
@@ -1494,23 +1583,49 @@ def mergeSprite(
         Returns if merge was successful or not
     """
     with ACM(ad.currentPath, leftNode.attrib["name"] + "/"):
-        nodeState = getNodesCombinationState(leftNode, rightNode)
+        keysToCheck = ["name", "costume", "customData"]
+        nodeState = getNodesCombinationState(leftNode, rightNode, keysToCheck)
         # fin merge if same or unique, otherwise go deeper
         match nodeState:
             case 0:
                 ad.currentElement.append(leftNode)
                 return True
-            case 1:
-                ad.currentElement.append(leftNode)
-                ad.currentElement.append(rightNode)
-                return True
-            case 2:
-                ad.addAndSwitch(leftNode)
+            case default:
+                res = True
+                currentNodeSet = False
+                if nodeState == 1:
+                    attribNodeState = getNodesCombinationState(
+                        leftNode, rightNode, ["customData"]
+                    )
+                    if attribNodeState != 1:
+                        tmpResolution = getResolution(ad.resolutions)
+                        if tmpResolution:
+                            ad.addAndSwitch(tmpResolution.resolve(leftNode, rightNode))
+                            currentNodeSet = True
+                        else:
+                            leftString, rightString = getAttributeConflictStrings(
+                                leftNode, rightNode, keysToCheck
+                            )
+                            ad.conflicts.append(
+                                Conflict(
+                                    leftString,
+                                    rightString,
+                                    conflictType=ConflictTypes.ATTRIBUTE.value,
+                                    parentPath=ad.getCurrentPath(),
+                                    parentImage=ad.getCurrentImage(),
+                                )
+                            )
+                            res = False
+                    else:
+                        ad.currentElement.append(leftNode)
+                        ad.currentElement.append(rightNode)
+                        return True
+                if not currentNodeSet:
+                    ad.addAndSwitch(leftNode)
                 currentSave = ad.currentElement
                 zips, uniqueNodes = zipMatchingNodesByTag(leftNode, rightNode)
                 for unique in uniqueNodes:
                     ad.currentElement.append(unique)
-                res = True
                 for i, (left, right) in enumerate(zips):
                     res &= mergeDecider(left, right, ad)
                     ad.currentElement = currentSave

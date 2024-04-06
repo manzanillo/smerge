@@ -19,6 +19,7 @@ import ImageDiv from "./ImageDiv";
 import httpService from "./services/HttpService";
 import { FileDto } from "./ConflictStepper";
 import AudioDiv from "./AudioDiv";
+import AttributeDiv from "./AttributeDiv";
 
 interface MergeConflictViewProps {
   leftButtonAction: () => void;
@@ -28,6 +29,7 @@ interface MergeConflictViewProps {
   isText?: boolean;
   isImage?: boolean;
   isAudio?: boolean;
+  isAttribute?: boolean;
   leftLink?: string;
   rightLink?: string;
   parentPath?: string;
@@ -46,6 +48,7 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
   isText = false,
   isImage = false,
   isAudio = false,
+  isAttribute = false,
   parentPath = "",
   parentImage = "",
   left,
@@ -53,28 +56,18 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
 }) => {
   const serverEndpoint = "";
 
-  const [xml1, setXml1] = useState<string>(
+  const [xml1, _setXml1] = useState<string>(
     leftLink.includes(".xml")
       ? serverEndpoint + leftLink
       : leftLink.replace("/media", "media")
   );
-  const [xml2, setXml2] = useState<string>(
+  const [xml2, _setXml2] = useState<string>(
     rightLink.includes(".xml")
       ? serverEndpoint + rightLink
       : rightLink.replace("/media", "media")
   );
 
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log("onstart");
-    console.log(left);
-    console.log(right);
-
-    return () => {
-      console.log("onunload");
-    };
-  }, []);
+  const [isLoaded, _setIsLoaded] = useState<boolean>(false);
 
   const [iconLoading, setIconLoading] = useState(true);
   const [iconData, setIconData] = useState("");
@@ -130,6 +123,8 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
               <ImageDiv text1={xml1} text2={xml2} left={left} right={right} />
             ) : isAudio ? (
               <AudioDiv text1={xml1} text2={xml2} left={left} right={right} />
+            ) : isAttribute ? (
+              <AttributeDiv text1={xml1} text2={xml2} />
             ) : (
               <SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>
             )}

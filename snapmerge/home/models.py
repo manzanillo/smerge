@@ -129,6 +129,17 @@ class SnapFile(File):
                 snap.xPosition = sum([a.xPosition for a in ancestors]) / len(ancestors)
                 snap.yPosition = ancestors[0].yPosition + 100
 
+                # check for near child collision from parent
+                for child in ancestors[0].children.all():
+                    if (
+                        abs(child.xPosition - snap.xPosition)
+                        + abs(child.yPosition - snap.yPosition)
+                    ) < 20:
+                        snap.xPosition += 80
+        else:
+            snap.xPosition = 1
+            snap.yPosition = 1
+
         snap.save()
         return snap
 
@@ -197,7 +208,9 @@ class ConflictFile(File):
         _("File"),
         blank=True,
         validators=[
-            FileExtensionValidator(["xml", "XML", "txt", "TXT", "base64", "BASE64"])
+            FileExtensionValidator(
+                ["xml", "XML", "txt", "TXT", "base64", "BASE64", "atxt", "ATXT"]
+            )
         ],
     )
     cx = models.FloatField("cx", null=True)

@@ -113,6 +113,9 @@ The api uses a flask server (more or less a smaller version of django for all ap
 ## Docker (Prod)
 For a production ready version of smerge we need to change a few things. First the django dev. server should not be used in an open setting, since it has a some possible vulnerabilities and performance problems. Therefore the django part of the app will be started with daphne (a for django specialized async gateway server). In addition another settings file is needed to disable more django specific settings. Next the react app will no longer run in dev mode on the vite server, instead it needs to be compiled and then the static files are served via nginx. In theory the main nginx proxy server can be set up to handle everything, but for some local reasons (a protesting raspberry pi...), this part is split into a separate lightweight nginx container. With this, the prod compose can simply start the different container and all should work. Make sure to compile the react app with vite before you build the container (`npx vite build`), otherwise it won't be able to build (or has an old version...).
 
+### Lets Encrypt
+If you have a public dns available (for example use a local raspberry pi and then duckdns), you are able to use lets encrypt and certbot to get a certificate for your server. The production container and the rest both will need one and a self signed is often more trouble if you have already access from public.
+
 
 ## Docker (Access Portal)
 The access server container can "simply" be build and started with docker-compose and the `docker-compose-access.yml` file. For the container to be able to build properly, a view steps need to be taken. 

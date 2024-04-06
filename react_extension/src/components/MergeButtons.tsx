@@ -101,11 +101,19 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
       },
       (req) => {
         console.log(req);
-        toast.error(`${req.responseText}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-        });
+        if (req.status > 499) {
+          toast.error(`Failed to merge files.`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+          });
+        } else {
+          toast.error(`${req.responseText}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+          });
+        }
       },
       (req) => {
         window.open(req.responseText, "_blank");

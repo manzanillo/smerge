@@ -142,3 +142,14 @@ export const Page3 = () => {
     </HelpDisplayItem>
   );
 };
+
+/*
+Missing Images:
+- Open in snap
+- Activate JS and load data
+- post back
+
+- merge two nodes
+
+
+*/
