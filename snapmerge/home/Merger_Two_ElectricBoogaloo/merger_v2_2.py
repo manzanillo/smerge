@@ -128,6 +128,7 @@ class Conflict:
         cyl=None,
         cxr=None,
         cyr=None,
+        allowBoth=False,
     ):
         self.leftElement = leftElement
         self.rightElement = rightElement
@@ -201,7 +202,8 @@ class Conflict:
 class Step(Enum):
     LEFT = 1
     RIGHT = 2
-    DATA = 3
+    BOTH = 3
+    DATA = 4
 
 
 class Resolution:
@@ -281,6 +283,25 @@ class AdditionalData:
 
     def getCurrentImage(self):
         return self.currentImage[-1]
+
+    def resolve(self, leftNode: ET.Element, rightNode: ET.Element) -> bool:
+        tmpResolution = getResolution(self.resolutions)
+        if tmpResolution == None:
+            return False
+        resolvedNodes = tmpResolution.resolve(leftNode, rightNode)
+        # be careful...allow both option only in nodes where is should be possible
+        # stage would be an exemption as an example, since only one stage can exist for each scene!
+        if tmpResolution.step == Step.BOTH:
+            self.currentElement.append(leftNode)
+            # move second to the side if over each other...
+            if ("x" in leftNode.keys() and "x" in rightNode.keys()) and abs(
+                float(leftNode.attrib["x"]) - float(rightNode.attrib["x"])
+            ) < 1:
+                rightNode.attrib["x"] = str(float(rightNode.attrib["x"]) + 20)
+            self.currentElement.append(rightNode)
+        else:
+            self.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
+        return True
 
 
 class ACM:
@@ -1023,11 +1044,7 @@ def mergeSimple(
                 # on uneven children, conflict
                 childRatio = len(left) - len(right)
                 if childRatio > 0 or childRatio < 0:
-                    tmpResolution = getResolution(ad.resolutions)
-                    if tmpResolution:
-                        ad.currentElement.append(
-                            tmpResolution.resolve(leftNode, rightNode)
-                        )
+                    if ad.resolve(leftNode, rightNode):
                         continue
                     else:
                         ad.conflicts.append(Conflict(leftNode, rightNode))
@@ -1071,9 +1088,7 @@ def atomicMerge(
 
     def retConflict(leftNode, rightNode, nameConflict=False):
         if not virtual:
-            tmpResolution = getResolution(ad.resolutions)
-            if tmpResolution:
-                ad.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
+            if ad.resolve(leftNode, rightNode):
                 return True
             else:
                 match (leftNode.tag):
@@ -1089,6 +1104,7 @@ def atomicMerge(
                                 cyl=leftNode.attrib["center-y"],
                                 cxr=rightNode.attrib["center-x"],
                                 cyr=rightNode.attrib["center-y"],
+                                allowBoth=True,
                             )
                         else:
                             conf = Conflict(
@@ -1097,6 +1113,7 @@ def atomicMerge(
                                 conflictType=ConflictTypes.ATTRIBUTE.value,
                                 parentPath=ad.getCurrentPath(),
                                 parentImage=ad.getCurrentImage(),
+                                allowBoth=True,
                             )
                     case "sound":
                         # if not nameConflict:
@@ -1108,6 +1125,7 @@ def atomicMerge(
                             parentImage=ad.getCurrentImage(),
                             cxl=leftNode.attrib["name"],
                             cxr=rightNode.attrib["name"],
+                            allowBoth=True,
                         )
                     # else:
                     #     conf = Conflict(
@@ -1375,11 +1393,7 @@ def mergeBlock(
                     ad.currentElement.append(rightNode)
                     return True
                 else:
-                    tmpResolution = getResolution(ad.resolutions)
-                    if tmpResolution:
-                        ad.currentElement.append(
-                            tmpResolution.resolve(leftNode, rightNode)
-                        )
+                    if ad.resolve(leftNode, rightNode):
                         return True
                     leftString, rightString = getAttributeConflictStrings(
                         leftNode, rightNode
@@ -1392,13 +1406,12 @@ def mergeBlock(
                             conflictType=ConflictTypes.ATTRIBUTE.value,
                             parentPath=ad.getCurrentPath(),
                             parentImage=ad.getCurrentImage(),
+                            allowBoth=True,
                         )
                     )
                     return False
 
-            tmpResolution = getResolution(ad.resolutions)
-            if tmpResolution:
-                ad.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
+            if ad.resolve(leftNode, rightNode):
                 return True
             else:
                 tmpL = leftNode.find("script")
@@ -1428,6 +1441,7 @@ def mergeBlock(
                         category=str(leftNode.attrib["category"]),
                         parentPath=ad.getCurrentPath(),
                         parentImage=ad.getCurrentImage(),
+                        allowBoth=True,
                     )
                 )
                 return False
@@ -1465,9 +1479,7 @@ def mergeStage(
                 res = True
                 currentNodeSet = False
                 if nodeState == 1:
-                    tmpResolution = getResolution(ad.resolutions)
-                    if tmpResolution:
-                        ad.addAndSwitch(tmpResolution.resolve(leftNode, rightNode))
+                    if ad.resolve(leftNode, rightNode):
                         currentNodeSet = True
                     else:
                         leftString, rightString = getAttributeConflictStrings(
@@ -1662,9 +1674,7 @@ def mergeSprite(
                         leftNode, rightNode, ["customData"]
                     )
                     if attribNodeState != 1:
-                        tmpResolution = getResolution(ad.resolutions)
-                        if tmpResolution:
-                            ad.addAndSwitch(tmpResolution.resolve(leftNode, rightNode))
+                        if ad.resolve(leftNode, rightNode):
                             currentNodeSet = True
                         else:
                             leftString, rightString = getAttributeConflictStrings(
@@ -1677,6 +1687,7 @@ def mergeSprite(
                                     conflictType=ConflictTypes.ATTRIBUTE.value,
                                     parentPath=ad.getCurrentPath(),
                                     parentImage=ad.getCurrentImage(),
+                                    allowBoth=True,
                                 )
                             )
                             res = False
@@ -1762,9 +1773,7 @@ def mergeScript(
             return True
         case 2:
             # extend with possible auto resolves for top / bottom changes later
-            tmpResolution = getResolution(ad.resolutions)
-            if tmpResolution:
-                ad.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
+            if ad.resolve(leftNode, rightNode):
                 return True
             else:
                 ad.conflicts.append(
@@ -1773,6 +1782,7 @@ def mergeScript(
                         rightNode,
                         parentPath=ad.getCurrentPath(),
                         parentImage=ad.getCurrentImage(),
+                        allowBoth=True,
                     )
                 )
                 return False

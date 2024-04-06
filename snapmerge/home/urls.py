@@ -88,7 +88,11 @@ urlpatterns = [
         name="toggle_color",
     ),
     re_path(r"^merge_conf/*", views.ReactMergeView.as_view(), name="react_merge_conf"),
-    re_path(r"^tmp/(?P<proj_id>[-\w]+)$", views.TmpView.as_view(), name="tmp"),
+    re_path(
+        r"^getConflict/(?P<proj_id>[-\w]+)$",
+        views.GetConflictsView.as_view(),
+        name="get_confs",
+    ),
     re_path(
         r"^new_merge/(?P<proj_id>[-\w]+)$",
         views.NewMergeView.as_view(),
@@ -103,12 +107,6 @@ urlpatterns = [
         r"^collapse_node/(?P<node_id>[-\w]+)$",
         views.ToggleCollapseView.as_view(),
         name="collapse_node",
-    ),
-    re_path(r"^tmptmp/(?P<proj_id>[-\w]+)$", views.TmpTmpView.as_view(), name="tmptmp"),
-    re_path(
-        r"^jsredirect/(?P<file_id>[-\w]+)$",
-        views.JsRedirectView.as_view(),
-        name="jsredirect",
     ),
     re_path(
         r"blockerXML/(?P<file_name>[-./\w]+)$",

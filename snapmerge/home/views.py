@@ -540,24 +540,9 @@ class ReactMergeView(View):
         return render(request, "merge_react.html", context)
 
 
-class TmpView(View):
+class GetConflictsView(View):
 
     def get(self, request, proj_id):
-        # proj = Project.objects.get(id=proj_id)
-
-        # left = models.SnapFile.create_and_save(project=proj,
-        #                                        file="1.xml")
-        # right = models.SnapFile.create_and_save(project=proj,
-        #                                         file="2.xml")
-
-        # merge_conflict = models.MergeConflict(left=left, right=right)
-        # merge_conflict.save()
-        # ret:MergeConflict = MergeConflict.objects.get(id=1)
-        # print(ret.left)
-        # print(ret.right)
-        # fileToDel = SnapFile.objects.get(id=proj_id)
-        # if fileToDel:
-        #     fileToDel.delete()
         print(proj_id)
         mc = MergeConflict.objects.get(id=proj_id)
         hunks = Hunk.objects.filter(mergeConflict=mc)
@@ -574,69 +559,22 @@ class TmpView(View):
         )
 
 
-class TmpTmpView(View):
-
-    def get(self, request, proj_id):
-        # proj = Project.objects.get(id=proj_id)
-
-        # left = models.SnapFile.create_and_save(project=proj,
-        #                                        file="1.xml")
-        # right = models.SnapFile.create_and_save(project=proj,
-        #                                         file="2.xml")
-
-        # merge_conflict = models.MergeConflict(left=left, right=right)
-        # merge_conflict.save()
-        # ret:MergeConflict = MergeConflict.objects.get(id=1)
-        # print(ret.left)
-        # print(ret.right)
-        # fileToDel = SnapFile.objects.get(id=proj_id)
-        # if fileToDel:
-        #     fileToDel.delete()
-
-        file1 = SnapFile.objects.get(id=1)
-        file2 = SnapFile.objects.get(id=2)
-        proj = Project.objects.get(id="d7af4edb96b54e98a4625e8d288bf528")
-        merge_conflict = models.MergeConflict(left=file1, right=file2, project=proj)
-        merge_conflict.save()
-
-        left1 = models.ConflictFile.create_and_save(
-            project=proj, file=f"2a82a956-8052-44bd-a6e4-35e0dd9e7d86.txt"
-        )
-        left1.save()
-        right2 = models.ConflictFile.create_and_save(
-            project=proj, file=f"2bfd58cc-c658-4399-a0a3-ce71957186b7.txt"
-        )
-        right2.save()
-
-        hunk = models.Hunk(left=left1, right=right2, mergeConflict=merge_conflict)
-        hunk.save()
-
-        left3 = models.ConflictFile.create_and_save(
-            project=proj, file=f"4c36ae19-be0b-42b9-a5ee-392a8d190d6f.xml"
-        )
-        left3.save()
-        right4 = models.ConflictFile.create_and_save(
-            project=proj, file=f"5f16a298-4d09-4a57-ab29-127833edcd0e.xml"
-        )
-        right4.save()
-
-        hunk = models.Hunk(left=left3, right=right4, mergeConflict=merge_conflict)
-        hunk.save()
-
-        return HttpResponse(merge_conflict.id, 200)
-
-
-# todo remove or change later...
-class JsRedirectView(View):
-    def get(self, request, file_id):
-        return ""
-
-
 class GetBlockerXMLView(View):
     def get(self, request, file_name) -> HttpResponse:
         # dummy_file: str = create_dummy_file(file_name, f"{request.scheme}://{request.get_host()}")
         dummy_file: str = create_dummy_file(file_name, f"https://{request.get_host()}")
         return HttpResponse(dummy_file, content_type="application/xml")
+
+
+def stepStringToEnum(step: str) -> Step:
+    if step == "left":
+        return Step.LEFT
+    elif step == "right":
+        return Step.RIGHT
+    elif step == "both":
+        return Step.BOTH
+    else:
+        return Step.DATA
 
 
 class NewMergeView(View):
@@ -646,12 +584,12 @@ class NewMergeView(View):
         print(dict_list_string)
         resolutions_dict = json.loads(dict_list_string)
         resolutionsConverted = [
-            Resolution(step=(Step.LEFT if (res["choice"] == "left") else Step.RIGHT))
+            Resolution(step=(stepStringToEnum(res["choice"])))
             for res in resolutions_dict
         ]
 
-        print("resolutions:")
-        print(resolutionsConverted)
+        # print("resolutions:")
+        # print(resolutionsConverted)
         [print(x.step) for x in resolutionsConverted]
 
         return mergeExt(request, proj_id, resolutionsConverted)
@@ -706,6 +644,9 @@ def mergeExt(request, proj_id, resolutions):
                 new_file.color = default_color()
                 new_file.description = ""
         else:
+            # if resolution but no conflict, the conflict was resolved ahead by another user
+            if len(resolutions) > 0:
+                return HttpResponse("Conflict already resolved", status=410)
             new_file = SnapFile.create_and_save(
                 project=proj, ancestors=file_ids, file=""
             )
@@ -803,6 +744,7 @@ def mergeExt(request, proj_id, resolutions):
                         parentPath=conf.parentPath,
                         parentImage=f"{uuid4()}.base64",
                     )
+                    hunk.allowBoth = conf.allowBoth
                     # set image...
                     with open(settings.BASE_DIR + hunk.get_media_path(), "w") as f:
                         f.write(conf.parentImage)

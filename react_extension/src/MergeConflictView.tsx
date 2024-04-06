@@ -20,9 +20,11 @@ import httpService from "./services/HttpService";
 import { FileDto } from "./ConflictStepper";
 import AudioDiv from "./AudioDiv";
 import AttributeDiv from "./AttributeDiv";
+import { useTranslation } from "react-i18next";
 
 interface MergeConflictViewProps {
   leftButtonAction: () => void;
+  bothButtonAction: () => void;
   rightButtonAction: () => void;
   code?: string;
   isActive?: boolean;
@@ -36,10 +38,12 @@ interface MergeConflictViewProps {
   parentImage?: string;
   left?: FileDto;
   right?: FileDto;
+  allowBoth?: boolean;
 }
 
 const MergeConflictView: React.FC<MergeConflictViewProps> = ({
   leftButtonAction,
+  bothButtonAction,
   rightButtonAction,
   code = "",
   leftLink = "",
@@ -53,8 +57,11 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
   parentImage = "",
   left,
   right,
+  allowBoth,
 }) => {
   const serverEndpoint = "";
+
+  const { t } = useTranslation();
 
   const [xml1, _setXml1] = useState<string>(
     leftLink.includes(".xml")
@@ -100,7 +107,7 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
             spacing={3}
           >
             <Typography variant="h5" style={{ textDecoration: "underline" }}>
-              Conflict inside:
+              {t("MergeConflictView.confInside")}
             </Typography>
             <Typography variant="body1">{parentPath}</Typography>
             {iconLoading ? (
@@ -141,15 +148,26 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
               color={"success"}
               startIcon={<TurnSlightLeftIcon />}
             >
-              Select Left
+              {t("MergeConflictView.selectLeft")}
             </Button>
+            {allowBoth && (
+              <Button
+                onClick={bothButtonAction}
+                variant="contained"
+                color={"warning"}
+                startIcon={<TurnSlightRightIcon />}
+                endIcon={<TurnSlightLeftIcon />}
+              >
+                {t("MergeConflictView.selectBoth")}
+              </Button>
+            )}
             <Button
               onClick={rightButtonAction}
               variant="contained"
-              color={"warning"}
+              color={"success"}
               endIcon={<TurnSlightRightIcon />}
             >
-              Select Right
+              {t("MergeConflictView.selectRight")}
             </Button>
           </Stack>
         </div>
@@ -166,7 +184,7 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
         >
           <Stack alignItems={"center"}>
             <CircularProgress size="64px" />
-            <h1>Loading conflicts...</h1>
+            <h1>{t("MergeConflictView.loadingText")}</h1>
           </Stack>
         </Box>
       )}

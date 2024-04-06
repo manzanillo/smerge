@@ -15,6 +15,7 @@ import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
 import useScriptLoader from "./components/shared/useScriptLoader";
+import { useTranslation } from "react-i18next";
 
 interface ConflictVM {
   hunks: ConflictDto[];
@@ -30,6 +31,7 @@ export interface ConflictDto {
   choice: string;
   parentPath: string;
   parentImage: string;
+  allowBoth: boolean;
 }
 
 export interface FileDto {
@@ -56,9 +58,11 @@ function getCookie(key: string) {
 const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   const { code } = useParams();
 
+  const { t } = useTranslation();
+
   const [loadingConflict, setLoadingConflict] = useState(true);
   const [loadingConfictText, setLoadingConflictText] = useState(
-    "Loading conflicts..."
+    t("MergeConflictView.loadingText")
   );
   const [conflictData, setConflictData] = useState<ConflictDto[]>();
 
@@ -72,7 +76,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
 
   const loadData = () => {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", `/tmp/${code}`, true);
+    xhttp.open("GET", `/getConflict/${code}`, true);
     const csrftoken = getCookie("csrftoken");
     xhttp.setRequestHeader("X-CSRFToken", csrftoken ?? "");
     xhttp.send();
@@ -124,11 +128,23 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
       } else {
         if (xhttp.readyState === 4 && xhttp.status >= 400) {
           console.log(`Conflict ${code} not found.`);
-          toast.warning(`Merge ${code} failed.`, {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-          });
+          if (xhttp.status == 410) {
+            toast.warning(t("ConflictStepper.alreadyResolvedToast"), {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+            });
+            setLoadingConflictText(t("ConflictStepper.alreadyResolved"));
+            setTimeout(() => {
+              window.close();
+            }, 10000);
+          } else {
+            toast.warning(`Merge ${code} failed.`, {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+            });
+          }
         }
       }
     };
@@ -140,12 +156,12 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
 
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = (left?: boolean) => {
+  const handleNext = (option?: string) => {
     if (conflictData != undefined) {
-      conflictData[activeStep].choice = left ? "left" : "right";
+      conflictData[activeStep].choice = option ?? "left";
     }
 
-    if (activeStep >= conflictData.length - 1) {
+    if (activeStep >= (conflictData?.length ?? 1) - 1) {
       finish();
       return;
     }
@@ -161,16 +177,20 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   };
 
   const leftButtonAction = () => {
-    handleNext(true);
+    handleNext("left");
+  };
+
+  const bothButtonAction = () => {
+    handleNext("both");
   };
 
   const rightButtonAction = () => {
-    handleNext(false);
+    handleNext("right");
   };
 
   const finish = () => {
-    console.log("fin");
-    console.log(conflictData);
+    // console.log("fin");
+    // console.log(conflictData);
 
     let c = 0;
     for (const conflict of conflictData as ConflictDto[]) {
@@ -188,13 +208,9 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
 
     // if all choices are set, send to backend and switch to waiting
     setConflictData([]);
-    setLoadingConflictText("Awaiting merge result...");
+    setLoadingConflictText(t("ConflictStepper.waitingForMerge"));
     setLoadingConflict(true);
-    toast.success(sendChoices(), {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
+    sendChoices();
     // setTimeout(()=>{window.location.reload();
     // }, 1000)
   };
@@ -256,16 +272,21 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                 <StepLabel
                   optional={
                     index === conflictData.length - 1 ? (
-                      <Typography variant="caption">Last step</Typography>
+                      <Typography variant="caption">
+                        {t("ConflictStepper.lastStep")}
+                      </Typography>
                     ) : null
                   }
                 >
-                  {`Conflict ${index + 1} of ${conflictData?.length}`}
+                  {`${t("ConflictStepper.conflict")} ${index + 1} ${t(
+                    "ConflictStepper.of"
+                  )} ${conflictData?.length}`}
                 </StepLabel>
                 <StepContent>
                   <div className="stepCard">
                     <MergeConflictView
                       leftButtonAction={leftButtonAction}
+                      bothButtonAction={bothButtonAction}
                       rightButtonAction={rightButtonAction}
                       code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`}
                       leftLink={step.left.file_url}
@@ -279,6 +300,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                       parentImage={step.parentImage}
                       left={step.left}
                       right={step.right}
+                      allowBoth={step.allowBoth}
                     />
                   </div>
 
@@ -287,20 +309,20 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                       <Button
                         variant="contained"
                         onClick={() => {
-                          handleNext(true);
+                          handleNext("left");
                         }}
                         sx={{ mt: 1, mr: 1 }}
                       >
                         {index === conflictData.length - 1
-                          ? "Finish"
-                          : "Continue"}
+                          ? t("ConflictStepper.finish")
+                          : t("ConflictStepper.continue")}
                       </Button>
                       <Button
                         disabled={index === 0}
                         onClick={handleBack}
                         sx={{ mt: 1, mr: 1 }}
                       >
-                        Back
+                        {t("ConflictStepper.back")}
                       </Button>
                     </div>
                   </Box>
@@ -310,11 +332,9 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
           </Stepper>
           {activeStep > (conflictData?.length ?? 9999) - 1 && (
             <Paper square elevation={0} sx={{ p: 3 }}>
-              <Typography>
-                All steps completed - you&apos;re finished
-              </Typography>
+              <Typography>{t("ConflictStepper.allStepsCompleted")}</Typography>
               <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-                Reset
+                {t("ConflictStepper.reset")}
               </Button>
             </Paper>
           )}

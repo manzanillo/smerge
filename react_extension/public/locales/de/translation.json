@@ -139,5 +139,25 @@
     "selectOnlyTwo": "Mit dem neuen Merger können jeweils nur zwei Knoten gleichzeitig zusammengeführt werden!",
     "noConflictNodes": "Konfliktknoten können nicht zusammengeführt werden!",
     "selectMinTwo": "Bitte wählen Sie weitere Knoten aus."
+  },
+  "MergeConflictView": {
+    "confInside": "Konflikt in:",
+    "selectLeft": "Links verwenden",
+    "selectBoth": "Beide verwenden",
+    "selectRight": "Rechts verwenden",
+    "loadingText": "Lade Konflikte..."
+  },
+  "ConflictStepper": {
+    "waitingForMerge": "Warte auf merge Resultat...",
+    "lastStep": "Letzter Schritt",
+    "conflict": "Konflikt",
+    "of": "von",
+    "finish": "Abschließen",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "allStepsCompleted": "Alle Schritte beendet - Sie sind fertig",
+    "reset": "Zurücksetzen",
+    "alreadyResolved": "Der Merge wurde von einem anderen abgeschlossen.\nDieses Fenster schliest sich in 10 Sekunden.",
+    "alreadyResolvedToast": "Merge bereits abgeschlossen!"
   }
 }

@@ -139,5 +139,25 @@
     "selectOnlyTwo": "Only two nodes can be merged at a time with the new merger!",
     "noConflictNodes": "Conflict nodes can't be merged!",
     "selectMinTwo": "Please select more nodes."
+  },
+  "MergeConflictView": {
+    "confInside": "Conflict inside:",
+    "selectLeft": "Take Left",
+    "selectBoth": "Take both",
+    "selectRight": "Take Right",
+    "loadingText": "Loading conflicts..."
+  },
+  "ConflictStepper": {
+    "waitingForMerge": "Awaiting merge result...",
+    "lastStep": "Last step",
+    "conflict": "Conflict",
+    "of": "of",
+    "finish": "Finish",
+    "continue": "Continue",
+    "back": "Back",
+    "allStepsCompleted": "All steps completed - you're finished",
+    "reset": "Reset",
+    "alreadyResolved": "The merge was resolved by another.\nThis window will close in 10 seconds.",
+    "alreadyResolvedToast": "Merge already resolved!"
   }
 }

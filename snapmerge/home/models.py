@@ -278,7 +278,6 @@ class MergeConflict(models.Model):
     connected_file = models.ForeignKey(
         SnapFile, on_delete=models.DO_NOTHING, related_name="connected_file", null=True
     )
-    # hunks = models.fields
 
 
 class Hunk(models.Model):
@@ -296,6 +295,7 @@ class Hunk(models.Model):
         blank=True,
         validators=[FileExtensionValidator(["base64", "BASE64"])],
     )
+    allowBoth = models.BooleanField(default=False)
 
     @classmethod
     def create_and_save(cls, left, right, mergeConflict, parentPath, parentImage):
@@ -318,6 +318,7 @@ class Hunk(models.Model):
             "choice": self.choice if self.choice != None else "",
             "parentPath": self.parentPath,
             "parentImage": self.get_media_path(),
+            "allowBoth": self.allowBoth,
         }
 
     def get_media_path(self):

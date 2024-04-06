@@ -31,6 +31,12 @@ createdatamigration:
 migrate:
 	python $(BASE)/manage.py migrate --settings=$(SETTINGS)
 
+addadmin:
+	python $(BASE)/manage.py addadmin --settings=$(SETTINGS)
+
+addpage:
+	python $(BASE)/manage.py addpage --settings=$(SETTINGS)
+
 test:
 	python $(BASE)/manage.py test $(APPNAME) --settings=$(SETTINGS)
 
