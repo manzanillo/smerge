@@ -119,7 +119,7 @@ class Conflict:
         self,
         leftElement,
         rightElement,
-        conflictType=ConflictTypes.ELEMENT,
+        conflictType=ConflictTypes.ELEMENT.value,
         s="",
         category="",
         parentPath="",
