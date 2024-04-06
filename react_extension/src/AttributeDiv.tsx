@@ -33,7 +33,7 @@ const styleRight: React.CSSProperties = {
 
 const AttributeDiv: React.FC<TextDivProps> = ({ text1, text2 }) => {
   const getAttributePane = (
-    attributes: { key: string; value: string }[],
+    attributes: { data: { key: string; value: string }[]; context: string },
     isLeft: boolean
   ) => {
     return (
@@ -44,41 +44,54 @@ const AttributeDiv: React.FC<TextDivProps> = ({ text1, text2 }) => {
         style={{ height: "100%" }}
       >
         <Paper style={isLeft ? styleLeft : styleRight} elevation={1}>
-          <ul>
-            {attributes.map((item, index) =>
-              item.key === "costume" ? (
-                <li key={index}>
-                  <div style={{ display: "flex" }}>
-                    {" "}
-                    {`${item.key}:`}
-                    <img
-                      style={{
-                        background: "white",
-                        borderRadius: "5px",
-                        marginLeft: "10px",
-                      }}
-                      src={item.value}
-                    />
-                  </div>
-                </li>
-              ) : (
-                <li key={index}> {`${item.key}:\t${item.value}`}</li>
-              )
+          <Stack direction={"column"} spacing={0}>
+            {attributes.context !== "" && (
+              <h4 style={{ marginBottom: "0px" }}>{attributes.context}</h4>
             )}
-          </ul>
+            <ul>
+              {attributes.data.map((item, index) =>
+                item.key === "costume" ? (
+                  <li key={index}>
+                    <div style={{ display: "flex" }}>
+                      {" "}
+                      {`${item.key}:`}
+                      <img
+                        style={{
+                          background: "white",
+                          borderRadius: "5px",
+                          marginLeft: "10px",
+                        }}
+                        src={item.value}
+                      />
+                    </div>
+                  </li>
+                ) : (
+                  <li key={index}> {`${item.key}:\t${item.value}`}</li>
+                )
+              )}
+            </ul>
+          </Stack>
         </Paper>
       </Grid>
     );
   };
 
   const textToAttributes = (text: string) => {
-    const keyValues = text.split(";;;");
-    return keyValues.map((item) => {
-      return {
-        key: item.split(":::")[0].replace("'", ""),
-        value: item.split(":::")[1].replace("'", ""),
-      };
-    });
+    const keyValuesContext = text.split("|||");
+    let contextString = "";
+    if (keyValuesContext.length > 1) {
+      contextString = keyValuesContext[1];
+    }
+    const keyValues = keyValuesContext[0].split(";;;");
+    return {
+      data: keyValues.map((item) => {
+        return {
+          key: item.split(":::")[0].replace("'", ""),
+          value: item.split(":::")[1].replace("'", ""),
+        };
+      }),
+      context: contextString,
+    };
   };
 
   const [text1Loading, setText1Loading] = useState(true);

@@ -84,6 +84,16 @@ class File(models.Model):
         abstract = True
 
 
+def checkForCollisions(currentNode, ancestor):
+    # check for near child collision from parent
+    for child in ancestor.children.all():
+        if (
+            abs(child.xPosition - currentNode.xPosition)
+            + abs(child.yPosition - currentNode.yPosition)
+        ) < 20:
+            currentNode.xPosition += 80
+
+
 class SnapFile(File):
     # validates only naming of file
     file = models.FileField(
@@ -125,17 +135,15 @@ class SnapFile(File):
                 )
                 snap.xPosition = newX
                 snap.yPosition = newY + 100
+
+                # check for near child collision from parent
+                checkForCollisions(snap, ancestors_as_files[0])
             else:
                 snap.xPosition = sum([a.xPosition for a in ancestors]) / len(ancestors)
                 snap.yPosition = ancestors[0].yPosition + 100
 
                 # check for near child collision from parent
-                for child in ancestors[0].children.all():
-                    if (
-                        abs(child.xPosition - snap.xPosition)
-                        + abs(child.yPosition - snap.yPosition)
-                    ) < 20:
-                        snap.xPosition += 80
+                checkForCollisions(snap, ancestors[0])
         else:
             snap.xPosition = 1
             snap.yPosition = 1

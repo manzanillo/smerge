@@ -125,6 +125,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     edgeList = edgeList?.filter((edge, index, self) => {
       const source = edge.data.source;
       const sourceNode = nodes?.find((node) => node.data.id == source);
+      if (!sourceNode) return false;
       return (
         (!self
           .slice(0, index)

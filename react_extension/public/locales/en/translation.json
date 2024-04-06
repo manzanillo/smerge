@@ -134,5 +134,10 @@
     "missingText": "Please open the project via the main page and not a direct link.",
     "buttonText": "To Main Page",
     "missingTextHeader": "Missing Token:"
+  },
+  "MergeButtons": {
+    "selectOnlyTwo": "Only two nodes can be merged at a time with the new merger!",
+    "noConflictNodes": "Conflict nodes can't be merged!",
+    "selectMinTwo": "Please select more nodes."
   }
 }

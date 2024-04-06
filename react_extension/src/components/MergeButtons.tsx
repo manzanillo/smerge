@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   Fab,
   Popover,
   PropTypes,
@@ -14,6 +15,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import MergeIcon from "@mui/icons-material/Merge";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 // import "./SettingsModal.css";
 
 interface MergeButtonsProps {
@@ -38,6 +40,9 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
     "success" | "error" | "info" | "warning" | PropTypes.Color
   >("primary");
   const [mergeTooltip, setMergeTooltip] = useState<string>("New Merge");
+  const [mergeButtonDisabled, setMergeButtonDisabled] = useState(false);
+
+  const { t } = useTranslation();
 
   const getSelectedNodes = () => {
     const cy = cyRef.current;
@@ -72,15 +77,35 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
   const handleMergeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    setMergeButtonDisabled(true);
     const selected = getSelectedNodes();
     if (selected?.length != 2 && mergeFabColor == "primary") {
-      toast.warning(`Please select only two nodes for a merge.`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
+      toast.warning(
+        selected?.length == 1
+          ? t("MergeButtons.selectMinTwo")
+          : t("MergeButtons.selectOnlyTwo"),
+        {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+        }
+      );
+      setMergeButtonDisabled(false);
       handleClose();
       return;
+    }
+
+    for (const node of selected ?? []) {
+      if (node.file_url.includes(".conflict")) {
+        toast.warning(t("MergeButtons.noConflictNodes"), {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+        });
+        setMergeButtonDisabled(false);
+        handleClose();
+        return;
+      }
     }
 
     if (mergeFabColor == "primary") {
@@ -96,11 +121,13 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
     httpService.get(
       url,
       (req) => {
-        console.log(req.response);
+        // console.log(req.response);
+        setMergeButtonDisabled(false);
         refresh();
       },
       (req) => {
-        console.log(req);
+        // console.log(req);
+        setMergeButtonDisabled(false);
         if (req.status > 499) {
           toast.error(`Failed to merge files.`, {
             position: "top-right",
@@ -116,6 +143,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
         }
       },
       (req) => {
+        setMergeButtonDisabled(false);
         window.open(req.responseText, "_blank");
       },
       true,
@@ -130,13 +158,16 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
     httpService.get(
       url,
       (req) => {
-        console.log(req.response);
+        // console.log(req.response);
+        setMergeButtonDisabled(false);
         refresh();
       },
       (req) => {
-        console.log(req);
+        // console.log(req);
+        setMergeButtonDisabled(false);
       },
       (req) => {
+        setMergeButtonDisabled(false);
         window.open(req.responseText, "_blank");
       },
       true,
@@ -197,14 +228,15 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
 
       <Tooltip title={mergeTooltip}>
         <Fab
+          disabled={mergeButtonDisabled}
           sx={fabStyle}
           size="large"
           color={mergeFabColor}
           aria-label="add"
           onContextMenu={handleMergeRightClick}
-          onClick={handleMergePreClick}
+          onClick={mergeButtonDisabled ? () => {} : handleMergePreClick}
         >
-          <MergeIcon />
+          {mergeButtonDisabled ? <CircularProgress /> : <MergeIcon />}
         </Fab>
       </Tooltip>
     </Box>

@@ -149,13 +149,16 @@ class Conflict:
         return f"Conflict ({self.conflictType}): {self.leftElement} <-> {self.rightElement} (Path: {self.parentPath})"
 
     def toFile(self, leftFilePath, rightFilePath):
-        if self.conflictType == "Element" or self.conflictType == "CustomBlock":
+        if (
+            self.conflictType == ConflictTypes.ELEMENT.value
+            or self.conflictType == ConflictTypes.CUSTOMBLOCK.value
+        ):
             projectName = "view"
             versionName = "Snap! 9.0, https://snap.berkeley.edu"
             file1, test, blocks = create_snap_file(projectName, versionName)
             test.append(self.leftElement)
 
-            if self.conflictType == "CustomBlock":
+            if self.conflictType == ConflictTypes.CUSTOMBLOCK.value:
                 firstElem = self.leftElement[0]
                 if "custom-block" in firstElem.tag:
                     for block in blocks:
@@ -169,7 +172,7 @@ class Conflict:
             file2, test2, blocks = create_snap_file(projectName, versionName)
             test2.append(self.rightElement)
 
-            if self.conflictType == "CustomBlock":
+            if self.conflictType == ConflictTypes.CUSTOMBLOCK.value:
                 firstElem = self.rightElement[0]
                 if "custom-block" in firstElem.tag:
                     for block in blocks:
@@ -180,9 +183,19 @@ class Conflict:
                 f.write(pretty_print_xml(file2.getroot()))
         else:
             with open(leftFilePath, "w") as f:
-                f.write(self.leftElement)
+                content = self.leftElement
+                # add context string for attributes if available
+                if self.conflictType == ConflictTypes.ATTRIBUTE.value:
+                    if self.s != "":
+                        content = f"{self.leftElement}|||{self.s}"
+                f.write(content)
             with open(rightFilePath, "w") as f:
-                f.write(self.rightElement)
+                content = self.rightElement
+                # add context string for attributes if available
+                if self.conflictType == ConflictTypes.ATTRIBUTE.value:
+                    if self.s != "":
+                        content = f"{self.rightElement}|||{self.s}"
+                f.write(content)
 
 
 class Step(Enum):
@@ -763,14 +776,25 @@ def getAttributeConflictStrings(
     rightParts = []
     for key in mismatchKeys:
         if key == "costume":
-            leftParts.append(f"{key}:::{getCostumeString(leftNode)}")
-            rightParts.append(f"{key}:::{getCostumeString(rightNode)}")
+            leftParts.append(f"{capitalizeFirst(key)}:::{getCostumeString(leftNode)}")
+            rightParts.append(f"{capitalizeFirst(key)}:::{getCostumeString(rightNode)}")
+            continue
+        if key == "s":
+            leftParts.append(f"Name:::{leftNode.attrib[key]}")
+            rightParts.append(f"Name:::{rightNode.attrib[key]}")
             continue
         leftParts.append(f"{key}:::{leftNode.attrib[key]}")
         rightParts.append(f"{key}:::{rightNode.attrib[key]}")
     leftString = ";;;".join(leftParts)
     rightString = ";;;".join(rightParts)
     return leftString, rightString
+
+
+def capitalizeFirst(string):
+    """Capitalize the first letter of a string."""
+    if not string:
+        return string
+    return string[0].upper() + string[1:]
 
 
 def isDefaultListType(node: ET.Element) -> bool:
@@ -926,7 +950,9 @@ def mergeProjectDef(
             return True
         ad.conflicts.append(
             Conflict(
-                leftNode.attrib["name"], rightNode.attrib["name"], conflictType="Text"
+                leftNode.attrib["name"],
+                rightNode.attrib["name"],
+                conflictType=ConflictTypes.TEXT.value,
             )
         )
         return False
@@ -1077,7 +1103,7 @@ def atomicMerge(
                         conf = Conflict(
                             leftNode.attrib["sound"],
                             rightNode.attrib["sound"],
-                            conflictType="Audio",
+                            conflictType=ConflictTypes.AUDIO.value,
                             parentPath=ad.getCurrentPath(),
                             parentImage=ad.getCurrentImage(),
                             cxl=leftNode.attrib["name"],
@@ -1096,7 +1122,7 @@ def atomicMerge(
                         conf = Conflict(
                             f"Variable '{name}' value: {leftNode.text}",
                             f"Variable '{name}' value: {rightNode.text}",
-                            conflictType="Text",
+                            conflictType=ConflictTypes.TEXT.value,
                             parentPath=ad.getCurrentPath(),
                             parentImage=ad.getCurrentImage(),
                         )
@@ -1339,18 +1365,56 @@ def mergeBlock(
         case 0:
             ad.currentElement.append(leftNode)
             return True
-        case 1:
-            ad.currentElement.append(leftNode)
-            ad.currentElement.append(rightNode)
-            return True
-        case 2:
+        case default:
+            if nodeState == 1:
+                attribNodeState = getNodesCombinationState(
+                    leftNode, rightNode, ["customData"]
+                )
+                if attribNodeState == 1:
+                    ad.currentElement.append(leftNode)
+                    ad.currentElement.append(rightNode)
+                    return True
+                else:
+                    tmpResolution = getResolution(ad.resolutions)
+                    if tmpResolution:
+                        ad.currentElement.append(
+                            tmpResolution.resolve(leftNode, rightNode)
+                        )
+                        return True
+                    leftString, rightString = getAttributeConflictStrings(
+                        leftNode, rightNode
+                    )
+                    ad.conflicts.append(
+                        Conflict(
+                            leftString,
+                            rightString,
+                            s="Custom Block Attribute Changed:",
+                            conflictType=ConflictTypes.ATTRIBUTE.value,
+                            parentPath=ad.getCurrentPath(),
+                            parentImage=ad.getCurrentImage(),
+                        )
+                    )
+                    return False
+
             tmpResolution = getResolution(ad.resolutions)
             if tmpResolution:
                 ad.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
                 return True
             else:
-                lScript = copyNode(leftNode.find("script"))
-                rScript = copyNode(rightNode.find("script"))
+                tmpL = leftNode.find("script")
+                if tmpL:
+                    lScript = copyNode(tmpL)
+                    lScript.attrib["x"] = "20"
+                    lScript.attrib["y"] = "20"
+                else:
+                    lScript = ET.Element("script", {"x": "20", "y": "20"})
+                tmpR = rightNode.find("script")
+                if tmpR:
+                    rScript = copyNode(tmpR)
+                    rScript.attrib["x"] = "20"
+                    rScript.attrib["y"] = "20"
+                else:
+                    rScript = ET.Element("script", {"x": "20", "y": "20"})
                 lBlockName = "Conflict-Block-Content: " + str(leftNode.attrib["s"])
                 rBlockName = "Conflict-Block-Content: " + str(rightNode.attrib["s"])
                 lScript.insert(0, ET.Element("custom-block", {"s": lBlockName}))
@@ -1359,7 +1423,7 @@ def mergeBlock(
                     Conflict(
                         lScript,
                         rScript,
-                        conflictType="CustomBlock",
+                        conflictType=ConflictTypes.CUSTOMBLOCK.value,
                         s=lBlockName,
                         category=str(leftNode.attrib["category"]),
                         parentPath=ad.getCurrentPath(),

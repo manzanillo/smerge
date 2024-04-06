@@ -134,5 +134,10 @@
     "fileUploadFail": "Keine Snap! Datei gefunden!",
     "fileUploadSuccess": "Snap! Datei hinzugefügt",
     "noXmlFile": "Falscher Datei Typ (nur .xml)!"
+  },
+  "MergeButtons": {
+    "selectOnlyTwo": "Mit dem neuen Merger können jeweils nur zwei Knoten gleichzeitig zusammengeführt werden!",
+    "noConflictNodes": "Konfliktknoten können nicht zusammengeführt werden!",
+    "selectMinTwo": "Bitte wählen Sie weitere Knoten aus."
   }
 }
