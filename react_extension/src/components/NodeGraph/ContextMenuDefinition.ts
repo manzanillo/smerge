@@ -30,8 +30,7 @@ const generateContextMenuSettings: any = (
         select: function (ele: CytoscapeContextElement) {
           const element = document.createElement("a");
           element.setAttribute("href", ele.data("file_url"));
-          element.setAttribute("download", ele.data("description"));
-
+          element.setAttribute("download", ele.data("label") + ".xml");
           element.style.display = "none";
           document.body.appendChild(element);
 
@@ -51,8 +50,8 @@ const generateContextMenuSettings: any = (
         fillColor: "rgba(200, 200, 200, 0.75)",
         content: `<img src="${editIcon}" alt="Edit" />`,
         select: function (ele: CytoscapeContextElement) {
-          console.log(ele);
-          console.log("Edit");
+          // console.log(ele);
+          // console.log("Edit");
           openNodeDialog(ele);
         },
       },
@@ -61,7 +60,7 @@ const generateContextMenuSettings: any = (
         content: `<img src="${colorIcon}" alt="Edit" />`,
         select: function (ele: CytoscapeContextElement) {
           const toggle_color_url = "toggle_color/" + projectId + "/" + ele.id();
-          console.log(httpService.baseURL);
+          // console.log(httpService.baseURL);
           httpService.get(
             toggle_color_url,
             () => {

@@ -33,7 +33,7 @@ const ProjectView: React.FC = () => {
 
   useEffect(() => {
     setModalOpen(isFileHovered);
-    console.log("Changed file hover");
+    // console.log("Changed file hover");
   }, [isFileHovered]);
 
   return (

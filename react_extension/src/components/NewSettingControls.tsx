@@ -51,7 +51,7 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
   const handleChange = (event: SelectChangeEvent) => {
     setLay(event.target.value as string);
     changeLayout(event.target.value as string);
-    console.log(event.target.value);
+    // console.log(event.target.value);
   };
 
   const { t } = useTranslation();
@@ -249,7 +249,7 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
                     valueLabelDisplay="auto"
                     value={wheelSensitivity}
                     onChange={(_, value) => {
-                      console.log(value);
+                      // console.log(value);
                       setWheelSensitivity(value as number);
                     }}
                   />

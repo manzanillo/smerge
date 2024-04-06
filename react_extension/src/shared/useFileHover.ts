@@ -49,7 +49,7 @@ function useFileHover() {
       window.removeEventListener("dragleave", handleDragLeave);
       window.removeEventListener("drop", handleDrop);
 
-      console.log("Removed event listeners");
+      // console.log("Removed event listeners");
     };
   }, []);
 

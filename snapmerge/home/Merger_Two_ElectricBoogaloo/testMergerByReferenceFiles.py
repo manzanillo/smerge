@@ -13,6 +13,9 @@ from itertools import groupby, starmap
 reference_file_base_path = "./snapmerge/test/snapfiles/"
 reference_collision_files_base_path = reference_file_base_path + "collisions/"
 reference_no_collision_files_base_path = reference_file_base_path + "no_collisions/"
+reference_multi_collision_files_base_path = (
+    reference_file_base_path + "multi_collisions/"
+)
 
 
 def get_file_pairs(directory_path) -> List[Tuple[str, str]]:
@@ -43,6 +46,7 @@ def get_file_pairs(directory_path) -> List[Tuple[str, str]]:
 
 collision_test_files = get_file_pairs(reference_collision_files_base_path)
 no_collision_test_files = get_file_pairs(reference_no_collision_files_base_path)
+multi_collision_test_files = get_file_pairs(reference_multi_collision_files_base_path)
 
 
 class TestMerge(TestCase):
@@ -86,7 +90,7 @@ class TestMerge(TestCase):
         right = reference_collision_files_base_path + rightFile
         try:
             conflict, merged = merge2(left, right)
-            comp = getCheckTypeFromName(left + right)
+            comp = getCheckTypeFromName(leftFile + rightFile)
             if comp == Conflict:
                 self.assertIsInstance(
                     conflict[0], Conflict, msg=f"Left: {left}, Right: {right}"
@@ -101,6 +105,39 @@ class TestMerge(TestCase):
         except Exception as e:
             if "'NoneType' object is not subscriptable" in str(e):
                 self.fail("Expected conflict, got None!")
+            else:
+                print(e)
+                self.fail("Unexpected exception")
+
+    @parameterized.expand(multi_collision_test_files, skip_on_empty=True)
+    def testMultiCollisions(self, leftFile, rightFile):
+        left = reference_multi_collision_files_base_path + leftFile
+        right = reference_multi_collision_files_base_path + rightFile
+        try:
+            conflict, merged = merge2(left, right)
+            comps = parseTypesFromName(leftFile)
+            for i, conf in enumerate(conflict):
+                if comps[i] == Conflict:
+                    self.assertIsInstance(
+                        conf, Conflict, msg=f"Left: {left}, Right: {right}"
+                    )
+                else:
+                    self.assertEqual(
+                        conf.conflictType,
+                        comps[i].value,
+                        msg=f"Left: {left}, Right: {right}",
+                    )
+            self.assertEqual(
+                len(conflict),
+                len(comps),
+                msg=f"Conflict count mismatch! (got <-> expected)",
+            )
+            self.assertEqual(merged is None, True, msg=f"Left: {left}, Right: {right}")
+        except Exception as e:
+            if "'NoneType' object is not subscriptable" in str(e):
+                self.fail("Expected conflict, got None!")
+            elif "list index out of range" in str(e):
+                self.fail("Got to many conflicts!")
             else:
                 print(e)
                 self.fail("Unexpected exception")
@@ -120,19 +157,54 @@ class TestMerge(TestCase):
             self.fail("Unexpected exception")
 
 
+def parseTypesFromName(name):
+    parts = name.split(".")[0].split("_")
+
+    begin = False
+    foundType = False
+    keepNullRep = True
+    ret = []
+    reps = 0
+    # remove last since it should be the file number matcher
+    for part in parts[1:-1]:
+        for i in range(reps - 1):
+            if len(ret) > 0:
+                ret.append(ret[-1])
+        if part == "type":
+            begin = True
+            foundType = False
+            keepNullRep = True
+            reps = 0
+            continue
+        if begin and not foundType:
+            ret.append(getCheckTypeFromName(part))
+            foundType = True
+            begin = False
+            keepNullRep = False
+            continue
+        try:
+            if not keepNullRep:
+                reps = int(part)
+        except:
+            reps = 0
+    return ret
+
+
 def getCheckTypeFromName(name):
-    if "type_image" in name.lower():
+    if "image" in name.lower():
         return ConflictTypes.IMAGE
-    if "type_element" in name.lower():
+    if "element" in name.lower():
         return ConflictTypes.ELEMENT
-    if "type_text" in name.lower():
+    if "text" in name.lower():
         return ConflictTypes.TEXT
-    if "type_customBlock" in name.lower():
+    if "customBlock" in name.lower():
         return ConflictTypes.CUSTOMBLOCK
-    if "type_watcher" in name.lower():
+    if "watcher" in name.lower():
         return ConflictTypes.WATCHER
-    if "type_audio" in name.lower():
+    if "audio" in name.lower():
         return ConflictTypes.AUDIO
+    if "attribute" in name.lower():
+        return ConflictTypes.ATTRIBUTE
     return Conflict
 
 

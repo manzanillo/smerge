@@ -48,7 +48,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
     const cy = cyRef.current;
     const selectedNodes = cy?.$("node:selected");
     const selectedNodeData = selectedNodes?.map((node) => node.data());
-    console.log(selectedNodeData);
+    // console.log(selectedNodeData);
     return selectedNodeData;
   };
 

@@ -41,10 +41,10 @@ export const postDeleteProject = async (
       true,
       true,
       () => {
-        console.log("Redirect oder so...");
+        // console.log("Redirect oder so...");
       }
     );
-    console.log(res);
+    // console.log(res);
     if (res) {
       toast.success(`Project Deleted.`, {
         position: "top-right",
@@ -121,8 +121,8 @@ export const postProjectSettingsChange = async (
       true
     );
 
-    console.log("In project settings:");
-    console.log(res);
+    // console.log("In project settings:");
+    // console.log(res);
     if (res) {
       toast.success(`Project updated.`, {
         position: "top-right",
@@ -170,8 +170,8 @@ export const putColorChange = async (
       return res;
     }
   } catch (err) {
-    console.log("Changing color failed.");
-    console.log(err);
+    // console.log("Changing color failed.");
+    // console.log(err);
   }
 };
 
@@ -198,8 +198,8 @@ export const putLabelChange = async (fileId: string, label: string) => {
       return res;
     }
   } catch (err) {
-    console.log("Changing label failed.");
-    console.log(err);
+    // console.log("Changing label failed.");
+    // console.log(err);
   }
 };
 
@@ -213,7 +213,7 @@ export const getToggleCollapse = async (nodeId: string) => {
       return res;
     }
   } catch (err) {
-    console.log("Collapsing node failed.");
-    console.log(err);
+    // console.log("Collapsing node failed.");
+    // console.log(err);
   }
 };

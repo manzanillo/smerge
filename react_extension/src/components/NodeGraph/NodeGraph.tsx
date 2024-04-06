@@ -82,7 +82,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const layoutRef = useRef(layout);
 
   const { data, error, isLoading, refresh } = useFiles(String(projectId));
-  if (error) console.log(error);
+  if (error) console.log("error: ", error);
 
   const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
     const nodeDefinition: NodeDefinition = {
@@ -285,7 +285,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
   const handleMessage = useCallback(
     (e: { text: string }) => {
-      console.log(e.text);
+      // console.log(e.text);
       // prevent refresh for own position change within 300ms
       if (Date.now() - lastPositionUpdate.current > 300) {
         // get currentLayout from storage, (prevent snapshot variables like the event...)
@@ -307,7 +307,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         ) {
           // "load-balancing" :P
           setTimeout(() => {
-            console.log("Reloading data...");
+            // console.log("Reloading data...");
             refresh();
           }, timeout);
         }

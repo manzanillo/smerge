@@ -58,7 +58,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({ xml1, xml2 }) => {
 
   const loadWorld = useCallback(() => {
     // Append the script to the component's DOM
-    console.log("apped");
+    // console.log("apped");
     addSnap();
     //document.body.appendChild(script);
   }, []);
@@ -69,7 +69,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({ xml1, xml2 }) => {
 
   const addSnap = () => {
     if (world != undefined || world2 != undefined) {
-      console.log("stopped");
+      // console.log("stopped");
       return;
     }
 
@@ -183,7 +183,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({ xml1, xml2 }) => {
   };
 
   const removeSnap = () => {
-    console.log("Removed");
+    // console.log("Removed");
     ide = undefined;
     world = undefined;
     ide2 = undefined;
@@ -239,7 +239,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({ xml1, xml2 }) => {
   const rRec = useRef();
 
   const updateIdeSizes = () => {
-    console.log("addEventListener - resize");
+    // console.log("addEventListener - resize");
     try {
       removeSnap();
       addSnap();
@@ -261,9 +261,9 @@ const SnapDiv: React.FC<SnapDivProps> = ({ xml1, xml2 }) => {
   }, [debouncedUpdateSize]);
 
   const updateSizeRef = () => {
-    console.log("Stuff");
+    // console.log("Stuff");
     try {
-      console.log(world.bounds ?? "nope");
+      // console.log(world.bounds ?? "nope");
     } catch (_) {
       _;
     }

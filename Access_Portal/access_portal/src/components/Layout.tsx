@@ -1,19 +1,37 @@
-import { AppBar, Box, Button, Divider, Drawer, FormControl, IconButton, InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Select, Toolbar, Typography } from "@mui/material"
-import MenuIcon from '@mui/icons-material/Menu';
+import {
+  AppBar,
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  FormControl,
+  IconButton,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  Select,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import NotFound from "./NotFound"
-import LoginIcon from '@mui/icons-material/Login';
-import LockIcon from '@mui/icons-material/Lock';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import NotFound from "./NotFound";
+import LoginIcon from "@mui/icons-material/Login";
+import LockIcon from "@mui/icons-material/Lock";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import React, { useEffect, useState } from "react";
 import Login from "./Login";
 import { testToken } from "../services/UserService";
 import httpService from "../shared/HttpService";
 import "./Layout.css";
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import LockClockIcon from '@mui/icons-material/LockClock';
-import Grid from '@mui/material/Unstable_Grid2';
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import LockClockIcon from "@mui/icons-material/LockClock";
+import Grid from "@mui/material/Unstable_Grid2";
 import { JSX } from "react/jsx-runtime";
 import Switcher from "./Switcher";
 import Unlock from "./Unlock";
@@ -22,26 +40,30 @@ import ActiveIpsPanel from "./ActiveIpsPanel";
 
 const Layout = () => {
   const [state, setState] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(httpService.isTokenSet());
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    httpService.isTokenSet()
+  );
 
   const navigate = useNavigate();
 
   const toggleDrawer =
-    (open: boolean) =>
-      (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-          event.type === 'keydown' &&
-          ((event as React.KeyboardEvent).key === 'Tab' ||
-            (event as React.KeyboardEvent).key === 'Shift')
-        ) {
-          return;
-        }
-        setState(open);
-      };
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+      setState(open);
+    };
 
   // Find token if available and set for http requests
   useEffect(() => {
-    if (!httpService.isTokenSet() && !window.location.pathname.includes("error")) {
+    if (
+      !httpService.isTokenSet() &&
+      !window.location.pathname.includes("error")
+    ) {
       const checkToken = async () => {
         const localToken = localStorage.getItem("token");
         const sessionToken = sessionStorage.getItem("token");
@@ -57,7 +79,7 @@ const Layout = () => {
         if (foundToken) {
           const res = await testToken(foundToken);
           if (res) {
-            console.log("Token valid and set.");
+            // console.log("Token valid and set.");
             setIsAuthenticated(true);
           } else {
             onAuthFailed();
@@ -65,42 +87,40 @@ const Layout = () => {
         } else {
           onAuthFailed();
         }
-      }
+      };
       checkToken();
     }
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   const onAuthFailed = (redirect?: boolean) => {
     redirect = redirect ?? true;
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
-    console.log("Token invalid.")
+    // console.log("Token invalid.")
     httpService.clearToken();
     setIsAuthenticated(false);
     if (redirect) {
       navigate("/access/login");
     }
-  }
+  };
 
   const [language, setLanguage] = useState("DE");
 
   const menuBase = (content: JSX.Element) => (
     <Box
-      sx={{ width: '250px' }}
+      sx={{ width: "250px" }}
       role="menu"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
-      <List >
-        {content}
-      </List>
+      <List>{content}</List>
       <div className="menu_footer">
         <Grid container>
-          <Grid  xs={8}>
+          <Grid xs={8}>
             <div className="versionDiv">Version: Beta_0.1</div>
           </Grid>
-          <Grid xs={4} sx={{ pr:"10px" }}>
+          <Grid xs={4} sx={{ pr: "10px" }}>
             <FormControl fullWidth>
               <InputLabel id="select-lang">Lang:</InputLabel>
               <Select
@@ -118,46 +138,58 @@ const Layout = () => {
         </Grid>
       </div>
     </Box>
-  )
+  );
 
-  const unauthedList = () => (
+  const unauthedList = () =>
     menuBase(
       <ListItem key={"login"} disablePadding>
-        <ListItemButton onClick={() => { navigate("/access/login") }}>
+        <ListItemButton
+          onClick={() => {
+            navigate("/access/login");
+          }}
+        >
           <ListItemIcon>
             <LoginIcon />
           </ListItemIcon>
           <ListItemText primary="Login" />
         </ListItemButton>
       </ListItem>
-    )
-  )
+    );
 
-  const authedList = (isAdmin: boolean | undefined) => (
+  const authedList = (isAdmin: boolean | undefined) =>
     menuBase(
       <>
         <ListItem key="Unlock IP" disablePadding>
-          <ListItemButton onClick={() => { navigate("/access/") }} className="lockButton">
-            <ListItemIcon >
+          <ListItemButton
+            onClick={() => {
+              navigate("/access/");
+            }}
+            className="lockButton"
+          >
+            <ListItemIcon>
               <LockIcon />
             </ListItemIcon>
             <ListItemText primary="Unlock IP" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Change Server Version" disablePadding>
-          <ListItemButton onClick={() => { navigate("/access/switch") }}>
-            <ListItemIcon >
+          <ListItemButton
+            onClick={() => {
+              navigate("/access/switch");
+            }}
+          >
+            <ListItemIcon>
               <AccountTreeIcon />
             </ListItemIcon>
             <ListItemText primary="Change Server Version" />
           </ListItemButton>
         </ListItem>
-        {(isAdmin ?
+        {isAdmin ? (
           <>
             <Divider />
             <ListItem key="Admin Panel" disablePadding>
               <ListItemButton onClick={() => navigate("/access/admin")}>
-                <ListItemIcon >
+                <ListItemIcon>
                   <AdminPanelSettingsIcon />
                 </ListItemIcon>
                 <ListItemText primary="Admin Panel" />
@@ -165,30 +197,28 @@ const Layout = () => {
             </ListItem>
             <ListItem key="Active Ips" disablePadding>
               <ListItemButton onClick={() => navigate("/access/actives")}>
-                <ListItemIcon >
+                <ListItemIcon>
                   <LockClockIcon />
                 </ListItemIcon>
                 <ListItemText primary="Active Ips" />
               </ListItemButton>
             </ListItem>
           </>
-          :
+        ) : (
           <></>
         )}
       </>
-    )
-
-  );
+    );
 
   const onAuthSuccess = () => {
     setIsAuthenticated(true);
-  }
+  };
 
   return (
     <>
       <div style={{ height: "100vh" }}>
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="sticky" >
+          <AppBar position="sticky">
             <Toolbar>
               <IconButton
                 size="large"
@@ -203,44 +233,67 @@ const Layout = () => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Access Portal
               </Typography>
-              {isAuthenticated ?
-                <Button variant="outlined" color="inherit" onClick={() => {
-                  onAuthFailed(true);
-                }
-                }>Logout</Button>
-                :
-                <Button variant="outlined" color="inherit" onClick={() => {
-                  navigate("/access/login");
-                }
-                }>Login</Button>
-              }
-
+              {isAuthenticated ? (
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  onClick={() => {
+                    onAuthFailed(true);
+                  }}
+                >
+                  Logout
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  onClick={() => {
+                    navigate("/access/login");
+                  }}
+                >
+                  Login
+                </Button>
+              )}
             </Toolbar>
           </AppBar>
         </Box>
-        <Drawer
-          anchor={"left"}
-          open={state}
-          onClose={toggleDrawer(false)}
-        >
-          {isAuthenticated ? <>{authedList(httpService.getClaims()?.isAdmin)}</> : <>{unauthedList()}</>}
+        <Drawer anchor={"left"} open={state} onClose={toggleDrawer(false)}>
+          {isAuthenticated ? (
+            <>{authedList(httpService.getClaims()?.isAdmin)}</>
+          ) : (
+            <>{unauthedList()}</>
+          )}
         </Drawer>
 
-        <div className="Content" style={{ position: "absolute", top: "64px", bottom: "0px", width: "100vw", overflow: "scroll" }}>
+        <div
+          className="Content"
+          style={{
+            position: "absolute",
+            top: "64px",
+            bottom: "0px",
+            width: "100vw",
+            overflow: "scroll",
+          }}
+        >
           <Routes>
             <Route path="/" element={<Unlock />} />
-            <Route path="/switch" element={<Switcher/>} />
-            <Route path="/admin" element={<AdminPanel/>} />
-            <Route path="/actives" element={<ActiveIpsPanel/>} />
-            <Route path="/login" element={<Login onAuthSuccess={onAuthSuccess} />} />
+            <Route path="/switch" element={<Switcher />} />
+            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/actives" element={<ActiveIpsPanel />} />
+            <Route
+              path="/login"
+              element={<Login onAuthSuccess={onAuthSuccess} />}
+            />
             <Route path="/error/:errorCode" element={<NotFound />} />
-            <Route path="*" Component={() => <Navigate to="/access/error/404" />} />
+            <Route
+              path="*"
+              Component={() => <Navigate to="/access/error/404" />}
+            />
           </Routes>
         </div>
       </div>
-
     </>
-  )
-}
+  );
+};
 
 export default Layout;

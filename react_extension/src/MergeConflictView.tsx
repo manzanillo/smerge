@@ -113,9 +113,17 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
             {iconLoading ? (
               <CircularProgress style={{ width: "24px", height: "24px" }} />
             ) : (
-              <Paper style={{ width: "48px", height: "36px" }} elevation={8}>
+              <Paper
+                style={{
+                  width: "48px",
+                  height: "36px",
+                  background: "white",
+                  marginLeft: "10px",
+                }}
+                elevation={8}
+              >
                 <img
-                  style={{ borderRadius: "5px" }}
+                  style={{ borderRadius: "5px", padding: "5px" }}
                   width="48px"
                   height="36px"
                   src={iconData}

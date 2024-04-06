@@ -285,23 +285,39 @@ class AdditionalData:
     def getCurrentImage(self):
         return self.currentImage[-1]
 
-    def resolve(self, leftNode: ET.Element, rightNode: ET.Element) -> bool:
+    def resolve(
+        self, leftNode: ET.Element, rightNode: ET.Element, shallow=False
+    ) -> bool:
         tmpResolution = getResolution(self.resolutions)
         if tmpResolution == None:
             return False
-        resolvedNodes = tmpResolution.resolve(leftNode, rightNode)
+        if shallow:
+            resolvedNode = tmpResolution.resolve(
+                shallowCopyNode(leftNode), shallowCopyNode(rightNode)
+            )
+        else:
+            resolvedNode = tmpResolution.resolve(leftNode, rightNode)
         # be careful...allow both option only in nodes where is should be possible
         # stage would be an exemption as an example, since only one stage can exist for each scene!
         if tmpResolution.step == Step.BOTH:
-            self.currentElement.append(leftNode)
+            if shallow:
+                resolvedNode = shallowCopyNode(leftNode)
+                self.currentElement.append(resolvedNode)
+            else:
+                self.currentElement.append(leftNode)
             # move second to the side if over each other...
             if ("x" in leftNode.keys() and "x" in rightNode.keys()) and abs(
                 float(leftNode.attrib["x"]) - float(rightNode.attrib["x"])
             ) < 1:
-                rightNode.attrib["x"] = str(float(rightNode.attrib["x"]) + 20)
+                rightNode.attrib["x"] = str(float(rightNode.attrib["x"]) + 110)
             self.currentElement.append(rightNode)
+            if shallow:
+                self.currentElement = resolvedNode
+            return True
         else:
-            self.currentElement.append(tmpResolution.resolve(leftNode, rightNode))
+            self.currentElement.append(resolvedNode)
+        if shallow:
+            self.currentElement = resolvedNode
         return True
 
 
@@ -1660,52 +1676,53 @@ def mergeSprite(
         Returns if merge was successful or not
     """
     with ACM(ad.currentPath, leftNode.attrib["name"] + "/"):
-        keysToCheck = ["name", "costume", "customData"]
-        nodeState = getNodesCombinationState(leftNode, rightNode, keysToCheck)
-        # fin merge if same or unique, otherwise go deeper
-        match nodeState:
-            case 0:
-                ad.currentElement.append(leftNode)
-                return True
-            case default:
-                res = True
-                currentNodeSet = False
-                if nodeState == 1:
-                    attribNodeState = getNodesCombinationState(
-                        leftNode, rightNode, ["customData"]
-                    )
-                    if attribNodeState != 1:
-                        if ad.resolve(leftNode, rightNode):
-                            currentNodeSet = True
-                        else:
-                            leftString, rightString = getAttributeConflictStrings(
-                                leftNode, rightNode, keysToCheck
-                            )
-                            ad.conflicts.append(
-                                Conflict(
-                                    leftString,
-                                    rightString,
-                                    conflictType=ConflictTypes.ATTRIBUTE.value,
-                                    parentPath=ad.getCurrentPath(),
-                                    parentImage=ad.getCurrentImage(),
-                                    allowBoth=True,
+        with ACM(ad.currentImage, getCostumeString(leftNode)):
+            keysToCheck = ["name", "costume", "customData"]
+            nodeState = getNodesCombinationState(leftNode, rightNode, keysToCheck)
+            # fin merge if same or unique, otherwise go deeper
+            match nodeState:
+                case 0:
+                    ad.currentElement.append(leftNode)
+                    return True
+                case default:
+                    res = True
+                    currentNodeSet = False
+                    if nodeState == 1:
+                        attribNodeState = getNodesCombinationState(
+                            leftNode, rightNode, ["customData"]
+                        )
+                        if attribNodeState != 1:
+                            if ad.resolve(leftNode, rightNode, True):
+                                currentNodeSet = True
+                            else:
+                                leftString, rightString = getAttributeConflictStrings(
+                                    leftNode, rightNode, keysToCheck
                                 )
-                            )
-                            res = False
-                    else:
-                        ad.currentElement.append(leftNode)
-                        ad.currentElement.append(rightNode)
-                        return True
-                if not currentNodeSet:
-                    ad.addAndSwitch(leftNode)
-                currentSave = ad.currentElement
-                zips, uniqueNodes = zipMatchingNodesByTag(leftNode, rightNode)
-                for unique in uniqueNodes:
-                    ad.currentElement.append(unique)
-                for i, (left, right) in enumerate(zips):
-                    res &= mergeDecider(left, right, ad)
-                    ad.currentElement = currentSave
-                return res
+                                ad.conflicts.append(
+                                    Conflict(
+                                        leftString,
+                                        rightString,
+                                        conflictType=ConflictTypes.ATTRIBUTE.value,
+                                        parentPath=ad.getCurrentPath(),
+                                        parentImage=ad.getCurrentImage(),
+                                        allowBoth=True,
+                                    )
+                                )
+                                res = False
+                        else:
+                            ad.currentElement.append(leftNode)
+                            ad.currentElement.append(rightNode)
+                            return True
+                    if not currentNodeSet:
+                        ad.addAndSwitch(leftNode)
+                    currentSave = ad.currentElement
+                    zips, uniqueNodes = zipMatchingNodesByTag(leftNode, rightNode)
+                    for unique in uniqueNodes:
+                        ad.currentElement.append(unique)
+                    for i, (left, right) in enumerate(zips):
+                        res &= mergeDecider(left, right, ad)
+                        ad.currentElement = currentSave
+                    return res
 
 
 def mergeScripts(
