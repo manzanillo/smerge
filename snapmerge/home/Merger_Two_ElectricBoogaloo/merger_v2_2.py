@@ -145,6 +145,7 @@ class Conflict:
         self.cyl = cyl
         self.cxr = cxr
         self.cyr = cyr
+        self.allowBoth = allowBoth
 
     def __str__(self):
         return f"Conflict ({self.conflictType}): {self.leftElement} <-> {self.rightElement} (Path: {self.parentPath})"
