@@ -29,7 +29,7 @@ services:
     image: nginx:1.25.4-alpine
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     volumes:
-      - ./data/nginx_deploy/nginx.conf:/etc/nginx/nginx.fub.conf
+      - ./data/nginx_deploy/nginx.fub.conf:/etc/nginx/nginx.conf
       - ./snapmerge/static:/static
       - ../../smerge.imp.fu-berlin.de.pem:/etc/letsencrypt/live/smerge.imp.fu-berlin.de.pem
       - ../../smerge.imp.fu-berlin.de-key.pem:/etc/letsencrypt/live/smerge.imp.fu-berlin.de-key.pem
