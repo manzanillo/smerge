@@ -156,6 +156,65 @@ class TestMerge(TestCase):
             print(e)
             self.fail("Unexpected exception")
 
+    # a bunch of specific tests for merge resolves and co.
+    def testScriptResolve(self):
+        left = reference_collision_files_base_path + "singleScript_type_element_1.xml"
+        right = reference_collision_files_base_path + "singleScript_type_element_2.xml"
+        conflictL, mergedL = merge2(left, right, resolutions=[Resolution(Step.LEFT)])
+        conflictR, mergedR = merge2(left, right, resolutions=[Resolution(Step.RIGHT)])
+        conflictB, mergedB = merge2(left, right, resolutions=[Resolution(Step.BOTH)])
+        self.assertIsNone(conflictL, msg="Expected no conflict, got one!")
+        self.assertIsNone(conflictR, msg="Expected no conflict, got one!")
+        self.assertIsNone(conflictB, msg="Expected no conflict, got one!")
+
+        # check if left was selected
+        treeLeft = ET.parse(left)
+        treeRight = ET.parse(right)
+        leftRoot = treeLeft.getroot()
+        rightRoot = treeRight.getroot()
+
+        mergedLRoot = ET.fromstring(mergedL)
+        mergedRRoot = ET.fromstring(mergedR)
+        mergedBRoot = ET.fromstring(mergedB)
+
+        searchForScriptTag = ".//script[@customData]"
+
+        leftScript = leftRoot.find(searchForScriptTag)
+        rightScript = rightRoot.find(searchForScriptTag)
+
+        mergedLScripts = mergedLRoot.findall(searchForScriptTag)
+        mergedRScripts = mergedRRoot.findall(searchForScriptTag)
+        mergedBScripts = mergedBRoot.findall(searchForScriptTag)
+
+        # assert right number of scripts after resolved merge
+        self.assertEqual(
+            len(mergedLScripts), 1, msg="Expected one script, got more or less!"
+        )
+        self.assertEqual(
+            len(mergedRScripts), 1, msg="Expected one script, got more or less!"
+        )
+        self.assertEqual(
+            len(mergedBScripts), 2, msg="Expected two scripts, got more or less!"
+        )
+
+        # assert selected scripts are right
+        self.assertEqual(
+            compareXMLSame(mergedLScripts[0], leftScript),
+            True,
+            msg="Selected script is not the left one!",
+        )
+        self.assertEqual(
+            compareXMLSame(mergedRScripts[0], rightScript),
+            True,
+            msg="Selected script is not the right one!",
+        )
+        for mergedBScript in mergedBScripts:
+            self.assertTrue(
+                compareXMLSame(mergedBScript, leftScript)
+                or compareXMLSame(mergedBScript, rightScript),
+                msg="Selected script is not the left or right one!",
+            )
+
 
 def parseTypesFromName(name):
     parts = name.split(".")[0].split("_")

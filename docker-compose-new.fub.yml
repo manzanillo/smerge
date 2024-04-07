@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  django:
+    container_name: smerge_daphne
+    build:
+      context: .
+      dockerfile: Dockerfile.daphne
+    image: daphne_docker
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./snapmerge/media:/app/snapmerge/media
+      - ./snapmerge/database:/app/snapmerge/database
+    expose:
+      - "8000"
+    restart: unless-stopped
+  react_ext:
+    container_name: smerge_ext
+    build:
+      context: .
+      dockerfile: Dockerfile.react.ext.depl
+    image: react_ext_docker
+    stdin_open: true
+    tty: true
+    expose:
+      - "5069"
+    restart: unless-stopped
+  nginx:
+    image: nginx:1.25.4-alpine
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    volumes:
+      - ./data/nginx_deploy/nginx.conf:/etc/nginx/nginx.fub.conf
+      - ./snapmerge/static:/static
+      - ../../smerge.imp.fu-berlin.de.pem:/etc/letsencrypt/live/smerge.imp.fu-berlin.de.pem
+      - ../../smerge.imp.fu-berlin.de-key.pem:/etc/letsencrypt/live/smerge.imp.fu-berlin.de-key.pem
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
