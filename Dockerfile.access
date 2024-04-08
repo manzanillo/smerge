@@ -119,41 +119,8 @@ RUN chmod 777 /app/Access_Portal/launch_docker.sh
 ENTRYPOINT ["/app/launch_docker.sh"]
 
 
-# RUN mkdir /app
-
-# WORKDIR /app
-
-# COPY . /app
-
-# WORKDIR /app/Access_Portal/access_portal
-
-# RUN npm install
-
-# WORKDIR /app/Access_Portal/Web_Api
-
-# RUN pip install -r requirements.txt
-
-# WORKDIR /app/react_extension
-
-# RUN npm install
-
-
-# WORKDIR /app
-# RUN pip install -r requirements.txt
-# RUN npm install
-
-# RUN chmod +x ./entrypoint_access.sh
-# RUN ./entrypoint_access.sh
-
-
-# Install SSH client
-
-
 # Generate a random SSH key pair during the container build
 #RUN ssh-keygen -t rsa -b 4096 -f /root/.ssh/id_rsa -N ""
-
-
-
 
 # sudo docker build -t smerge_access . -f Dockerfile.access
 # sudo docker run -d -p 80:80 -p 443:443 smerge_access --name access_smerge

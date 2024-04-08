@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
   nginx:
     image: nginx:1.25.4-alpine
-    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; reboot done & nginx -g "daemon off;"'''
     volumes:
       - ./data/nginx_deploy/nginx.fub.conf:/etc/nginx/nginx.conf
       - ./snapmerge/static:/static
@@ -36,4 +36,4 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    restart: unless-stopped
+    restart: always

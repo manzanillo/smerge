@@ -225,12 +225,17 @@ Rough list of project files with short descriptors as direction guide. Files not
 | ---------- | ----------------- |
 | 📁 data | multiple nginx configs (old and new) |
 | 📄 docker-compose-access.yml | Compose file for the Access Portal |
-| 📄 docker-compose-local-nginx.yml | Compose for a local nginx router |
-| 📄 docker-compose-mail-dummy.yml | Used for mail relay activation (for us mailjet) |
-| 📄 docker-compose-prod.yml | New production setup (make sure to compile React before build) |
-| 📄 docker-compose.fub.yml | Old Berlin setup |
-| 📄 docker-compose.yml | Old local docker build |
-| 📄 ... | ...|
+| 📄 docker-compose-init-certbot.yml | Compose to init certbot files for the first time (don't run alone) |
+| 📄 docker-compose-mail-dummy.yml | Compose a mail dump, used to activate mailrelay like mailjet |
+| 📄 docker-compose-new.fub.yml | New Compose for the Berlin Smerge server |
+| 📄 docker-compose-prod.yml | New production setup (init certbot before, manual or with script) |
+| 📄 Dockerfile.access | Docker file to build Smerge with the Access Portal |
+| 📄 Dockerfile.daphne | Docker file for the production Django part |
+| 📄 Dockerfile.react.ext.depl | Docker file for the React App (2 stage build and then static nginx serve) |
+| 📄 launch_daphne.sh | Launch script for the docker prod container (run preliminaries and then daphne) |
+| 📄 launch_docker.sh | Launch script for the Access Portal container (starts flask, vites, nginx and django) |
+| 📄 launch.sh | Launch script for django and vite in one terminal with vite intractability |
+| 📄 new_init_deploy_certsbot.sh | Changes nginx configs to right domains and runs the certbot init compose |
 </details>
 
 
@@ -322,6 +327,12 @@ Since snap already needs js to be activated for the post back button to work, we
 Both xmlBlocker js and the post back button js are watched by django for changes and rebuild the xml part for the snap file on start of django or on a hot reload trigger. Therefore if you want to change these code parts, just edit the js files inside `./snapmerge/static/snap/` while django is running.
 
 To add more files apart from python files to the django auto watch, register them inside the `app.py` files `extra_reload_files` list and add a builder if needed to the `ready` function.
+
+### Django compress error in browser
+The npm packages for Django are installed in the toplevel folder, therefore when you start django inside another folder (i.e. not with the path ./snapmerge/manage.py), it won't be able to resolve the wanted packages and throws an error on template render.
+
+### Snap integration in React
+Don't be as stupid as we were and put multiple Snap instances in a resizable slider component. Snap is not happy with this and requires full reloads to handle right scales and ratios. Therefore the mess in the diff view. Just use a static frame or anything else :D.
 
 
 --------------
