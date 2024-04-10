@@ -1458,7 +1458,7 @@ def mergeBlock(
                         category=str(leftNode.attrib["category"]),
                         parentPath=ad.getCurrentPath(),
                         parentImage=ad.getCurrentImage(),
-                        allowBoth=True,
+                        allowBoth=False,
                     )
                 )
                 return False

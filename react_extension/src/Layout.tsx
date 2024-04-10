@@ -55,9 +55,21 @@ function Layout() {
   // check if csfr token was set and redirect to missing page if not
   const navigate = useNavigate();
   useEffect(() => {
-    if (httpService.csrftoken === "") {
+    if (
+      httpService.csrftoken === "" &&
+      !location.href.includes("csfr_missing")
+    ) {
       // react router to missing page
-      navigate("/ext/csfr_missing");
+      console.log(
+        location.href.split("/")[location.href.split("/").length - 1]
+      );
+      const lastPart =
+        location.href.split("/")[location.href.split("/").length - 1];
+      if (lastPart.includes("csfr_missing")) {
+        navigate("/ext/csfr_missing");
+      } else {
+        navigate("/ext/csfr_missing/" + lastPart);
+      }
     }
   }, []);
 

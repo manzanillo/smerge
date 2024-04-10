@@ -2,9 +2,30 @@ import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import csfr_badger from "./assets/csfr_badger.jpg";
 import { useTranslation } from "react-i18next";
 import "./CsfrMissing.css";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function CsfrMissing() {
   const { t } = useTranslation();
+
+  const { projectId } = useParams();
+
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown((prev: number) => prev - 1);
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (countdown <= 0) {
+      location.href = "/redirect/" + (projectId ?? "");
+    }
+  }, [countdown]);
 
   return (
     <Box
@@ -42,7 +63,7 @@ function CsfrMissing() {
             location.href = "/";
           }}
         >
-          {t("CsfrMissing.buttonText")}
+          {t("CsfrMissing.buttonText") + ` (${countdown})`}
         </Button>
       </Stack>
     </Box>

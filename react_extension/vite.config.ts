@@ -9,11 +9,14 @@ export default defineConfig({
       name: "index-html-build-replacement",
       apply: "build",
       transformIndexHtml(html) {
-        return html
-          .replace(/<title>(.*?)<\/title>/, `<title>SMERGE (BETA)</title>`)
-          .replace(/_dev.svg/, `.svg`)
-          .replace(/_dev.png/, `.png`)
-          .replace(/_dev.webmanifest/, `.webmanifest`);
+        return (
+          html
+            // .replace(/<title>(.*?)<\/title>/, `<title>SMERGE (BETA)</title>`)
+            .replace(/<title>(.*?)<\/title>/, `<title>SMERGE</title>`)
+            .replace(/_dev.svg/, `.svg`)
+            .replace(/_dev.png/, `.png`)
+            .replace(/_dev.webmanifest/, `.webmanifest`)
+        );
       },
     },
     react(),

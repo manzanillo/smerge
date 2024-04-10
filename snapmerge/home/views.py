@@ -298,12 +298,19 @@ class CreateProjectView(View):
 
             snap_file.xml_job()
 
-            context = {
-                **baseContext,
-                "proj_pin": proj_instance.pin,
-                "proj_password": unhashed_pw,
-                "proj_id": proj_instance.id,
-            }
+            if unhashed_pw == "":
+                context = {
+                    **baseContext,
+                    "proj_pin": proj_instance.pin,
+                    "proj_id": proj_instance.id,
+                }
+            else:
+                context = {
+                    **baseContext,
+                    "proj_pin": proj_instance.pin,
+                    "proj_password": unhashed_pw,
+                    "proj_id": proj_instance.id,
+                }
             return render(request, "info_proj.html", context)
 
         else:
@@ -991,3 +998,28 @@ class ResetPasswordView(View):
         proj.save()
         messages.success(request, _("Password changed"))
         return HttpResponseRedirect(f"/ext/project_view/{proj.id}")
+
+
+class RedirectView(View):
+    def get(self, request, proj_id):
+        # only allow react /ext/ redirects
+        project = Project.objects.get(id=proj_id)
+        if project:
+            if check_password("", project.password):
+                return render(
+                    request,
+                    "redirect.html",
+                    {
+                        "project_id": proj_id,
+                    },
+                )
+            else:
+                form = OpenProjectForm(initial={"pin": project.pin})
+                context = {
+                    **baseContext,
+                    "form": form,
+                }
+                return render(request, "open_proj.html", context)
+        else:
+            # return django 404
+            raise Http404

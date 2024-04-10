@@ -42,10 +42,12 @@ urlpatterns = [
     path("api/file/<int:id>", api_views.SnapFileDetailView.as_view()),
     path("api/file/<int:id>/position", api_views.SnapFilePositionView.as_view()),
     path("api/file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
-    # path('api/project/')
-    re_path("api/sendEventPing", views.SendEventPing.as_view(), name="sendEventPing"),
-    # re_path(r'^ws/([-\w]+)', consumers.ChatConsumer.as_asgi()),
-    # path('events/', include(django_eventstream.urls), {'channels': ['test']}),
+    path("file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
+    re_path(
+        r"redirect/(?P<proj_id>[-\w]+)$",
+        views.RedirectView.as_view(),
+        name="redirect_ext",
+    ),
     re_path(r"^test/event/", views.index, name="index"),
     re_path(r"^$", views.HomeView.as_view(), name="home"),
     re_path(r"^nav/$", views.NavView.as_view(), name="nav"),
