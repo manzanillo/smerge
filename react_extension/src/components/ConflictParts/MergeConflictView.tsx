@@ -16,7 +16,7 @@ import {
 import Stack from "@mui/material/Stack";
 import TextDiv from "./TextDiv";
 import ImageDiv from "./ImageDiv";
-import httpService from "./services/HttpService";
+import httpService from "../../services/HttpService";
 import { FileDto } from "./ConflictStepper";
 import AudioDiv from "./AudioDiv";
 import AttributeDiv from "./AttributeDiv";
@@ -117,15 +117,21 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
                 style={{
                   width: "48px",
                   height: "36px",
-                  background: "white",
+                  position: "relative",
                   marginLeft: "10px",
                 }}
+                className={"checkeredSmal"}
                 elevation={8}
               >
                 <img
-                  style={{ borderRadius: "5px", padding: "5px" }}
-                  width="48px"
-                  height="36px"
+                  style={{
+                    borderRadius: "5px",
+                    position: "absolute",
+                    top: "2px",
+                    left: "2px",
+                  }}
+                  width="44px"
+                  height="32px"
                   src={iconData}
                 />
               </Paper>

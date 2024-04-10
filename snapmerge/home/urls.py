@@ -44,7 +44,7 @@ urlpatterns = [
     path("api/file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     path("file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     re_path(
-        r"redirect/(?P<proj_id>[-\w]+)$",
+        r"^redirect/(?P<proj_id>[-\w]*)$",
         views.RedirectView.as_view(),
         name="redirect_ext",
     ),

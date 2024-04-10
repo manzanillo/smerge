@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 // import Grid from '@mui/material/Grid';
 import Grid from "@mui/material/Unstable_Grid2";
 import { useEffect, useState } from "react";
-import httpService from "./services/HttpService";
+import httpService from "../../services/HttpService";
 import { Box, CircularProgress, Divider, Stack } from "@mui/material";
 import "./ImageDiv.css";
 import { FileDto } from "./ConflictStepper";

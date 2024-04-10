@@ -54,6 +54,7 @@ interface ConfirmButtonProps {
     | undefined;
   suppressCancel?: boolean;
   children?: React.ReactNode;
+  currentOpen?: boolean;
 }
 
 const ConfirmButton: React.FC<ConfirmButtonProps> = ({
@@ -68,11 +69,18 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   cancelColor = "error",
   suppressCancel = false,
   children,
+  currentOpen,
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     // console.log(event.currentTarget);
+    if(currentOpen) {
+      if(currentOpen) {
+        handleCancel();
+        return;
+      }
+    }
     setAnchorEl(event.currentTarget);
   };
 

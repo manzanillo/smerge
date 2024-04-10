@@ -20,7 +20,7 @@ import httpService from "../services/HttpService";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ConfirmButton from "./ConfirmButton";
+import ConfirmButton from "./shared/ConfirmButton";
 import ProjectDto from "./models/ProjectDto";
 import ProjectColorMenu from "./ProjectColorMenu";
 import { getProjectUnhideAll } from "../services/ProjectService";
@@ -219,6 +219,7 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
             )}
             popoverText={t("NewSettingControls.wheel_sensitivity_popover.text")}
             suppressCancel
+            currentOpen={wheelSensitivityExpanded}
           >
             <Accordion
               expanded={wheelSensitivityExpanded}

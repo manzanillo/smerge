@@ -310,7 +310,11 @@ class AdditionalData:
                 float(leftNode.attrib["x"]) - float(rightNode.attrib["x"])
             ) < 1:
                 rightNode.attrib["x"] = str(float(rightNode.attrib["x"]) + 110)
-            self.currentElement.append(rightNode)
+            # prevent wrong copy if list element
+            if self.currentElement.tag == "item":
+                insertAsItemAtItem(self.workCopy, self.currentElement, rightNode)
+            else:
+                self.currentElement.append(rightNode)
             if shallow:
                 self.currentElement = resolvedNode
             return True
@@ -338,6 +342,58 @@ class ACM:
 # -------------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------- UTILITY FUNCTIONS ---------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------------------
+
+
+def insertAsItemAtItem(treeRoot: ET.Element, item: ET.Element, insert: ET.Element) -> bool:
+    """Insert the given element with a item node wrapper at the given item node in the tree
+
+    Parameters
+    ----------
+    treeRoot : ET.Element
+        Tree to insert to
+    item : ET.Element
+        Parent of this node will be used to insert to
+    insert : ET.Element
+        Wrapped into a item node and inserted at parent of item
+
+    Returns
+    -------
+    bool
+        Return if the insert was successful
+    """
+    parent = findParent(treeRoot, item)
+    if parent != None:
+        itemElement = ET.Element("item")
+        itemElement.append(insert)
+        if "name" in insert.keys():
+            insert.attrib["name"] = insert.attrib["name"] + "_conflict_copy"
+        parent.append(itemElement)
+        return True
+    return False
+    
+    
+def findParent(treeRoot: ET.Element, item: ET.Element) -> ET.Element:
+    """Returns the parent of the given item in the tree (only use once since costly operation... for multi call, build reverse map!)
+
+    Parameters
+    ----------
+    treeRoot : ET.Element
+        Tree to be searched
+    item : ET.Element
+        Node to be child
+
+    Returns
+    -------
+    ET.Element
+        returns the node with item as child
+    """
+    if item in treeRoot:
+        return treeRoot
+    for child in treeRoot:
+        found = findParent(child, item)
+        if found != None:
+            return found
+    return None
 
 
 def modularZipper(

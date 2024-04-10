@@ -22,7 +22,7 @@ import {
   postProjectSettingsChange,
   postDeleteProject,
 } from "../services/ProjectService";
-import ConfirmButton from "./ConfirmButton";
+import ConfirmButton from "./shared/ConfirmButton";
 import ImageButton from "./shared/ImageButton";
 import { useTranslation } from "react-i18next";
 import { supportedLanguages } from "../shared/i18n";

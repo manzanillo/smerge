@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Carousel from "../Carousel";
+import Carousel from "../shared/Carousel";
 import { Backdrop, Fab, Fade } from "@mui/material";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import "../../shared/i18n";

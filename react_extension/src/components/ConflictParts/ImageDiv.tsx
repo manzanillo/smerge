@@ -4,13 +4,10 @@ import Paper from "@mui/material/Paper";
 // import Grid from '@mui/material/Grid';
 import Grid from "@mui/material/Unstable_Grid2";
 import { useEffect, useRef, useState } from "react";
-import httpService from "./services/HttpService";
+import httpService from "../../services/HttpService";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import "./ImageDiv.css";
-import ModeStandbyIcon from "@mui/icons-material/ModeStandby";
-import FilterTiltShiftIcon from "@mui/icons-material/FilterTiltShift";
-import ControlCameraIcon from "@mui/icons-material/ControlCamera";
-import TargetIcon from "./TargetIcon";
+import TargetIcon from "../shared/TargetIcon";
 import { FileDto } from "./ConflictStepper";
 
 interface ImageDivProps {

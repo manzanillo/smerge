@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
-import useScriptLoader from "./components/shared/useScriptLoader";
+import useScriptLoader from "../shared/useScriptLoader";
 import { useTranslation } from "react-i18next";
 
 interface ConflictVM {
