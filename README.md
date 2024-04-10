@@ -1,10 +1,12 @@
 # SMERGE <img height=80px align="right" src="./snapmerge/static/icon/logo_norm.svg" />
 Smerge is a basic version management system for the block-based programming language Snap!. It offers a simple user interface to manage a project and merge different branches with relative ease.
 
+It is based on a lot of open source projects including cytoscape.js or Django. It is intended to be simple, beautiful, fast, and easy to use in school environments. A live demo can be found at [smerge.org](https://smerge.org)
+
 ## History lesson
 The project was first written purely with Django and due to access limitations could only merge different scripts via cartesian location. This worked well for a less interactive page in the beginning, but with new features the project part was migrated to a React frontend. Due to time constraints and simplicity, project creation and a few other static pages are still using django and the in conjunction Django templates as base.
 
-The Docker "production" setup was therefore also only made with only a simple Django setup in mind, but with some hefty roundabout constraints due to the deployment on the TU Berlin servers and their restrictions. (This includes  [Dockerfile](/Dockerfile), [docker-compose.yml](/docker-compose.yml), [docker-compose.fub.yml](/docker-compose.fub.yml) and [entrypoint.sh](/entrypoint.sh))
+The Docker "production" setup was therefore also only made with only a simple Django setup in mind, but with some hefty roundabout constraints due to the deployment on the FU Berlin servers and their restrictions. (This includes  [Dockerfile](/Dockerfile), [docker-compose.yml](/docker-compose.yml), [docker-compose.fub.yml](/docker-compose.fub.yml) and [entrypoint.sh](/entrypoint.sh))
 
 The database was and still is an sqlite3 file (/snapmerge/database/db.sqlite3). Since the database is currently very small with low bandwidth, this works well. In the future this should probably be extended to a full blown database instance in the Docker setup (or separately).
 
@@ -340,8 +342,6 @@ Don't be as stupid as we were and put multiple Snap instances in a resizable sli
 --------------
 
 # Old Readme
-# TMP - README...
-This is a private "fork" of [smerge](https://github.com/manzanillo/smerge) and used to develope the application further on a local basis.
 
 # smerge
 

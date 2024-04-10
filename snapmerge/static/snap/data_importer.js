@@ -1767,7 +1767,6 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
     return project.initialize();
 };
 
-
 loadFile();
 world.children[0].setBlocksScale(1);
 
