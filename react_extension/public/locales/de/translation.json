@@ -133,7 +133,9 @@
     "dropText": "Snap! Datei als neuen Knoten hochladen.",
     "fileUploadFail": "Keine Snap! Datei gefunden!",
     "fileUploadSuccess": "Snap! Datei hinzugefügt",
-    "noXmlFile": "Falscher Datei Typ (nur .xml)!"
+    "noXmlFile": "Falscher Datei Typ (nur .xml)!",
+    "UploadText": "Datei wird hochgeladen...",
+    "progress": "Hochladen ist zu {{val}} % abgeschlossen"
   },
   "MergeButtons": {
     "selectOnlyTwo": "Mit dem neuen Merger können jeweils nur zwei Knoten gleichzeitig zusammengeführt werden!",

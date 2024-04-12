@@ -63,7 +63,11 @@ function UploadZone(props: UploadZoneProps) {
       return;
     }
 
-    toastId.current = toast("Starting file upload...", { autoClose: false });
+    toastId.current = toast.loading(t("UploadZone.UploadText"), {
+      autoClose: false,
+      hideProgressBar: false,
+      progress: 0,
+    });
 
     // copy of old drag and drop...
     const formData = new FormData();
@@ -72,24 +76,20 @@ function UploadZone(props: UploadZoneProps) {
     xhttp.open("POST", "/add/" + projectId, true);
     xhttp.setRequestHeader("X-CSRFToken", httpService.csrftoken);
 
-    xhttp.addEventListener(
-      "progress",
-      function (e) {
-        if (e.lengthComputable) {
-          const percentComplete = Math.round((e.loaded * 100) / e.total);
-          if (toastId.current) {
-            toast.update(toastId.current, {
-              render: `Upload is ${percentComplete}% done`,
-              position: "top-right",
-              autoClose: false,
-              progress: percentComplete,
-              hideProgressBar: false,
-            });
-          }
+    xhttp.onprogress = function (e) {
+      if (e.lengthComputable) {
+        const percentComplete = Math.round((e.loaded * 100) / e.total);
+        if (toastId.current) {
+          toast.update(toastId.current, {
+            render: t("UploadZone.progress", { val: percentComplete }),
+            position: "top-right",
+            autoClose: false,
+            progress: percentComplete,
+            hideProgressBar: false,
+          });
         }
-      },
-      false
-    );
+      }
+    };
 
     xhttp.onreadystatechange = function () {
       if (xhttp.readyState === 4 && xhttp.status <= 299) {

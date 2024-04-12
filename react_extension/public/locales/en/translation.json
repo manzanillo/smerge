@@ -128,7 +128,9 @@
     "dropText": "Upload Snap! file as new node.",
     "fileUploadSuccess": "Snap! File Added",
     "fileUploadFail": "No Snap! file found!",
-    "noXmlFile": "Wrong file type (only .xml)!"
+    "noXmlFile": "Wrong file type (only .xml)!",
+    "UploadText": "File Upload...",
+    "progress": "Upload is {{val}}% done"
   },
   "CsfrMissing": {
     "missingText": "Please open the project via the main page and not a direct link.",
