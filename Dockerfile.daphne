@@ -1,16 +1,5 @@
-FROM python:alpine3.19
-
-RUN apk --no-cache add \
-    nodejs \
-    npm \
-    make \
-    libffi-dev \
-    libressl-dev \
-    libxml2-dev \
-    libxslt-dev \
-    libjpeg-turbo-dev \
-    gcc \
-    g++
+FROM python:3.11.9
+RUN apt-get update || : && apt-get install nodejs npm make -y
 
 RUN mkdir /app
 WORKDIR /app

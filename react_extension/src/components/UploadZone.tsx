@@ -1,5 +1,5 @@
 import { Box, Modal } from "@mui/material";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useDropzone } from "react-dropzone";
 
@@ -49,6 +49,9 @@ function UploadZone(props: UploadZoneProps) {
     borderColor: "green",
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const toastId = useRef<any>();
+
   const uploadFile = (files: File[]) => {
     setModalOpen(false);
     if (files.length === 0) {
@@ -60,29 +63,59 @@ function UploadZone(props: UploadZoneProps) {
       return;
     }
 
+    toastId.current = toast("Starting file upload...", { autoClose: false });
+
     // copy of old drag and drop...
     const formData = new FormData();
     formData.append("file", files[0]);
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/add/" + projectId, true);
     xhttp.setRequestHeader("X-CSRFToken", httpService.csrftoken);
-    xhttp.send(formData);
+
+    xhttp.addEventListener(
+      "progress",
+      function (e) {
+        if (e.lengthComputable) {
+          const percentComplete = Math.round((e.loaded * 100) / e.total);
+          if (toastId.current) {
+            toast.update(toastId.current, {
+              render: `Upload is ${percentComplete}% done`,
+              position: "top-right",
+              autoClose: false,
+              progress: percentComplete,
+              hideProgressBar: false,
+            });
+          }
+        }
+      },
+      false
+    );
 
     xhttp.onreadystatechange = function () {
       if (xhttp.readyState === 4 && xhttp.status <= 299) {
-        toast.success(t("UploadZone.fileUploadSuccess"), {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-        });
+        if (toastId.current) {
+          toast.update(toastId.current, {
+            render: t("UploadZone.fileUploadSuccess"),
+            position: "top-right",
+            autoClose: 2000,
+            type: toast.TYPE.SUCCESS,
+            hideProgressBar: false,
+          });
+        }
       } else if (xhttp.readyState === 4) {
-        toast.error(t("UploadZone.fileUploadFail"), {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-        });
+        if (toastId.current) {
+          toast.update(toastId.current, {
+            render: t("UploadZone.fileUploadFail"),
+            position: "top-right",
+            autoClose: 2000,
+            type: toast.TYPE.ERROR,
+            hideProgressBar: false,
+          });
+        }
       }
     };
+
+    xhttp.send(formData);
   };
 
   function StyledDropzone() {
