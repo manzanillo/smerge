@@ -4,6 +4,7 @@ import re
 from .generator import *
 from enum import Enum
 from typing import Callable
+from .comparator import compare_images
 
 
 tmp1_file_path = "add_new.xml"
@@ -47,59 +48,6 @@ def cap_string(input_string, max_length=50):
     else:
         return input_string[:max_length] + "..."
 
-
-# class Conflict:
-#     def __init__(
-#         self, leftElement, rightElement, conflictType="Element", s="", category=""
-#     ):
-#         self.leftElement = leftElement
-#         self.rightElement = rightElement
-#         if conflictType not in ["Element", "Text", "Image", "CustomBlock"]:
-#             raise ValueError(
-#                 "Invalid conflictType. It must be one of 'Element', 'Text', or 'Image'."
-#             )
-#         self.conflictType = conflictType
-#         self.s = s
-#         self.category = category
-
-#     def __str__(self):
-#         return f"Conflict ({self.conflictType}): {self.leftElement} <-> {self.rightElement}"
-
-#     def toFile(self, leftFilePath, rightFilePath):
-#         if self.conflictType == "Element" or self.conflictType == "CustomBlock":
-#             projectName = "view"
-#             versionName = "Snap! 9.0, https://snap.berkeley.edu"
-#             file1, test, blocks = create_snap_file(projectName, versionName)
-#             test.append(self.leftElement)
-
-#             if self.conflictType == "CustomBlock":
-#                 firstElem = self.leftElement[0]
-#                 if "custom-block" in firstElem.tag:
-#                     for block in blocks:
-#                         block.append(
-#                             SnapCustomBlock(s=self.s, category=self.category).generate()
-#                         )
-
-#             with open(leftFilePath, "w") as f:
-#                 f.write(pretty_print_xml(file1.getroot()))
-
-#             file2, test2, blocks = create_snap_file(projectName, versionName)
-#             test2.append(self.rightElement)
-
-#             if self.conflictType == "CustomBlock":
-#                 firstElem = self.rightElement[0]
-#                 if "custom-block" in firstElem.tag:
-#                     for block in blocks:
-#                         block.append(
-#                             SnapCustomBlock(s=self.s, category=self.category).generate()
-#                         )
-#             with open(rightFilePath, "w") as f:
-#                 f.write(pretty_print_xml(file2.getroot()))
-#         else:
-#             with open(leftFilePath, "w") as f:
-#                 f.write(self.leftElement)
-#             with open(rightFilePath, "w") as f:
-#                 f.write(self.rightElement)
 
 ATOMIC_SPRITE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKUAAACCCAYAAAAngghUAAAAxXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjabVBRDsMgCP33FDsC8tDicezqkt1gxx8WurTNXuITeeQJpPF5v9JjgrMkKYvWVisZpEnjboGSo++cSXb2VAktX/NJOQS2FOyGP7VG/ZHPPwO/ukXlbPQMYb0KTcJfb0bxEWZHs4ktjFoYgV3IYdB9LKpNl/MI66Ar1E+atIYrxfz3tyy2va3YP2AeyCBjQLwBzCMJ3QLZuVohoVkMqDHjGNUW8m9PB9IXk9NaDuOfsZgAAAGFaUNDUElDQyBwcm9maWxlAAB4nH2RPUjDQBiG3/5oRSoOdhBxyFBdtIuKdKxVKEKFUCu06mBy6R80aUhSXBwF14KDP4tVBxdnXR1cBUHwB8TZwUnRRUr8Lim0iPGO4x7e+96Xu+8Af7PKVDOYAFTNMjKppJDLrwqhVwTRSzOOCYmZ+pwopuE5vu7h4/tdjGd51/05BpSCyQCfQJxgumERbxDPblo6533iCCtLCvE58aRBFyR+5Lrs8hvnksN+nhkxspl54gixUOpiuYtZ2VCJZ4ijiqpRvj/nssJ5i7NarbP2PfkLwwVtZZnrtEaRwiKWIEKAjDoqqMJCjHaNFBMZOk96+Eccv0gumVwVMHIsoAYVkuMH/4PfvTWL01NuUjgJ9LzY9scYENoFWg3b/j627dYJEHgGrrSOv9YE4p+kNzpa9AgY3AYurjuavAdc7gDDT7pkSI4UoOUvFoH3M/qmPDB0C/SvuX1rn+P0AchSr9I3wMEhMF6i7HWPd/d19+3fmnb/fgC8nnLE3bUJugAADXhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDQuNC4wLUV4aXYyIj4KIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgIHhtbG5zOkdJTVA9Imh0dHA6Ly93d3cuZ2ltcC5vcmcveG1wLyIKICAgIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIgogICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIgogICB4bXBNTTpEb2N1bWVudElEPSJnaW1wOmRvY2lkOmdpbXA6N2E4NmFkMWUtYmU2MS00ODVkLTkwZDgtMWRjZThmYjA0MWFjIgogICB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmExOTliOGRhLTE1YzItNGJjZC1hYTZlLWZkODUxNzYzMGRlZSIKICAgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjk5ODRmYzQ5LWQ0NzctNDFlZi1iZTgyLTkzOWRmMjAxYTU5OSIKICAgZGM6Rm9ybWF0PSJpbWFnZS9wbmciCiAgIEdJTVA6QVBJPSIyLjAiCiAgIEdJTVA6UGxhdGZvcm09IkxpbnV4IgogICBHSU1QOlRpbWVTdGFtcD0iMTcxMjM4OTEwNjk0MDE5OCIKICAgR0lNUDpWZXJzaW9uPSIyLjEwLjM0IgogICB0aWZmOk9yaWVudGF0aW9uPSIxIgogICB4bXA6Q3JlYXRvclRvb2w9IkdJTVAgMi4xMCIKICAgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyNDowNDowNlQwOTozODoyNSswMjowMCIKICAgeG1wOk1vZGlmeURhdGU9IjIwMjQ6MDQ6MDZUMDk6Mzg6MjUrMDI6MDAiPgogICA8eG1wTU06SGlzdG9yeT4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJzYXZlZCIKICAgICAgc3RFdnQ6Y2hhbmdlZD0iLyIKICAgICAgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo2ZGQzN2M5NC0zYTlmLTQ0YzEtOWVmYi1kOTk2NjQzMjFkNDciCiAgICAgIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkdpbXAgMi4xMCAoTGludXgpIgogICAgICBzdEV2dDp3aGVuPSIyMDI0LTA0LTA2VDA5OjM4OjI2KzAyOjAwIi8+CiAgICA8L3JkZjpTZXE+CiAgIDwveG1wTU06SGlzdG9yeT4KICA8L3JkZjpEZXNjcmlwdGlvbj4KIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAKPD94cGFja2V0IGVuZD0idyI/Pr6OTUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfoBAYHJhrd26aIAAAGUklEQVR42u3dT0ybdRzH8e/TQrfnz6gyF4mJ8cFTlw1I6EbCxmhvXpoNTRYvjFETBeYgsrG4jv3z0jIWQwebmBgPxi3rCdjBHbi7LDExHrh4MjFGExOj/DkYL/XgSgghE0b//J7f7/057++vL572vfKsIowxxhhjjDHGGKvR7t+//1JPT09xfHy8yGkwpWCmUqliMpksnj59unjv3r1POBVW6VnbgVkoFP5cW1v77ydYlrS0tMj09LTF8bGaoNwKZmme50lXV9fPly9ffoOjZFVFKSLy4MED9+HDh2ubYZbW3NwsyWQydvbs2R85VlYVlNuBKSISiUTkyJEjks1meXpnlUe5XZilHThwQBKJxMT58+czHDWrGMqdwizF0eHDh2VmZoarJ6sMyheBuTGOjh8//lsmk3mN42dlRbkbmMQRqxjKcsAkjljZUZYLJnHEyoqy3DCJI1CKqjCJI1AqDZM4AqXSMIkjUCoLkzgCpdIwiSNQKguTOAKl0jA3xlEikWjp7+9f4iEHpTIwiSNQKgtzYxx1d3d/Ojw8PAYDg1GqBrMUR4cOHZK7d+9y9TQVpYowN8XRH5lM5hVoGIZSZZjEkcEogwCTODIQZVBgEkeGoQwaTOLIEJRBhEkcGYAyyDCJI41R6gCTONIQpS4wiSPNUOoGkzjSBKWOMIkjDVA+g1lfKBT+WV1d1fIBaG5ulu7u7ng6nf4ejgFBaQLMUhzF43HJ5XIWKAMyE2BuiqOZ4eHhEVACkzgCJTB3EkfHjh1buXLlShSUwCSOQAlM0+Mo0H8ZYOoZR4H/CgOmfnGkxWUfmHrFkTavRYCpTxxp9QIZmHrEkXb/KAvM4MeRlu8UADPYcaTt21fADG4caf2eKjCDGUdGvNF/8uTJ4srKCspecPX19RKPx2ViYsICJTCVjKMTJ058PjIyMgRKYBoTR8Z9lzMwKxNHnZ2df4+Pj9ugBKZy831fEolEZzqdfgpKYGoTR0bfpHTq1Kni8vIyghSLI+PvnAOmenEUMv2genp64nCpzorFoiwtLUkymSymUqliLpf7dasfV2f6Qa2urr4Pl+pdKSORiDiOI42NjRKNRvM8fW/a9PT07Nzc3CBcKru6ujqxbVtc15VYLCY3b960eE0JyJpcFffu3SuO40hTU5N0dHRs++OwLUCyci4SiYht27Jv3z5pa2v77tKlSx07Bg1IttuFw2GxbVts2xbf9+X27du7cmUBkpUjWuLx+Mfnzp2bLMuvbcoh3rlz58v5+fn34LT7aHEcRxzHkYMHD8qNGzf4hgxA1uaqaNv2xmh5s6+v76eK/X6AZM+LFsdxpKGhQVpbW78dGxvrqsoXASDZVtHiOI74vi+Tk5NVN2IBklmWJXv27NkYLaNDQ0P5mv15AEm0VDJaQAlI5aLFeJSAVC9ajEYJSDWjxViUgFQ3WoxECUi1o8U4lKaDDEK0GIXSZJBBihZjUJoIMqjRYgRKk0DqEC3ao8zn818vLCz0mhAtruuu39Ny/fp1PgYPkLWLFtd1pampSY4ePfp6X1/fL0YGHCBrHy2u65buaVm8ePHiW2L4LEDWLlpc1xXf9+XWrVvG/08lgUGpE8hStLiuW4qWDwcHBz+DYIBQ6gLS9GjRBmXQQRItmqEMMkiiRUOUQQRJtGiMMkggiRYDUAYFJNFiCErVQRIthqFUGSTRYiBKFUESLQajVAkk0QJKyefzhYWFhXdViRbP8yQWi8m1a9e4KpqIstYgQ6HQ5mh59cyZM7/DwFCUtQQZiUTE87zSPS3fXLhwIcVDbzjKWoAMh8PiOM56tFTrs6pZAFBWE2TpEwlc15X9+/dLe3v7BwMDA1/wMIOy6iCJFlAqAZJoAaUyIIkWUCoBkmgBpRIgiRZQKgOSaGGWCiCJFlZWlLsBSbSwsqN8EZBEC6sYyp2AJFpYxVFOTU3NPXr06O3tRIvneevRcvXqVa6KrPwo/w9kKBRaf3p+Fi0v9/b2/sVRs4qgfB7IUrREo1FpbW2dHx0dfYfjZRVFuRXIcDi8fsup7/uSy+V4embVQTk5OfnD48eP2zZGi+d50tjYKO3t7f0DAwNfcZSsaiiz2ezy4uJiA9HClECZzWaXnzx50kC0MCU2Ozv7UTqdLk5NTc1xGowxxhhjjDHGGGM67V9nExK6Z+bJ2AAAAABJRU5ErkJggg=="
 
@@ -254,6 +202,7 @@ class AdditionalData:
             "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
         ]
         self.conflicts: list[Conflict] = []
+        self.hasActiveStageSizeConflict = False
 
     def __str__(self):
         return f"AdditionalData: {self.currentPath}, {self.currentImage[-1][:30]}"
@@ -344,7 +293,9 @@ class ACM:
 # -------------------------------------------------------------------------------------------------------------------------------------
 
 
-def insertAsItemAtItem(treeRoot: ET.Element, item: ET.Element, insert: ET.Element) -> bool:
+def insertAsItemAtItem(
+    treeRoot: ET.Element, item: ET.Element, insert: ET.Element
+) -> bool:
     """Insert the given element with a item node wrapper at the given item node in the tree
 
     Parameters
@@ -370,8 +321,8 @@ def insertAsItemAtItem(treeRoot: ET.Element, item: ET.Element, insert: ET.Elemen
         parent.append(itemElement)
         return True
     return False
-    
-    
+
+
 def findParent(treeRoot: ET.Element, item: ET.Element) -> ET.Element:
     """Returns the parent of the given item in the tree (only use once since costly operation... for multi call, build reverse map!)
 
@@ -808,7 +759,9 @@ def getNodesCombinationState(
     if compareNodesDefinition(leftNode, rightNode, keysToCheck):
         return 2
     # add exception for <l> nodes
-    if leftNode.tag == "l" and len(leftNode.keys()) == 0:
+    if (leftNode.tag == "l" and len(leftNode.keys()) == 0) or (
+        leftNode.tag == "pentrails" and len(leftNode.keys()) == 0
+    ):
         if leftNode.text != rightNode.text:
             return 2
     return 1
@@ -1038,18 +991,23 @@ def mergeProjectDef(
     -------
     """
     if leftNode.attrib["name"] != rightNode.attrib["name"]:
-        tmpRes = getResolution(ad.resolutions)
-        if tmpRes:
-            ad.workCopy.append(shallowCopyNode(tmpRes.resolve(leftNode, rightNode)))
-            return True
-        ad.conflicts.append(
-            Conflict(
-                leftNode.attrib["name"],
-                rightNode.attrib["name"],
-                conflictType=ConflictTypes.TEXT.value,
+        # ignore name change from first new scene add
+        if not (
+            "blank_project" in leftNode.attrib["name"]
+            or "blank_project" in rightNode.attrib["name"]
+        ):
+            tmpRes = getResolution(ad.resolutions)
+            if tmpRes:
+                ad.workCopy.append(shallowCopyNode(tmpRes.resolve(leftNode, rightNode)))
+                return True
+            ad.conflicts.append(
+                Conflict(
+                    leftNode.attrib["name"],
+                    rightNode.attrib["name"],
+                    conflictType=ConflictTypes.TEXT.value,
+                )
             )
-        )
-        return False
+            return False
 
     if compareVersionName(leftNode.attrib["app"], rightNode.attrib["app"]) == -1:
         ad.workCopy.append(shallowCopyNode(rightNode))
@@ -1166,6 +1124,23 @@ def atomicMerge(
             else:
                 match (leftNode.tag):
                     case "costume":
+                        # first compare images since snap likes to change the encoding of the exact same image from time to time...
+                        # also only on image conflict and not attribute...
+                        if (
+                            not compare_images(
+                                leftNode.attrib["image"], rightNode.attrib["image"]
+                            )
+                            < 0.9993
+                            and not nameConflict
+                            and (
+                                leftNode.attrib["center-x"]
+                                == rightNode.attrib["center-x"]
+                                and leftNode.attrib["center-y"]
+                                == rightNode.attrib["center-y"]
+                            )
+                        ):
+                            ad.currentElement.append(leftNode)
+                            return True
                         if not nameConflict:
                             conf = Conflict(
                                 leftNode.attrib["image"],
@@ -1188,6 +1163,20 @@ def atomicMerge(
                                 parentImage=ad.getCurrentImage(),
                                 allowBoth=True,
                             )
+                    case "pentrails":
+                        # first compare trails since snap likes to change the encoding of the exact same image from time to time...
+                        if (
+                            not compare_images(leftNode.text, rightNode.text) < 0.9993
+                        ) or ad.hasActiveStageSizeConflict:
+                            ad.currentElement.append(leftNode)
+                            return True
+                        conf = Conflict(
+                            leftNode.text,
+                            rightNode.text,
+                            conflictType=ConflictTypes.IMAGE.value,
+                            parentPath=ad.getCurrentPath(),
+                            parentImage=ad.getCurrentImage(),
+                        )
                     case "sound":
                         # if not nameConflict:
                         conf = Conflict(
@@ -1362,8 +1351,9 @@ def mergeDecider(
     """
     match leftNode.tag:
         case "pentrails":
-            ad.currentElement.append(leftNode)
-            return True
+            # ad.currentElement.append(leftNode)
+            # return True
+            return mergeSimple(leftNode, rightNode, ad)
         case "blocks":
             return mergeBlocks(leftNode, rightNode, ad)
         case "stage":
@@ -1552,12 +1542,15 @@ def mergeStage(
                 res = True
                 currentNodeSet = False
                 if nodeState == 1:
+                    leftString, rightString = getAttributeConflictStrings(
+                        leftNode, rightNode, checkKeys
+                    )
+                    # add current size confilct flag to ad if width / height affected to prevent certain pentrail conflict
+                    if "width" in leftString and "height" in leftString:
+                        ad.hasActiveStageSizeConflict = True
                     if ad.resolve(leftNode, rightNode):
                         currentNodeSet = True
                     else:
-                        leftString, rightString = getAttributeConflictStrings(
-                            leftNode, rightNode, checkKeys
-                        )
                         ad.conflicts.append(
                             Conflict(
                                 leftString,
@@ -1585,6 +1578,9 @@ def mergeStage(
                     for i, (left, right) in enumerate(zips):
                         res &= mergeDecider(left, right, ad)
                         ad.currentElement = currentSave
+
+                # reset current size conflict flag in each case
+                ad.hasActiveStageSizeConflict = False
                 return res
 
 
@@ -1623,6 +1619,7 @@ def modularListMerge(
         return True
     else:
         ad.addAndSwitch(shallowCopyNode(leftNode[0]))
+        currentBackup = ad.currentElement
         zips, uniqueNodes = zipMatchingNodesByAttributeForLists(
             leftNode[0], rightNode[0], "customData"
         )
@@ -1632,6 +1629,7 @@ def modularListMerge(
         res = True
         for i, (left, right) in enumerate(zips):
             res &= mergeSimple(left, right, ad, "", "customData")
+            ad.currentElement = currentBackup
         return res
 
 

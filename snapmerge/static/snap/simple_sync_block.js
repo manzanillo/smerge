@@ -17,6 +17,10 @@ new DialogBoxMorph(
     }
     url += "&message=" + message;
     var data = ide.getProjectXML();
+
+    if (new Blob([data]).size > 32 * 1024 * 1024) {
+      ide.showMessage("File size exceeds 32MB. Aborting upload. Please reduce the size of the project.");
+    } else {
     var r = new XMLHttpRequest();
     r.open("POST", url, true);
     r.setRequestHeader("Content-Type", "application/xml");
@@ -29,6 +33,7 @@ new DialogBoxMorph(
       }
     };
     r.send(data);
+  }
   },
   this
 ).prompt("commit message", "", window.world, null);

@@ -496,7 +496,6 @@ class DeleteProjectView(View):
     def post(self, request, proj_id):
 
         password = request.POST.get("password", None)
-        print(password)
 
         if password is not None:
             try:
@@ -550,7 +549,7 @@ class ReactMergeView(View):
 class GetConflictsView(View):
 
     def get(self, request, proj_id):
-        print(proj_id)
+        # print(proj_id)
         mc = MergeConflict.objects.get(id=proj_id)
         hunks = Hunk.objects.filter(mergeConflict=mc)
         ret = {}
@@ -588,7 +587,7 @@ class NewMergeView(View):
     def post(self, request, proj_id):
         resolutions = request.POST.get("resolutions")
         dict_list_string = f"[{resolutions}]"
-        print(dict_list_string)
+        # print(dict_list_string)
         resolutions_dict = json.loads(dict_list_string)
         resolutionsConverted = [
             Resolution(step=(stepStringToEnum(res["choice"])))
@@ -597,7 +596,7 @@ class NewMergeView(View):
 
         # print("resolutions:")
         # print(resolutionsConverted)
-        [print(x.step) for x in resolutionsConverted]
+        # [print(x.step) for x in resolutionsConverted]
 
         return mergeExt(request, proj_id, resolutionsConverted)
         # print(resolutions_dict)
@@ -761,7 +760,7 @@ def mergeExt(request, proj_id, resolutions):
                     # print(ret.left)
                     # print(ret.right)
 
-                print(conflicts)
+                # print(conflicts)
                 new_file.file = str(merge_conflict.id) + ".conflict"
                 new_file.type = "conflict"
                 new_file.description = "Active Conflict"
@@ -780,7 +779,7 @@ def mergeExt(request, proj_id, resolutions):
                 # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
 
             new_file.xml_job()
-            print(new_file.as_dict())
+            # print(new_file.as_dict())
             # delete old conflict on resolved
             for current_res_conf in result_conflicts:
                 connected_hunks = current_res_conf.hunk_set.all()

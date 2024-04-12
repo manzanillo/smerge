@@ -159,5 +159,8 @@
     "reset": "Zurücksetzen",
     "alreadyResolved": "Der Merge wurde von einem anderen abgeschlossen.\nDieses Fenster schliest sich in 10 Sekunden.",
     "alreadyResolvedToast": "Merge bereits abgeschlossen!"
+  },
+  "ImageDiv": {
+    "Pen": "Stift:"
   }
 }

@@ -5,15 +5,19 @@ from ..views import hashPassword
 
 
 def hash_passwords(apps, schema_editor):
-    Project = apps.get_model('home', 'Project')
-    for project in Project.objects.all():
-        project.password = hashPassword(project.password) if project.password is not None else None
-        project.save()
+    Project = apps.get_model("home", "Project")
+    projects = Project.objects.all()
+    for project in projects:
+        project.password = (
+            hashPassword(project.password) if project.password is not None else None
+        )
+    Project.objects.bulk_update(projects, ["password"])
+
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0028_alter_project_password'),
+        ("home", "0028_alter_project_password"),
     ]
 
     operations = [

@@ -9,6 +9,7 @@ import { Box, CircularProgress, Stack } from "@mui/material";
 import "./ImageDiv.css";
 import TargetIcon from "../shared/TargetIcon";
 import { FileDto } from "./ConflictStepper";
+import { useTranslation } from "react-i18next";
 
 interface ImageDivProps {
   text1: string;
@@ -51,6 +52,8 @@ const styleRight: React.CSSProperties = {
 const ImageDiv: React.FC<ImageDivProps> = ({ text1, text2, left, right }) => {
   const splitHeight = 600;
 
+  const { t } = useTranslation();
+
   const getImagePane = (
     text: string,
     isLeft: boolean,
@@ -58,6 +61,11 @@ const ImageDiv: React.FC<ImageDivProps> = ({ text1, text2, left, right }) => {
     cyPercent: string,
     ratio: number
   ) => {
+    // If no center is given, the conflict is for a pentrail
+    if (!left?.cx) {
+      cxPercent = "8px";
+      cyPercent = "0px";
+    }
     return (
       <Grid
         container
@@ -83,14 +91,18 @@ const ImageDiv: React.FC<ImageDivProps> = ({ text1, text2, left, right }) => {
                 position: "absolute",
                 top: cyPercent,
                 left: cxPercent,
-                transform: "translate(-50%, -50%)",
-                color: "red",
+                transform: left?.cx ? "translate(-50%, -50%)" : "",
+                color: "black",
               }}
             >
-              <TargetIcon
-                style={{ fontSize: 50, fontWeight: 1 }}
-                color="lightblue"
-              />
+              {left?.cx ? (
+                <TargetIcon
+                  style={{ fontSize: 50, fontWeight: 1 }}
+                  color="lightblue"
+                />
+              ) : (
+                <div style={{ fontSize: "24px" }}>{t("ImageDiv.Pen")}</div>
+              )}
             </div>
           </div>
         </Paper>

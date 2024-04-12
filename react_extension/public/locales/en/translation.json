@@ -159,5 +159,8 @@
     "reset": "Reset",
     "alreadyResolved": "The merge was resolved by another.\nThis window will close in 10 seconds.",
     "alreadyResolvedToast": "Merge already resolved!"
+  },
+  "ImageDiv": {
+    "Pen": "Pen:"
   }
 }
