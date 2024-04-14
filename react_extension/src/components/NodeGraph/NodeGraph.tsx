@@ -479,6 +479,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         onClose={(res) => {
           //   console.log("Input: ", res);
           //   console.log("And node ref is: ", editNodeRef.current?.data("label")); //label
+          res = res.trim().substring(0, 200);
           putLabelChange(editNodeRef.current?.data("id"), res);
         }}
         def={nameDefaultValue}

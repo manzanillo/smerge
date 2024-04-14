@@ -69,6 +69,10 @@
       "item2": {
         "footer": "**__Right click a node to open the context menu:\n - Download: Download corresponding Snap! file.\n - Mark as favorite: Mark a node for all to see.\n - Edit: Change node values.\n - Collapse: Collapse all nodes beneath into one.",
         "header": "Context Menu"
+      },
+      "item3": {
+        "header": "Drop Zone",
+        "footer": "**__Pull a Snap! file into the window dropzone and let go when it is green to upload a file as node.\n - File must have the ending .xml and the Snap! file structure\n - If the file is to big, the download will be refused (if you hit this limit, you might have done somthing pretty wrong)"
       }
     },
     "page1": {
@@ -83,7 +87,7 @@
       },
       "item2": {
         "header": "Upload Progress to Smerge",
-        "footer": "**__Post to Smerge:\n -Click the \"Post to Smerge\" block in the tab \"Variables\" and enter a short description of the new version to upload the changes to Smerge. "
+        "footer": "**__Post to Smerge:\n -Click the \"Post to Smerge\" block in the tab \"Variables\" and enter a short description of the new version to upload the changes to Smerge. \n -If your file size is getting too big (>32MB), the sync will prevent an upload and you need to shrink your file."
       }
     },
     "page2": {

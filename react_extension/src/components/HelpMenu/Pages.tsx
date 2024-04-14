@@ -33,6 +33,12 @@ export const Page0 = () => {
         footer={t("HelpPages.page0.item2.footer")}
         src="/ext/img/help_move_2.gif"
       />
+      <HelpDisplayItemContent
+        parentHeight={basePageHeight}
+        header={t("HelpPages.page0.item3.header")}
+        footer={t("HelpPages.page0.item3.footer")}
+        src="/ext/img/upload.gif"
+      />
     </HelpDisplayItem>
   );
 };
@@ -55,19 +61,19 @@ export const Page1 = () => {
         parentHeight={basePageHeight}
         header={t("HelpPages.page1.item0.header")}
         footer={t("HelpPages.page1.item0.footer")}
-        src="/ext/img/open.png"
+        src="/ext/img/open_snap.gif"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page1.item1.header")}
         footer={t("HelpPages.page1.item1.footer")}
-        src="/ext/img/data_importer.png"
+        src="/ext/img/import.gif"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page1.item2.header")}
         footer={t("HelpPages.page1.item2.footer")}
-        src="/ext/img/upload_msg.png"
+        src="/ext/img/sync.gif"
       />
     </HelpDisplayItem>
   );
@@ -90,19 +96,19 @@ export const Page2 = () => {
         parentHeight={basePageHeight}
         header={t("HelpPages.page2.item0.header")}
         footer={t("HelpPages.page2.item0.footer")}
-        src="/ext/img/merge.png"
+        src="/ext/img/merge.gif"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page2.item1.header")}
         footer={t("HelpPages.page2.item1.footer")}
-        src="/ext/img/conflict.png"
+        src="/ext/img/conflict.gif"
       />
       <HelpDisplayItemContent
         parentHeight={basePageHeight}
         header={t("HelpPages.page2.item2.header")}
         footer={t("HelpPages.page2.item2.footer")}
-        src="/ext/img/merge.png"
+        src="/ext/img/old_merge.gif"
       />
     </HelpDisplayItem>
   );
@@ -142,14 +148,3 @@ export const Page3 = () => {
     </HelpDisplayItem>
   );
 };
-
-/*
-Missing Images:
-- Open in snap
-- Activate JS and load data
-- post back
-
-- merge two nodes
-
-
-*/

@@ -69,6 +69,10 @@
       "item2": {
         "header": "Kontextmenü",
         "footer": "**__Drücken der rechten Maustaste auf einem Knoten öffnet das Kontextmenü\n - Herunterladen: Die entsprechende Snap!-Datei herunterladen.\n - Als Favorit markieren: Einen Knoten für alle sichtbar markieren.\n - Bearbeiten: Die Bezeichnung eines Knotens bearbeiten.\n - Kollabieren: Alle darunterliegenden Knoten unter dem ausgewählten kollabieren."
+      },
+      "item3": {
+        "header": "Datei Hochladen",
+        "footer": "**__Ziehe eine Snap! Datei in das Fenster und lasse sie los wenn der Rahmen der DropZone grün wird, um sie hochzuladen.\n - Die Datei muss die Endung .xml und die Snap! Struktur besitzen\n - Wenn die Datei zu groß ist, wird der Download abgelehnt (wenn Sie dieses Limit erreichen, haben Sie möglicherweise etwas ziemlich falsch gemacht)"
       }
     },
     "page1": {
@@ -83,7 +87,7 @@
       },
       "item2": {
         "header": "Fortschritt an Smerge senden",
-        "footer": "**__Post to Smerge:\n -Mit einem Klick auf den \"Post to Smerge\" Baustein im Tab \"Variables\" werden nach der Eingabe einer kurzen Beschreibung der neuen Version die Änderungen in Smerge hochgeladen."
+        "footer": "**__Post to Smerge:\n -Mit einem Klick auf den \"Post to Smerge\" Baustein im Tab \"Variables\" werden nach der Eingabe einer kurzen Beschreibung der neuen Version die Änderungen in Smerge hochgeladen.\n -Wenn Ihre Datei zu groß wird (>32MB), stoppt der Hochladeprozess und Sie müssen Ihre Projektgröße verkleinern."
       }
     },
     "page2": {
