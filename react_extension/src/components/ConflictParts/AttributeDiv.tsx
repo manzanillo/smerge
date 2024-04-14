@@ -50,7 +50,7 @@ const AttributeDiv: React.FC<TextDivProps> = ({ text1, text2 }) => {
             )}
             <ul>
               {attributes.data.map((item, index) =>
-                item.key === "costume" ? (
+                item.key.toLowerCase() === "costume" ? (
                   <li key={index}>
                     <div style={{ display: "flex" }}>
                       {" "}

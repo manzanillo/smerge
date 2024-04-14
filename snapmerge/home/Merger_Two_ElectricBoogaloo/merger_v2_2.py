@@ -244,6 +244,13 @@ class AdditionalData:
             resolvedNode = tmpResolution.resolve(
                 shallowCopyNode(leftNode), shallowCopyNode(rightNode)
             )
+            # replace costume number with right uuid and resolve after merger to prevent
+            # shuffle if more costumes are merged into the node
+            if resolvedNode.tag == "sprite":
+                if tmpResolution.step == Step.LEFT:
+                    resolvedNode.attrib["costume"] = getCostumeUUID(leftNode)
+                elif tmpResolution.step == Step.RIGHT:
+                    resolvedNode.attrib["costume"] = getCostumeUUID(rightNode)
         else:
             resolvedNode = tmpResolution.resolve(leftNode, rightNode)
         # be careful...allow both option only in nodes where is should be possible
@@ -890,6 +897,33 @@ def getCostumeString(node: ET.Element) -> str:
             return allCost[index - 1].attrib["image"]
 
 
+def getCostumeUUID(node: ET.Element) -> str:
+    """Get the costume uuid from a node
+
+    Parameters
+    ----------
+    node : ET.Element
+        Node to get the costume uuid from
+
+    Returns
+    -------
+    str
+        Returns the costume uuid to resolve after merge or default 1 if data not available
+    """
+    if "costume" in node.keys():
+        index = int(node.attrib["costume"])
+        if index == 0:
+            return ATOMIC_SPRITE
+        else:
+            allCost = node.findall(".//costume")
+            if index > len(allCost):
+                return ATOMIC_SPRITE
+            if "customData" in allCost[index - 1].keys():
+                return allCost[index - 1].attrib["customData"]
+            else:
+                return 1
+
+
 # -------------------------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------  MERGE FUNCTIONS  ---------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------------------
@@ -964,9 +998,30 @@ def merge2(
 
     if not res:
         return ad.conflicts, None
+
+    # resolve costume uuid with number if merge resolve saved uuid in costume attribute of sprite
+    resolveCostumeUUID(ad.workCopy)
+
     if outputAsET:
         return None, ad.workCopy
     return None, ET.tostring(ad.workCopy, encoding="UTF-8")
+
+
+def resolveCostumeUUID(node: ET.Element):
+    allSprites = node.findall(".//sprite")
+    for sprite in allSprites:
+        # check if costume is uuid or list value
+        if len(sprite.attrib["costume"]) == 36:
+            uuid = sprite.attrib["costume"]
+            allCostumes = sprite.findall(".//costume")
+            fixed = False
+            for i, costume in enumerate(allCostumes):
+                if costume.attrib["customData"] == uuid:
+                    sprite.attrib["costume"] = str(i + 1)
+                    fixed = True
+                    break
+            if not fixed:
+                sprite.attrib["costume"] = "1"
 
 
 def mergeProjectDef(
@@ -1161,7 +1216,6 @@ def atomicMerge(
                                 conflictType=ConflictTypes.ATTRIBUTE.value,
                                 parentPath=ad.getCurrentPath(),
                                 parentImage=ad.getCurrentImage(),
-                                allowBoth=True,
                             )
                     case "pentrails":
                         # first compare trails since snap likes to change the encoding of the exact same image from time to time...
@@ -1469,7 +1523,6 @@ def mergeBlock(
                             conflictType=ConflictTypes.ATTRIBUTE.value,
                             parentPath=ad.getCurrentPath(),
                             parentImage=ad.getCurrentImage(),
-                            allowBoth=True,
                         )
                     )
                     return False
@@ -1759,7 +1812,6 @@ def mergeSprite(
                                         conflictType=ConflictTypes.ATTRIBUTE.value,
                                         parentPath=ad.getCurrentPath(),
                                         parentImage=ad.getCurrentImage(),
-                                        allowBoth=True,
                                     )
                                 )
                                 res = False

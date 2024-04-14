@@ -2,11 +2,21 @@ import cv2
 import numpy as np
 import base64
 from skimage.metrics import structural_similarity as ssim
+from cairosvg import svg2png
 
 
 def compare_images(base64_img1, base64_img2):
     img1 = base64.b64decode(stripBase64Header(base64_img1))
     img2 = base64.b64decode(stripBase64Header(base64_img2))
+
+    if isSVG(base64_img1) and isSVG(base64_img2):
+        # catch both svg and only compare since they should be encoded same?
+        if base64_img1 == base64_img2:
+            return 1
+        else:
+            return 0
+    if isSVG(base64_img1) or isSVG(base64_img2):
+        return 0
 
     npimg1 = np.frombuffer(img1, dtype=np.uint8)
     npimg2 = np.frombuffer(img2, dtype=np.uint8)
@@ -26,6 +36,10 @@ def compare_images(base64_img1, base64_img2):
 
 def stripBase64Header(base64_img):
     return base64_img.split(",")[-1]
+
+
+def isSVG(base64_img):
+    return base64_img.startswith("data:image/svg+xml;base64,")
 
 
 if __name__ == "__main__":
