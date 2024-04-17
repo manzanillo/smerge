@@ -1,4 +1,3 @@
-# SSEs try
 import os
 import django
 from django.core.asgi import get_asgi_application
@@ -7,17 +6,22 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django_eventstream import routing, consumers
 from .CustomRoomIdMiddleware import CustomRoomIdMiddlewareStack
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings_daphne")
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings_daphne")
 
 
-application = ProtocolTypeRouter({
-    'http': URLRouter([
-        path('events/<str:id>/', CustomRoomIdMiddlewareStack(
-            URLRouter(routing.urlpatterns)
-        )),
-        re_path(r'', get_asgi_application()),
-    ]),
-})
+application = ProtocolTypeRouter(
+    {
+        "http": URLRouter(
+            [
+                path(
+                    "events/<str:id>/",
+                    CustomRoomIdMiddlewareStack(URLRouter(routing.urlpatterns)),
+                ),
+                re_path(r"", get_asgi_application()),
+            ]
+        ),
+    }
+)
 
 # dep mode?
 # cd snapmerge

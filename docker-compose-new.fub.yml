@@ -1,11 +1,11 @@
 version: "3.7"
 services:
   django:
-    container_name: smerge_daphne
+    container_name: smerge_daphne_fub
     build:
       context: .
-      dockerfile: Dockerfile.daphne
-    image: daphne_docker
+      dockerfile: Dockerfile.fub
+    image: daphne_docker_fub
     stdin_open: true
     tty: true
     volumes:

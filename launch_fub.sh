@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Copy of launch_daphne.sh just with fub django settings
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR/snapmerge"
 
@@ -17,14 +19,14 @@ trap 'graceful_shutdown' SIGTERM
 
 # compress files
 echo "Compressing files..."
-python manage.py compress --settings=config.settings_daphne
+python manage.py compress --settings=config.settings_fub
 
 # Run migrations
 echo "Apply migrations..."
-python manage.py migrate --settings=config.settings_daphne 
+python manage.py migrate --settings=config.settings_fub
 
 # Start Daphne
-export DJANGO_SETTINGS_MODULE=config.settings_daphne
+export DJANGO_SETTINGS_MODULE=config.settings_fub
 
 daphne -p 8000 -b 0.0.0.0 config.asgi:application &
 PID=$!
