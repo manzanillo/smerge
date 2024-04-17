@@ -94,7 +94,7 @@
       "header": "Merge",
       "item0": {
         "header": "Merge Nodes",
-        "footer": "**__Merge two nodes:\n -Select two nodes and click the \"New Smerge\" button in the right lower corner, then confirm the merge."
+        "footer": "**__Merge two nodes:\n -Select two nodes and click the \"New Smerge\" button in the right lower corner, then confirm the merge.\n -ATTENTION: If you have a project created before 18.04.24, please use the original merger until you commited all nodes to be merged at least once. Otherwise the new merger won't work correctly!"
       },
       "item1": {
         "header": "Merge Conflicts",

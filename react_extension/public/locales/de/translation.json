@@ -93,7 +93,7 @@
     "page2": {
       "item0": {
         "header": "Knoten mergen",
-        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Smerge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden. "
+        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Smerge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden.\n -ACHTUNG: Wenn Sie ein Projekt verwenden, welches vor dem 18.04.24 erstellt wurde, nutzen Sie nur den originalen Merger bis alle zu Mergenden Knoten mindestens einmal neu \"Commited\" wurden. Andernfalls wird der Merger nicht richtig funktionieren!"
       },
       "item1": {
         "header": "Mergekonflikte",
