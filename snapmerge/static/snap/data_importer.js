@@ -1773,6 +1773,22 @@ world.children[0].setBlocksScale(1);
 async function loadFile () {
   var res = await fetch("{{url}}");
   var xml = await res.text();
+
+  // fix xml encoding for umlaute
+  let charMap = {
+    "&#252;": "ü",
+    "&#246;": "ö",
+    "&#228;": "ä",
+    "&#220;": "Ü",
+    "&#214;": "Ö",
+    "&#196;": "Ä",
+    "&#223;": "ß",
+    "&#8364;": "€"
+  };
+  for(let entity in charMap) {
+    let char = charMap[entity];
+    xml= xml.replace(new RegExp(entity, 'g'), char);
+  }
   var ide = window.world.root().children[0];
   ide.loadProjectXML(xml)
 }
