@@ -1,0 +1,696 @@
+openapi: 3.0.3
+info:
+  title: Your Project API
+  version: 1.0.0
+  description: Your project description
+paths:
+  /api/delete/conflict/{id}:
+    delete:
+      operationId: api_delete_conflict_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/delete/project/{id}:
+    delete:
+      operationId: api_delete_project_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/file/{id}:
+    get:
+      operationId: api_file_retrieve
+      description: API endpoint that allows file details to be viewed.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapFile'
+          description: ''
+  /api/file/{id}/position:
+    put:
+      operationId: api_file_position_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapFile'
+          description: ''
+    patch:
+      operationId: api_file_position_partial_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapFile'
+          description: ''
+  /api/file/{id}/positions:
+    put:
+      operationId: api_file_positions_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapFile'
+          description: ''
+    patch:
+      operationId: api_file_positions_partial_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapFile'
+          description: ''
+  /api/project/{id}:
+    get:
+      operationId: api_project_retrieve
+      description: API endpoint that allows projects to be viewed.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /api/project/{id}/files:
+    get:
+      operationId: api_project_files_list
+      description: API endpoint that obtains a list of files that correspond to a
+        given project.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SnapFile'
+          description: ''
+  /api/project/{id}/unhide_all:
+    get:
+      operationId: api_project_unhide_all_retrieve
+      description: API endpoint to unhide / decollapse all files in a project.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/update/node_desc/{id}:
+    put:
+      operationId: api_update_node_desc_update
+      description: API endpoint that allows for the description of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: api_update_node_desc_partial_update
+      description: API endpoint that allows for the description of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/update/password/{id}:
+    put:
+      operationId: api_update_password_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: api_update_password_partial_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/update/project/{id}:
+    put:
+      operationId: api_update_project_update
+      description: API endpoint that allows projects to be viewed.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Project'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    patch:
+      operationId: api_update_project_partial_update
+      description: API endpoint that allows projects to be viewed.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProject'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProject'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProject'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /api/update/project_colors/{id}:
+    put:
+      operationId: api_update_project_colors_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: api_update_project_colors_partial_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /file/{id}/positions:
+    put:
+      operationId: file_positions_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - file
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SnapFile'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapFile'
+          description: ''
+    patch:
+      operationId: file_positions_partial_update
+      description: API endpoint that allows for the position of a file to be updated.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - file
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSnapFile'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapFile'
+          description: ''
+components:
+  schemas:
+    PatchedProject:
+      type: object
+      description: Serializes a project without credential information
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        pin:
+          type: string
+          maxLength: 6
+        default_color:
+          type: string
+          title: Node_color
+          maxLength: 7
+        favor_color:
+          type: string
+          maxLength: 7
+        conflict_color:
+          type: string
+          maxLength: 7
+    PatchedSnapFile:
+      type: object
+      description: Serializes a snapfile
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        file_url:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        project:
+          type: string
+          format: uuid
+        ancestors:
+          type: array
+          items:
+            type: integer
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+        number_scripts:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        number_sprites:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        color:
+          type: string
+          maxLength: 7
+        xPosition:
+          type: number
+          format: double
+        yPosition:
+          type: number
+          format: double
+        collapsed:
+          type: boolean
+        hidden:
+          type: boolean
+        type:
+          type: string
+          nullable: true
+          maxLength: 30
+    Project:
+      type: object
+      description: Serializes a project without credential information
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        pin:
+          type: string
+          maxLength: 6
+        default_color:
+          type: string
+          title: Node_color
+          maxLength: 7
+        favor_color:
+          type: string
+          maxLength: 7
+        conflict_color:
+          type: string
+          maxLength: 7
+      required:
+      - id
+      - name
+      - pin
+    SnapFile:
+      type: object
+      description: Serializes a snapfile
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        file_url:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        project:
+          type: string
+          format: uuid
+        ancestors:
+          type: array
+          items:
+            type: integer
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+        number_scripts:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        number_sprites:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        color:
+          type: string
+          maxLength: 7
+        xPosition:
+          type: number
+          format: double
+        yPosition:
+          type: number
+          format: double
+        collapsed:
+          type: boolean
+        hidden:
+          type: boolean
+        type:
+          type: string
+          nullable: true
+          maxLength: 30
+      required:
+      - ancestors
+      - file_url
+      - id
+      - project
+      - timestamp
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

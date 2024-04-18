@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import base64
 from skimage.metrics import structural_similarity as ssim
-from cairosvg import svg2png
 
 
 def compare_images(base64_img1, base64_img2):

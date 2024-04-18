@@ -58,6 +58,9 @@ access_d_build:
 access_d_up:
 	docker-compose -f docker-compose-access.yml up
 
+generate_swagger: 
+	python $(BASE)/manage.py  spectacular --settings=$(SETTINGS)  --color --file schema.yml
+
 #for tracking time spend on project :)
 CFLAGS = -g -std=c11 -pedantic -Wall -Werror -D_XOPEN_SOURCE=700 
 CC = gcc

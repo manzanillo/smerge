@@ -27,4 +27,5 @@ email-validator
 opencv-python-headless==4.9.0.80
 scikit-image==0.23.1
 numpy==1.26.4
-cairosvg==2.7.1
+
+drf-spectacular==0.27.2
