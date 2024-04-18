@@ -4,7 +4,7 @@ import json
 URL = "https://thorstest.hopto.org"
 POST_BACK_URL = "https://thorstest.hopto.org"
 
-SECRET_KEY = "()fvd?-m+=quyxz*_3v+gjg!902ß5wbo*k)(0kwtwuryr4nil"
+# SECRET_KEY = "..."
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 COMPRESS_OFFLINE = False
@@ -61,6 +61,7 @@ BETA = True
 SECRET_PATH = "secrets/smerge/secrets.smerge.json"
 secret_file = open(SECRET_PATH).read()
 secrets = json.loads(secret_file)
+SECRET_KEY = secrets["SECRET_KEY"]
 EMAIL_HOST_PASSWORD = secrets["EMAIL_HOST_PASSWORD"]
 EMAIL_SENDER = "idppi@idpsmerge.duckdns.org"
 
