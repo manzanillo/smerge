@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 
-from ..views import check_password
+from ..views import check_password, hashPassword
 
 
 # class ListSnapFilesView(generics.ListAPIView):
@@ -88,21 +88,6 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
 
         send_event(str(instance.id), "message", {"text": "projectChange"})
         return Response(data=serializer.data, status=200)
-
-    # def get_object(self):
-    #     file_id = self.kwargs['id']
-    #     return SnapFile.objects.get(id=file_id)
-
-    # def put(self, request, *args, **kwargs):
-    #     snap_file = self.get_object()
-    #     snap_file.xPosition = request.data['x']
-    #     snap_file.yPosition = request.data['y']
-    #     snap_file.save()
-
-    #     print(str(snap_file.project_id))
-    #     send_event(str(snap_file.project_id), 'message', {'text': 'Update'})
-
-    #     return Response(status=status.HTTP_200_OK)
 
 
 class SnapFileDetailView(generics.RetrieveAPIView):
@@ -215,7 +200,7 @@ class ProjectChangePasswordView(generics.UpdateAPIView):
             if request.data["new-password"] == "":
                 instance.password = None
             else:
-                instance.password = request.data["new-password"]
+                instance.password = hashPassword(request.data["new-password"])
             instance.save()
             return Response(data="Password changed.", status=200)
         else:
@@ -234,7 +219,7 @@ class ProjectDeleteView(generics.DestroyAPIView):
         if instance.password == None or check_password(
             request.data["password"], instance.password
         ):
-            # instance.delete()
+            instance.delete()
             return Response(data="Project Deleted!", status=300)
         else:
             return Response(data="Wrong Password!", status=403)
