@@ -39,6 +39,6 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot --email richieschmid@live.de --agree-tos -d thorstest.hopto.org
+    command: certonly --webroot --webroot-path=/var/www/certbot --email <your-mail> --agree-tos -d <your-domain>
     depends_on:
       - nginx

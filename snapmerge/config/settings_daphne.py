@@ -3,11 +3,9 @@ import json
 
 # internal url the server listens on
 URL = "http://0.0.0.0:8000"
-# POST_BACK_URL = 'https://rs-kubuntu.local'
-# POST_BACK_URL = 'https://idpsmerge.duckdns.org'
 
 # url used in snap blocks to find the server
-POST_BACK_URL = "https://thorstest.hopto.org"
+POST_BACK_URL = "https://<your-domain>"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -37,17 +35,11 @@ USE_X_FORWARDED_HOST = True
 ASGI_APPLICATION = "routing.application"
 
 CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
-    "https://rs-kubuntu.local",
-    "https://air.local",
-    "https://idpsmerge.duckdns.org",
-    "https://thorstest.hopto.org",
+    "https://<your-domain>",
 ]
 
 CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + [
-    "https://rs-kubuntu.local",
-    "https://idpsmerge.duckdns.org",
-    "https://thorstest.hopto.org",
-    "https://air.local",
+    "https://<your-domain>",
 ]
 
 ALLOWED_HOSTS = [
@@ -55,11 +47,7 @@ ALLOWED_HOSTS = [
     "faui20s.cs.fau.de",
     "faui20s.informatik.uni-erlangen.de",
     "smerge.org",
-    "idpsmerge.duckdns.org",
-    "smerge_server",
-    "rs-kubuntu.local",
-    "air.local",
-    "thorstest.hopto.org",
+    "<your-domain>",
 ]
 
 DEBUG = False
@@ -70,7 +58,7 @@ secret_file = open(SECRET_PATH).read()
 secrets = json.loads(secret_file)
 SECRET_KEY = secrets["SECRET_KEY"]
 EMAIL_HOST_PASSWORD = secrets["EMAIL_HOST_PASSWORD"]
-EMAIL_SENDER = "idppi@idpsmerge.duckdns.org"
+EMAIL_SENDER = "<your-mailrelay-sender>"
 
 EMAIL_HOST = "in-v3.mailjet.com"
 EMAIL_PORT = 587

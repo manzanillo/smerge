@@ -2,7 +2,7 @@ from .settings_base import *
 import json
 
 URL = "http://127.0.0.1:8000"
-POST_BACK_URL = "https://rs-kubuntu.local"
+POST_BACK_URL = "https://<your-domain>"
 
 # SECRET_KEY = '...'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -31,25 +31,17 @@ CHANNEL_LAYERS = {
 }
 
 CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
-    "https://rs-kubuntu.local",
-    "https://air.local",
+    "https://<your-domain>",
 ]
 
-CSRF_TRUSTED_ORIGINS = (
-    CSRF_TRUSTED_ORIGINS
-    + ["https://rs-kubuntu.local", "https://idpsmerge.duckdns.org"]
-    + ["https://air.local"]
-)
+CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + ["https://<your-domain>"]
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "faui20s.cs.fau.de",
     "faui20s.informatik.uni-erlangen.de",
     "smerge.org",
-    "idpsmerge.duckdns.org",
-    "smerge_server",
-    "rs-kubuntu.local",
-    "air.local",
+    "<your-domain>",
 ]
 
 DEBUG = True
@@ -60,7 +52,7 @@ secret_file = open(SECRET_PATH).read()
 secrets = json.loads(secret_file)
 SECRET_KEY = secrets["SECRET_KEY"]
 EMAIL_HOST_PASSWORD = secrets["EMAIL_HOST_PASSWORD"]
-EMAIL_SENDER = "idppi@idpsmerge.duckdns.org"
+EMAIL_SENDER = "<your-mailrelay-sender>"
 
 EMAIL_HOST = "in-v3.mailjet.com"
 EMAIL_PORT = 587

@@ -78,9 +78,9 @@ RUN npm install
 # copy nginx conf and certificates
 COPY /secrets /app/
 COPY /data/nginx_access/ext_nginx.conf /etc/nginx/conf.d/default.conf
-RUN mkdir -p /etc/letsencrypt/live/idpsmerge.duckdns.org
-COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
-COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/idpsmerge.duckdns.org/
+RUN mkdir -p /etc/letsencrypt/live/<your-domain>
+COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/<your-domain>/
+COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/<your-domain>/
 
 # copy custom missing authorization page
 COPY /data/nginx_access/e403.html /usr/share/nginx/html/

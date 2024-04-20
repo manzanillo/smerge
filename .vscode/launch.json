@@ -22,7 +22,7 @@
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
-            "url": "https://rs-kubuntu.local/ext/project_view/4d45d49a2fff4f6e821e1b8f744cd7da",
+            "url": "https://<your-domain>/ext/project_view/<some-project-id>/",
             "webRoot": "${workspaceFolder}/react_extension/src/"
         },
 

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Enter your domain
-domain="thorstest.hopto.org"
+domain="<your-domain>"
 # Enter the email certbot should run under
-email="richieschmid@live.de"
+email="<your-mail>"
 data_path="./data/certbot"
 
 

@@ -1,8 +1,8 @@
 from .settings_base import *
 import json
 
-URL = "https://thorstest.hopto.org"
-POST_BACK_URL = "https://thorstest.hopto.org"
+URL = "https://<your-domain>"
+POST_BACK_URL = "https://<your-domain>"
 
 # SECRET_KEY = "..."
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -30,17 +30,11 @@ USE_X_FORWARDED_HOST = True
 # }
 
 CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + [
-    "https://rs-kubuntu.local",
-    "https://air.local",
-    "https://idpsmerge.duckdns.org",
-    "https://thorstest.hopto.org",
+    "https://<your-domain>",
 ]
 
 CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + [
-    "https://rs-kubuntu.local",
-    "https://idpsmerge.duckdns.org",
-    "https://air.local",
-    "https://thorstest.hopto.org",
+    "https://<your-domain>",
 ]
 
 ALLOWED_HOSTS = [
@@ -48,11 +42,7 @@ ALLOWED_HOSTS = [
     "faui20s.cs.fau.de",
     "faui20s.informatik.uni-erlangen.de",
     "smerge.org",
-    "idpsmerge.duckdns.org",
-    "smerge_server",
-    "rs-kubuntu.local",
-    "air.local",
-    "thorstest.hopto.org",
+    "<your-domain>",
 ]
 
 DEBUG = True
@@ -63,7 +53,7 @@ secret_file = open(SECRET_PATH).read()
 secrets = json.loads(secret_file)
 SECRET_KEY = secrets["SECRET_KEY"]
 EMAIL_HOST_PASSWORD = secrets["EMAIL_HOST_PASSWORD"]
-EMAIL_SENDER = "idppi@idpsmerge.duckdns.org"
+EMAIL_SENDER = "<your-mailrelay-sender>"
 
 EMAIL_HOST = "in-v3.mailjet.com"
 EMAIL_PORT = 587
