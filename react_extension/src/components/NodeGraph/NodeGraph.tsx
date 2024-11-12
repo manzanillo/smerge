@@ -14,6 +14,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { debounce, toNumber } from "lodash";
 import { useQueryClient } from "@tanstack/react-query";
 import SettingsModal from "../SettingsModal";
+import KanbanBoard from "../KanbanBoard/KanbanBoard";
 import cxtmenu from "cytoscape-cxtmenu";
 import generateContextMenuSettings, {
   CytoscapeContextElement,
@@ -25,6 +26,8 @@ import ProjectDto from "../models/ProjectDto";
 import ProjectStats from "../ProjectStats";
 import NameDialog from "../shared/NameDialog";
 import { putLabelChange } from "../../services/ProjectService";
+
+// TODO this file is way to convoluted => needs refactoring
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodeGraphProps {
@@ -471,6 +474,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         wheelSensitivity={wheelSensitivity}
         setWheelSensitivity={setWheelSensitivity}
         reloadData={refresh}
+      />
+      <KanbanBoard
+        projectData={projectData}
+        setProjectData={setProjectData}
       />
       <MergeButtons cyRef={cy} refresh={refresh} projectId={projectId ?? ""} />
       <NameDialog

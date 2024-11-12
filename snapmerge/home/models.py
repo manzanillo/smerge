@@ -22,6 +22,14 @@ def default_conflict_color():
     return "#d0021b"
 
 
+def default_kanban_board():
+    return '''{"columns":[
+            {"id":1,"title":"KanbanBoard.todo","cards":[]},
+            {"id":2,"title":"KanbanBoard.wip","cards":[]},
+            {"id":3,"title":"KanbanBoard.done","cards":[]}
+        ]}'''
+
+
 class NodeTypes(Enum):
     DEFAULT = "default"
     MERGING = "merging"
@@ -47,6 +55,9 @@ class Project(models.Model):
     )
     conflict_color = models.CharField(
         _("conflict_color"), max_length=7, default=default_conflict_color()
+    )
+    kanban_board = models.TextField(
+        _("kanban_board"), default=default_kanban_board()
     )
 
     @classmethod

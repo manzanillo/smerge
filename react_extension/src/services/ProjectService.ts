@@ -140,6 +140,33 @@ export const postProjectSettingsChange = async (
   }
 };
 
+export const putKanbanChange = async (
+  projectId: string,
+  project: ProjectDto,
+  board: string,
+  maxId: int
+) => {
+  try {
+    const res = await httpService.postAsync<ProjectDto>(
+      `api/update/project/${projectId}`,
+      { ...project, kanban_board: board},
+      "PUT",
+      true,
+      true
+    );
+
+    if (res) {
+      return res;
+    }
+  } catch (err) {
+    toast.error(`Failed to update Kanbanboard`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+    });
+  }
+};
+
 export const putColorChange = async (
   projectId: string,
   default_color?: string,

@@ -168,5 +168,11 @@
   },
   "ImageDiv": {
     "Pen": "Stift:"
+  },
+  "KanbanBoard": {
+    "todo": "Backlog",
+    "wip": "In Progress",
+    "done": "Finished",
+    "cardLimit": "Card limit reached."
   }
 }

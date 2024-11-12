@@ -72,6 +72,8 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
             cleanData["description"] = request.data["description"]
         if "name" in request.data.keys():
             cleanData["name"] = request.data["name"]
+        if "kanban_board" in request.data.keys():
+            cleanData["kanban_board"] = request.data["kanban_board"]
 
         if "password" not in request.data.keys():
             request.data["password"] = ""

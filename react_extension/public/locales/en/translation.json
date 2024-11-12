@@ -168,5 +168,11 @@
   },
   "ImageDiv": {
     "Pen": "Pen:"
+  },
+  "KanbanBoard": {
+    "todo": "Zu Erledigen",
+    "wip": "In Bearbeitung",
+    "done": "Fertig",
+    "cardLimit": "Karten Limit erreicht."
   }
 }

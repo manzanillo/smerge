@@ -10,7 +10,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'pin','default_color', 'favor_color', 'conflict_color')
+        fields = ('id', 'name', 'description', 'pin','default_color', 'favor_color', 'conflict_color',
+            'kanban_board')
 
 
 class SnapFileSerializer(serializers.ModelSerializer):
@@ -24,7 +25,7 @@ class SnapFileSerializer(serializers.ModelSerializer):
         model = SnapFile
         fields = ('id', 'file_url', 'description', 'project', 'ancestors', 'timestamp', 'number_scripts',
                   'number_sprites', 'color', 'xPosition', 'yPosition', 'collapsed', 'hidden', 'type')
-        
+
 class ProjectColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project

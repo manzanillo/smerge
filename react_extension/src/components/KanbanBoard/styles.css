@@ -1,0 +1,23 @@
+
+.react-kanban-board {
+  padding: 5px;
+}
+
+.react-kanban-card {
+  border-radius: 3px;
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 7px;
+}
+
+.react-kanban-card--dragging {
+  box-shadow: 2px 2px grey;
+}
+
+.react-kanban-column {
+  padding: 15px;
+  border-radius: 2px;
+  background-color: #eee;
+  margin: 5px;
+}
+

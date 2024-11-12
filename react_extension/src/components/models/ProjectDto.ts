@@ -5,5 +5,6 @@ export default interface ProjectDto {
     pin: string,
     default_color: string,
     favor_color: string,
-    conflict_color: string
+    conflict_color: string,
+    kanban_board: string,
 }
