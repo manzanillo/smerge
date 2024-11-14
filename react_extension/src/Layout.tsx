@@ -16,6 +16,7 @@ import "./Layout.css";
 import { useTranslation } from "react-i18next";
 import httpService from "./services/HttpService";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUser, logout } from "./services/TeacherAuthService";
 
 // function Layout() {
 
@@ -39,6 +40,27 @@ const navItems = [
       window.history.back();
     },
   },
+  {
+    name: getCurrentUser()? "Teacher-View" : "main.nav_teacherlogin",
+    foo: () => {
+      const destination = getCurrentUser()? "ext/teacher_view" : "ext/teacher_login/";
+      if(location.href.includes("/ext")){
+        location.href = location.href.split("ext")[0] + destination;
+      }
+      else {
+        location.href = destination
+      }
+    }
+  },
+  {
+    name: getCurrentUser()? "Logout" : "",
+    foo: () => {
+      if(location.href.includes("/ext") && getCurrentUser()){
+        logout();
+        location.href = location.href.split("ext")[0] + "ext/teacher_login/";
+      }
+    }
+  }
 ];
 
 function Layout() {
@@ -71,6 +93,9 @@ function Layout() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const reactInternLinks = 
+  navItems.push()
 
   const container = window.document.body;
 

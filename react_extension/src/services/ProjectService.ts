@@ -28,6 +28,22 @@ export const getProjectUnhideAll = async (projectId: string) => {
   }
 };
 
+export const createProject = async (name: string) => {
+  const res = await httpService.postAsync<Promise<unknown>>(
+    `api/create_project`, {name: name}
+  );
+
+  if (res) {
+    toast.success(`Creation successful.`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+    });
+    return res;
+  }
+};
+
+
 export const postDeleteProject = async (
   projectId: string,
   password: string,

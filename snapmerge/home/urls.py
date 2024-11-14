@@ -1,11 +1,9 @@
-from django.conf.urls import include
 from django.urls import path, re_path
 from . import views
 from .api import views as api_views
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers
+from rest_framework.authtoken import views as authviews
 
-import django_eventstream
-from . import consumers
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.core import management
@@ -20,14 +18,17 @@ def setup_token_invalidator_job():
     scheduler.add_job(run_token_invalidator, "interval", days=1)
     scheduler.start()
 
-
 def run_token_invalidator():
     management.call_command("resettokencleanup", W=1)
-
 
 router = routers.DefaultRouter()
 
 urlpatterns = [
+    path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
+    path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),
+    path("api/schoolclasses", api_views.SchoolClassesView.as_view()),
+    path("api/teachers/<str:id>/schoolclasses", api_views.SchoolClassesForTeacherView.as_view()),
+    path("api/schoolclasses/<str:id>/projects", api_views.ProjectsForSchoolClassesView.as_view()),
     path("api/project/<str:id>/files", api_views.ListSnapFilesView.as_view()),
     path("api/project/<str:id>", api_views.ProjectDetailView.as_view()),
     path("api/project/<str:id>/unhide_all", api_views.UnhideAllView.as_view()),
@@ -35,9 +36,7 @@ urlpatterns = [
     path("api/update/password/<str:id>", api_views.ProjectChangePasswordView.as_view()),
     path("api/delete/project/<str:id>", api_views.ProjectDeleteView.as_view()),
     path("api/delete/conflict/<str:id>", api_views.MergeConflictDeleteView.as_view()),
-    path(
-        "api/update/project_colors/<str:id>", api_views.ProjectColorUpdateView.as_view()
-    ),
+    path("api/update/project_colors/<str:id>", api_views.ProjectColorUpdateView.as_view()),
     path("api/update/node_desc/<str:id>", api_views.NodeLabelUpdateView.as_view()),
     path("api/file/<int:id>", api_views.SnapFileDetailView.as_view()),
     path("api/file/<int:id>/position", api_views.SnapFilePositionView.as_view()),
@@ -52,6 +51,7 @@ urlpatterns = [
     re_path(r"^$", views.HomeView.as_view(), name="home"),
     re_path(r"^nav/$", views.NavView.as_view(), name="nav"),
     re_path(r"^impressum/$", views.ImpressumView.as_view(), name="impressum"),
+    re_path(r"^teacher_login/$", views.OpenTeacherLogin.as_view(), name="teacher-login"),
     re_path(r"^open_project/$", views.OpenProjectView.as_view(), name="open_proj"),
     re_path(r"^restore_info/$", views.RestoreInfoView.as_view(), name="restore_info"),
     path(

@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from .xmltools import analyze_file, include_sync_button
@@ -30,6 +31,27 @@ def default_kanban_board():
         ]}'''
 
 
+def default_kanban_board():
+    return '''{"columns":[
+            {"id":1,"title":"KanbanBoard.todo","cards":[]},
+            {"id":2,"title":"KanbanBoard.wip","cards":[]},
+            {"id":3,"title":"KanbanBoard.done","cards":[]}
+        ]}'''
+
+
+class SchoolClass(models.Model):
+    id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(_("Name"), max_length=100)
+    teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    @classmethod
+    def create_and_save(cls, name, teacherid):
+        schoolclass = cls.objects.create(
+            name=name, teacher = teacherid
+        )
+        schoolclass.save()
+        return schoolclass
+
 class NodeTypes(Enum):
     DEFAULT = "default"
     MERGING = "merging"
@@ -47,6 +69,7 @@ class Project(models.Model):
     pin = models.CharField(_("PIN"), max_length=6, unique=True)
     id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_("Email"), null=True, blank=True)
+    schoolclass = models.ForeignKey(SchoolClass, on_delete=models.DO_NOTHING, blank=True, null=True)
     default_color = models.CharField(
         _("node_color"), max_length=7, default=default_color()
     )
@@ -61,9 +84,9 @@ class Project(models.Model):
     )
 
     @classmethod
-    def create_and_save(cls, name, picture, description, password=""):
+    def create_and_save(cls, name, picture, description, schoolclass, password=""):
         proj = cls.objects.create(
-            name=name, picture=picture, description=description, password=password
+            name=name, picture=picture, description=description, password=password, schoolclass = schoolclass
         )
         proj.save()
         return proj

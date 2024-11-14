@@ -3,7 +3,8 @@
     "test": "test text oder so...",
     "nav_back": "Back",
     "nav_impressum": "Impressum",
-    "nav_howto": "How To Smerge"
+    "nav_howto": "How To Smerge",
+    "nav_teacherlogin": "Teacher-Login"
   },
   "SettingsModal": {
     "old_title": "Project Settings",

@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import authHeader, { getCurrentUser } from "./TeacherAuthService";
 
 class HttpService {
   public csrftoken: string;
@@ -68,7 +69,7 @@ class HttpService {
     xhttp.open(method, this.baseURL + endpoint, true);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
-
+    addAuthHeader(xhttp);
     xhttp.send(JSON.stringify(data));
 
     xhttp.onreadystatechange = function () {
@@ -133,6 +134,7 @@ class HttpService {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", this.baseURL + endpoint, true);
     xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    addAuthHeader(xhttp);
     xhttp.send();
 
     xhttp.onreadystatechange = function () {
@@ -158,6 +160,12 @@ class HttpService {
         });
       }
     };
+  }
+}
+
+function addAuthHeader(xhttp: XMLHttpRequest) : void {
+  if (getCurrentUser()) {
+    xhttp.setRequestHeader('Authorization', 'Token ' + getCurrentUser().token);
   }
 }
 

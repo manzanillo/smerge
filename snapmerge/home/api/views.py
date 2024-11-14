@@ -1,11 +1,18 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, request
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import permissions
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from django.http import HttpResponseBadRequest
+from rest_framework.authtoken.views import ObtainAuthToken
 
-from ..models import SnapFile, Project, MergeConflict
-from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer
-from django.shortcuts import get_object_or_404
+from ..models import SnapFile, Project, MergeConflict, SchoolClass
+from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer, RegistrationSerializer, SchoolClassSerializer
+from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
@@ -22,6 +29,128 @@ from ..views import check_password, hashPassword
 #     serializer_class = SnapFileSerializer
 #     lookup_field = 'project'
 #     permission_classes = [permissions.AllowAny]
+
+
+class CustomAuthToken(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
+
+class RegisterTeacherView(APIView):
+    """Registration View"""
+
+    def post(self, request, *args, **kwargs):
+        """Handles post request logic"""
+        registration_serializer = RegistrationSerializer(data=request.data)
+        print("register endpoint")
+        # Generate tokens for existing users
+        for user in User.objects.all():
+            if not user:
+                break
+            else:
+                try:
+                    Token.objects.get(user_id=user.id)
+                except Token.DoesNotExist:
+                    Token.objects.create(user=user)
+
+        if registration_serializer.is_valid():
+            user = registration_serializer.save()
+            token = Token.objects.create(user=user)
+
+            return Response(
+                {
+                    "user": {
+                        "id": registration_serializer.data["id"],
+                        "username": registration_serializer.data["username"],
+                        "email": registration_serializer.data["email"],
+                        "is_active": registration_serializer.data["is_active"],
+                        "is_staff": registration_serializer.data["is_staff"],
+                    },
+                    "status": {
+                        "message": "User created",
+                        "code": f"{status.HTTP_200_OK} OK",
+                    },
+                    "token": token.key,
+                }
+            )
+        return Response(
+             {
+                "error": registration_serializer.errors,
+                "status": f"{status.HTTP_203_NON_AUTHORITATIVE_INFORMATION} NON AUTHORITATIVE INFORMATION"
+            }
+        )
+
+class SchoolClassesView(generics.CreateAPIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    queryset = SchoolClass.objects.all()
+    serializer_class = SchoolClassSerializer
+
+    def get_serializer_context(self):
+        context =  super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+    def post(self, request, *args, **kwargs):
+        #serializer = SchoolClassSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
+    
+class SchoolClassesForTeacherView(generics.ListAPIView):
+    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = SchoolClassSerializer
+    lookup_field = "id"
+    queryset = SchoolClass.objects.all()
+
+    #def get_serializer_context(self):
+    #    context =  super().get_serializer_context()
+    #    context['request'] = self.request
+    #    return context
+
+    def get_queryset(self):
+        user = self.request.user
+        return  SchoolClass.objects.filter(teacher=user)
+
+    def get(self, request, *args, **kwargs):
+        teacher_id = self.kwargs.get(self.lookup_field)
+        #user = self.request.user  #This does not work correctly yet, the ids never match even if they are the same user
+        #if not teacher_id == user.id:
+        #    return HttpResponseBadRequest("Your UserId does not match the ID given in the URL!")
+        return self.list(request, *args, **kwargs)
+
+class ProjectsForSchoolClassesView(generics.ListAPIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = ProjectSerializer
+    lookup_field = "id"
+    queryset = Project.objects.all()
+
+    #def get(self, request, *args, **kwargs):
+    #    return self.list(request, *args, **kwargs).filter(schoolclass = kwargs.get('id'))
+
+    def get_queryset(self):
+        schoolclass_id = self.kwargs.get(self.lookup_field)
+        return Project.objects.filter(schoolclass=schoolclass_id)
+    
 
 
 class ListSnapFilesView(generics.ListAPIView):
