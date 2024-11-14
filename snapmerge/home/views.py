@@ -146,6 +146,9 @@ class ProjectView(View):
         }
         return render(request, "proj.html", context)
 
+class OpenTeacherLogin(View):
+    def get(self, request):
+        return redirect(f"/ext/teacher_login/")
 
 class MergeView(View):
     def get(self, request, proj_id):
@@ -208,7 +211,6 @@ class MergeView(View):
 
         else:
             return HttpResponse("invalid data ", status=400)
-
 
 class SyncView(View):
     @method_decorator(csrf_exempt)

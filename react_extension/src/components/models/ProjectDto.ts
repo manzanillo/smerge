@@ -6,4 +6,5 @@ export default interface ProjectDto {
     default_color: string,
     favor_color: string,
     conflict_color: string
+    schoolclass?: string | null
 }

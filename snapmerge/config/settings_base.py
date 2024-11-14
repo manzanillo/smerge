@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "compressor_toolkit",
     "rest_framework",
     'drf_spectacular',
+    "rest_framework.authtoken"
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -57,7 +58,8 @@ SPECTACULAR_SETTINGS = {
 
 REST_FRAMEWORK = {
     # YOUR SETTINGS
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'#,
+    #'DEFAULT_AUTHENTICATION_CLASSES':'rest_framework.authentication.TokenAuthentication'
 }
 
 MIDDLEWARE = [
