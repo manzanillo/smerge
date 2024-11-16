@@ -170,9 +170,9 @@
     "Pen": "Stift:"
   },
   "KanbanBoard": {
-    "todo": "Backlog",
-    "wip": "In Progress",
-    "done": "Finished",
-    "cardLimit": "Card limit reached."
+    "todo": "Zu Erledigen",
+    "wip": "In Bearbeitung",
+    "done": "Fertig",
+    "cardLimit": "Karten Limit erreicht."
   }
 }
