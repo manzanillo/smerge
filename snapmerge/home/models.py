@@ -23,6 +23,19 @@ def default_conflict_color():
     return "#d0021b"
 
 
+class SchoolClass(models.Model):
+    id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(_("Name"), max_length=100)
+    teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    @classmethod
+    def create_and_save(cls, name, teacherid):
+        schoolclass = cls.objects.create(
+            name=name, teacher = teacherid
+        )
+        schoolclass.save()
+        return schoolclass
+
 def default_kanban_board():
     return '''{"columns":[
             {"id":1,"title":"KanbanBoard.todo","cards":[]},
