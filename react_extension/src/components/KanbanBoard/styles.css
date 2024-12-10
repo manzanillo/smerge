@@ -16,8 +16,22 @@
 
 .react-kanban-column {
   padding: 15px;
-  border-radius: 2px;
+  border-radius: 9px;
   background-color: #eee;
   margin: 5px;
 }
 
+.card-color-picker .react-colorful {
+  padding: 15px;
+  height: 80px;
+  width: 100%;
+}
+
+.card-color-picker .react-colorful__saturation {
+  visibility: hidden;
+}
+
+.card-color-picker .react-colorful__hue {
+  order: -1;
+  border-radius: 15px;
+}

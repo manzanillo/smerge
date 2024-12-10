@@ -1,6 +1,6 @@
-import { ControlledBoard, addCard, changeCard, removeCard, Card, moveCard, KanbanBoard as KB }
-  from "@caldwell619/react-kanban"
-import React, { useState, useEffect } from "react";
+import { ControlledBoard, addCard, changeCard, removeCard, Card, moveCard, moveColumn, addColumn,
+  removeColumn, changeColumn, KanbanBoard as KB } from "@caldwell619/react-kanban"
+import React, { useState, useEffect, useRef } from "react";
 import {Typography, Button, Box, TextField, Backdrop, Fab, Fade, Stack, IconButton } from "@mui/material";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import EditIcon from "@mui/icons-material/Edit";
@@ -10,6 +10,11 @@ import { putKanbanChange } from "../../services/ProjectService";
 import "./styles.css"
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { HexColorPicker } from "react-colorful";
+import PaletteIcon from '@mui/icons-material/Palette';
+import Dialog from '@mui/material/Dialog';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import DialogActions from '@mui/material/DialogActions';
 
 interface KanbanBoardProps {
   projectData: ProjectDto;
@@ -18,10 +23,14 @@ interface KanbanBoardProps {
 
 // Only a limited number of cards and length of text in cards is allowed
 const max_card_length = 200
-const max_card_number = 15
+const max_card_number = 20
+const max_card_lines = 5
+const max_column_number = 5
 
-const renderColumnHeader = (column, board, setBoard) => {
-  const { t } = useTranslation();
+const renderColumnHeader = (column, board, setBoard, configOpen) => {
+  const [editMode, setEditMode] = useState(false);
+  const [title, setTitle] = useState('');
+  const { t, i18n } = useTranslation();
 
   const onAdd = () => {
     var number_of_cards = 0
@@ -29,7 +38,7 @@ const renderColumnHeader = (column, board, setBoard) => {
       number_of_cards = number_of_cards + col.cards.length
     }
 
-    if (number_of_cards <= max_card_number) {
+    if (number_of_cards < max_card_number) {
       // Every card needs an unique id
       setBoard(addCard(board, column, {id: Math.random()}, { on: 'bottom' }))
     } else
@@ -41,16 +50,67 @@ const renderColumnHeader = (column, board, setBoard) => {
   };
 
   return (
-    <Box display="flex" alignItems="center" gap={2} sx={{ pb: '5px', width: '300px' }}>
-      <Typography variant="h4">{t(column.title)}</Typography>
-      <Button
-        sx={{ backgroundColor: '#076AAB', color: 'white', marginLeft: 'auto'}}
-        size="medium"
-        variant="contained"
-        onClick={onAdd}
+    <Box display="flex" alignItems="center" gap={2} sx={{ pb: '5px', width: '308px', height: '47px'}}>
+      <Typography variant="h4" sx={{overflow: 'hidden'}}>
+        {i18n.exists(column.title) ? t(column.title) : column.title}
+      </Typography>
+
+      {configOpen ?
+        <Button
+          sx={{ marginLeft: 'auto', backgroundColor: '#BD5F00', color: 'white', '&:hover': {
+            backgroundColor: '#FF8000',
+            color: 'black',
+          },}}
+          variant="contained"
+          onClick={() => {
+            setTitle(i18n.exists(column.title) ? t(column.title) : column.title)
+            setEditMode(true)
+          }}
+        >
+          EDIT
+        </Button>
+      :
+        <Button
+          sx={{ marginLeft: 'auto', backgroundColor: '#076AAB', color: 'white' }}
+          variant="contained"
+          onClick={onAdd}
+        >
+          Add
+        </Button>
+      }
+      <Dialog
+          open={editMode}
+          onClose={() => {
+            setEditMode(false)
+          }}
       >
-        Add
-      </Button>
+        <TextField
+          value={title}
+          onChange={(event) => {
+            setTitle(event.target.value);
+          }}
+          sx={{m:"16px"}}
+        />
+        <DialogActions>
+          <Button sx={{ marginLeft: 'auto', color: 'red'}} onClick={() => {
+            setBoard(removeColumn(board, column))
+            setEditMode(false)
+          }}>
+            {t("KanbanBoard.deleteColumn")}
+          </Button>
+          <Button onClick={() => {
+              setEditMode(false)
+          }}>
+            {t("KanbanBoard.cancel")}
+          </Button>
+          <Button onClick={() => {
+            setBoard(changeColumn(board, column, {title: title}))
+            setEditMode(false)
+          }}>
+            {t("KanbanBoard.save")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
@@ -58,6 +118,16 @@ const renderColumnHeader = (column, board, setBoard) => {
 const renderCard = (card, board, setBoard) => {
   const [editMode, setEditMode] = useState(false);
   const [text, setText] = useState(card.description);
+
+  const inputRef = useRef(null);
+
+  // Does not work in makeEdit
+  useEffect(() => {
+    if (inputRef && inputRef.current && editMode) {
+      inputRef.current.focus();
+      inputRef.current.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length)
+    }
+  }, [editMode]);
 
   const makeEdit = () => {
     setEditMode(true);
@@ -73,27 +143,46 @@ const renderCard = (card, board, setBoard) => {
   const handleChange = (event) => {
     const newText = event.target.value;
     const lines = newText.split('\n').length;
-    if (lines <= 5) {
+    if (lines <= max_card_lines) {
       setText(newText);
     }
+  };
+
+  const [color, setColor] = useState(card.color ? card.color : "#90CAF9");
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
+
+  const saveColor = () => {
+    setColorPickerOpen(false);
+    setBoard(changeCard(board, card.id, {color: color}))
   };
 
   // For synchronization
   useEffect(() => {
     setText(card.description)
-  }, [card]);
+  }, [card.description]);
+
+  useEffect(() => {
+    if (card.color)
+      setColor(card.color)
+  }, [card.color]);
 
   const deleteCard = () => {
     const column = board.columns.find(e => e.cards.some(c => c.id === card.id))
     setBoard(removeCard(board, column, card))
   };
 
+  const predefinedColors = ["#FA9191", "#FAC591", "#F9F991", "#91FA91", "#91FAFA", "#90CAF9", "#9191FA", "#FA91FA"];
+
   return (
-    <Box sx={{
-      bgcolor: editMode ? '#F9CA90' : 'primary.main', borderRadius: 3, width: '300px', my: '3px',
-      boxShadow: 1
+    <Box spacing={2} sx={{
+      bgcolor: editMode ? '#C4C4C4' : color,
+      borderRadius: 3,
+      width: '308px',
+      my: '3px',
+      boxShadow: 1,
+      display: 'flex',
+      flexDirection: 'row'
     }}>
-    <Stack direction="row" spacing={2}>
       <div style={{'pointer-events': editMode ? 'auto' : 'none'}}>
         <TextField
           multiline
@@ -102,16 +191,11 @@ const renderCard = (card, board, setBoard) => {
           onChange={handleChange}
           disabled={!editMode}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Escape') {
               saveEdit();
             }
           }}
-          inputRef={input => {
-            if (input) {
-              input.focus()
-              input.setSelectionRange(input.value.length, input.value.length)
-            }
-          }}
+          inputRef={inputRef}
           inputProps={{ maxLength: max_card_length }}
           sx={{
             '& .MuiInputBase-input.Mui-disabled': {
@@ -128,13 +212,50 @@ const renderCard = (card, board, setBoard) => {
         />
       </div>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column'}}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', marginLeft: "auto"}}>
         <Button
           sx={{color: 'black'}}
           onClick={deleteCard}
         >
           X
         </Button>
+
+        <IconButton
+          sx={{color: 'black', marginTop: 'auto'}}
+          onClick={() => {
+            setColorPickerOpen((prev) => !prev);
+          }}
+        >
+          <PaletteIcon/>
+        </IconButton>
+
+        <Dialog
+          onClose={saveColor}
+          open={colorPickerOpen}
+        >
+          <div class = "card-color-picker">
+            <HexColorPicker
+              color={color}
+              onChange={(color) => {
+                setColor(color);
+              }}
+            />
+          </div>
+          <Box>
+          {predefinedColors.map((pColor) => (
+              <Button
+                variant="contained"
+                style={{ background: pColor }}
+                onClick={() => setColor(pColor)}
+                sx={{
+                  width: '40px',
+                  height: '40px',
+              }}
+              />
+            ))}
+          </Box>
+        </Dialog>
+
         <IconButton
           sx={{color: 'black',  marginTop: 'auto'}}
           onClick={editMode ? saveEdit : makeEdit}
@@ -142,7 +263,6 @@ const renderCard = (card, board, setBoard) => {
           {editMode ? <SaveIcon/> : <EditIcon/>}
         </IconButton>
       </Box>
-    </Stack>
     </Box>
   )
 }
@@ -152,11 +272,13 @@ const renderCard = (card, board, setBoard) => {
 
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjectData }) => {
   const [boardlOpen, setBoardOpen] = useState(false);
+  const [configOpen, setConfigOpen] = useState(false);
 
   const checkCloseKanbanBoard = (ev: React.MouseEvent<HTMLElement>) => {
     const target = ev.target as HTMLElement;
     if (target.classList.contains("closeKanbanBoard")) {
       setBoardOpen(false);
+      setConfigOpen(false);
     }
   };
 
@@ -190,6 +312,19 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjec
     }
   }, [projectData]);
 
+  const { t, i18n } = useTranslation();
+
+  const onAddColumn = () => {
+    if (board.columns.length < max_column_number) {
+      setBoard(addColumn(board, {id: Math.random(), title: '', cards: []}))
+    } else
+      toast.warning(t("KanbanBoard.columnLimit"), {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+      });
+  };
+
   return (
     <>
       <Fade in={boardlOpen} timeout={10}>
@@ -208,22 +343,55 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjec
           }}
           open={boardlOpen}
           onClick={checkCloseKanbanBoard}
+          onKeyDown={(e) => {
+            if (e.key == 'Escape') {
+              setBoardOpen(false);
+              setConfigOpen(false);
+            }
+          }}
         >
           <div style={{
             color: "black",
             left: '20%',
-            }}>
-            <ControlledBoard
-              disableColumnDrag="true"
-              renderCard={(p) => renderCard(p, board, updateBoard)}
-              renderColumnHeader={(p) => renderColumnHeader(p, board, updateBoard)}
-              onCardDragEnd={(card, source, destination) => {
-                return updateBoard(moveCard(board, source, destination))
+            }}
+          >
+            <Stack direction="row" sx={{ alignItems: 'flex-start'}}>
+              {configOpen && <AddBoxIcon fontSize="large" sx={{ opacity: 0, m: "8px"}}/>}
+              <ControlledBoard
+                disableColumnDrag={!configOpen}
+                renderCard={(p) => renderCard(p, board, updateBoard)}
+                renderColumnHeader={(p) => renderColumnHeader(p, board, updateBoard, configOpen)}
+                onCardDragEnd={(card, source, destination) => {
+                  return updateBoard(moveCard(board, source, destination))
+                }}
+                onColumnDragEnd={(c, source, destination) => {
+                  return updateBoard(moveColumn(board, source, destination))
+                }}
+                allowAddCard={false}
+              >
+              {board}
+              </ControlledBoard>
+              {configOpen && <IconButton
+                  variant="contained"
+                  sx={{ backgroundColor: '#076AAB', color: '#white', my: '10px'}}
+                  onClick={onAddColumn}
+                >
+                <AddBoxIcon fontSize="large"/>
+              </IconButton>}
+            </Stack>
+            <Fab
+              style={{
+                position: "absolute",
+                background: "white",
+                top: 20,
+                left: 20,
               }}
-              allowAddCard={false}
+              onClick={() => {
+                setConfigOpen((prev) => !prev);
+              }}
             >
-            {board}
-            </ControlledBoard>
+              {configOpen ? <SaveIcon/> : <EditIcon/>}
+            </Fab>
 
           </div>
         </Backdrop>

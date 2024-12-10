@@ -179,6 +179,10 @@
     "todo": "Backlog",
     "wip": "In Progress",
     "done": "Finished",
-    "cardLimit": "Card limit reached."
+    "cardLimit": "Card limit reached.",
+    "columnLimit": "Column limit reached.",
+    "cancel": "Cancel",
+    "deleteColumn": "Delete Column",
+    "save": "Save"
   }
 }

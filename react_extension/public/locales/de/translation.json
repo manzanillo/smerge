@@ -179,6 +179,10 @@
     "todo": "Zu Erledigen",
     "wip": "In Bearbeitung",
     "done": "Fertig",
-    "cardLimit": "Karten Limit erreicht."
+    "cardLimit": "Karten Limit erreicht.",
+    "columnLimit": "Spalten Limit erreicht.",
+    "cancel": "Abbrechen",
+    "deleteColumn": "Spalte Löschen",
+    "save": "Speichern"
   }
 }
