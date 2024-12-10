@@ -26,6 +26,10 @@ import ProjectDto from "../models/ProjectDto";
 import ProjectStats from "../ProjectStats";
 import NameDialog from "../shared/NameDialog";
 import { putLabelChange } from "../../services/ProjectService";
+import nodeHtmlLabel from "cytoscape-node-html-label";
+Cytoscape.use(nodeHtmlLabel);
+import { Stack, Typography, Button } from '@mui/material';
+import "./CommitMessage.css";
 
 // TODO this file is way to convoluted => needs refactoring
 
@@ -214,6 +218,27 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   // changed by eventUpdate if whole layout was pushed by others
   const resize = useRef(false);
   useEffect(() => {
+    if (cy.current) {
+      // the HTML label that is used to display the commit message when hovering over it
+      cy.current.nodeHtmlLabel([
+        {
+          query: 'node',
+          halign: 'right',
+          valign: 'center',
+          halignBox: 'right',
+          valignBox: 'center',
+          tpl: (data) => {
+            return (
+              "<div class='commitmessage'>"+
+                "<p class='commitmessage' style='color:Black;'>"+ data.label +" </p>"+
+              "</div>"
+            );
+          }
+        }
+      ],{
+        enablePointerEvents: true
+      });
+    }
     if (cy.current && !isLoading) {
       setElements([...(nodes ?? []), ...(edges ?? [])]);
 

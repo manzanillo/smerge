@@ -1,0 +1,19 @@
+p.commitmessage {
+    background-color: transparent;
+    text-overflow: ellipsis;
+    width: 5em;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  p.commitmessage:hover {
+    width: fit-content;
+  }
+  
+  .commitmessagespan {
+    visibility: hidden;
+  }
+
+  .cxtmenu .commitmessage {
+    visibility:hidden;
+  }

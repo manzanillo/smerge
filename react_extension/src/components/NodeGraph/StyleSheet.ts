@@ -4,7 +4,7 @@ const stylesheet: cytoscape.Stylesheet[] = [
     style: {
       content: "data(label)",
       "text-margin-x": 2,
-      "text-opacity": 0.8,
+      "text-opacity": 0.0,
       "text-valign": "center",
       "text-halign": "right",
       "background-color": "data(color)",

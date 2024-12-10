@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -53,14 +55,26 @@ export default function SignUp() {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [gdprError, setGdprError] = React.useState(false);
+  const [gdprErrorMessage, setGdprErrorMessage] = React.useState('');
   // This code only runs on the client side, to determine the system color preference
 
   const validateInputs = () => {
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
     const name = document.getElementById('name') as HTMLInputElement;
+    const gdpr = document.getElementById('gdpr') as HTMLInputElement;
 
     let isValid = true;
+
+    if (!gdpr.checked) {
+      setGdprError(true);
+      setGdprErrorMessage('Accepting this field is required.');
+      isValid = false;
+    } else {
+      setGdprError(false);
+      setGdprErrorMessage('');
+    }
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
@@ -176,6 +190,12 @@ export default function SignUp() {
                   error={passwordError}
                   helperText={passwordErrorMessage}
                   color={passwordError ? 'error' : 'primary'}
+                />
+              </FormControl>
+              <FormControl error={gdprError}>
+                <FormControlLabel
+                  required control={<Checkbox color={gdprError ? 'error' : 'primary'} id="gdpr" />}
+                  label="I agree that my data is stored in accordance to the GDPR"
                 />
               </FormControl>
               <Button

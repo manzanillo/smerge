@@ -23,6 +23,7 @@
     "cytoscape": "^3.27.0",
     "cytoscape-cxtmenu": "^3.5.0",
     "cytoscape-dagre": "^2.5.0",
+    "cytoscape-node-html-label": "^1.2.2",
     "i18next": "^23.7.18",
     "i18next-browser-languagedetector": "^7.2.0",
     "i18next-http-backend": "^2.4.2",
