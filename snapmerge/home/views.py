@@ -563,6 +563,9 @@ class GetConflictsView(View):
                 "projectId": mc.project.id,
                 "leftId": mc.left.id,
                 "rightId": mc.right.id,
+                "leftFile": mc.left.get_media_path(),
+                "rightFile": mc.right.get_media_path(),
+                "workCopy": mc.get_work_copy_path(),
             }
         )
 
@@ -688,10 +691,14 @@ def mergeExt(request, proj_id, resolutions):
                     # result.write(f)
             else:
                 # new_file.delete()
+                # Store partially merged file in database
+                workCopyFileName = f"{uuid4()}.xml"
+                with open(settings.BASE_DIR + settings.MEDIA_URL + workCopyFileName, 'wb') as f:
+                    f.write(result)
 
                 # Create new conflict with both files
                 merge_conflict = models.MergeConflict(
-                    left=file1, right=file2, project=proj, connected_file=new_file
+                    left=file1, right=file2, project=proj, connected_file=new_file, work_copy=workCopyFileName
                 )
                 merge_conflict.save()
 
@@ -730,6 +737,8 @@ def mergeExt(request, proj_id, resolutions):
                             file=f"{uuid4()}{ending}",
                             cx=conf.cxl,
                             cy=conf.cyl,
+                            description=file1.description,
+                            tag_id=conf.leftElement.get("customData")
                         )
                         left.save()
                         right = models.ConflictFile.create_and_save(
@@ -737,6 +746,8 @@ def mergeExt(request, proj_id, resolutions):
                             file=f"{uuid4()}{ending}",
                             cx=conf.cxr,
                             cy=conf.cyr,
+                            description=file2.description,
+                            tag_id=conf.rightElement.get("customData")
                         )
                         right.save()
 
@@ -753,10 +764,11 @@ def mergeExt(request, proj_id, resolutions):
                         parentImage=f"{uuid4()}.base64",
                     )
                     hunk.allowBoth = conf.allowBoth
+                    hunk.save()
+
                     # set image...
                     with open(settings.BASE_DIR + hunk.get_media_path(), "w") as f:
                         f.write(conf.parentImage)
-                    hunk.save()
 
                     # ret:MergeConflict = MergeConflict.objects.get(id=1)
                     # print(ret.left)

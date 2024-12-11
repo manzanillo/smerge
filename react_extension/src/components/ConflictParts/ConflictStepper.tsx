@@ -22,6 +22,9 @@ interface ConflictVM {
   projectId: string;
   leftId: number;
   rightId: number;
+  leftFile: string;
+  rightFile: string;
+  workCopy: string;
 }
 
 export interface ConflictDto {
@@ -46,6 +49,7 @@ export interface FileDto {
   cx: number;
   cy: number;
   name: string;
+  tag_id: string;
 }
 
 interface ConflictStepperProps {}
@@ -69,6 +73,9 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   const projectId = useRef<string>("");
   const leftId = useRef<number>(0);
   const rightId = useRef<number>(0);
+  const leftFile = useRef<string>("");
+  const rightFile = useRef<string>("");
+  const workCopy = useRef<string>("");
 
   useEffect(() => {
     debouncedLoadData();
@@ -89,6 +96,9 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
         projectId.current = resJson.projectId;
         leftId.current = resJson.leftId;
         rightId.current = resJson.rightId;
+        leftFile.current = resJson.leftFile;
+        rightFile.current = resJson.rightFile;
+        workCopy.current = resJson.workCopy;
       } else {
         if (xhttp.status >= 400) {
           console.log(`Conflict ${code} not found.`);
@@ -291,6 +301,8 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                       code={`LeftID: ${step.left.id} <-> RightID: ${step.right.id}`}
                       leftLink={step.left.file_url}
                       rightLink={step.right.file_url}
+                      leftDesc={step.left.description}
+                      rightDesc={step.right.description}
                       isActive={index == activeStep}
                       isText={step.left.file_url.includes(".txt")}
                       isImage={step.left.file_url.includes(".base64")}
@@ -301,6 +313,10 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
                       left={step.left}
                       right={step.right}
                       allowBoth={step.allowBoth}
+                      workCopy={workCopy.current}
+                      leftFile={leftFile.current}
+                      rightFile={rightFile.current}
+                      tagId={step.left.tag_id}
                     />
                   </div>
 

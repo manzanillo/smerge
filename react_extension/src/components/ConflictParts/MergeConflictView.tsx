@@ -34,11 +34,18 @@ interface MergeConflictViewProps {
   isAttribute?: boolean;
   leftLink?: string;
   rightLink?: string;
+  leftDesc?: string;
+  rightDesc?: string;
   parentPath?: string;
   parentImage?: string;
   left?: FileDto;
   right?: FileDto;
   allowBoth?: boolean;
+  workCopy?: string;
+  leftFile?: string;
+  rightFile?: string;
+  tagId?: string;
+  rightTagId?: string;
 }
 
 const MergeConflictView: React.FC<MergeConflictViewProps> = ({
@@ -48,6 +55,8 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
   code = "",
   leftLink = "",
   rightLink = "",
+  leftDesc = "",
+  rightDesc = "",
   isActive,
   isText = false,
   isImage = false,
@@ -58,17 +67,30 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
   left,
   right,
   allowBoth,
+  workCopy = "",
+  leftFile = "",
+  rightFile = "",
+  tagId = "",
 }) => {
   const serverEndpoint = "";
 
   const { t } = useTranslation();
-
-  const [xml1, _setXml1] = useState<string>(
+  const [xmlLeft, _setXmlLeft] = useState<string>(
+    leftFile.includes(".xml")
+      ? serverEndpoint + leftFile
+      : leftFile.replace("/media", "media")
+  );
+  const [xmlRight, _setXmlRight] = useState<string>(
+    rightFile.includes(".xml")
+      ? serverEndpoint + rightFile
+      : rightFile.replace("/media", "media")
+  );
+  const [xmlHunkLeft, _setXmlHunkLeft] = useState<string>(
     leftLink.includes(".xml")
       ? serverEndpoint + leftLink
       : leftLink.replace("/media", "media")
   );
-  const [xml2, _setXml2] = useState<string>(
+  const [xmlHunkRight, _setXmlHunkRight] = useState<string>(
     rightLink.includes(".xml")
       ? serverEndpoint + rightLink
       : rightLink.replace("/media", "media")
@@ -97,7 +119,7 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
 
   return (
     <>
-      {!isLoaded && isActive && xml1 != "" && xml2 != "" ? (
+      {!isLoaded && isActive && xmlHunkLeft != "" && xmlHunkRight != "" ? (
         <div className="merge_main_space">
           <Stack
             height={"40px"}
@@ -139,15 +161,16 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
           </Stack>
           <div className="merge_main_pane">
             {isText ? (
-              <TextDiv text1={xml1} text2={xml2} />
+              <TextDiv text1={xmlHunkLeft} text2={xmlHunkRight} />
             ) : isImage ? (
-              <ImageDiv text1={xml1} text2={xml2} left={left} right={right} />
+              <ImageDiv text1={xmlHunkLeft} text2={xmlHunkRight} left={left} right={right} />
             ) : isAudio ? (
-              <AudioDiv text1={xml1} text2={xml2} left={left} right={right} />
+              <AudioDiv text1={xmlHunkLeft} text2={xmlHunkRight} left={left} right={right} />
             ) : isAttribute ? (
-              <AttributeDiv text1={xml1} text2={xml2} />
+              <AttributeDiv text1={xmlHunkLeft} text2={xmlHunkRight} />
             ) : (
-              <SnapDiv xml1={xml1} xml2={xml2}></SnapDiv>
+              <SnapDiv linkLeft={xmlLeft} linkRight={xmlRight} desc1={leftDesc} desc2={rightDesc} linkWorkCopy={workCopy}
+                       tagId={tagId}></SnapDiv>
             )}
           </div>
           <Stack

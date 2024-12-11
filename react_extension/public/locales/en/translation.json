@@ -167,6 +167,11 @@
     "alreadyResolved": "The merge was resolved by another.\nThis window will close in 10 seconds.",
     "alreadyResolvedToast": "Merge already resolved!"
   },
+  "SnapDiv": {
+    "leftCommit": "Left Commit",
+    "rightCommit": "Right Commit",
+    "result": "Result"
+  },
   "ImageDiv": {
     "Pen": "Pen:"
   },

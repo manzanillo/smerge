@@ -928,37 +928,31 @@ def getCostumeUUID(node: ET.Element) -> str:
 # ---------------------------------------------------------  MERGE FUNCTIONS  ---------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------------------
 
-
-def merge2(
-    leftFilePath: str,
-    rightFilePath: str,
+def merge2ET(
+    leftRoot: ET.Element,
+    rightRoot: ET.Element,
     resolutions: list[Resolution] = [],
     outputAsET: bool = False,
 ) -> tuple[list[Conflict] | None, str]:
     """Main merging function
 
-    Parameters
-    ----------
-    file1Path : str
-        Path to left xml File.
-    file2Path : str
-        Path to right xml File.
-    resolutions : list[Resolution], optional
-        List of resolutions, by default []
-    outputAsET : bool, optional
-        If true, returns the merged tree as ET.Element, by default False
+        Parameters
+        ----------
+        file1Path : str
+            Path to left xml File.
+        file2Path : str
+            Path to right xml File.
+        resolutions : list[Resolution], optional
+            List of resolutions, by default []
+        outputAsET : bool, optional
+            If true, returns the merged tree as ET.Element, by default False
 
-    Returns
-    -------
-    tuple[list[Conflict] | None, str]
-        returns None and merged string if there are no conflicts, otherwise return conflicts and None
-    -------
+        Returns
+        -------
+        tuple[list[Conflict] | None, str]
+            returns None and merged string if there are no conflicts, otherwise return conflicts and None
+        -------
     """
-    treeLeft = ET.parse(leftFilePath)
-    treeRight = ET.parse(rightFilePath)
-
-    leftRoot = treeLeft.getroot()
-    rightRoot = treeRight.getroot()
 
     conflicts = []
     workCopy = ET.Element("")
@@ -997,7 +991,8 @@ def merge2(
                 res &= mergeSimple(leftNode, rightNode, ad)
 
     if not res:
-        return ad.conflicts, None
+        _, mergeTemplate = merge2ET(leftRoot, ad.workCopy)
+        return ad.conflicts, mergeTemplate
 
     # resolve costume uuid with number if merge resolve saved uuid in costume attribute of sprite
     resolveCostumeUUID(ad.workCopy)
@@ -1005,6 +1000,21 @@ def merge2(
     if outputAsET:
         return None, ad.workCopy
     return None, ET.tostring(ad.workCopy, encoding="UTF-8")
+
+
+def merge2(
+    leftFilePath: str,
+    rightFilePath: str,
+    resolutions: list[Resolution] = [],
+    outputAsET: bool = False,
+) -> tuple[list[Conflict] | None, str]:
+    treeLeft = ET.parse(leftFilePath)
+    treeRight = ET.parse(rightFilePath)
+
+    leftRoot = treeLeft.getroot()
+    rightRoot = treeRight.getroot()
+
+    return merge2ET(leftRoot, rightRoot, resolutions, outputAsET)
 
 
 def resolveCostumeUUID(node: ET.Element):

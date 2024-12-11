@@ -271,12 +271,13 @@ class ConflictFile(File):
     cx = models.FloatField("cx", null=True)
     cy = models.FloatField("cy", null=True)
     name = models.CharField("name", max_length=200, null=True, blank=True)
+    tag_id = models.CharField("tag_id", max_length=200, null=True, blank=True)
 
     @classmethod
     def create_and_save(
-        cls, project, file, cx, cy, ancestors=None, description="", name=""
+        cls, project, file, cx, cy, ancestors=None, description="", name="", tag_id=""
     ):
-        confl = cls.objects.create(project=project, file=file, description=description)
+        confl = cls.objects.create(project=project, file=file, description=description, tag_id=tag_id)
         confl.cx = cx
         confl.cy = cy
         confl.name = name
@@ -302,6 +303,7 @@ class ConflictFile(File):
             "cx": self.cx if self.cx else "",
             "cy": self.cy if self.cy else "",
             "name": self.name if self.name else "",
+            "tag_id": self.tag_id,
         }
 
     def get_media_path(self):
@@ -325,6 +327,17 @@ class MergeConflict(models.Model):
     connected_file = models.ForeignKey(
         SnapFile, on_delete=models.DO_NOTHING, related_name="connected_file", null=True
     )
+    work_copy = models.FileField(
+        _("File"),
+        validators=[
+            FileExtensionValidator(
+                ["xml", "XML"]
+            )
+        ],
+    )
+
+    def get_work_copy_path(self):
+        return settings.MEDIA_URL + str(self.work_copy)
 
 
 class Hunk(models.Model):
