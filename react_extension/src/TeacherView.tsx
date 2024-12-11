@@ -51,6 +51,9 @@ const TeacherView: React.FC = () => {
     }, []);
 
     return <div>
+        {  
+            projectsOfSchoolclasses ? (<div></div>) : (<div>You do not have any Schoolclasses yet, create one on the bottom right!</div>) 
+        }
         {projectsOfSchoolclasses.map((item:{schoolclass:SchoolclassDto, projects:ProjectDto[]}) => (
             <Accordion>
                 <AccordionSummary
@@ -69,16 +72,16 @@ const TeacherView: React.FC = () => {
                         ))
                        }
                         <Grid item>
-                            <AddProjectDialog></AddProjectDialog>
+                            <AddProjectDialog state={projectsOfSchoolclasses} setState={setProjectsOfSchoolclasses} schoolClass={item.schoolclass}></AddProjectDialog>
                         </Grid>
                         <Grid item>
-                            <ImportProjectDialog></ImportProjectDialog>
+                            <ImportProjectDialog state={projectsOfSchoolclasses} setState={setProjectsOfSchoolclasses} schoolClass={item.schoolclass}></ImportProjectDialog>
                         </Grid>
                     </Grid>
                 </AccordionDetails>
             </Accordion>
         ))}
-        <AddSchoolclassDialog></AddSchoolclassDialog>
+        <AddSchoolclassDialog state={projectsOfSchoolclasses} setState={setProjectsOfSchoolclasses}></AddSchoolclassDialog>
     </div>
 }
 

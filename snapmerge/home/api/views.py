@@ -18,7 +18,7 @@ from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 
-from ..views import check_password, hashPassword
+from ..views import check_password, generate_unique_PIN, hashPassword
 
 
 # class ListSnapFilesView(generics.ListAPIView):
@@ -126,7 +126,7 @@ class SchoolClassesForTeacherView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return  SchoolClass.objects.filter(teacher=user)
+        return SchoolClass.objects.filter(teacher=user)
 
     def get(self, request, *args, **kwargs):
         teacher_id = self.kwargs.get(self.lookup_field)
@@ -144,13 +144,28 @@ class ProjectsForSchoolClassesView(generics.ListAPIView):
     lookup_field = "id"
     queryset = Project.objects.all()
 
-    #def get(self, request, *args, **kwargs):
-    #    return self.list(request, *args, **kwargs).filter(schoolclass = kwargs.get('id'))
-
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         schoolclass_id = self.kwargs.get(self.lookup_field)
         return Project.objects.filter(schoolclass=schoolclass_id)
+
+class ProjectCreationFromTeacherView(generics.CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = ProjectSerializer
     
+    def get_serializer_context(self):
+        context =  super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+    def post(self, request, *args, **kwargs):
+        projectPin = generate_unique_PIN()
+        projectdata = {**request.data, 'pin': projectPin}
+        serializer = self.get_serializer(data=projectdata, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
 
 
 class ListSnapFilesView(generics.ListAPIView):
@@ -203,7 +218,8 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
             cleanData["name"] = request.data["name"]
         if "kanban_board" in request.data.keys():
             cleanData["kanban_board"] = request.data["kanban_board"]
-
+        if "schoolclass" in request.data.keys():
+            cleanData["schoolclass"] = request.data["schoolclass"]
         if "password" not in request.data.keys():
             request.data["password"] = ""
 
@@ -211,6 +227,39 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
             request.data["password"], instance.password
         ):
             return Response(data="Wrong Password!", status=403)
+        partial = kwargs.pop("partial", False)
+
+        serializer = self.get_serializer(instance, data=cleanData, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        send_event(str(instance.id), "message", {"text": "projectChange"})
+        return Response(data=serializer.data, status=200)
+
+class ProjectImportUpdateView(generics.UpdateAPIView):
+    """
+    API endpoint that allows projects to be viewed.
+    """
+
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    lookup_field = "id"
+    permission_classes = [permissions.AllowAny]
+
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        cleanData = {"pin": instance.pin}
+        if "description" in request.data.keys():
+            cleanData["description"] = request.data["description"]
+        if "name" in request.data.keys():
+            cleanData["name"] = request.data["name"]
+        if "kanban_board" in request.data.keys():
+            cleanData["kanban_board"] = request.data["kanban_board"]
+        if "schoolclass" in request.data.keys():
+            cleanData["schoolclass"] = request.data["schoolclass"]
+        if "password" not in request.data.keys():
+            request.data["password"] = ""
         partial = kwargs.pop("partial", False)
 
         serializer = self.get_serializer(instance, data=cleanData, partial=partial)

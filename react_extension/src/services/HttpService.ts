@@ -88,6 +88,78 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
+        toast.error(`Post ${endpoint} failed (${xhttp.status}).`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+        });
+      }
+    };
+  }
+
+  putAsync<T>(
+    endpoint: string,
+    data: any,
+    method: string = "PUT",
+    suppressNotificationSuccess = true,
+    suppressNotificationFail = false,
+    onRedirect = () => {}
+  ): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.put(
+        endpoint,
+        data,
+        method,
+        (xHttp) =>
+          resolve(
+            xHttp.responseText.includes("{")
+              ? (JSON.parse(xHttp.responseText) as T)
+              : (xHttp.responseText as T)
+          ),
+        reject,
+        (reason: any) => {
+          onRedirect();
+          reject(reason);
+        },
+        suppressNotificationSuccess,
+        suppressNotificationFail
+      );
+    });
+  }
+
+  put(
+    endpoint: string,
+    data: any,
+    method: string = "PUT",
+    onSuccess: (_: XMLHttpRequest) => void,
+    onFail: (_: XMLHttpRequest) => void,
+    onRedirect: (_: XMLHttpRequest) => void,
+    suppressNotificationSuccess = false,
+    suppressNotificationFail = false
+  ) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, this.baseURL + endpoint, true);
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    addAuthHeader(xhttp);
+    xhttp.send(JSON.stringify(data));
+
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState === 4 && xhttp.status <= 299) {
+        onSuccess(xhttp);
+        if (suppressNotificationSuccess) return;
+
+        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+        });
+      } else if (xhttp.readyState === 4 && xhttp.status <= 399) {
+        onRedirect(xhttp);
+      } else if (xhttp.readyState === 4) {
+        onFail(xhttp);
+        if (suppressNotificationFail) return;
+
         toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
           position: "top-right",
           autoClose: 2000,

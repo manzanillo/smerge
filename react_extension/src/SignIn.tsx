@@ -10,8 +10,8 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import { toast } from 'react-toastify'
 import { styled } from '@mui/material/styles';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
 import * as TeacherAuthService from './services/TeacherAuthService';
 
 //let navigate: NavigateFunction = useNavigate();
@@ -87,6 +87,11 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       },
       (error) => {
         console.log(error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+        });
       }
     )    
   };

@@ -9,8 +9,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { createProject } from '../services/ProjectService';
+import SchoolclassDto from './models/SchoolclassDto';
 
-export default function AddProjectDialog() {
+const AddProjectDialog = (props: { setState: (arg0: any[]) => void; state: any;  schoolClass: SchoolclassDto}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -36,7 +37,7 @@ export default function AddProjectDialog() {
             const formJson = Object.fromEntries((formData as any).entries());
             const name = formJson.name;
             console.log(name);
-            createProject(name);
+            createProject(name, props.schoolClass.id);
             handleClose();
           },
         }}
@@ -66,3 +67,5 @@ export default function AddProjectDialog() {
     </React.Fragment>
   );
 }
+
+export default AddProjectDialog;

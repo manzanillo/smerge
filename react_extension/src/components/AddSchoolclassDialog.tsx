@@ -6,12 +6,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Fab, IconButton } from '@mui/material';
+import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { createProject } from '../services/ProjectService';
 import { createSchoolclass } from '../services/SchoolclassService';
 
-export default function AddSchoolclassDialog() {
+const AddSchoolclassDialog = (props: { setState: (arg0: any[]) => void; state: any; }) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -42,7 +41,10 @@ export default function AddSchoolclassDialog() {
             const formJson = Object.fromEntries((formData as any).entries());
             const name = formJson.name;
             console.log(name);
-            createSchoolclass(name);
+            const schoolclass = createSchoolclass(name).then((res) => {
+              props.setState([...props.state, {'schoolclass':res, 'projects' : []}])
+              return res
+            });
             handleClose();
           },
         }}
@@ -72,3 +74,5 @@ export default function AddSchoolclassDialog() {
     </React.Fragment>
   );
 }
+
+export default AddSchoolclassDialog;

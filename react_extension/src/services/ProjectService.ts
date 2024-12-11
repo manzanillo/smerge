@@ -2,6 +2,7 @@
 import { toast } from "react-toastify";
 import ProjectDto from "../components/models/ProjectDto";
 import httpService from "./HttpService";
+import AddSchoolclassDialog from "../components/AddSchoolclassDialog";
 
 export const getProjectData = async (projectId: string) => {
   const res = await httpService.getAsync<Promise<ProjectDto>>(
@@ -28,11 +29,10 @@ export const getProjectUnhideAll = async (projectId: string) => {
   }
 };
 
-export const createProject = async (name: string) => {
+export const createProject = async (name: string, schoolclassId: string | null) => {
   const res = await httpService.postAsync<Promise<unknown>>(
-    `api/create_project`, {name: name}
+    `api/projects`, {name: name, schoolclass: schoolclassId}
   );
-
   if (res) {
     toast.success(`Creation successful.`, {
       position: "top-right",
@@ -176,6 +176,32 @@ export const putKanbanChange = async (
     }
   } catch (err) {
     toast.error(`Failed to update Kanbanboard`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+    });
+  }
+};
+
+
+export const importProjectToSchoolclass = async (
+  projectId: string,
+  project: ProjectDto,
+) => {
+  try {
+    const res = await httpService.postAsync<ProjectDto>(
+      `api/update/project/${projectId}/import`,
+      { ...project},
+      "PUT",
+      true,
+      true
+    );
+
+    if (res) {
+      return res;
+    }
+  } catch (err) {
+    toast.error(`Failed to import Project`, {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,

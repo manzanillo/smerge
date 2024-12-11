@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const API_URL = window.location.href.split("ext")[0] + "api/";
 
@@ -23,9 +24,15 @@ export const login = (username: string, password: string) => {
       if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-
       return response.data;
-    });
+    }, (error) => {
+      console.log(error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+      });
+    })
 };
 
 export const logout = () => {

@@ -8,8 +8,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IconButton } from '@mui/material';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { getProjectData, importProjectToSchoolclass } from '../services/ProjectService';
+import SchoolclassDto from './models/SchoolclassDto';
+import ProjectDto from './models/ProjectDto';
 
-export default function ImportProjectDialog() {
+const ImportProjectDialog = (props: { setState: (arg0: any[]) => void; state: any; schoolClass: SchoolclassDto}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -32,8 +35,26 @@ export default function ImportProjectDialog() {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
-            const email = formJson.email;
-            console.log(email);
+            const projectId = formJson.projectId;
+            getProjectData(projectId).then((response) => {
+                const project = response;
+                if(project) {
+                  project.schoolclass = props.schoolClass.id;
+                  const updatedProject = importProjectToSchoolclass(projectId, project).then((res) => {
+                    if (!res) return;
+                    var newState: { schoolclass: string | null; projects: ProjectDto[]; }[] = [];
+                      props.state.map((item: { schoolclass: string | null; projects: ProjectDto[]; }) => {
+                        if (item.schoolclass == project.schoolclass) {
+                          item.projects = [...item.projects, res] 
+                        }
+                        newState = [...newState, item]
+                      })
+                    props.setState(newState)
+                  });
+                }
+                else return null;
+            });
+            console.log(projectId);
             handleClose();
           },
         }}
@@ -41,26 +62,27 @@ export default function ImportProjectDialog() {
         <DialogTitle>Import existing Project</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
+            To Import a Project, input its ProjectId here.
           </DialogContentText>
           <TextField
             autoFocus
             required
             margin="dense"
-            id="name"
-            name="email"
-            label="Email Address"
-            type="email"
+            id="projectid"
+            name="projectId"
+            label="Project ID or PIN"
+            type="string"
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Subscribe</Button>
+          <Button type="submit">Import</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
   );
 }
+
+export default ImportProjectDialog;

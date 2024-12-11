@@ -319,7 +319,6 @@ class CreateProjectView(View):
             messages.warning(request, _("Invalid Data."))
             return HttpResponseRedirect(reverse("create_proj"))
 
-
 class OpenProjectView(View):
     def get(self, request):
         form = OpenProjectForm()
