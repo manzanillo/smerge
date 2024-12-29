@@ -409,6 +409,43 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
           description: ''
+  /api/update/kanban/{id}:
+    put:
+      operationId: api_update_project_kanban_update
+      description: API endpoint to update the Kanban board.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: api_update_project_kanban_partial_update
+      description: API endpoint to update the Kanban board.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
   /api/update/project_colors/{id}:
     put:
       operationId: api_update_project_colors_update

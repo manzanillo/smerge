@@ -35,6 +35,7 @@ urlpatterns = [
     path("api/project/<str:id>/unhide_all", api_views.UnhideAllView.as_view()),
     path("api/update/project/<str:id>", api_views.ProjectDetailUpdateView.as_view()),
     path("api/update/project/<str:id>/import", api_views.ProjectImportUpdateView.as_view()),
+    path("api/update/kanban/<str:id>", api_views.ProjectUpdateKanbanView.as_view()),
     path("api/update/password/<str:id>", api_views.ProjectChangePasswordView.as_view()),
     path("api/delete/project/<str:id>", api_views.ProjectDeleteView.as_view()),
     path("api/delete/conflict/<str:id>", api_views.MergeConflictDeleteView.as_view()),

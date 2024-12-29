@@ -27,6 +27,12 @@ const max_card_number = 20
 const max_card_lines = 5
 const max_column_number = 5
 
+// predefine some card background colors to make it easy to select distinct ones
+// all colors have the same brightness and saturation to keep the text readable
+const predefinedCardColors = ["#FA9191", "#FAC591", "#F9F991", "#91FA91", "#91FAFA", "#90CAF9", "#9191FA", "#FA91FA"];
+const defaultCardColor = "#90CAF9"
+const editCardColor = "#C4C4C4"
+
 const renderColumnHeader = (column, board, setBoard, configOpen) => {
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState('');
@@ -52,7 +58,7 @@ const renderColumnHeader = (column, board, setBoard, configOpen) => {
   return (
     <Box display="flex" alignItems="center" gap={2} sx={{ pb: '5px', width: '308px', height: '47px'}}>
       <Typography variant="h4" sx={{overflow: 'hidden'}}>
-        {i18n.exists(column.title) ? t(column.title) : column.title}
+        {column.titleChanged ? column.title : t(column.title)}
       </Typography>
 
       {configOpen ?
@@ -63,7 +69,7 @@ const renderColumnHeader = (column, board, setBoard, configOpen) => {
           },}}
           variant="contained"
           onClick={() => {
-            setTitle(i18n.exists(column.title) ? t(column.title) : column.title)
+            setTitle(column.titleChanged ? column.title : t(column.title))
             setEditMode(true)
           }}
         >
@@ -104,7 +110,7 @@ const renderColumnHeader = (column, board, setBoard, configOpen) => {
             {t("KanbanBoard.cancel")}
           </Button>
           <Button onClick={() => {
-            setBoard(changeColumn(board, column, {title: title}))
+            setBoard(changeColumn(board, column, {title: title, titleChanged: true}))
             setEditMode(false)
           }}>
             {t("KanbanBoard.save")}
@@ -148,7 +154,7 @@ const renderCard = (card, board, setBoard) => {
     }
   };
 
-  const [color, setColor] = useState(card.color ? card.color : "#90CAF9");
+  const [color, setColor] = useState(card.color ? card.color : defaultCardColor);
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
 
   const saveColor = () => {
@@ -171,11 +177,9 @@ const renderCard = (card, board, setBoard) => {
     setBoard(removeCard(board, column, card))
   };
 
-  const predefinedColors = ["#FA9191", "#FAC591", "#F9F991", "#91FA91", "#91FAFA", "#90CAF9", "#9191FA", "#FA91FA"];
-
   return (
     <Box spacing={2} sx={{
-      bgcolor: editMode ? '#C4C4C4' : color,
+      bgcolor: editMode ? editCardColor : color,
       borderRadius: 3,
       width: '308px',
       my: '3px',
@@ -242,7 +246,7 @@ const renderCard = (card, board, setBoard) => {
             />
           </div>
           <Box>
-          {predefinedColors.map((pColor) => (
+          {predefinedCardColors.map((pColor) => (
               <Button
                 variant="contained"
                 style={{ background: pColor }}
@@ -299,7 +303,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjec
       b.version = 0
     }
     b.version += 1
-    putKanbanChange(projectData.id, projectData, JSON.stringify(b));
+    putKanbanChange(projectData.id, b);
     setBoard(b)
   }
 

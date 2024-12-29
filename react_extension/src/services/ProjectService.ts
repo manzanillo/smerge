@@ -158,14 +158,12 @@ export const postProjectSettingsChange = async (
 
 export const putKanbanChange = async (
   projectId: string,
-  project: ProjectDto,
-  board: string,
-  maxId: int
+  board: any,
 ) => {
   try {
     const res = await httpService.postAsync<ProjectDto>(
-      `api/update/project/${projectId}`,
-      { ...project, kanban_board: board},
+      `api/update/kanban/${projectId}`,
+      { kanban_board: JSON.stringify(board) },
       "PUT",
       true,
       true

@@ -36,7 +36,7 @@ class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
-        
+
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
@@ -94,7 +94,7 @@ class SchoolClassesView(generics.CreateAPIView):
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     queryset = SchoolClass.objects.all()
     serializer_class = SchoolClassSerializer
 
@@ -109,9 +109,9 @@ class SchoolClassesView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
-    
+
 class SchoolClassesForTeacherView(generics.ListAPIView):
-    
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -153,7 +153,7 @@ class ProjectCreationFromTeacherView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     serializer_class = ProjectSerializer
-    
+
     def get_serializer_context(self):
         context =  super().get_serializer_context()
         context['request'] = self.request
@@ -269,6 +269,26 @@ class ProjectImportUpdateView(generics.UpdateAPIView):
         send_event(str(instance.id), "message", {"text": "projectChange"})
         return Response(data=serializer.data, status=200)
 
+class ProjectUpdateKanbanView(generics.UpdateAPIView):
+    """
+    API endpoint to update the Kanban board.
+    """
+
+    queryset = Project.objects.all()
+    lookup_field = "id"
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ProjectSerializer
+
+    def put(self, request, *args, **kwargs):
+        project = self.get_object()
+
+        if "kanban_board" in request.data.keys():
+            project.kanban_board = request.data["kanban_board"]
+
+        project.save()
+        # Notify everyone to update the board
+        send_event(str(project.id), "message", {"text": "projectChange_KanbanBoard"})
+        return Response(data="Updated Kanbanboard.", status=200)
 
 class SnapFileDetailView(generics.RetrieveAPIView):
     """
