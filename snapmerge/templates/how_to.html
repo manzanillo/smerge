@@ -16,7 +16,7 @@
         </h1>
 
         <p>
-            {% trans "Smerge is a version control system for the block-based language <em>Snap!</em>, " %} 
+            {% trans "Smerge is a version control system for the block-based language <em>Snap!</em>, " %}
             {% trans "which enables collaboration and tinkering in the classroom. " %}
             {% trans "It&#39;s tailored to novice programmers and therefore easy to use for teachers and students. " %}
             {% trans "What we wanted to avoid was making a feature-overloaded git clone." %}
@@ -24,10 +24,10 @@
 
         <p>{%trans "The use of Smerge is also explained in this video (English subtitles available) in addition to the following instructions" %}</p>
 
-        
+
         <iframe width="560" height="315" src="https://www.youtube.com/embed/bqfCOkNY6UM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        
-        
+
+
 
 
         <h2>{% trans "Attention!" %}</h2>
@@ -37,7 +37,7 @@
         <p><img src="{% static "howto/javascript.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
 
 
-       
+
 
         <h2><a name='header-n6' class='md-header-anchor '></a>{% trans "Our Badger&#39;s sett" %}</h2>
             <p>{% trans "A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is gradually expanding it over years." %}</p>
@@ -66,13 +66,23 @@
             <p>{% trans "As you see, everyone is working in his own &quot;tunnels&quot;!" %}</p>
             <p>{% trans "At a certain point the badger wants to meet up with his family members. In the same way, we want to merge our changes to the project. Eventually we want to play the game, don&#39;t we?" %}</p>
             <p>{% trans "Therefore we simply click the &quot;merge&quot;-Button in the bottom right, tick all the versions we would like to merge, and click yes to confirm." %}</p>
-        
+
         <p><img src="{% static "howto/4.gif" %}" alt='img' referrerPolicy='no-referrer'/></p>
             <p>{% trans "Now we will find a new version, with all changes merged. But what happens if more than one made changes to the same script? If such a situation occurs, we will have to manually choose with version we want to keep:" %}</p>
         <p><img src="{% static "howto/5.png" %}" alt='img' referrerPolicy='no-referrer'/></p>
         <h2><a name='header-n42' class='md-header-anchor '></a>{% trans "Go back if you made a mistake" %}</h2>
             <p>{% trans "Sometimes the badger abandons one tunnel, e.g. due to a lack of stability. He then has to go back and up in his sett, and work on from a different chamber. In the same way, sometimes we have to go back to an older version, e.g. because we made some mistakes or tried something that didn&#39;t really work out. In order to do so, we simply open the version we want to rever to, open it in <em>Snap!</em> by double-clicking, and work on from there. This way, we will get a new &quot;tunnel&quot;." %}</p>
         <hr/>
+
+        <h2><a class='md-header-anchor '></a>{% trans "Kanban board" %}</h2>
+            <p>{% trans "Group work requires communication between participants, for this propose Smerge provides a Kanban board. It can be opened with a button on the top right hand corner below the setting button. Cards can be added by pressing the ADD button at the top of a column, and to edit them click on the pencil icon of a card, write some text and click on the save icon when done. Additionally, the color of a card can be changed by clicking on the palette icon of a card. They can be moved to a different column by dragging." %}</p>
+
+           <p><img src="{% static "howto/kanban.gif" %}" alt='img' referrerPolicy='no-referrer'/></p>
+
+            <p>{% trans "To change the column layout, first press the button at the top left hand corner and then add, remove, rename or drag columns. You can have up to five columns in total." %}</p>
+
+        <hr/>
+
         <h2><a name='header-n54' class='md-header-anchor '></a>{% trans "Built for teachers and the classroom" %}</h2>
 
             <p>{% trans "What does Smerge offer you and how it can help with teaching?" %}</p>
@@ -88,7 +98,7 @@
                 </li>
             </ul>
         <h2><a name='header-n60' class='md-header-anchor '></a>{% trans "Login and User Management" %}</h2>
-        
+
         <p>{% trans "We deliberatly have no dedicated user accounts or management. Instead, to secure your projects, you will get a PIN on the time of project creation, and can set a password. If you add your e-mail at project creation, you can retrieve your PIN and password for all your projects if you forgot them." %}</p>
         <p>{% trans "Want to know more or need help?" %} <a href="mailto:tilman.michaeli@tum.de"
                                                             title="{% trans "Contact" %}"> {% trans "Contact" %}</a>

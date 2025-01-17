@@ -16,9 +16,9 @@ As mentioned above, the project currently uses Django as "static" page host and 
 
 The main configuration is located in the "snapmerge/home/config" folder and contains different settings for different launch situations. For example, settings_production.py disable debug and beta mode in addition to enforcing some security measures and changing the base URLs to the correct server locations. For most of the configuration to work, some secrets need to be set in advance inside the "snapmerge/secrets" folder. More details in the the secret section below.
 
-The home folder and "views.py" contain most of the logic for the Django part, the merger and API as mentioned above. The old merger is also contained in the "views.py" with more parts inside "ancestors.py" and "xmltools.py". These can still be accessed from the project page by switching the merge mode, but were not modified from the old state. The new merger is contained inside the directory "Merger_Two_ElectricBoogaloo". 
+The home folder and "views.py" contain most of the logic for the Django part, the merger and API as mentioned above. The old merger is also contained in the "views.py" with more parts inside "ancestors.py" and "xmltools.py". These can still be accessed from the project page by switching the merge mode, but were not modified from the old state. The new merger is contained inside the directory "Merger_Two_ElectricBoogaloo".
 
-The basic premise of the old merger was to combine all scripts / blocks of a Snap! file with cartesian coordinates since they were the only "stable" part to differentiate each block. This approach works for basic combinations but couldn't differentiate between moved and changed parts, in addition to mishandling hidden XML parts like watcher and states. The new merger probably still mishandles some states changed internally by Snap!, but hopefully less then the old one :D. We also added an activation step between the user opening Snap! and their program. Since JS activation inside Snap! was mandatory from the beginning, we extended this part and added the mentioned step there. 
+The basic premise of the old merger was to combine all scripts / blocks of a Snap! file with cartesian coordinates since they were the only "stable" part to differentiate each block. This approach works for basic combinations but couldn't differentiate between moved and changed parts, in addition to mishandling hidden XML parts like watcher and states. The new merger probably still mishandles some states changed internally by Snap!, but hopefully less then the old one :D. We also added an activation step between the user opening Snap! and their program. Since JS activation inside Snap! was mandatory from the beginning, we extended this part and added the mentioned step there.
 
 When a user opens a project node, a dummy is loaded with a single button that in turn loads the real file after JS was activated and the button pressed. In the same step we have overwritten the serialize and deserialize logic of Django to enable an extra value inside the XML tags. This "customData" value is in turn filled with a uuid4 when the file is posted back to the server. With this addition, the new merger can differentiate most cases better then a simple x / y comparison. (Be careful since Snap! can and will delete script nodes from time to time internally, resulting in a loss of uuid... pre / post pass might be necessary in the future.) The merger itself steps structured through the given XML files, determines the node type and then uses a specific merger for each case. More information can be found inside the merger comments. This approach is longer than a generalized merger but at least a bit easier to understand, extend and is better workable.
 
@@ -123,7 +123,7 @@ Since the FU server handles its own certificates, the production compose dose no
 
 
 ## Docker (Access Portal)
-The access server container can "simply" be built and started with docker-compose and the `docker-compose-access.yml` file. For the container to be able to build properly, a few steps need to be taken. 
+The access server container can "simply" be built and started with docker-compose and the `docker-compose-access.yml` file. For the container to be able to build properly, a few steps need to be taken.
 - First, disable any local Nginx server running on port 80 / 443 of the target machine, since the Access Portal container has its own for routing and IP blocking. (Optionally, change ports and use another proxy server to point at the right container if needed.)
 - Then make sure all needed files exist inside the secrets folder. These are the SSL certificates (public / private) for your domain (make sure to change your needed domain inside the Nginx config...). We would advise to use tools like Certbot to get the certificates if you want a publicly accessible server, or create a self signed pair. In addition, you need a set of public and private SSH keys. They are used by the server to authenticate against github (also make sure to enter this public key in your repo, otherwise switching commit / branch won't work).
 - After the container is running, you should be able to open the Access Portal login under `https://<your-domain>/access/login` and register a user. To verify the first user / admin, open a terminal inside the Access Portal container and run the python file `/app/Access_Portal/Web_Api/activateUser.py --name <name> -a`. This will activate your created user and make him the admin. Each next verification can be made inside the Access Portal in the admin panel by the applicable user.
@@ -312,10 +312,10 @@ Rough list of project files with short descriptors as direction guide. Files not
 
 
 ## Test Infrastructure
-The main focus of the test infrastructure is the merger algorithm as it is the core of Smerge.  
+The main focus of the test infrastructure is the merger algorithm as it is the core of Smerge.
 
-For the merger, the tests are based on reference files.  
-This means that the Snap! files to be tested with are stored within the Smerge git repository.  
+For the merger, the tests are based on reference files.
+This means that the Snap! files to be tested with are stored within the Smerge git repository.
 In particular, the files are stored under:
 ```
 snapmerge -> test -> snapfiles
@@ -324,18 +324,18 @@ snapmerge -> test -> snapfiles
 ### Merging Test Case Generation
 For convenience, there exists a small convention-based test framework for generating tests that test whether a conflict should be raised or not when two files get merged.
 
-In order to generate new test cases files can be added either to the ```collisions``` or the ```no_collisions``` folder.  
+In order to generate new test cases files can be added either to the ```collisions``` or the ```no_collisions``` folder.
 For each merging test, 'two' files must be placed into those folders.
-If a collision is the expected outcome of merging the two files they must be placed into the ```collisions``` folder. Otherwise, in the ```no_collisions``` folder. 
+If a collision is the expected outcome of merging the two files they must be placed into the ```collisions``` folder. Otherwise, in the ```no_collisions``` folder.
 
-The files must adhere to the following naming convention: 
+The files must adhere to the following naming convention:
 ```
 prefix_<ignored>_suffix.xml
 ```
-The files get matched by their prefix, i.e. the prefix must be the same for the files to be merged together for the test.  
+The files get matched by their prefix, i.e. the prefix must be the same for the files to be merged together for the test.
 As a best practice, the prefix should be a description of what is to be tested.
-The suffix can be anything.  
-For example, it can extend the description of the particular test with individual information of the file, or it can be just a number. 
+The suffix can be anything.
+For example, it can extend the description of the particular test with individual information of the file, or it can be just a number.
 It is important to separate the prefix from the suffix with an "_". Otherwise, the matching cannot be successfully executed.
 
 If you have multiple tests that rely on the same input for one half, you can reduce the number of files by a base matcher. If for example more than two files with the same prefix are found, the tests will search for a base file with the suffix "_0". If it is found, test cases will be generated with each other file and the base case.
@@ -360,30 +360,30 @@ This part is a bit stricter and only reads the types from the first input file. 
 
 
 ### Other Reference File Based Tests
-It is recommended to store all files involved in the merger test into the ```snapfiles``` folder.  
-They can either be stored directly into the folder itself or into subfolders for clarity.  
+It is recommended to store all files involved in the merger test into the ```snapfiles``` folder.
+They can either be stored directly into the folder itself or into subfolders for clarity.
 
-As these tests cannot be auto-generated, the tests need to be implemented manually. It is recommended to implement the tests directly into the folder with the implementation to be tested, following the Django naming scheme for test files.   
+As these tests cannot be auto-generated, the tests need to be implemented manually. It is recommended to implement the tests directly into the folder with the implementation to be tested, following the Django naming scheme for test files.
 
 
 ## Password Reset Token Invalidation
-In order to reset passwords, Smerge uses a token-based password reset mechanism.  
-After their usage, the tokens get deleted from the database automatically and therefore, they get invalidated.  
-For unused tokens, it may be desired to invalidate them from time to time.  
-This may prevent abuse of the tokens.  
+In order to reset passwords, Smerge uses a token-based password reset mechanism.
+After their usage, the tokens get deleted from the database automatically and therefore, they get invalidated.
+For unused tokens, it may be desired to invalidate them from time to time.
+This may prevent abuse of the tokens.
 
 By default, Smerge runs a task after starting the server that invalidates old unused password reset tokens.
-Every day, the task gets rescheduled.   
-The task deletes all password reset tokens that are older than one week.  
+Every day, the task gets rescheduled.
+The task deletes all password reset tokens that are older than one week.
 
-The default task can be disabled by setting the following in the Django settings:  
+The default task can be disabled by setting the following in the Django settings:
 ```DISABLE_TOKEN_INVALIDATION = True```
 
 
-If you have disabled the automatically scheduled invalidation task within Django you can still invalidate tokens via a Django management command.  
-The same command gets executed for the scheduled task. 
- 
-For more information execute:  
+If you have disabled the automatically scheduled invalidation task within Django you can still invalidate tokens via a Django management command.
+The same command gets executed for the scheduled task.
+
+For more information execute:
 ```python snapmerge/manage.py  resettokencleanup --h --settings=config.settings_local```
 
 
@@ -408,13 +408,13 @@ Good to know: Django has some parts that only work when `debug=True` is set in t
 
 
 ### Custom manage.py commands
-In the `snapmerge/home/management/commands/` folder lay three additional commands that can be run with 
+In the `snapmerge/home/management/commands/` folder lay three additional commands that can be run with
 
 ```sh
 python manage.py <addadmin | addpage | resettokencleanup> --settings=config.settings_local
 ```
 
-or 
+or
 
 ```sh
 make <addadmin | addpage>
@@ -470,6 +470,38 @@ Smerge itself is licensed under the MIT license. License for third-party librari
 
 To import initial data use:
 manage.py loaddata snapmerge/fixtures/initial_data.json
+
+--------------
+
+# Changelog
+
+## 2018-2023
+
+- Creation 2018
+- Developed and maintained mostly by Stefan Seegerer and Tilman Michaeli
+
+## 2023-2024
+
+- Development by student project
+- e.g. modernization and switch to React
+
+## 2024-2025
+
+A second student project including the following major changes
+
+### Kanban board
+
+With the Kanban board pupils can communicate between each other and track their progress,
+such that additional external tools like sticky notes are no longer needed.
+
+It can be used to:
+- Create tasks by adding cards with a textual description
+- Track the progress by moving cards to an appropriate column,
+  the number of columns and column description can also be adjusted
+- Colorize cards to assign additional meaning to them
+  e.g. to assign them to a specific person
+
+### TODO other things
 
 --------------
 

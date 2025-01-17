@@ -541,6 +541,40 @@ msgstr ""
 msgid "Want to know more or need help?"
 msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
 
+#: snapmerge/templates/how_to.html:77
+msgid "Kanban board"
+msgstr "Kanban Board"
+
+#: snapmerge/templates/how_to.html:78
+msgid ""
+"Group work requires communication between participants, "
+"for this propose Smerge provides a Kanban board. "
+"It can be opened with a button on the top right hand corner below the setting button. "
+"Cards can be added by pressing the ADD button at the top of a column, "
+"and to edit them click on the pencil icon of a card, "
+"write some text and click on the save icon when done. "
+"Additionally, the color of a card can be changed by clicking on the palette icon of a card. "
+"They can be moved to a different column by dragging."
+msgstr ""
+"Gruppenarbeit erfordert Kommunikation zwischen den Teilhabenden. "
+"Hierfür stellt Smerge ein Kanban Board bereit, welchen mit einem Knopf in der rechten oberen Ecke "
+"unter dem Einstellungsknopf geöffnet werden kann. "
+"Karten können durch Drücken des ADD Knopfes, welcher sich oberhalb "
+"der jeweiligen Spalte befindet, hinzugefügt werden. "
+"Um sie zu bearbeiten, drückt man auf das Bleistiftsymbol, schreibt Text "
+"und drückt danach auf das Speichern Symbol. "
+"Außerdem kann die Farbe einer Karte verändert werden, indem man auf das Farbpaletten Symbol klickt. "
+"Das Verschieben von Karten zwischen Spalten funktioniert per Drag and Drop."
+
+#: snapmerge/templates/how_to.html:82
+msgid ""
+"To change the column layout, first press the button at the top left hand corner and then add, "
+"remove, rename or drag columns. You can have up to five columns in total."
+msgstr ""
+"Um den Aufbau der Spalten zu verändern, kann man auf den Knopf in der linken oberen Ecke drücken, "
+"und danach Spalten hinzufügen, entfernen, umbenennen und per Drag and Drop verschieben. "
+"Die Anzahl der Spalten, kann auf bis zu fünf steigen."
+
 #: snapmerge/templates/impressum.html:12
 msgid "About Smerge"
 msgstr "Über Smerge"
