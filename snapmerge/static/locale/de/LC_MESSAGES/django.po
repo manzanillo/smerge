@@ -703,6 +703,14 @@ msgstr ""
 "Gib deine Emailadresse ein, um deine Projektpasswörter und PINs "
 "wiederzuerlangen."
 
+#: snapmerge/home/Merger_Two_ElectricBoogaloo/merger_v2_2.py:266
+msgid "LEFT VERSION -- This block originates from a merge in which both versions were kept."
+msgstr "LINKE VERSION -- Dieser Block stammt aus einem Merge bei dem beide Versionen behalten wurden."
+
+#: snapmerge/home/Merger_Two_ElectricBoogaloo/merger_v2_2.py:272
+msgid "RIGHT VERSION -- This block originates from a merge in which both versions were kept."
+msgstr "RECHTE VERSION -- Dieser Block stammt aus einem Merge bei dem beide Versionen behalten wurden."
+
 #, fuzzy
 #~| msgid "SnapFiles"
 #~ msgid "Static Files"

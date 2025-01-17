@@ -14,6 +14,8 @@ tmp2_file_path = "moved.xml"
 
 import xml.dom.minidom
 
+from django.utils.translation import gettext_lazy as _
+
 
 def pretty_print_xml(xml_tree):
     parsed_xml = xml.dom.minidom.parseString(
@@ -256,6 +258,21 @@ class AdditionalData:
         # be careful...allow both option only in nodes where is should be possible
         # stage would be an exemption as an example, since only one stage can exist for each scene!
         if tmpResolution.step == Step.BOTH:
+            # We add comments to the left and right version of the merge conflict in case BOTH versions are kept
+            # This way the users can trace back the origin of their blocks
+            comment_tag = ET.Element("comment")
+            comment_tag.set("collapsed", "true")
+            comment_tag.set("w", "100")
+            comment_tag.text = str(_("LEFT VERSION -- Originates from merge in which both versions were kept."))
+            list(leftNode)[0].append(comment_tag)
+
+            comment_tag = ET.Element("comment")
+            comment_tag.set("collapsed", "true")
+            comment_tag.set("w", "100")
+            comment_tag.text = str(_("RIGHT VERSION -- Originates from merge in which both versions were kept."))
+            list(rightNode)[0].append(comment_tag)
+
+            # Merging process starts here
             if shallow:
                 resolvedNode = shallowCopyNode(leftNode)
                 self.currentElement.append(resolvedNode)
