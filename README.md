@@ -487,7 +487,7 @@ manage.py loaddata snapmerge/fixtures/initial_data.json
 
 ## 2024-2025
 
-A second student project including the following major changes
+A second student project including the following major changes:
 
 ### Kanban board
 
@@ -501,7 +501,22 @@ It can be used to:
 - Colorize cards to assign additional meaning to them
   e.g. to assign them to a specific person
 
-### TODO other things
+### Introduction of three-way merge
+
+In case of a merge conflict between two nodes, the conflict view now shows the conflicting block pairs, and only them, one at a time at the sides of the screen with the tentative merge result in the middle. For every block pair, the user can choose between keeping one of the blocks or keeping both after the merge.
+
+### Collapse of commit messages
+
+Commit messages that appear next to their respective node have been collapsed to reduce clutter on the screen. The full commit messages can be displayed by hovering above them with the cursor.
+
+### Addition of teacher accounts and teacher view
+
+Teachers can now register teacher accounts and use them for login. When logged in with a teacher account, teachers have access to the newly added teacher view, in which they can organize Smerge projects between different school classes. They can also add new school classes to the teacher view.
+
+### Improvement of project import and addition of project duplication
+
+Within the teacher view, teachers can now import existing project by providing either project ID or Pin. They can now also duplicate project templates.
+
 
 --------------
 
