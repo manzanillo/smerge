@@ -10,8 +10,9 @@ import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { createProject } from '../services/ProjectService';
 import SchoolclassDto from './models/SchoolclassDto';
+import ProjectDto from './models/ProjectDto';
 
-const AddProjectDialog = (props: { setState: (arg0: any[]) => void; state: any;  schoolClass: SchoolclassDto}) => {
+const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToState: (arg0: ProjectDto) => void; }) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -37,7 +38,10 @@ const AddProjectDialog = (props: { setState: (arg0: any[]) => void; state: any; 
             const formJson = Object.fromEntries((formData as any).entries());
             const name = formJson.name;
             console.log(name);
-            createProject(name, props.schoolClass.id);
+            createProject(name, props.schoolClass.id).then((res) => {
+              if (!res) return;
+              else props.addProjectToState(res);
+            })
             handleClose();
           },
         }}

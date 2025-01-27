@@ -5,14 +5,14 @@ import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Typography from '@mui/material/Typography';
 import ContentCut from '@mui/icons-material/ContentCut';
-import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import Cloud from '@mui/icons-material/Cloud';
 import Menu from '@mui/material/Menu';
+import ProjectDto from './models/ProjectDto';
+import { duplicateProject } from '../services/ProjectService';
 
-export default function ProjectCardContextMenu() {
+const ProjectCardContextMenu = (props: {projectData: ProjectDto, addProjectToState: (arg0: ProjectDto) => void;}) => {
 
   const ITEM_HEIGHT = 48;
 
@@ -24,6 +24,14 @@ export default function ProjectCardContextMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleImportButtonClick = () => {
+    duplicateProject(props.projectData.id).then((res) => {
+      if (!res) return;
+      props.addProjectToState(res);
+    });
+    handleClose();
+  }
 
   return (
     <div>
@@ -58,19 +66,13 @@ export default function ProjectCardContextMenu() {
             <ListItemIcon>
                 <ContentCut fontSize="small" />
             </ListItemIcon>
-            <ListItemText>Cut</ListItemText>
-        </MenuItem>
-        <MenuItem>
-            <ListItemIcon>
-                <ContentCopy fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Copy</ListItemText>
+            <ListItemText onClick={handleImportButtonClick}>Duplicate</ListItemText>
         </MenuItem>
         <MenuItem>
             <ListItemIcon>
                 <ContentPaste fontSize="small" />
             </ListItemIcon>
-            <ListItemText>Paste</ListItemText>
+            <ListItemText>Delete</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem>
@@ -83,3 +85,5 @@ export default function ProjectCardContextMenu() {
     </div>
   );
 }
+
+export default ProjectCardContextMenu;

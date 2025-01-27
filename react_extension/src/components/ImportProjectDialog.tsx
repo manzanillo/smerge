@@ -8,11 +8,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IconButton } from '@mui/material';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
-import { getProjectData, importProjectToSchoolclass } from '../services/ProjectService';
+import { getProjectData, getProjectDataWithPin, importProjectToSchoolclass } from '../services/ProjectService';
 import SchoolclassDto from './models/SchoolclassDto';
 import ProjectDto from './models/ProjectDto';
 
-const ImportProjectDialog = (props: { setState: (arg0: any[]) => void; state: any; schoolClass: SchoolclassDto}) => {
+const ImportProjectDialog = (props: {schoolClass: SchoolclassDto; addProjectToState: (arg0:ProjectDto) => void}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -36,24 +36,32 @@ const ImportProjectDialog = (props: { setState: (arg0: any[]) => void; state: an
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
             const projectId = formJson.projectId;
-            getProjectData(projectId).then((response) => {
+            if(projectId.includes('-')) {
+              getProjectData(projectId).then((response) => {
                 const project = response;
                 if(project) {
                   project.schoolclass = props.schoolClass.id;
-                  const updatedProject = importProjectToSchoolclass(projectId, project).then((res) => {
+                  importProjectToSchoolclass(projectId, project).then((res) => {
                     if (!res) return;
-                    var newState: { schoolclass: string | null; projects: ProjectDto[]; }[] = [];
-                      props.state.map((item: { schoolclass: string | null; projects: ProjectDto[]; }) => {
-                        if (item.schoolclass == project.schoolclass) {
-                          item.projects = [...item.projects, res] 
-                        }
-                        newState = [...newState, item]
-                      })
-                    props.setState(newState)
+                    props.addProjectToState(res);
                   });
                 }
                 else return null;
-            });
+              });
+            }
+            else {
+              getProjectDataWithPin(projectId).then((response) => {
+                const project = response;
+                if(project) {
+                  project.schoolclass = props.schoolClass.id;
+                  importProjectToSchoolclass(project.id, project).then((res) => {
+                    if (!res) return;
+                    props.addProjectToState(res);
+                 });
+                }
+                else return null;
+              });
+            }
             console.log(projectId);
             handleClose();
           },

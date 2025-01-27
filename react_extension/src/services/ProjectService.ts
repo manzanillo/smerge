@@ -2,13 +2,30 @@
 import { toast } from "react-toastify";
 import ProjectDto from "../components/models/ProjectDto";
 import httpService from "./HttpService";
-import AddSchoolclassDialog from "../components/AddSchoolclassDialog";
 
 export const getProjectData = async (projectId: string) => {
   const res = await httpService.getAsync<Promise<ProjectDto>>(
     `api/project/${projectId}`
   );
 
+  if (res) {
+    return res;
+  }
+};
+
+export const duplicateProject = async (projectId: string, ) => {
+  const res = await httpService.postAsync<Promise<ProjectDto>>(
+    `api/project/${projectId}/duplicate`, null
+  );
+  if (res) {
+    return res;
+  }
+};
+
+export const getProjectDataWithPin = async (projectPin: string) => {
+  const res = await httpService.getAsync<Promise<ProjectDto>>(
+    `api/projects/with_pin/${projectPin}`
+  );
   if (res) {
     return res;
   }
@@ -30,7 +47,7 @@ export const getProjectUnhideAll = async (projectId: string) => {
 };
 
 export const createProject = async (name: string, schoolclassId: string | null) => {
-  const res = await httpService.postAsync<Promise<unknown>>(
+  const res = await httpService.postAsync<ProjectDto>(
     `api/projects`, {name: name, schoolclass: schoolclassId}
   );
   if (res) {
@@ -41,8 +58,39 @@ export const createProject = async (name: string, schoolclassId: string | null) 
     });
     return res;
   }
+  else {
+    toast.error('Creation failed', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+    })
+  }
 };
 
+export const importProjectToSchoolclass = async (projectId: string, project: ProjectDto) => {
+  const res = await httpService.postAsync<ProjectDto>(
+    `api/update/project/${projectId}/import`,
+    { ...project},
+    "POST",
+    true,
+    true
+  );
+  if (res) {
+    toast.success(`Import successful.`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+    });
+    return res;
+  }
+  else {
+    toast.error('Import failed', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+    })
+  }
+};
 
 export const postDeleteProject = async (
   projectId: string,
@@ -181,31 +229,6 @@ export const putKanbanChange = async (
   }
 };
 
-
-export const importProjectToSchoolclass = async (
-  projectId: string,
-  project: ProjectDto,
-) => {
-  try {
-    const res = await httpService.postAsync<ProjectDto>(
-      `api/update/project/${projectId}/import`,
-      { ...project},
-      "PUT",
-      true,
-      true
-    );
-
-    if (res) {
-      return res;
-    }
-  } catch (err) {
-    toast.error(`Failed to import Project`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
-  }
-};
 
 export const putColorChange = async (
   projectId: string,

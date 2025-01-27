@@ -267,6 +267,153 @@ paths:
       responses:
         '200':
           description: No response body
+  /api/schoolclasses:
+    post:
+      operationId: api_schoolclasses_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchoolClass'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SchoolClass'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SchoolClass'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchoolClass'
+          description: ''
+  /api/schoolclasses/{id}/projects:
+    get:
+      operationId: api_schoolclasses_projects_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+          description: ''
+  /api/schoolclasses/{schoolclassId}/projects/{projectId}:
+    put:
+      operationId: api_schoolclasses_projects_update
+      parameters:
+      - in: path
+        name: projectId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: schoolclassId
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Project'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /api/teacher_login_token:
+    post:
+      operationId: api_teacher_login_token_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/teacher_registration_token:
+    post:
+      operationId: api_teacher_registration_token_create
+      description: Handles post request logic
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/teachers/{id}/schoolclasses:
+    get:
+      operationId: api_teachers_schoolclasses_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SchoolClass'
+          description: ''
   /api/update/node_desc/{id}:
     put:
       operationId: api_update_node_desc_update
@@ -553,6 +700,22 @@ paths:
           description: ''
 components:
   schemas:
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
     PatchedProject:
       type: object
       description: Serializes a project without credential information
@@ -581,6 +744,8 @@ components:
         conflict_color:
           type: string
           maxLength: 7
+        kanban_board:
+          type: string
     PatchedSnapFile:
       type: object
       description: Serializes a snapfile
@@ -661,10 +826,29 @@ components:
         conflict_color:
           type: string
           maxLength: 7
+        kanban_board:
+          type: string
       required:
       - id
       - name
       - pin
+    SchoolClass:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        teacher:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - name
+      - teacher
     SnapFile:
       type: object
       description: Serializes a snapfile
@@ -731,3 +915,8 @@ components:
       type: apiKey
       in: cookie
       name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

@@ -9,8 +9,11 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.http import HttpResponseBadRequest
 from rest_framework.authtoken.views import ObtainAuthToken
+from shutil import copyfile
+from uuid import uuid4
+from django.conf import settings
 
-from ..models import SnapFile, Project, MergeConflict, SchoolClass
+from ..models import File, SnapFile, Project, MergeConflict, SchoolClass
 from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer, RegistrationSerializer, SchoolClassSerializer
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
@@ -53,7 +56,7 @@ class RegisterTeacherView(APIView):
         """Handles post request logic"""
         registration_serializer = RegistrationSerializer(data=request.data)
         print("register endpoint")
-        # Generate tokens for existing users
+        # Generate tokens for all existing users if none yet present
         for user in User.objects.all():
             if not user:
                 break
@@ -64,6 +67,11 @@ class RegisterTeacherView(APIView):
                     Token.objects.create(user=user)
 
         if registration_serializer.is_valid():
+            if User.objects.get(username = registration_serializer.getUsername()):
+                return Response ({
+                        "error": "Username already exists!",
+                        "status": f"{status.HTTP_400_BAD_REQUEST} BAD REQUEST"
+                        })
             user = registration_serializer.save()
             token = Token.objects.create(user=user)
 
@@ -130,9 +138,6 @@ class SchoolClassesForTeacherView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         teacher_id = self.kwargs.get(self.lookup_field)
-        #user = self.request.user  #This does not work correctly yet, the ids never match even if they are the same user
-        #if not teacher_id == user.id:
-        #    return HttpResponseBadRequest("Your UserId does not match the ID given in the URL!")
         return self.list(request, *args, **kwargs)
 
 class ProjectsForSchoolClassesView(generics.ListAPIView):
@@ -148,7 +153,7 @@ class ProjectsForSchoolClassesView(generics.ListAPIView):
         schoolclass_id = self.kwargs.get(self.lookup_field)
         return Project.objects.filter(schoolclass=schoolclass_id)
 
-class ProjectCreationFromTeacherView(generics.CreateAPIView):
+class DuplicateProject(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -160,11 +165,48 @@ class ProjectCreationFromTeacherView(generics.CreateAPIView):
         return context
 
     def post(self, request, *args, **kwargs):
+        projectId = kwargs.get('id')
+        originalProject = get_object_or_404(Project, id=projectId)
+        duplicateProject = Project.objects.create(name=originalProject.name, description=originalProject.description, picture=originalProject.picture, schoolclass=originalProject.schoolclass, password=originalProject.password, pin=generate_unique_PIN())
+        Project.save(duplicateProject)
+        originalFiles = SnapFile.objects.filter(project=originalProject)
+        if originalFiles:
+            for ogfile in originalFiles:
+                filepath_seperated = ogfile.get_media_path().split('.')
+                copy_filepath = filepath_seperated[0] + '_copy.' + filepath_seperated[1]
+                copyfile(settings.BASE_DIR + ogfile.get_media_path(), settings.BASE_DIR + copy_filepath)
+                duplicateFile = SnapFile.create_and_save(project=duplicateProject, description=ogfile.description, file=copy_filepath.split('/')[-1])
+        return Response(status="201", data=self.get_serializer(duplicateProject).data)
+    
+
+class ProjectCreationFromTeacherView(generics.CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = ProjectSerializer
+    
+    def get_serializer_context(self):
+        context =  super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+    def post(self, request, *args, **kwargs):
         projectPin = generate_unique_PIN()
         projectdata = {**request.data, 'pin': projectPin}
         serializer = self.get_serializer(data=projectdata, context={'request': request})
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        proj_instance = Project.objects.get(pin=projectPin)
+        snap_description = "blank project"
+        snap_file = SnapFile.create_and_save(
+            project=proj_instance, description=snap_description, file=""
+        )
+        snap_file.file = str(uuid4()) + ".xml"
+        copyfile(
+            settings.BASE_DIR + "/static/snap/blank_proj.xml",
+            settings.BASE_DIR + snap_file.get_media_path(),
+        )
+        snap_file.save()
         return Response(serializer.data)
 
 
@@ -196,6 +238,21 @@ class ProjectDetailView(generics.RetrieveAPIView):
     serializer_class = ProjectSerializer
     lookup_field = "id"
     permission_classes = [permissions.AllowAny]
+
+
+class ProjectRetrieverWithPin(generics.RetrieveAPIView):
+    
+    """
+    API endpoint that allows projects to be viewed when only knowing their pin.
+    """
+
+    serializer_class = ProjectSerializer
+    lookup_field = "id"
+    queryset = Project.objects.all()
+
+    def get(self, request, **kwargs):
+        project = Project.objects.get(pin=kwargs["id"])
+        return Response(self.get_serializer(project).data)
 
 
 class ProjectDetailUpdateView(generics.UpdateAPIView):
@@ -238,7 +295,7 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
 
 class ProjectImportUpdateView(generics.UpdateAPIView):
     """
-    API endpoint that allows projects to be viewed.
+    API endpoint that allows projects to be imported to a new Schoolclass.
     """
 
     queryset = Project.objects.all()

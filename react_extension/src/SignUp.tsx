@@ -11,9 +11,8 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material';
-import ITeacher from './components/models/TeacherDto';
 import * as TeacherAuthService from './services/TeacherAuthService';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 //let navigate: NavigateFunction = useNavigate();
 
@@ -62,8 +61,8 @@ export default function SignUp() {
   const validateInputs = () => {
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
-    const name = document.getElementById('name') as HTMLInputElement;
     const gdpr = document.getElementById('gdpr') as HTMLInputElement;
+    const name = document.getElementById('username') as HTMLInputElement;
 
     let isValid = true;
 
@@ -113,7 +112,7 @@ export default function SignUp() {
     const email = data.get('email');
     const password = data.get('password');
     console.log({
-      name: data.get('name'),
+      name: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     });
@@ -121,7 +120,15 @@ export default function SignUp() {
      () => {
       //navigate("ext/teacher_login");
       location.href = "/ext/teacher_login/";
-     } 
+     },
+     (error) => {
+        console.log(error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+        });
+      }
     )
   };
 
