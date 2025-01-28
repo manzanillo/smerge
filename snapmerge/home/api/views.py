@@ -223,6 +223,7 @@ class ProjectCreationFromTeacherView(generics.CreateAPIView):
             settings.BASE_DIR + snap_file.get_media_path(),
         )
         snap_file.save()
+        snap_file.xml_job()
         return Response(serializer.data)
 
 

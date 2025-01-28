@@ -71,7 +71,7 @@ export const importProjectToSchoolclass = async (projectId: string, project: Pro
   const res = await httpService.postAsync<ProjectDto>(
     `api/update/project/${projectId}/import`,
     { ...project},
-    "POST",
+    "PUT",
     true,
     true
   );
