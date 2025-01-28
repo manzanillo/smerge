@@ -66,12 +66,12 @@ class RegisterTeacherView(APIView):
                 except Token.DoesNotExist:
                     Token.objects.create(user=user)
         if registration_serializer.is_valid():
-            if User.objects.get(username = registration_serializer.getUsername(request.data)):
+            if User.objects.exists(username = registration_serializer.getUsername(request.data)):
                 return Response ({
                         "error": "Username already exists!",
                         "status": f"{status.HTTP_400_BAD_REQUEST} BAD REQUEST"
                         })
-            user = registration_serializer.save()
+            user = registration_serializer.create(request.data)
             token = Token.objects.create(user=user)
 
             return Response(
