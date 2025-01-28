@@ -189,7 +189,7 @@ class DuplicateProject(generics.CreateAPIView):
                 duplicateFiles.append(duplicateFile)
             for ogfile in originalFiles:
                 duplicateChild = findDuplicateFromOriginal(ogfile, duplicateFiles)
-                for ancestor in ogfile.ancestors:
+                for ancestor in ogfile.ancestors.all():
                     duplicateAncestor = findDuplicateFromOriginal(ancestor, duplicateFiles)
                     duplicateChild.ancestors.append(duplicateAncestor)
                 SnapFile.save(duplicateChild)
