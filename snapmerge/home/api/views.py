@@ -158,7 +158,7 @@ def findDuplicateFromOriginal(og, duplicateList): #util function for duplication
     copy_filepath = filepath_seperated[0] + '_copy.' + filepath_seperated[1]
     duplicateFilepath = copy_filepath.split('/')[-1]
     for file in duplicateList:
-        if (file.file.equals(duplicateFilepath)) and (file.description.equals(og.description)):
+        if (file.file == duplicateFilepath) and (file.description.equals(og.description)):
             return file 
     return None
 
