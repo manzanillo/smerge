@@ -54,7 +54,7 @@ const TeacherView: React.FC = () => {
 
     return <div>
         {  
-            !projectsOfSchoolclasses ? (<div>You do not have any Schoolclasses yet, create one on the bottom right!</div>) : (
+            projectsOfSchoolclasses.length <= 0 ? (<div>You do not have any Schoolclasses yet, create one on the bottom right!</div>) : (
                 isLoading ? (<div>Loading...</div>) : (
                     projectsOfSchoolclasses.map((item: { schoolclass: SchoolclassDto, projects: ProjectDto[] }) => {
                         return <Accordion>
