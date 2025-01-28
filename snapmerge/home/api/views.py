@@ -154,10 +154,13 @@ class ProjectsForSchoolClassesView(generics.ListAPIView):
         return Project.objects.filter(schoolclass=schoolclass_id)
 
 def findDuplicateFromOriginal(og, duplicateList): #util function for duplication below, determines which file from the duplicateList is the duplicate of the og
-        for file in duplicateList:
-            if (file.name.equals(og.name)) and (file.description.equals(og.description)):
-                return file 
-        return None
+    filepath_seperated = og.get_media_path().split('.')
+    copy_filepath = filepath_seperated[0] + '_copy.' + filepath_seperated[1]
+    duplicateFilepath = copy_filepath.split('/')[-1]
+    for file in duplicateList:
+        if (file.file.equals(duplicateFilepath)) and (file.description.equals(og.description)):
+            return file 
+    return None
 
 class DuplicateProject(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
