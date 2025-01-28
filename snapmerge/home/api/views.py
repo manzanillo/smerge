@@ -191,7 +191,7 @@ class DuplicateProject(generics.CreateAPIView):
                 duplicateChild = findDuplicateFromOriginal(ogfile, duplicateFiles)
                 for ancestor in ogfile.ancestors.all():
                     duplicateAncestor = findDuplicateFromOriginal(ancestor, duplicateFiles)
-                    duplicateChild.ancestors.append(duplicateAncestor)
+                    duplicateChild.ancestors.add(duplicateAncestor)
                 SnapFile.save(duplicateChild)
         return Response(status="201", data=self.get_serializer(duplicateProject).data)
     
