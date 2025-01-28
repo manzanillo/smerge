@@ -153,6 +153,12 @@ class ProjectsForSchoolClassesView(generics.ListAPIView):
         schoolclass_id = self.kwargs.get(self.lookup_field)
         return Project.objects.filter(schoolclass=schoolclass_id)
 
+def findDuplicateFromOriginal(og, duplicateList): #util function for duplication below, determines which file from the duplicateList is the duplicate of the og
+        for file in duplicateList:
+            if (file.name.equals(og.name)) and (file.description.equals(og.description)):
+                return file 
+        return None
+
 class DuplicateProject(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -170,12 +176,20 @@ class DuplicateProject(generics.CreateAPIView):
         duplicateProject = Project.objects.create(name=originalProject.name, description=originalProject.description, picture=originalProject.picture, schoolclass=originalProject.schoolclass, password=originalProject.password, pin=generate_unique_PIN())
         Project.save(duplicateProject)
         originalFiles = SnapFile.objects.filter(project=originalProject)
+        duplicateFiles = []
         if originalFiles:
             for ogfile in originalFiles:
                 filepath_seperated = ogfile.get_media_path().split('.')
                 copy_filepath = filepath_seperated[0] + '_copy.' + filepath_seperated[1]
                 copyfile(settings.BASE_DIR + ogfile.get_media_path(), settings.BASE_DIR + copy_filepath)
                 duplicateFile = SnapFile.create_and_save(project=duplicateProject, description=ogfile.description, file=copy_filepath.split('/')[-1])
+                duplicateFiles.append(duplicateFile)
+            for ogfile in originalFiles:
+                duplicateChild = findDuplicateFromOriginal(ogfile, duplicateFiles)
+                for ancestor in ogfile.ancestors:
+                    duplicateAncestor = findDuplicateFromOriginal(ancestor, duplicateFiles)
+                    duplicateChild.ancestors.append(duplicateAncestor)
+                SnapFile.save(duplicateChild)
         return Response(status="201", data=self.get_serializer(duplicateProject).data)
     
 

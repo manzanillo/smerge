@@ -241,6 +241,9 @@ Rough list of project files with short descriptors as direction guide. Files not
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Layout.tsx | Menu bar on top of screen and reroute on missing token |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 main.tsx | Main React component with all routes under |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 ProjectView.tsx | Component for the main project view |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 TeacherView.tsx | Component for the teacher view |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 SignIn.tsx | Component for the teacher login view |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 SignUp.tsx | Component for the teacher registration view |
 | &nbsp;&nbsp;&nbsp;&nbsp;📄 index.html | Base and entry point for the React app |
 | &nbsp;&nbsp;&nbsp;&nbsp;📄 package.json | Contains list of all needed node packages |
 | &nbsp;&nbsp;&nbsp;&nbsp;📄 tsconfig.json | linter and compile configs |
@@ -515,7 +518,7 @@ Teachers can now register teacher accounts and use them for login. When logged i
 
 ### Improvement of project import and addition of project duplication
 
-Within the teacher view, teachers can now import existing project by providing either project ID or Pin. They can now also duplicate project templates.
+Within the teacher view, teachers can now import existing project by providing either project ID or Pin. They can now also duplicate projects.
 
 
 --------------
