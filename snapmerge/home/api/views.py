@@ -77,11 +77,11 @@ class RegisterTeacherView(APIView):
             return Response(
                 {
                     "user": {
-                        "id": registration_serializer.data["id"],
-                        "username": registration_serializer.data["username"],
-                        "email": registration_serializer.data["email"],
-                        "is_active": registration_serializer.data["is_active"],
-                        "is_staff": registration_serializer.data["is_staff"],
+                        "id": user.id,
+                        "username": user.username,
+                        "email": user.email,
+                        "is_active": user.is_active,
+                        "is_staff": user.is_staff,
                     },
                     "status": {
                         "message": "User created",
