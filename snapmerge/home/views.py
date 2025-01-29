@@ -690,12 +690,12 @@ def mergeExt(request, proj_id, resolutions):
                     # result.write(f)
             else:
                 # new_file.delete()
-                # Store partially merged file in database
+                # Store partially merged file in database for displaying in three way merge
                 workCopyFileName = f"{uuid4()}.xml"
                 with open(settings.BASE_DIR + settings.MEDIA_URL + workCopyFileName, 'wb') as f:
                     f.write(result)
 
-                # Create new conflict with both files
+                # Create new conflict with all three files
                 merge_conflict = models.MergeConflict(
                     left=file1, right=file2, project=proj, connected_file=new_file, work_copy=workCopyFileName
                 )
@@ -731,6 +731,7 @@ def mergeExt(request, proj_id, resolutions):
                         )
                         right.save()
                     else:
+                        # Store conflict files in database
                         left = models.ConflictFile.create_and_save(
                             project=proj,
                             file=f"{uuid4()}{ending}",

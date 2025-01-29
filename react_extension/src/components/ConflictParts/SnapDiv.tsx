@@ -67,13 +67,17 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
 
 
     async function loadWorld() {
-        // Append the script to the component's DOM
-        // console.log("apped");
+        // Prepare the snap files for opening in snap
+
+        // Load the snap files from URLs
         await fetchSnapFiles();
+
+        // Set scene and sprite selectors in files
         xmlLeft = navigateSnapFile(xmlLeft, tagId);
         xmlRight = navigateSnapFile(xmlRight, tagId);
         xmlWorkCopy = navigateSnapFile(xmlWorkCopy, tagId);
 
+        // Create file blobs and virtuals URLs so snap can open the files
         xmlLeftBlob = new Blob([xmlLeft], { type: 'text/plain' });
         xmlRightBlob = new Blob([xmlRight], { type: 'text/plain' });
         xmlMergeBlob = new Blob([xmlWorkCopy], { type: 'text/plain' });
@@ -116,7 +120,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         ceRef.current.height = ceRef.current?.offsetHeight;
         //const arr = ['#leftEditor', '#rightEditor'];
 
-        // use Split to display world1 and world2 side aside and allow resizing
+        // use Split to display world1, world2 and world_merge side by side and allow resizing
 
         ide = new IDE_Morph({
             load: xmlLeftBlobLink,
@@ -202,25 +206,10 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
             world_merge.doOneCycle();
         };
 
-        // let loop2 = () => {
-        //   if (ide2 == undefined || world2 == undefined) return;
-        //   setTimeout(() => {
-        //     requestAnimationFrame(loop2);
-        //   }, 33);
-        //   world2.doOneCycle();
-        // };
+        // Create worlds
         world = new WorldMorph(document.getElementById("leftEditor"), false);
         world2 = new WorldMorph(document.getElementById("rightEditor"), false);
         world_merge = new WorldMorph(document.getElementById("centerEditor"), false);
-
-        // setTimeout(() => {
-        //   console.log(world);
-        //   console.log(world.bounds);
-        //   //   world.setExtent(new Point(300, 300));
-        // }, 1000);
-
-        // * setPosition(aPoint)
-        // * setExtent(aPoint)
 
         // don't fill
         ide.openIn(world);
@@ -229,6 +218,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
 
         loop();
 
+        // Start highlighting the conflict blocks
         setTimeout(() => {
             highlightScript(ide, xmlLeft);
             highlightScript(ide2, xmlRight);
@@ -353,18 +343,24 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         }
     };
 
+    // Script for periodically flashing and unflashing the conflict blocks
     const highlightScript = (hlght_ide, hlght_xml) => {
+            // Parse snapfile
             const parser = new DOMParser();
             const snapDom = parser.parseFromString(hlght_xml, "text/xml");
+            // Search conflict block
             const conflictScript = snapDom.querySelector('[customData="'+tagId+'"]');
+            // Count previous code blocks for indexing the conflict block
             const scriptsElement = conflictScript.parentNode;
             let scriptsArray = Array.from(scriptsElement.children);
             scriptsArray = scriptsArray.slice(0, scriptsArray.indexOf(conflictScript));
             const prev_lines = sum(scriptsArray.map(s => (s.children.length))) + scriptsArray.length + 1;
 
+            // Highlight blocks
             highlight_blocks(hlght_ide, prev_lines, prev_lines + conflictScript.children.length);
     };
 
+    // Flash and unflash the conflict blocks
     const highlight_blocks = (hlght_ide, from, to) => {
         setTimeout(() => {
             highlight_blocks(hlght_ide, from, to);
@@ -376,7 +372,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         }, 1000);
     };
 
-    // Function to make an asynchronous HTTP request using fetch
+    // Function to make an asynchronous HTTP request using fetch retrieving the snapfiles from the server
     async function fetchSnapFiles() {
         try {
             // Use Promise.all to wait for all requests to complete
@@ -386,6 +382,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
                 fetch(linkWorkCopy)
             ]);
 
+            // Use Promise.all to wait for all responses to be parsed
             [xmlLeft, xmlRight, xmlWorkCopy] = await Promise.all([
                 response1.text(),
                 response2.text(),
@@ -397,11 +394,15 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         }
     }
 
+    // Function for setting the appropriate scene, stage & scripts selectors for correct display of the snapfiles
     function navigateSnapFile(snapFile, tagId) {
+        // Parse snapfile
         const parser = new DOMParser();
         const snapDom = parser.parseFromString(snapFile, "text/xml");
-        // Set selector accordingly
+        // Find conflict script
         const conflictScript = snapDom.querySelector('[customData="'+tagId+'"]');
+
+        // Find conlfict root and check if it's a sprite or a stage
         let conflictRoot = conflictScript.parentNode.parentNode;
         if (conflictRoot.tagName == "sprite") {
             // Case 1: Tag is in a Sprite in a Script
@@ -423,6 +424,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
             spritesNode.setAttribute("select", "0");
         }
 
+        // Find correct scene and set scene selector
         const sceneId = Array.from(conflictRoot.parentNode.parentNode.children).indexOf(conflictRoot.parentNode) + 1;
         conflictRoot.parentNode.parentNode.setAttribute("select", sceneId);
 

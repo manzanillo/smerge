@@ -955,10 +955,10 @@ def merge2ET(
 
         Parameters
         ----------
-        file1Path : str
-            Path to left xml File.
-        file2Path : str
-            Path to right xml File.
+        leftRoot : ET.Element
+            Root of the left node
+        rightRoot : ET.Element
+            Root of the right node
         resolutions : list[Resolution], optional
             List of resolutions, by default []
         outputAsET : bool, optional
@@ -1008,6 +1008,7 @@ def merge2ET(
                 res &= mergeSimple(leftNode, rightNode, ad)
 
     if not res:
+        # If merge conflict is detected, merge left version of the commit with the workCopy to get preview for three way merge
         _, mergeTemplate = merge2ET(leftRoot, ad.workCopy)
         return ad.conflicts, mergeTemplate
 
@@ -1025,6 +1026,26 @@ def merge2(
     resolutions: list[Resolution] = [],
     outputAsET: bool = False,
 ) -> tuple[list[Conflict] | None, str]:
+    """Wrapper for merge2ET
+
+            Parameters
+            ----------
+            file1Path : str
+                Path to left xml File.
+            file2Path : str
+                Path to right xml File.
+            resolutions : list[Resolution], optional
+                List of resolutions, by default []
+            outputAsET : bool, optional
+                If true, returns the merged tree as ET.Element, by default False
+
+            Returns
+            -------
+            tuple[list[Conflict] | None, str]
+                returns None and merged string if there are no conflicts, otherwise return conflicts and None
+            -------
+    """
+
     treeLeft = ET.parse(leftFilePath)
     treeRight = ET.parse(rightFilePath)
 
