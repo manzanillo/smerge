@@ -506,7 +506,9 @@ It can be used to:
 
 ### Introduction of three-way merge
 
-In case of a merge conflict between two nodes, the conflict view now shows the conflicting block pairs, and only them, one at a time at the sides of the screen with the tentative merge result in the middle. For every block pair, the user can choose between keeping one of the blocks or keeping both after the merge.
+In case of a merge conflict between two blocks, the merging view has been expanded. The conflicting blocks are no longer isolated and shown in the context of the whole sprite/stage. For further clarity the blocks involved in the current merging step are highglighted in colour. Furthermore, a third window in the middle was added placing the conflict blocks within the automatically merged project to visualize the overall consequences of the merge.
+
+Should both versions of a conflicting block be chosen, notes were added to these blocks describing their origin.
 
 ### Collapse of commit messages
 
