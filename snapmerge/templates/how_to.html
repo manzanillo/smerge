@@ -99,10 +99,23 @@
             </ul>
         <h2><a name='header-n60' class='md-header-anchor '></a>{% trans "Login and User Management" %}</h2>
 
-        <p>{% trans "We deliberatly have no dedicated user accounts or management. Instead, to secure your projects, you will get a PIN on the time of project creation, and can set a password. If you add your e-mail at project creation, you can retrieve your PIN and password for all your projects if you forgot them." %}</p>
-        <p>{% trans "Want to know more or need help?" %} <a href="mailto:tilman.michaeli@tum.de"
-                                                            title="{% trans "Contact" %}"> {% trans "Contact" %}</a>
+        <p>{% trans "We deliberatly have no dedicated user accounts or management for the average user. Instead, to secure your projects, you will get a PIN on the time of project creation, and can set a password. If you add your e-mail at project creation, you can retrieve your PIN and password for all your projects if you forgot them." %}</p>
+       
         </p>
+
+        <h2><a name='header-n60' class='md-header-anchor '></a>{% trans "Project Management View for teachers" %}</h2>
+
+        <p>{% trans "To access the Teacher View for managing your students' projects, you need to create an account and log in." %}</p>
+
+        <p><img src="{% static "howto/teacher_view.gif" %}" alt='img' referrerPolicy='no-referrer'/></p>
+
+        <p>{% trans "The teacher view allows you to collect all your students' projects in one place. You manage your schoolclasses, that contain the projects. You as a teacher have access to all of your students' projects listed in the view." %}</p>
+        <p>{% trans "To include projects into your schoolclass, you can either create a new project from scratch or import a project your students created. You may also import projects from one schoolclass into another." %}</p>
+        <p>{% trans "You can duplicate projects in our schoolclasses. The result is a copy of the project from the point of duplication. This enables for example sharing the starting point of an exercise with the whole class individually." %}</p>
+
+        <p>{% trans "Want to know more or need help?" %} <a href="mailto:tilman.michaeli@tum.de"
+                                        title="{% trans "Contact" %}"> {% trans "Contact" %}</a>
+        
     </div>
 </div>
 {% endblock %}

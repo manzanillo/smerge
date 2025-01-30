@@ -175,7 +175,7 @@ class DuplicateProject(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         projectId = kwargs.get('id')
         originalProject = get_object_or_404(Project, id=projectId)
-        duplicateProject = Project.objects.create(name=originalProject.name, description=originalProject.description, picture=originalProject.picture, schoolclass=originalProject.schoolclass, password=originalProject.password, pin=generate_unique_PIN())
+        duplicateProject = Project.objects.create(name=originalProject.name, description=originalProject.description, picture=originalProject.picture, schoolclass=originalProject.schoolclass, password=originalProject.password, pin=generate_unique_PIN(), kanban_board=originalProject.kanban_board)
         Project.save(duplicateProject)
         originalFiles = SnapFile.objects.filter(project=originalProject)
         duplicateFiles = []
@@ -297,7 +297,7 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
         if "password" not in request.data.keys():
             request.data["password"] = ""
 
-        if instance.password is not None and not check_password(
+        if instance.password is not None and instance.password is not '' and not check_password(
             request.data["password"], instance.password
         ):
             return Response(data="Wrong Password!", status=403)
