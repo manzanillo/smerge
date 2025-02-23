@@ -436,14 +436,9 @@ msgstr ""
 
 #: snapmerge/templates/how_to.html:71
 msgid ""
-"Now we will find a new version, with all changes merged. But what happens if "
-"more than one made changes to the same script? If such a situation occurs, "
-"we will have to manually choose with version we want to keep:"
+"Now we will find a new version, with all changes merged."
 msgstr ""
-"Jetzt haben wir eine neue Version mit den zusammengeführten Änderungen. Was "
-"aber passiert, wenn wir mehr als eine Änderung am selben Skript gemacht "
-"haben? In einer solchen Situiation müssen wir manuell wählen, welche Version "
-"wir behalten wollen:"
+"Jetzt haben wir eine neue Version mit den zusammengeführten Änderungen."
 
 #: snapmerge/templates/how_to.html:73
 msgid "Go back if you made a mistake"
