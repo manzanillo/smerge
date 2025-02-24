@@ -436,9 +436,14 @@ msgstr ""
 
 #: snapmerge/templates/how_to.html:71
 msgid ""
-"Now we will find a new version, with all changes merged."
+"Now we will find a new version, with all changes merged. But what happens if "
+"more than one made changes to the same script? If such a situation occurs, "
+"we will have to manually choose with version we want to keep:"
 msgstr ""
-"Jetzt haben wir eine neue Version mit den zusammengeführten Änderungen."
+"Jetzt haben wir eine neue Version mit den zusammengeführten Änderungen. Was "
+"aber passiert, wenn wir mehr als eine Änderung am selben Skript gemacht "
+"haben? In einer solchen Situiation müssen wir manuell wählen, welche Version "
+"wir behalten wollen:"
 
 #: snapmerge/templates/how_to.html:73
 msgid "Go back if you made a mistake"
@@ -521,7 +526,7 @@ msgstr "Login und User Management"
 
 #: snapmerge/templates/how_to.html:92
 msgid ""
-"We deliberatly have no dedicated user accounts or management. Instead, to "
+"We deliberatly have no dedicated user accounts or management for the average user. Instead, to "
 "secure your projects, you will get a PIN on the time of project creation, "
 "and can set a password. If you add your e-mail at project creation, you can "
 "retrieve your PIN and password for all your projects if you forgot them."
@@ -532,43 +537,25 @@ msgstr ""
 "Ihre E-Mail bei der Projekterstellung hinterlegen, können Sie bei Bedarf PIN "
 "und Passwort für all Ihre Projekte abrufen, falls Sie diese vergessen haben."
 
-#: snapmerge/templates/how_to.html:93
+#: snapmerge/templates/how_to.html:101
 msgid "Want to know more or need help?"
 msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
 
-#: snapmerge/templates/how_to.html:77
-msgid "Kanban board"
-msgstr "Kanban Board"
+#: snapmerge/templates/how_to.html:107
+msgid "To access the Teacher View for managing your students' projects, you need to create an account and log in."
+msgstr "Um die Lehrer View zu benutzen, muss ein Lehrer einen Account erstellen und sich dann damit einloggen."
 
-#: snapmerge/templates/how_to.html:78
-msgid ""
-"Group work requires communication between participants, "
-"for this propose Smerge provides a Kanban board. "
-"It can be opened with a button on the top right hand corner below the setting button. "
-"Cards can be added by pressing the ADD button at the top of a column, "
-"and to edit them click on the pencil icon of a card, "
-"write some text and click on the save icon when done. "
-"Additionally, the color of a card can be changed by clicking on the palette icon of a card. "
-"They can be moved to a different column by dragging."
-msgstr ""
-"Gruppenarbeit erfordert Kommunikation zwischen den Teilhabenden. "
-"Hierfür stellt Smerge ein Kanban Board bereit, welchen mit einem Knopf in der rechten oberen Ecke "
-"unter dem Einstellungsknopf geöffnet werden kann. "
-"Karten können durch Drücken des ADD Knopfes, welcher sich oberhalb "
-"der jeweiligen Spalte befindet, hinzugefügt werden. "
-"Um sie zu bearbeiten, drückt man auf das Bleistiftsymbol, schreibt Text "
-"und drückt danach auf das Speichern Symbol. "
-"Außerdem kann die Farbe einer Karte verändert werden, indem man auf das Farbpaletten Symbol klickt. "
-"Das Verschieben von Karten zwischen Spalten funktioniert per Drag and Drop."
+#: snapmerge/templates/how_to.html:111
+msgid "The teacher view allows you to collect all your students' projects in one place. You manage your schoolclasses, that contain the projects. You as a teacher have access to all of your students' projects listed in the view."
+msgstr "Die Lehrer View ermöglicht es dir alle Projekte deiner Schüler:innen zu sammeln. Du organisierst Schulklassen die Schülerprojekte enthalten. Du als Lehrer hast Zugriff zu allen Projekten deiner Schüler:innen."
 
-#: snapmerge/templates/how_to.html:82
-msgid ""
-"To change the column layout, first press the button at the top left hand corner and then add, "
-"remove, rename or drag columns. You can have up to five columns in total."
-msgstr ""
-"Um den Aufbau der Spalten zu verändern, kann man auf den Knopf in der linken oberen Ecke drücken, "
-"und danach Spalten hinzufügen, entfernen, umbenennen und per Drag and Drop verschieben. "
-"Die Anzahl der Spalten, kann auf bis zu fünf steigen."
+#: snapmerge/templates/how_to.html:112
+msgid "To include projects into your schoolclass, you can either create a new project from scratch or import a project your students created. You may also import projects from one schoolclass into another."
+msgstr "Um Projekte in eine Schulklasse hinzuzufügen kann man entweder neue Projekte erstellen oder ein bestehendes Projekt importieren. Du kannst auch Projekte aus anderen Klassen importieren, diese sind dann nicht mehr Teil der vorherigen Klasse."
+
+#: snapmerge/templates/how_to.html:113
+msgid "You can duplicate projects in our schoolclasses. The result is a copy of the project from the point of duplication. This enables for example sharing the starting point of an exercise with the whole class individually."
+msgstr "Man kann Projekte in einer Schulklasse klonen. Das ERgebnis ist eine Kopie des Projekts zum Zeitpunkt des Klonens. Dies ermöglicht es zum Beispiel eine vorbereitete Aufgabe an die ganze Klasse auszuhändigen."
 
 #: snapmerge/templates/impressum.html:12
 msgid "About Smerge"
@@ -731,14 +718,6 @@ msgid "Enter your email to restore all you're projects passwords or PINs"
 msgstr ""
 "Gib deine Emailadresse ein, um deine Projektpasswörter und PINs "
 "wiederzuerlangen."
-
-#: snapmerge/home/Merger_Two_ElectricBoogaloo/merger_v2_2.py:266
-msgid "LEFT VERSION -- This block originates from a merge in which both versions were kept."
-msgstr "LINKE VERSION -- Dieser Block stammt aus einem Merge bei dem beide Versionen behalten wurden."
-
-#: snapmerge/home/Merger_Two_ElectricBoogaloo/merger_v2_2.py:272
-msgid "RIGHT VERSION -- This block originates from a merge in which both versions were kept."
-msgstr "RECHTE VERSION -- Dieser Block stammt aus einem Merge bei dem beide Versionen behalten wurden."
 
 #, fuzzy
 #~| msgid "SnapFiles"
