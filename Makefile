@@ -1,12 +1,23 @@
 BASE = ./snapmerge
+REACT_BASE= ./react_extension
 SETTINGS = config.settings_local
+SETTINGS_TESTSERVER = config.settings_test
+APPNAME= "snapmerge"
 
 .PHONY: run startapp makemigrations migrate test
 
 crun:
 	npm install && python $(BASE)/manage.py compress --settings=$(SETTINGS) ; python $(BASE)/manage.py runserver --settings=$(SETTINGS)
+
 run:
 	python $(BASE)/manage.py runserver --settings=$(SETTINGS)
+
+run_testserver:
+	python $(BASE)/manage.py runserver --settings=$(SETTINGS_TESTSERVER)
+
+run_with_react_ext:
+	./launch.sh
+
 
 startapp:
 	python $(BASE)/manage.py startapp $(APPNAME)
@@ -14,8 +25,17 @@ startapp:
 makemigrations:
 	python $(BASE)/manage.py makemigrations --settings=$(SETTINGS)
 
+createdatamigration:
+	python $(BASE)/manage.py makemigrations --settings=$(SETTINGS) --empty "home"
+
 migrate:
 	python $(BASE)/manage.py migrate --settings=$(SETTINGS)
+
+addadmin:
+	python $(BASE)/manage.py addadmin --settings=$(SETTINGS)
+
+addpage:
+	python $(BASE)/manage.py addpage --settings=$(SETTINGS)
 
 test:
 	python $(BASE)/manage.py test $(APPNAME) --settings=$(SETTINGS)
@@ -31,6 +51,15 @@ shell:
 
 compress:
 	npm install && python $(BASE)/manage.py compress --settings=$(SETTINGS)
+
+access_d_build:
+	docker-compose -f docker-compose-access.yml build
+
+access_d_up:
+	docker-compose -f docker-compose-access.yml up
+
+generate_swagger: 
+	python $(BASE)/manage.py  spectacular --settings=$(SETTINGS)  --color --file schema.yml
 
 #for tracking time spend on project :)
 CFLAGS = -g -std=c11 -pedantic -Wall -Werror -D_XOPEN_SOURCE=700 

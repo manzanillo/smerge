@@ -1,0 +1,74 @@
+.merge_main_space {
+    /* width:100%;
+    height:100%; */
+    padding:2em;
+    /* border-radius: 20px; */
+}
+
+.leftSplitPane{
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.rightSplitPane{
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.merge_main_pane {
+    /* width:100%;
+    height:100%; */
+    background-color: #727272;
+    margin-top: 20px;
+
+    border-radius: 20px;
+    /* border: inset red; */
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+.split {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.gutter {
+    background-color: #eeeeee49;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+    background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+}
+
+.checkeredSmal{
+    --checker-color-1: #ffffff;
+    --checker-color-2: #ececec;
+    --checker-size: 8px;
+    --checker-gradient1: linear-gradient(
+    45deg,
+    var(--checker-color-1) 25%,
+    transparent 25%,
+    transparent 75%,
+    var(--checker-color-1) 75%
+    );
+    --checker-gradient2: linear-gradient(
+    -45deg,
+    var(--checker-color-1) 25%,
+    transparent 25%,
+    transparent 75%,
+    var(--checker-color-1) 75%
+    );
+
+    background-color: var(--checker-color-2) !important;
+    background-image: var(--checker-gradient1), var(--checker-gradient1),
+        var(--checker-gradient2), var(--checker-gradient2) !important;
+    background-position: calc(100vw / 2) calc(100vh / 2),
+        calc(100vw / 2 + var(--checker-size)) calc(100vh / 2 + var(--checker-size)),
+        calc(100vw / 2) calc(100vh / 2 + var(--checker-size)),
+        calc(100vw / 2 + var(--checker-size)) calc(100vh / 2) !important;
+    background-size: calc(var(--checker-size) * 2) calc(var(--checker-size) * 2) !important;
+}

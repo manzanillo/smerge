@@ -1,0 +1,126 @@
+# Use the official Nginx slim image as the base image
+FROM nginx:alpine
+
+# Remove the default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# install needed packages
+RUN apk update && apk add --no-cache bash
+
+RUN apk --no-cache add git python3-dev py3-pip nodejs npm
+
+RUN apk add --no-cache gcc
+
+RUN apk add --no-cache \
+    libffi-dev \
+    libressl-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libc-dev \
+    zlib-dev \
+    make \
+    g++
+
+RUN apk add --no-cache jq
+
+RUN apk add docker
+
+RUN apk add --no-cache openssh-client
+
+
+# init app
+RUN mkdir /app
+WORKDIR /app
+
+# copy ssh for git
+RUN mkdir -p /root/.ssh
+COPY /secrets/rasp_ssh/* /root/.ssh/
+
+# install python packages for smerge
+WORKDIR /app
+COPY /requirements.txt /app
+COPY /package.json /app
+COPY /package-lock.json /app
+RUN pip install -r requirements.txt
+RUN npm install
+
+COPY /smerge.yml /app
+
+COPY /entrypoint_access.sh /app
+COPY /launch_docker.sh /app
+COPY /Makefile /app
+
+
+# install packages for access
+RUN mkdir -p /app/Access_Portal/Web_Api
+COPY /Access_Portal/Web_Api/requirements.txt /app/Access_Portal/Web_Api/
+WORKDIR /app/Access_Portal/Web_Api
+RUN pip install -r requirements.txt
+
+RUN mkdir -p /app/Access_Portal/access_portal
+COPY /Access_Portal/access_portal/package.json /app/Access_Portal/access_portal/
+COPY /Access_Portal/access_portal/package-lock.json /app/Access_Portal/access_portal/
+WORKDIR /app/Access_Portal/access_portal
+RUN npm install
+
+
+# install react_ext packages
+RUN mkdir /app/react_extension
+COPY /react_extension/package.json /app/react_extension
+COPY /react_extension/package-lock.json /app/react_extension
+
+WORKDIR /app/react_extension
+RUN npm install
+
+
+# copy nginx conf and certificates
+COPY /secrets /app/
+COPY /data/nginx_access/ext_nginx.conf /etc/nginx/conf.d/default.conf
+RUN mkdir -p /etc/letsencrypt/live/<your-domain>
+COPY /secrets/rasp_certs/fullchain.pem /etc/letsencrypt/live/<your-domain>/
+COPY /secrets/rasp_certs/privkey.pem /etc/letsencrypt/live/<your-domain>/
+
+# copy custom missing authorization page
+COPY /data/nginx_access/e403.html /usr/share/nginx/html/
+
+WORKDIR /app
+COPY . /app
+# COPY /Access_Portal/ /app/Access_Portal
+# COPY /react_extension/ /app/react_extension
+# RUN mkdir -p /app/snapmerge
+# COPY /snapmerge/ /app/snapmerge/
+
+RUN touch /etc/nginx/allowed_ips.conf
+RUN echo -n "deny all;" >> /etc/nginx/allowed_ips.conf
+#COPY /snapmerge/manage.py /app/snapmerge/
+
+
+RUN chmod +x ./entrypoint_access.sh
+RUN ./entrypoint_access.sh
+
+
+# Set the permissions on the SSH key
+RUN chmod 600 /root/.ssh/id_rsa
+
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+
+# Expose port 80 to allow incoming HTTP traffic
+EXPOSE 80
+EXPOSE 443
+
+# Start Nginx when the container runs
+CMD ["nginx", "-g", "daemon off;"]
+
+RUN chmod 777 /app/Access_Portal/launch_docker.sh
+
+ENTRYPOINT ["/app/launch_docker.sh"]
+
+
+# Generate a random SSH key pair during the container build
+#RUN ssh-keygen -t rsa -b 4096 -f /root/.ssh/id_rsa -N ""
+
+# sudo docker build -t smerge_access . -f Dockerfile.access
+# sudo docker run -d -p 80:80 -p 443:443 smerge_access --name access_smerge

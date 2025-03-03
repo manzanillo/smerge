@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  django:
+    container_name: smerge_server_access
+    build:
+      context: .
+      dockerfile: Dockerfile.access
+    image: smerge_docker
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./snapmerge/media:/app/snapmerge/media
+      - ./snapmerge/database:/app/snapmerge/database
+      - ./Access_Portal/Web_Api/instance:/app/Access_Portal/Web_Api/instance
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "80:80"
+      - "443:443"

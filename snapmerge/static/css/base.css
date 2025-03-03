@@ -47,6 +47,7 @@ footer {
 }
 
 .wave-container {
+  z-index: -1;
   position: relative;
   text-align: center;
   overflow: hidden;
@@ -71,4 +72,51 @@ input:focus + label {
 input:focus {
   border-bottom: 1px solid rgb(7, 106, 171) !important;
   box-shadow: 0 1px 0 0 rgb(7, 106, 171) !important;
+}
+
+.marquee {
+  background-color: red;
+  position: fixed;
+  top: 64px;
+  width: 100%;
+  height: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+}
+
+.marquee span {
+  display: inline-block;
+  color: white;
+  font-size: 18px;
+  vertical-align:middle;
+  padding-left: 33.33%;
+  left: 100%;
+  animation: marquee 15s linear infinite;
+}
+
+.marquee span:nth-child(2) {
+  left: 133.33%;
+}
+
+.marquee span:nth-child(3) {
+  left: 166.66%;
+}
+
+@keyframes marquee {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}
+
+#adminIcon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  z-index: 1200;
+  background-color: transparent;
+  display: none;
 }

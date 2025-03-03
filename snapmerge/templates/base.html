@@ -18,24 +18,59 @@
     {% endblock %}
 
 
-    <title>SMERGE</title>
+    
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-    <link rel="icon" href="{%  static 'icon/favicon.ico' %}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{%  static 'icon/favicon-32x32.png' %}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{%  static 'icon/favicon-96x96.png' %}" sizes="96x96">
+    <title>SMERGE{{ devAdd }}</title>
+    {% if inBeta %}
+        {% comment %} <link rel="icon" type="image/svg+xml" href="{%  static 'icon/logo_debug.svg' %}" /> {% endcomment %}
+        <link rel="apple-touch-icon" sizes="57x57" href="{%  static 'icon/debug/apple-icon-57x57.png' %}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{%  static 'icon/debug/apple-icon-60x60.png' %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{%  static 'icon/debug/apple-icon-72x72.png' %}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{%  static 'icon/debug/apple-icon-76x76.png' %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{%  static 'icon/debug/apple-icon-114x114.png' %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{%  static 'icon/debug/apple-icon-120x120.png' %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{%  static 'icon/debug/apple-icon-144x144.png' %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{%  static 'icon/debug/apple-icon-152x152.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{%  static 'icon/debug/apple-icon-180x180.png' %}">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{%  static 'icon/debug/android-icon-192x192.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{%  static 'icon/debug/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{%  static 'icon/debug/favicon-96x96.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{%  static 'icon/debug/favicon-16x16.png' %}">
+        <link rel="manifest" href="{%  static 'icon/debug/manifest.json' %}">
+    {% else %}
+        <link rel="apple-touch-icon" sizes="57x57" href="{%  static 'icon/updated/apple-icon-57x57.png' %}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{%  static 'icon/updated/apple-icon-60x60.png' %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{%  static 'icon/updated/apple-icon-72x72.png' %}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{%  static 'icon/updated/apple-icon-76x76.png' %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{%  static 'icon/updated/apple-icon-114x114.png' %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{%  static 'icon/updated/apple-icon-120x120.png' %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{%  static 'icon/updated/apple-icon-144x144.png' %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{%  static 'icon/updated/apple-icon-152x152.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{%  static 'icon/updated/apple-icon-180x180.png' %}">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{%  static 'icon/updated/android-icon-192x192.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{%  static 'icon/updated/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{%  static 'icon/updated/favicon-96x96.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{%  static 'icon/updated/favicon-16x16.png' %}">
+        <link rel="manifest" href="{%  static 'icon/updated/manifest.json' %}">
+        {% comment %} <link rel="icon" href="{%  static 'icon/favicon.ico' %}" sizes="16x16">
+        <link rel="icon" type="image/png" href="{%  static 'icon/favicon-32x32.png' %}" sizes="32x32">
+        <link rel="icon" type="image/png" href="{%  static 'icon/favicon-96x96.png' %}" sizes="96x96"> {% endcomment %}
+    {% endif %}
+    
 
 </head>
 
 <body>
     <nav>
         <a href="{% url 'home' %}" class="logo">
-            SMERGE
+            SMERGE{{ devAdd }}
         </a>
         <ul>
             <div class="navlinks">
                 <li><a href="{% url 'howto' %}">How To Smerge</a> </li>
                 <li><a href="{% url 'impressum' %}">Impressum</a> </li>
                 <li><a onclick="window.history.back()">{% trans "Back" %}</a> </li>
+                <li><a href="{% url 'teacher-login' %}">Teacher-Login</a> </li>
             </div>
         </ul>
         
@@ -46,6 +81,29 @@
         </div>
     </nav>
 
+    <img id="adminIcon" width="24px" src="{%  static 'icon/admin.svg' %}" onclick="openHiddenAdmin(event)"></img>
+    <script>
+        let icon = document.getElementById('adminIcon');
+        let timeoutId;
+        
+        document.addEventListener('mousemove', function(event) {
+          if ((event.clientX < 24 && event.clientX > 0) && (event.clientY > window.innerHeight - 24 && event.clientY < window.innerHeight)) {
+            timeoutId = setTimeout(function() {
+              icon.style.display = 'block';
+            }, 5000);
+          } else {
+            clearTimeout(timeoutId);
+            icon.style.display = 'none';
+          }
+        });
+
+        function openHiddenAdmin(event) {
+            if (event.ctrlKey && event.altKey && event.shiftKey) {
+              window.location = "/admin/"
+            }
+          }
+        </script>
+
 
     {% compress js %}
     <script type="module" src="{% static 'js/main.js' %}"></script>
@@ -54,6 +112,13 @@
 
     <script type="module" src="{% static 'js/nav-slide.js' %}"></script>
     <main>
+        {% if notification_visible %}
+            <div class="marquee">
+                <span>{{notification_text}}</span>
+                <span>{{notification_text}}</span>
+                <span>{{notification_text}}</span>
+            </div>
+        {% endif %}
         {%block content %}
 
         {% endblock %}

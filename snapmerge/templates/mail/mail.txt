@@ -7,7 +7,7 @@
 {% trans "Project: " %}{{ entry.name }}
 {% trans "Description: " %}{{ entry.description | default_if_none:"" }}
 {% trans "PIN: " %}{{ entry.pin }}
-{% trans "Password: " %}{{ entry.password | default_if_none:"" }}
+{% trans "Reset-Link: " %}{{ entry.reset_url | default_if_none:"" }}
 
 {% endfor %}
 

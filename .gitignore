@@ -83,4 +83,21 @@ snapmerge/media/*
 snapmerge/static/CACHE/**
 
 #secrets file
-secrets/secrets.smerge.json
+secrets/smerge/secrets.smerge.json
+
+secrets/rasp_certs/fullchain.pem
+secrets/rasp_certs/privkey.pem
+
+secrets/rasp_ssh/id_rsa
+secrets/rasp_ssh/id_rsa.pub
+
+#exclude git data
+Access_Portal/Web_Api/gitWorker/data/*
+
+#exclude vite tmp files
+**/.vite
+**/.vite/**
+
+**/test_files/**
+
+**/venv/**

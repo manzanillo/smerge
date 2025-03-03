@@ -1,0 +1,42 @@
+/* .checkered{
+    --checker-size: 100px;
+    background-image:
+      linear-gradient(45deg, #000 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #000 75%),
+      linear-gradient(45deg, transparent 75%, #000 75%),
+      linear-gradient(45deg, #000 25%, #fff 25%) !important;    
+
+    background-size: calc(var(--checker-size) + var(--checker-size)) calc(var(--checker-size) + var(--checker-size)) !important;       
+
+    background-position:0 0, 0 0, calc( 0px - var(--checker-size)) calc( 0px - var(--checker-size)), var(--checker-size) var(--checker-size) !important;
+} */
+
+.checkered{
+    --checker-color-1: #ffffff;
+    --checker-color-2: #ececec;
+    --checker-size: 15px;
+    --checker-gradient1: linear-gradient(
+    45deg,
+    var(--checker-color-1) 25%,
+    transparent 25%,
+    transparent 75%,
+    var(--checker-color-1) 75%
+    );
+    --checker-gradient2: linear-gradient(
+    -45deg,
+    var(--checker-color-1) 25%,
+    transparent 25%,
+    transparent 75%,
+    var(--checker-color-1) 75%
+    );
+
+    background-color: var(--checker-color-2) !important;
+    background-image: var(--checker-gradient1), var(--checker-gradient1),
+        var(--checker-gradient2), var(--checker-gradient2) !important;
+    background-position: calc(100vw / 2) calc(100vh / 2),
+        calc(100vw / 2 + var(--checker-size)) calc(100vh / 2 + var(--checker-size)),
+        calc(100vw / 2) calc(100vh / 2 + var(--checker-size)),
+        calc(100vw / 2 + var(--checker-size)) calc(100vh / 2) !important;
+    background-size: calc(var(--checker-size) * 2) calc(var(--checker-size) * 2) !important;
+}
+

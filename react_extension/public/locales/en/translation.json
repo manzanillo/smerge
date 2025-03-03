@@ -1,0 +1,188 @@
+{
+  "main": {
+    "test": "test text oder so...",
+    "nav_back": "Back",
+    "nav_impressum": "Impressum",
+    "nav_howto": "How To Smerge",
+    "nav_teacherlogin": "Teacher-Login"
+  },
+  "SettingsModal": {
+    "old_title": "Project Settings",
+    "graph_title": "Graph Settings"
+  },
+  "OldSettingControls": {
+    "project_pin": "Project Pin:",
+    "change_password": "Change Password:",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "change": "Change",
+    "change_project_name": "Change Project Name:",
+    "change_project_desc": "Change Project Description:",
+    "language": "Language:",
+    "delete_project": "Delete Project"
+  },
+  "NewSettingControls": {
+    "save_graph_pos": "Save Graph Position",
+    "save_current_layout": "Save Current Layout (in file)",
+    "load_layout": "Load Layout From File",
+    "layout": "Layout",
+    "dagre": "Dagre",
+    "preset": "Server-Saved",
+    "random": "Random",
+    "grid": "Grid",
+    "circle": "Circle",
+    "concentric": "Concentric",
+    "breadthfirst": "Breadth First",
+    "cose": "Force (Cose)",
+    "wheel_sensitivity_popover": {
+      "text": "Be careful! This setting will RELOAD the page and is SAVED on the pc. (Default is 1)",
+      "button": "Open"
+    },
+    "old_projectview": "Old Project View",
+    "scroll_speed": "Change Scroll Speed:",
+    "save_graph_pos_tooltip": "Save the current layout on the server (as \"Server-Saved\" layout)",
+    "save_current_layout_tooltip": "Download the current graph, as is into a json file",
+    "load_layout_tooltip": "Load previous saved graph (.json) into current panel (hit \"Save Graph Position\" if you want the loaded graph to be saved as the server layout)",
+    "color_style": "Change Project Colors:",
+    "colorPicker": {
+      "primary": "Normal",
+      "favor": "Favored",
+      "conflict": "Conflict"
+    },
+    "unhide_all": "Unhide / Expand All",
+    "unhide_popover": {
+      "text": "Are you sure to unhide / expand all nodes?",
+      "button": "Yes",
+      "button_cancel": "No"
+    }
+  },
+  "HelpPages": {
+    "page0": {
+      "header": "General Usage",
+      "item0": {
+        "header": "Movement",
+        "footer": "**__General Movement:\n -Click and drag the mouse on a node to move it\n  -Only in \"Server-Saved\" layout will each move be saved and shared\n -Click and drag outside of a node to move the graph\n -Scroll to zoom in and out"
+      },
+      "item1": {
+        "header": "Select Objects",
+        "footer": "**__Selecting nodes:\n -Hold Shift or Ctrl and click on nodes to select them\n  -Selected nodes have a pink color\n -Hold Shift and drag the mouse to create a selection box"
+      },
+      "item2": {
+        "footer": "**__Right click a node to open the context menu:\n - Download: Download corresponding Snap! file.\n - Mark as favorite: Mark a node for all to see.\n - Edit: Change node values.\n - Collapse: Collapse all nodes beneath into one.",
+        "header": "Context Menu"
+      },
+      "item3": {
+        "header": "Drop Zone",
+        "footer": "**__Pull a Snap! file into the window dropzone and let go when it is green to upload a file as node.\n - File must have the ending .xml and the Snap! file structure\n - If the file is to big, the download will be refused (if you hit this limit, you might have done somthing pretty wrong)"
+      }
+    },
+    "page1": {
+      "header": "Snap! Integration",
+      "item0": {
+        "header": "Open Snap!",
+        "footer": "Double click on a node to open it in Snap!"
+      },
+      "item1": {
+        "header": "Activate JavaScript and Import Data",
+        "footer": "**__Activating JavaScript:\n -To be able to use Smerge, JavaScript extensions have to be activated in Snap!\n  -Open the Settings menu and check \"JavaScript extensions\".\n -Click on the \"Activate JS and Import Data\" block to import your data."
+      },
+      "item2": {
+        "header": "Upload Progress to Smerge",
+        "footer": "**__Post to Smerge:\n -Click the \"Post to Smerge\" block in the tab \"Variables\" and enter a short description of the new version to upload the changes to Smerge. \n -If your file size is getting too big (>32MB), the sync will prevent an upload and you need to shrink your file."
+      }
+    },
+    "page2": {
+      "header": "Merge",
+      "item0": {
+        "header": "Merge Nodes",
+        "footer": "**__Merge two nodes:\n -Select two nodes and click the \"New Smerge\" button in the right lower corner, then confirm the merge.\n -ATTENTION: If you have a project created before 18.04.24, please use the original merger until you commited all nodes to be merged at least once. Otherwise the new merger won't work correctly!"
+      },
+      "item1": {
+        "header": "Merge Conflicts",
+        "footer": "**__Solving merge conflicts:\n -If two project versions are too incompatible with each other, they create a merge conflict. Merge conflicts have to be resolved manually. \n  -Double click on a merge conflict to open an overview of conflicting elements. \n  -Select whether to proceed with the left or the right version of the project."
+      },
+      "item2": {
+        "header": "Using the Old Smerge Version",
+        "footer": "To change to the old Smerge merger, right click on the \"New Merge\" button in the lower right corner. The color will change to orange, indicating the change.\nHint: The old merger is capable of merging more than two files at once."
+      }
+    },
+    "page3": {
+      "header": "Settings",
+      "item0": {
+        "header": "Project Settings",
+        "footer": "**__Project setting options:\n -Change Password: updates the password or sets a password if none was set before (requires a password input)\n -Change Project Name: updates the project name (requires a password input)\n -Change Project Description: updates the project description (requires a password input)\n -Delete Project: deletes the project (requires a password input and a confirmation; caution: the deletion is final!)\n -Language: allows to choose the app language\n"
+      },
+      "item1": {
+        "header": "Graph Settings",
+        "footer": "**__Graph setting options:\n -Save Graph Position: saves the current layout and updates it for all users (if using the Server-Saved layout option).\n -Layout: changes the graph layout. Options include:\n  -Dagre: traditional hierarchical layout; default option. \n  -Server-Saved: the custom option saved on the server. \n  -Random: places the nodes randomly.\n  -Grid: shows all nodes in the graph on a grid.\n  -Circle: organises the nodes into a circle.\n  -Concentric: organises the nodes into concentric circles.\n  -Breadth First: organises the nodes in levels, according to the levels generated by running a breadth-first search on the graph.\n  -Force (Cose): sorts nodes according to an implementation of the CoSE algorithm.\n -Change Scroll Speed: updates the scroll speed used for zooming in or out.\n -Change Project Colors: allows to update the color scheme for normal nodes, nodes marked as favorite and merge conflict nodes.\n -Old Project View: switches to the old Smerge project settings view.\n"
+      },
+      "item2": {
+        "header": "Saving and Loading Layouts",
+        "footer": "Clicking on \"Save Current Layout\" downloads the current graph layout as a JSON file to the users' system. The file can be loaded by clicking the \"Load Layout From File\" button which allows the layout described in the file to be restored."
+      }
+    }
+  },
+  "NameDialog": {
+    "title": "Change node name",
+    "description": "The given value will be displayed as name for this node in the graph.",
+    "label": "Node Name",
+    "cancel": "Cancel",
+    "confirm": "Change"
+  },
+  "UploadZone": {
+    "dropText": "Upload Snap! file as new node.",
+    "fileUploadSuccess": "Snap! File Added",
+    "fileUploadFail": "No Snap! file found!",
+    "noXmlFile": "Wrong file type (only .xml)!",
+    "UploadText": "File Upload...",
+    "progress": "Upload is {{val}}% done"
+  },
+  "CsfrMissing": {
+    "missingText": "Please open the project via the main page and not a direct link.",
+    "buttonText": "To Main Page",
+    "missingTextHeader": "Missing Token:"
+  },
+  "MergeButtons": {
+    "selectOnlyTwo": "Only two nodes can be merged at a time with the new merger!",
+    "noConflictNodes": "Conflict nodes can't be merged!",
+    "selectMinTwo": "Please select more nodes."
+  },
+  "MergeConflictView": {
+    "confInside": "Conflict inside:",
+    "selectLeft": "Take Left",
+    "selectBoth": "Take both",
+    "selectRight": "Take Right",
+    "loadingText": "Loading conflicts..."
+  },
+  "ConflictStepper": {
+    "waitingForMerge": "Awaiting merge result...",
+    "lastStep": "Last step",
+    "conflict": "Conflict",
+    "of": "of",
+    "finish": "Finish",
+    "continue": "Continue",
+    "back": "Back",
+    "allStepsCompleted": "All steps completed - you're finished",
+    "reset": "Reset",
+    "alreadyResolved": "The merge was resolved by another.\nThis window will close in 10 seconds.",
+    "alreadyResolvedToast": "Merge already resolved!"
+  },
+  "SnapDiv": {
+    "leftCommit": "Left Commit",
+    "rightCommit": "Right Commit",
+    "result": "Result"
+  },
+  "ImageDiv": {
+    "Pen": "Pen:"
+  },
+  "KanbanBoard": {
+    "todo": "Backlog",
+    "wip": "In Progress",
+    "done": "Finished",
+    "cardLimit": "Card limit reached.",
+    "columnLimit": "Column limit reached.",
+    "cancel": "Cancel",
+    "deleteColumn": "Delete Column",
+    "save": "Save"
+  }
+}

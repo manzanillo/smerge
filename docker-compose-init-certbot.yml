@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./data/nginx_deploy/init_cert_nginx.conf:/etc/nginx/nginx.conf
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email <your-mail> --agree-tos -d <your-domain>
+    depends_on:
+      - nginx

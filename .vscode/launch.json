@@ -1,0 +1,65 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+        },
+        {
+            "name": "Python: Merger_v2 main",
+            "type": "python",
+            "request": "launch",
+            "module": "snapmerge.home.Merger_Two_ElectricBoogaloo.merger_v2_2",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch Edge",
+            "request": "launch",
+            "type": "msedge",
+            "url": "https://<your-domain>/ext/project_view/<some-project-id>/",
+            "webRoot": "${workspaceFolder}/react_extension/src/"
+        },
+
+        {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/snapmerge/manage.py",
+            "args": [
+                "runserver",
+                "--settings=config.settings_local"
+            ],
+            "django": true,
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Flask (Access)",
+            "type": "python",
+            "request": "launch",
+            //"python": "${workspaceFolder}/Access_Portal/Web_Api/venv/bin/python",
+            "program": "${workspaceFolder}/Access_Portal/Web_Api/run.py",
+            "args": [
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/snapmerge/manage.py",
+            "args": [
+                "test",
+                "snapmerge",
+                "--settings=config.settings_local"
+            ],
+            "django": true,
+            "justMyCode": true
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{%block css %}
+<link rel="stylesheet" href="{% static "css/home.css" %}">
+{% endblock %}
+
+
+{% block content %}
+{% csrf_token %}
+<div>Redirect</div>
+<script>
+    window.location.href = "/ext/project_view/{{ project_id }}";
+</script>
+{% endblock %}

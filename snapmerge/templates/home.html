@@ -9,7 +9,19 @@
 {% block content %}
 <div class="vertical-center center-align">
   <div class="row">
-    <img width="75%" heigth="auto" src="{% static "icon/icon.svg" %}" />
+    {% if inBeta %}
+      <div class="imageStack">
+        <img width="75%" heigth="auto" src="{% static 'icon/icon_debug.svg' %}" />
+        <h1 class="betaSign">
+          <span class="betaSign">B</span>
+          <span class="betaSign">E</span>
+          <span class="betaSign">T</span>
+          <span class="betaSign">A</span>
+        </h1>
+      </div>
+    {% else %}
+      <img width="75%" heigth="auto" src="{% static 'icon/icon.svg' %}" />
+    {% endif %}
 
     <div class="">
         <a href="{% url 'open_proj' %}" id="open-btn" name="open" class="btn waves-effect waves-light">

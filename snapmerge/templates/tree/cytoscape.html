@@ -43,7 +43,7 @@ var cy = window.cy = cytoscape({
   elements: {
     nodes: [
     {% for ele in files  %}
-    { data: { id: '{{ele.id}}' ,
+    { data: { id: '{{ele.id}}',
               href: '{{ele.file_url}}',
               description: '{{ele.description}}',
               timestamp : '{{ele.timestamp}}',
@@ -88,7 +88,7 @@ cy.on('tap', 'node', function(event) {
 cy.on('taphold dblclick', 'node', function(evt){
         if (this.data('href')){
         //ADJUST FOR CERTAIN SERVERSETTINGS
-            var url = 'https://snap.berkeley.edu/snapsource/snap.html#open:' + window.location.origin + this.data('href');
+            var url = 'https://snap.berkeley.edu/snapsource/snap.html#open:' + window.location.origin + "/blockerXML/" + this.data('id') + ".xml"//this.data('href');
             try { // your browser may block popups
                 window.open(url,'_blank');
             } catch(e){ // fall back on url change
@@ -98,6 +98,9 @@ cy.on('taphold dblclick', 'node', function(evt){
     }
 );
 
+cy.on('dragfree', 'node', function (evt){
+    console.log(evt.target.position());
+});
 
 // Show tooltip on hover
 cy.on('click', 'node', function(evt){
@@ -220,5 +223,41 @@ $('#merge').mousedown(function (evt) {
 });
 
 $('#cancel-merge').mousedown(toggleMerge);
+
+$('#new-merge').mousedown(function (evt) {
+  var selectedElements = cy.$(':selected');
+
+        if (selectedElements.length > 0){
+            console.log(selectedElements);
+
+            var merge_url = 'new_merge/{{proj_id}}';
+            var first = true;
+            selectedElements.forEach(function(ele){
+                if (first){
+                    merge_url += '?';
+                    first = false;
+                }
+                else {
+                    merge_url += '&';
+                }
+                merge_url += 'file='+ele.data('id');
+            });
+
+            var merged_node;
+            $.ajax({
+                url: merge_url,
+                cache: false,
+                success: function(new_node) {
+                  console.log(new_node)
+                },
+                error: function(stuff){
+                  if(stuff.status === 303){
+                    location.replace(stuff.responseText)
+                  }
+                    console.log('new merge did not work');
+                }
+            });
+        }
+});
 
 </script>

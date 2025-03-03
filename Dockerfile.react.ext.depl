@@ -1,0 +1,24 @@
+# Multi-stage Dockerfile
+# The first stage installs dependencies and builds the React app
+# The second stage copies the built React app into an Nginx container
+
+FROM node:21-alpine as build-stage
+WORKDIR /app
+COPY react_extension/package.json /app/
+RUN npm install
+
+COPY react_extension/ /app/
+
+RUN npx vite build
+
+
+# production environment
+FROM nginx:stable-alpine
+WORKDIR /app
+
+COPY --from=build-stage /app/dist /app
+
+COPY data/nginx_deploy/nginx_ext.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 5069
+CMD ["nginx", "-g", "daemon off;"]
