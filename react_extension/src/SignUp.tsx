@@ -107,6 +107,11 @@ export default function SignUp() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!validateInputs()) {
+        console.log("invalid inputs");
+        return;
+    }
+    console.log("valid inputs", passwordError)
     const data = new FormData(event.currentTarget);
     const username = data.get('username');
     const email = data.get('email');
