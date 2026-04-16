@@ -40,7 +40,6 @@ export const MColorPicker: React.FC<MColorPickerProps> = ({
       </Stack>
       {isOpen && (
         <ClickAwayListener
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           onClickAway={(_) => {
             toggle((prev) => {
               return !prev;

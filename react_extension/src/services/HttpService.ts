@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
-import authHeader, { getCurrentUser } from "./TeacherAuthService";
+import { getCurrentUser } from "./TeacherAuthService";
+import i18next from "i18next";
 
 class HttpService {
   public csrftoken: string;
@@ -7,7 +8,8 @@ class HttpService {
 
   constructor() {
     this.csrftoken = this.getCookie("csrftoken") ?? "";
-    this.baseURL = window.location.href.split("ext")[0];
+    this.baseURL = window.location.origin;
+    // this.baseURL = "http://127.0.0.1:8000";
 
     //     this.instance = axios.create({
     //     baseURL: 'http://127.0.0.1/api', // Replace with your API base URL
@@ -67,8 +69,9 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send(JSON.stringify(data));
 
@@ -77,7 +80,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -88,7 +91,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Post ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -139,8 +142,9 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send(JSON.stringify(data));
 
@@ -149,7 +153,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -160,7 +164,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -169,15 +173,15 @@ class HttpService {
     };
   }
 
-  getAsync<T>(endpoint: string): Promise<T> {
+  getAsync<T>(endpoint: string, suppressNotificationSuccess = true, suppressNotificationFail = false): Promise<T> {
     return new Promise((resolve, reject) => {
       this.get(
         endpoint,
         (xHttp) => resolve(JSON.parse(xHttp.responseText) as T),
         reject,
         reject,
-        true,
-        false
+        suppressNotificationSuccess,
+        suppressNotificationFail
       );
     });
   }
@@ -205,7 +209,8 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", this.baseURL + endpoint, true);
-    xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    xhttp.withCredentials = true;
+    this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send();
 
@@ -214,7 +219,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -225,13 +230,55 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
         });
       }
     };
+  }
+
+
+  private refreshCsrfToken() {
+    this.csrftoken = this.getCookie("csrftoken") ?? "";
+    return this.csrftoken;
+  }
+
+  private setCsrfHeader(xhttp: XMLHttpRequest) {
+    const token = this.refreshCsrfToken();
+    if (token) {
+      xhttp.setRequestHeader("X-CSRFToken", token);
+    }
+  }
+
+  postFormAsync<T>(
+    endpoint: string,
+    formData: FormData,
+    method: string = "POST",
+  ): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.open(method, this.baseURL + endpoint, true);
+      xhttp.withCredentials = true;
+      this.setCsrfHeader(xhttp);
+      addAuthHeader(xhttp);
+
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState === 4 && xhttp.status <= 299) {
+          resolve(JSON.parse(xhttp.responseText) as T);
+        } else if (xhttp.readyState === 4) {
+          try {
+            const payload = JSON.parse(xhttp.responseText);
+            reject(new Error(payload.detail ?? `Request failed (${xhttp.status})`));
+          } catch {
+            reject(new Error(`Request failed (${xhttp.status})`));
+          }
+        }
+      };
+
+      xhttp.send(formData);
+    });
   }
 }
 

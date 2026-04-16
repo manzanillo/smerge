@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MergeConflictView.css";
 import SnapDiv from "./SnapDiv";
 import TurnSlightLeftIcon from "@mui/icons-material/TurnSlightLeft";
@@ -72,29 +71,12 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
   rightFile = "",
   tagId = "",
 }) => {
-  const serverEndpoint = "";
 
   const { t } = useTranslation();
-  const [xmlLeft, _setXmlLeft] = useState<string>(
-    leftFile.includes(".xml")
-      ? serverEndpoint + leftFile
-      : leftFile.replace("/media", "media")
-  );
-  const [xmlRight, _setXmlRight] = useState<string>(
-    rightFile.includes(".xml")
-      ? serverEndpoint + rightFile
-      : rightFile.replace("/media", "media")
-  );
-  const [xmlHunkLeft, _setXmlHunkLeft] = useState<string>(
-    leftLink.includes(".xml")
-      ? serverEndpoint + leftLink
-      : leftLink.replace("/media", "media")
-  );
-  const [xmlHunkRight, _setXmlHunkRight] = useState<string>(
-    rightLink.includes(".xml")
-      ? serverEndpoint + rightLink
-      : rightLink.replace("/media", "media")
-  );
+  const [xmlLeft, _setXmlLeft] = useState<string>(leftFile);
+  const [xmlRight, _setXmlRight] = useState<string>(rightFile);
+  const [xmlHunkLeft, _setXmlHunkLeft] = useState<string>(leftLink);
+  const [xmlHunkRight, _setXmlHunkRight] = useState<string>(rightLink);
 
   const [isLoaded, _setIsLoaded] = useState<boolean>(false);
 
@@ -103,7 +85,7 @@ const MergeConflictView: React.FC<MergeConflictViewProps> = ({
 
   useEffect(() => {
     httpService.get(
-      parentImage.substring(1),
+      parentImage,
       (req) => {
         setIconData(req.response);
         setIconLoading(false);

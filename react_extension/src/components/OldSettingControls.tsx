@@ -9,7 +9,7 @@ import {
   Paper,
   Stack,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PasswordField from "./shared/PasswordField";
 import ProjectDto from "./models/ProjectDto";
 import TextField from "./shared/TextField";
@@ -44,11 +44,7 @@ const OldSettingControls: React.FC<OldSettingControlsProps> = ({
   });
   const [oldPasswordError, setOldPasswordError] = useState(false);
 
-  const { t, i18n } = useTranslation();
-
-  const selectedIndex = (() => {
-    return supportedLanguages.indexOf(i18n.language);
-  })();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setValues({
@@ -58,7 +54,6 @@ const OldSettingControls: React.FC<OldSettingControlsProps> = ({
     });
   }, [projectData]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (event: any) => {
     setValues({
       ...values,
@@ -267,51 +262,6 @@ const OldSettingControls: React.FC<OldSettingControlsProps> = ({
             cancelColor={"primary"}
           />
         </Stack>
-        <div>
-          {/* <div style={{ textDecoration: "underline", fontWeight: 900 }}>{t('OldSettingControls.language')}</div>
-                    <Stack  margin="10px" marginTop="20px" direction={"row"} spacing={3} alignItems={"center"}>
-                        
-                        {
-                            supportedLanguages.map((lang, index) => (
-                                <ImageButton selected={index == selectedIndex} key={lang} onClick={() => { i18n.changeLanguage(lang); }} height={44} src={`/ext/${lang.replace("en", "gb")}.svg`}></ImageButton>
-                            ))
-                        }
-                    </Stack> */}
-          <Accordion
-            style={{ borderRadius: "10px", minHeight: "20px" }}
-            sx={{ bgcolor: "transparent" }}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1-content"
-            >
-              <div
-                style={{
-                  textDecoration: "underline",
-                  fontWeight: 900,
-                  height: "20px",
-                }}
-              >
-                {t("OldSettingControls.language")}
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Stack direction={"row"} spacing={3} alignItems={"center"}>
-                {supportedLanguages.map((lang, index) => (
-                  <ImageButton
-                    selected={index == selectedIndex}
-                    key={lang}
-                    onClick={() => {
-                      i18n.changeLanguage(lang);
-                    }}
-                    height={44}
-                    src={`/ext/${lang.replace("en", "gb")}.svg`}
-                  ></ImageButton>
-                ))}
-              </Stack>
-            </AccordionDetails>
-          </Accordion>
-        </div>
       </Stack>
     </Paper>
   );

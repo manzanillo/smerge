@@ -7,22 +7,99 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from rest_framework.authtoken.views import ObtainAuthToken
 from shutil import copyfile
 from uuid import uuid4
 from django.conf import settings
+from django.core.files.uploadedfile import UploadedFile
+from django.utils.translation import gettext as _
+import xml.etree.ElementTree as ET
+import secrets
+import base64
+import logging
 
-from ..models import File, SnapFile, Project, MergeConflict, SchoolClass
+from ..models import File, SnapFile, Project, MergeConflict, SchoolClass, PasswordResetToken
+from ..xmltools import analyze_file
 from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer, RegistrationSerializer, SchoolClassSerializer
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 
 from ..views import check_password, generate_unique_PIN, hashPassword
 
+
+def sanitize_token(token):
+    # Ensure token is valid URL-safe base64 to prevent token injection edge cases.
+    try:
+        sanitized_token = (
+            base64.urlsafe_b64encode(base64.urlsafe_b64decode(token + "=="))
+            .strip(b"=")
+            .decode("utf-8")
+        )
+        if str(sanitized_token) != token:
+            logging.log(
+                logging.WARNING, f"Received token is not base64 encoded: {token}"
+            )
+            return None
+    except Exception as e:
+        logging.log(logging.INFO, f"Invalid token: {e}")
+        return None
+    return sanitized_token
+
+
+def _validate_uploaded_snap_xml(uploaded_file):
+    if not isinstance(uploaded_file, UploadedFile):
+        raise ValueError(_("No valid xml."))
+    try:
+        ET.fromstring(uploaded_file.read())
+        uploaded_file.seek(0)
+    except ET.ParseError as exc:
+        raise ValueError(_("No valid xml.")) from exc
+
+
+def _create_initial_snap_file(project, uploaded_file, start_description):
+    if uploaded_file:
+        _validate_uploaded_snap_xml(uploaded_file)
+        snap_file = SnapFile.create_and_save(
+            file=uploaded_file,
+            project=project,
+            description=start_description or uploaded_file.name,
+        )
+    else:
+        snap_file = SnapFile.create_and_save(
+            project=project,
+            description="blank project",
+            file="",
+        )
+        snap_file.file = str(uuid4()) + ".xml"
+        copyfile(
+            settings.BASE_DIR + "/static/snap/blank_proj.xml",
+            _get_snap_file_abs_path(snap_file),
+        )
+        snap_file.save()
+
+    snap_file.xml_job()
+    return snap_file
+
+
+def _get_snap_file_abs_path(snap_file):
+    return settings.BASE_DIR + snap_file.get_media_path()
+
+
+def _update_snap_file_stats(snap_file):
+    stats = analyze_file(snap_file.get_media_path())
+    snap_file.number_scripts = stats[0]
+    snap_file.number_sprites = stats[1]
+    snap_file.save(update_fields=["number_scripts", "number_sprites"])
+
+# Response mit gesetztem CSRF-Cookie
+def _response_with_csrf_cookie(request, data, status_code):
+    get_token(request)
+    return Response(data, status=status_code)
 
 # class ListSnapFilesView(generics.ListAPIView):
 #     """
@@ -33,6 +110,12 @@ from ..views import check_password, generate_unique_PIN, hashPassword
 #     lookup_field = 'project'
 #     permission_classes = [permissions.AllowAny]
 
+@method_decorator(ensure_csrf_cookie, name="dispatch")
+class CsrfCookieView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return _response_with_csrf_cookie(request, {"detail": "CSRF cookie set"}, 200)
 
 class CustomAuthToken(ObtainAuthToken):
 
@@ -66,11 +149,11 @@ class RegisterTeacherView(APIView):
                 except Token.DoesNotExist:
                     Token.objects.create(user=user)
         if registration_serializer.is_valid():
-            if User.objects.filter(username = registration_serializer.getUsername(request.data)).exists():
-                return Response ({
-                        "error": "Username already exists!",
-                        "status": f"{status.HTTP_400_BAD_REQUEST} BAD REQUEST"
-                        })
+            if User.objects.filter(username=registration_serializer.getUsername(request.data)).exists():
+                return Response({
+                    "error": "Username already exists!",
+                    "status": f"{status.HTTP_400_BAD_REQUEST} BAD REQUEST"
+                })
             user = registration_serializer.create(request.data)
             token = Token.objects.create(user=user)
 
@@ -91,14 +174,34 @@ class RegisterTeacherView(APIView):
                 }
             )
         return Response(
-             {
+            {
                 "error": registration_serializer.errors,
                 "status": f"{status.HTTP_203_NON_AUTHORITATIVE_INFORMATION} NON AUTHORITATIVE INFORMATION"
             }
         )
 
-class SchoolClassesView(generics.CreateAPIView):
 
+class TeacherTutorialStatusView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return Response({"completed_tutorial": request.user.completed_tutorial}, status=200)
+
+    def patch(self, request, *args, **kwargs):
+        completed_tutorial = request.data.get("completed_tutorial")
+        if not isinstance(completed_tutorial, bool):
+            return Response(
+                {"detail": "completed_tutorial must be a boolean."},
+                status=400,
+            )
+
+        request.user.completed_tutorial = completed_tutorial
+        request.user.save(update_fields=["completed_tutorial"])
+        return Response({"completed_tutorial": request.user.completed_tutorial}, status=200)
+
+
+class SchoolClassesView(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -106,19 +209,19 @@ class SchoolClassesView(generics.CreateAPIView):
     serializer_class = SchoolClassSerializer
 
     def get_serializer_context(self):
-        context =  super().get_serializer_context()
+        context = super().get_serializer_context()
         context['request'] = self.request
         return context
 
     def post(self, request, *args, **kwargs):
-        #serializer = SchoolClassSerializer(data=request.data)
+        # serializer = SchoolClassSerializer(data=request.data)
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
 
-class SchoolClassesForTeacherView(generics.ListAPIView):
 
+class SchoolClassesForTeacherView(generics.ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -126,7 +229,7 @@ class SchoolClassesForTeacherView(generics.ListAPIView):
     lookup_field = "id"
     queryset = SchoolClass.objects.all()
 
-    #def get_serializer_context(self):
+    # def get_serializer_context(self):
     #    context =  super().get_serializer_context()
     #    context['request'] = self.request
     #    return context
@@ -139,8 +242,8 @@ class SchoolClassesForTeacherView(generics.ListAPIView):
         teacher_id = self.kwargs.get(self.lookup_field)
         return self.list(request, *args, **kwargs)
 
-class ProjectsForSchoolClassesView(generics.ListAPIView):
 
+class ProjectsForSchoolClassesView(generics.ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -158,8 +261,9 @@ def findDuplicateFromOriginal(og, duplicateList): #util function for duplication
     duplicateFilepath = copy_filepath.split('/')[-1]
     for file in duplicateList:
         if (file.file == duplicateFilepath) and (file.description == og.description):
-            return file 
+            return file
     return None
+
 
 class DuplicateProject(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
@@ -168,14 +272,19 @@ class DuplicateProject(generics.CreateAPIView):
     serializer_class = ProjectSerializer
 
     def get_serializer_context(self):
-        context =  super().get_serializer_context()
+        context = super().get_serializer_context()
         context['request'] = self.request
         return context
 
     def post(self, request, *args, **kwargs):
         projectId = kwargs.get('id')
         originalProject = get_object_or_404(Project, id=projectId)
-        duplicateProject = Project.objects.create(name=originalProject.name, description=originalProject.description, picture=originalProject.picture, schoolclass=originalProject.schoolclass, password=originalProject.password, pin=generate_unique_PIN(), kanban_board=originalProject.kanban_board)
+        newName = originalProject.name + " Kopie"
+        duplicateProject = Project.objects.create(name=newName, description=originalProject.description,
+                                                  picture=originalProject.picture,
+                                                  schoolclass=originalProject.schoolclass,
+                                                  password=originalProject.password, pin=generate_unique_PIN(),
+                                                  kanban_board=originalProject.kanban_board)
         Project.save(duplicateProject)
         originalFiles = SnapFile.objects.filter(project=originalProject)
         duplicateFiles = []
@@ -183,8 +292,9 @@ class DuplicateProject(generics.CreateAPIView):
             for ogfile in originalFiles:
                 filepath_seperated = ogfile.get_media_path().split('.')
                 copy_filepath = filepath_seperated[0] + '_copy.' + filepath_seperated[1]
-                copyfile(settings.BASE_DIR + ogfile.get_media_path(), settings.BASE_DIR + copy_filepath)
-                duplicateFile = SnapFile.create_and_save(project=duplicateProject, description=ogfile.description, file=copy_filepath.split('/')[-1])
+                copyfile(_get_snap_file_abs_path(ogfile), settings.BASE_DIR + copy_filepath)
+                duplicateFile = SnapFile.create_and_save(project=duplicateProject, description=ogfile.description,
+                                                         file=copy_filepath.split('/')[-1])
                 duplicateFiles.append(duplicateFile)
             for ogfile in originalFiles:
                 duplicateChild = findDuplicateFromOriginal(ogfile, duplicateFiles)
@@ -193,38 +303,50 @@ class DuplicateProject(generics.CreateAPIView):
                     duplicateChild.ancestors.add(duplicateAncestor)
                 SnapFile.save(duplicateChild)
         return Response(status="201", data=self.get_serializer(duplicateProject).data)
-    
+
 
 class ProjectCreationFromTeacherView(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     serializer_class = ProjectSerializer
-    
+
     def get_serializer_context(self):
-        context =  super().get_serializer_context()
+        context = super().get_serializer_context()
         context['request'] = self.request
         return context
 
     def post(self, request, *args, **kwargs):
-        projectPin = generate_unique_PIN()
-        projectdata = {**request.data, 'pin': projectPin}
-        serializer = self.get_serializer(data=projectdata, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        proj_instance = Project.objects.get(pin=projectPin)
-        snap_description = "blank project"
-        snap_file = SnapFile.create_and_save(
-            project=proj_instance, description=snap_description, file=""
+        name = (request.data.get("name") or "").strip()
+        description = request.data.get("description") or ""
+        start_description = request.data.get("start_description") or ""
+        schoolclassId = request.data.get("schoolclass")
+        schoolclass = get_object_or_404(SchoolClass, id=schoolclassId)
+
+        if not name:
+            return Response({"detail": _("Project name is required.")}, status=400)
+
+        project_pin = generate_unique_PIN()
+
+        project = Project.objects.create(
+            name=name,
+            description=description,
+            pin=project_pin,
+            schoolclass=schoolclass
         )
-        snap_file.file = str(uuid4()) + ".xml"
-        copyfile(
-            settings.BASE_DIR + "/static/snap/blank_proj.xml",
-            settings.BASE_DIR + snap_file.get_media_path(),
-        )
-        snap_file.save()
-        snap_file.xml_job()
-        return Response(serializer.data)
+
+        try:
+            _create_initial_snap_file(
+                project,
+                request.FILES.get("file"),
+                start_description,
+            )
+        except ValueError as exc:
+            project.delete()
+            return Response({"detail": str(exc)}, status=400)
+
+        serializer = self.get_serializer(project)
+        return Response(serializer.data, status=201)
 
 
 class ListSnapFilesView(generics.ListAPIView):
@@ -258,7 +380,6 @@ class ProjectDetailView(generics.RetrieveAPIView):
 
 
 class ProjectRetrieverWithPin(generics.RetrieveAPIView):
-    
     """
     API endpoint that allows projects to be viewed when only knowing their pin.
     """
@@ -298,7 +419,7 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
             request.data["password"] = ""
 
         if instance.password is not None and instance.password is not '' and not check_password(
-            request.data["password"], instance.password
+                request.data["password"], instance.password
         ):
             return Response(data="Wrong Password!", status=403)
         partial = kwargs.pop("partial", False)
@@ -309,6 +430,7 @@ class ProjectDetailUpdateView(generics.UpdateAPIView):
 
         send_event(str(instance.id), "message", {"text": "projectChange"})
         return Response(data=serializer.data, status=200)
+
 
 class ProjectImportUpdateView(generics.UpdateAPIView):
     """
@@ -343,6 +465,7 @@ class ProjectImportUpdateView(generics.UpdateAPIView):
         send_event(str(instance.id), "message", {"text": "projectChange"})
         return Response(data=serializer.data, status=200)
 
+
 class ProjectUpdateKanbanView(generics.UpdateAPIView):
     """
     API endpoint to update the Kanban board.
@@ -363,6 +486,7 @@ class ProjectUpdateKanbanView(generics.UpdateAPIView):
         # Notify everyone to update the board
         send_event(str(project.id), "message", {"text": "projectChange_KanbanBoard"})
         return Response(data="Updated Kanbanboard.", status=200)
+
 
 class SnapFileDetailView(generics.RetrieveAPIView):
     """
@@ -463,13 +587,13 @@ class ProjectChangePasswordView(generics.UpdateAPIView):
         instance = self.get_object()
 
         if (
-            "old-password" not in request.data.keys()
-            or "new-password" not in request.data.keys()
+                "old-password" not in request.data.keys()
+                or "new-password" not in request.data.keys()
         ):
             return Response(data="Missing Values!", status=400)
 
         if instance.password is None or check_password(
-            request.data["old-password"], instance.password
+                request.data["old-password"], instance.password
         ):
             if request.data["new-password"] == "":
                 instance.password = None
@@ -490,8 +614,8 @@ class ProjectDeleteView(generics.DestroyAPIView):
         instance = self.get_object()
         if "password" not in request.data.keys():
             return Response(data="Missing Password!", status=400)
-        if instance.password == None or check_password(
-            request.data["password"], instance.password
+        if instance.password is None or instance.password == "" or check_password(
+                request.data["password"], instance.password
         ):
             instance.delete()
             return Response(data="Project Deleted!", status=300)
@@ -601,3 +725,414 @@ class UnhideAllView(generics.GenericAPIView):
         )
         send_event(str(project.id), "message", {"text": "Update_added_resize"})
         return Response(data="Unhide / uncollapsed all nodes", status=200)
+
+
+class SchoolClassUpdateView(generics.UpdateAPIView):
+    """
+    PUT /schoolclasses/<id>/
+    DELETE /schoolclasses/<id>/
+    """
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    queryset = SchoolClass.objects.all()
+    serializer_class = SchoolClassSerializer
+    lookup_field = "id"
+
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # Check if user owns this schoolclass
+        if instance.teacher != request.user:
+            return Response(data="Unauthorized", status=403)
+
+        cleanData = {}
+        if "name" in request.data.keys():
+            cleanData["name"] = request.data["name"]
+
+        if not cleanData:
+            return Response(data="No data to update", status=400)
+
+        partial = kwargs.pop("partial", False)
+        serializer = self.get_serializer(instance, data=cleanData, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(data=serializer.data, status=200)
+
+    def delete(self, request, *args, **kwargs):
+
+        instance = self.get_object()
+
+        # Check if user owns this schoolclass
+        if instance.teacher != request.user:
+            return Response(data="Unauthorized", status=403)
+
+        # Delete all projects in this schoolclass
+        projects = Project.objects.filter(schoolclass=instance)
+        for project in projects:
+            project.delete()
+
+        instance.delete()
+        return Response(data="Schoolclass deleted", status=200)
+
+
+class PublicProjectOpenView(APIView):
+    """Open project by PIN and optional password for public (non-teacher) flow."""
+
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        pin = request.data.get("pin", "").strip()
+        password = request.data.get("password", "")
+
+        if not pin:
+            return Response({"detail": _("PIN is required.")}, status=400)
+
+        try:
+            project = Project.objects.get(pin=pin)
+        except Project.DoesNotExist:
+            return Response({"detail": _("No such project or wrong password")}, status=403)
+
+        if project.password and not check_password(password, project.password):
+            return _response_with_csrf_cookie(request, {"detail": _("No such project or wrong password")}, 403)
+
+        return _response_with_csrf_cookie(request, {"project_id": str(project.id)}, 200)
+
+
+class PublicProjectCreateView(APIView):
+    """Create public project with optional starting Snap file."""
+
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        name = (request.data.get("name") or "").strip()
+        description = request.data.get("description") or ""
+        password_plain = request.data.get("password") or ""
+        email = request.data.get("email") or ""
+        start_description = request.data.get("start_description") or ""
+
+        if not name:
+            return Response({"detail": _("Project name is required.")}, status=400)
+
+        project = Project.objects.create(
+            name=name,
+            description=description,
+            email=email,
+            pin=generate_unique_PIN(),
+            password=hashPassword(password_plain) if password_plain else "",
+        )
+
+        try:
+            _create_initial_snap_file(
+                project,
+                request.FILES.get("file"),
+                start_description,
+            )
+        except ValueError as exc:
+            project.delete()
+            return _response_with_csrf_cookie(request, {"detail": str(exc)}, 400)
+
+        return _response_with_csrf_cookie(
+            request,
+            {
+                "project_id": str(project.id),
+                "pin": project.pin,
+                "password": password_plain,
+            },
+            201,
+        )
+
+
+class PublicRestoreInfoView(APIView):
+    """Request password/PIN restore email for public users."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email", "").strip()
+
+        if not email:
+            return Response({"detail": _("Email is required.")}, status=400)
+
+        try:
+            from email_validator import validate_email, EmailNotValidError
+            emailinfo = validate_email(email, check_deliverability=False)
+            email = emailinfo.normalized
+        except EmailNotValidError as e:
+            return Response({"detail": _("Invalid Email.") + " " + str(e)}, status=400)
+
+        projects = Project.objects.filter(email=email)
+
+        if not projects.exists():
+            # Don't reveal whether email exists - return success anyway
+            return Response({"detail": _("Mail sent")}, status=200)
+
+        base_url = request.scheme + "://" + request.get_host()
+
+        for project in projects:
+            token = secrets.token_urlsafe(None)
+            PasswordResetToken.objects.create(project=project, token=token)
+            project.reset_url = base_url + "/reset_password/" + token
+
+        from django.template.loader import render_to_string
+        from django.core.mail import send_mail
+
+        content_text = render_to_string("mail/mail.txt", {"projects": projects})
+        content_html = render_to_string("mail/mail.html", {"projects": projects})
+
+        try:
+            send_mail(
+                _("Your smerge.org projects"),
+                content_text,
+                settings.EMAIL_SENDER,
+                [email],
+                fail_silently=False,
+                html_message=content_html,
+            )
+        except Exception as e:
+            print(e)
+            return Response(
+                {"detail": _("Something went wrong, please try again or contact us")},
+                status=500,
+            )
+
+        return Response({"detail": _("Mail sent")}, status=200)
+
+class PublicResetPasswordView(APIView):
+    """Reset project password via API token."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, token, *args, **kwargs):
+        sanitized_token = sanitize_token(token)
+        if sanitized_token is None:
+            return Response({"detail": _("Invalid token")}, status=400)
+
+        exists = PasswordResetToken.objects.filter(token=sanitized_token).exists()
+        if not exists:
+            return Response(
+                {"detail": _("Invalid token, token does not exist please request a new one!")},
+                status=404,
+            )
+
+        return Response({"detail": _("Valid token")}, status=200)
+
+    def post(self, request, token, *args, **kwargs):
+        sanitized_token = sanitize_token(token)
+        if sanitized_token is None:
+            return Response({"detail": _("Invalid token")}, status=400)
+
+        new_password = request.data.get("new_password")
+        new_password_repeated = request.data.get("new_password_repeated")
+
+        if not new_password or not new_password_repeated:
+            return Response({"detail": _("Please fill in both fields")}, status=400)
+
+        if new_password != new_password_repeated:
+            return Response({"detail": _("Passwords do not match")}, status=400)
+
+        try:
+            token_object = PasswordResetToken.objects.get(token=sanitized_token)
+        except PasswordResetToken.DoesNotExist:
+            return Response(
+                {"detail": _("Invalid token, token does not exist please request a new one!")},
+                status=404,
+            )
+        except Exception as e:
+            logging.log(logging.WARNING, f"Something went wrong retrieving token: {e}")
+            return Response({"detail": _("Something went wrong.")}, status=500)
+
+        project = token_object.project
+        token_object.delete()
+        project.password = hashPassword(new_password)
+        project.save()
+
+        return Response(
+            {"detail": _("Password changed"), "project_id": str(project.id)},
+            status=200,
+        )
+
+# Tutorial Project Creation
+class CreateTutorialProjectView(APIView):
+
+    authentication_classes = []
+
+    def post(self, request):
+        try:
+            project = Project()
+            project.name = "Smerge Tutorial"
+            project.description = "Interaktives Smerge Tutorial"
+            project.pin = generate_unique_PIN()
+            project.password = ""
+            project.email = None
+            project.is_tutorial = True
+            project.save()
+
+            # Create initial snap file from template
+            snap_description = "Tutorial Start"
+            snap_file = SnapFile.create_and_save(
+                project=project,
+                description=snap_description,
+                file=""
+            )
+            snap_file.file = str(uuid4()) + ".xml"
+
+            copyfile(
+                settings.BASE_DIR + "/static/snap/tutorial_base.xml",
+                _get_snap_file_abs_path(snap_file)
+                )
+            _update_snap_file_stats(snap_file)
+            snap_file.save()
+            snap_file.xml_job()
+
+            return _response_with_csrf_cookie(request, {
+                "project_id": str(project.id),
+                "pin": project.pin,
+                "file_id": snap_file.id,
+                "success": True
+            }, 200)
+
+        except Exception as e:
+            return JsonResponse({
+                "success": False,
+                "error": str(e)
+            }, status=500)
+
+# Tutorial: Neunen Knoten hinzufügen damit Merge geübt werden kann
+class AddTutorialMergeNodeView(APIView):
+
+    def post(self, request, project_id):
+        try:
+            project = Project.objects.get(id=project_id)
+
+            if not project.is_tutorial:
+                return JsonResponse({
+                    "success": False,
+                    "error": "Not a tutorial project"
+                }, status=400)
+
+            # Root-Node des Projekts: initialer Knoten ohne Parents/Ancestors.
+            project_root = (
+                SnapFile.objects.filter(project=project, ancestors__isnull=True)
+                .order_by("timestamp")
+                .first()
+            )
+
+            if not project_root:
+                return JsonResponse({
+                    "success": False,
+                    "error": "No initial file found"
+                }, status=400)
+
+            # Student version als Basis des Merges
+            merge_base = (
+                SnapFile.objects.filter(project=project, children__isnull=True)
+                .order_by("-timestamp", "-id")
+                .first()
+            )
+
+            # Merge Root = Ursprungsknoten der Student Changes und Ancestor des neuen erstellten Knotens.
+            merge_root = (
+                SnapFile.objects.filter(project=project, children__isnull=False)
+                .order_by("-timestamp")
+                .first()
+            )
+
+            # Falls der Lernende noch keine eigene Änderung erzeugt hat,
+            # legen wir eine Kopie als Kind des Root-Files an, damit zwei Branches zum Mergen da sind.
+            if merge_base.id == project_root.id and not project_root.children.exists():
+                student_copy = SnapFile.create_and_save(
+                    project=project,
+                    description="Tutorial Student Branch",
+                    file="",
+                    ancestors=[project_root]
+                )
+                student_copy.file = str(uuid4()) + ".xml"
+                student_copy.save(update_fields=["file"])
+                copyfile(
+                    _get_snap_file_abs_path(project_root),
+                    _get_snap_file_abs_path(student_copy),
+                )
+                _update_snap_file_stats(student_copy)
+                merge_root = project_root
+
+            # Zweiter Knoten (automatische Änderung für Merge)
+            merge_file = SnapFile.create_and_save(
+                project=project,
+                description="Tutorial Merge",
+                file="",
+                ancestors=[merge_root],
+            )
+            merge_file.file = str(uuid4()) + ".xml"
+            merge_file.save(update_fields=["file"])
+
+            copyfile(
+                _get_snap_file_abs_path(merge_base),
+                _get_snap_file_abs_path(merge_file)
+            )
+
+            _update_snap_file_stats(merge_file)
+
+            # Neue nodes im client anzeigen
+            send_event(str(project.id), "message", {"text": "projectChange resize added"})
+
+            return JsonResponse({
+                "success": True,
+                "file_id": merge_file.id,
+                "project_id": str(project.id)
+            })
+
+        except Project.DoesNotExist:
+            return JsonResponse({
+                "success": False,
+                "error": "Project not found"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                "success": False,
+                "error": str(e)
+            }, status=500)
+
+# Tutorial: Projekt nach Abschluss löschen
+class CleanupTutorialProjectView(APIView):
+
+    def post(self, request, project_id):
+        try:
+            project = Project.objects.get(id=project_id)
+
+            if not project.is_tutorial:
+                return JsonResponse({
+                    "success": False,
+                    "error": "Not a tutorial project"
+                }, status=400)
+
+            project.delete()
+
+            return JsonResponse({"success": True})
+
+        except Project.DoesNotExist:
+            return JsonResponse({
+                "success": False,
+                "error": "Project not found"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                "success": False,
+                "error": str(e)
+            }, status=500)
+
+# isBeta und devAdd aus den settings an den Client weitergeben
+class SettingsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        dev_add = " (DEV)" if settings.DEBUG else " (BETA)" if settings.BETA else ""
+        return Response({
+            "inBeta": settings.BETA,
+            "devAdd": dev_add,
+        })
+

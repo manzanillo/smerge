@@ -118,8 +118,8 @@ export default function SignUp() {
     });
     TeacherAuthService.register(String(username), String(email), String(password)).then(
      () => {
-      //navigate("ext/teacher_login");
-      location.href = "/ext/teacher_login/";
+      //navigate("teacher_login");
+      location.href = "/teacher_login/";
      },
      (error) => {
         console.log(error);
@@ -217,7 +217,7 @@ export default function SignUp() {
                 Already have an account?{' '}
                 <span>
                   <Link
-                    href="/ext/teacher_login/"
+                    href="/teacher_login/"
                     variant="body2"
                     sx={{ alignSelf: 'center' }}
                   >

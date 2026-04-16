@@ -15,6 +15,7 @@ WORKDIR /app/snapmerge
 RUN npm install
 
 COPY ./secrets /app/secrets/
+RUN ln -s /app/secrets /app/snapmerge/secrets
 
 RUN mkdir -p /app/snapmerge/media
 RUN mkdir -p /app/snapmerge/database

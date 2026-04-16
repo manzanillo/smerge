@@ -2,7 +2,6 @@ import SvgIcon from "@mui/material/SvgIcon";
 
 interface TargetProps {
   style?: React.CSSProperties;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   color?: string;
 }
 

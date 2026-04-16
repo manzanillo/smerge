@@ -1,4 +1,6 @@
-const stylesheet: cytoscape.Stylesheet[] = [
+import type cytoscape from "cytoscape";
+
+const stylesheet: cytoscape.StylesheetStyle[] = [
   {
     selector: "node",
     style: {
@@ -39,7 +41,6 @@ const stylesheet: cytoscape.Stylesheet[] = [
       "background-blacken": 0.25,
       // 'width': '32px',
       // 'height': '32px',
-      // 'background-image': '/ext/logo.svg',
     },
   },
   {

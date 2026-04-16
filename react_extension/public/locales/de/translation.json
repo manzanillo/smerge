@@ -4,7 +4,146 @@
     "nav_back": "Zurück",
     "nav_howto": "How To Smerge",
     "nav_impressum": "Impressum",
-    "nav_teacherlogin": "Lehrer-Login"
+    "nav_teacherlogin": "Lehrer-Login",
+    "nav_teacher_view": "Lehrer-Ansicht",
+    "nav_logout": "Abmelden"
+  },
+  "home": {
+    "open_existing": "Projekt öffnen",
+    "create_new": "Projekt erstellen",
+    "start_tutorial": "Tutorial starten"
+  },
+  "footer": {
+    "github": "GitHub",
+    "contact": "Kontakt"
+  },
+  "howto": {
+    "title": "How to Smerge...",
+    "intro1": "Smerge ist ein Versionskontrollsystem fur die blockbasierte Sprache Snap!",
+    "intro2": "das Zusammenarbeit und Tinkern im Klassenzimmer ermoglicht.",
+    "intro3": "Es ist auf Einsteiger zugeschnitten und daher fur Lehrkrafte und Schuler einfach zu bedienen.",
+    "intro4": "Wir wollten bewusst keinen uberladenen Git-Klon bauen.",
+    "video_intro": "Die Nutzung von Smerge wird zusatzlich in diesem Video erklart (englische Untertitel verfugbar):",
+    "attention": "Achtung!",
+    "attention_text": "Damit Smerge funktioniert, mussen in Snap! die JavaScript Extensions aktiviert sein. Dazu beim ersten Offnen eines Smerge-Projekts in Snap! auf das Zahnrad klicken und die entsprechende Option aktivieren.",
+    "badgers_sett": "Unser Dachsbau",
+    "badgers_sett_1": "Ein Dachs arbeitet mit seiner Familie uber lange Zeit an einem Bau mit vielen Tunneln und Kammern.",
+    "badgers_sett_2": "Ganz ahnlich ist es beim Programmieren: Entwicklungsschritte von Version zu Version lassen sich ebenfalls als Dachsbau darstellen.",
+    "badgers_sett_3": "In diesem Beispiel entwickeln wir Asteroids, bei dem alle Asteroiden vor einer Kollision mit dem Raumschiff zerstort werden mussen.",
+    "badgers_how_1": "Wie kommen wir zu so einem Dachsbau?",
+    "badgers_how_2": "Jede Version kann per Doppelklick direkt in Snap! geoffnet und dort wie gewohnt weiterbearbeitet werden.",
+    "badgers_save_1": "Um Anderungen in Snap! zu speichern, mussen wir sie in unseren Dachsbau posten.",
+    "badgers_save_2": "Das geschieht uber den Block 'post to smerge...' unter Variablen. Eine kurze Beschreibung hilft, die Version spater wiederzufinden.",
+    "badgers_save_3": "Danach erscheint die Version in unserem Dachsbau auf smerge.org.",
+    "collaboration": "Alleine arbeiten ist langweilig...",
+    "collaboration_1": "Ein Dachs arbeitet nicht allein, sondern mit der ganzen Familie. Alle graben ihre eigenen Tunnel.",
+    "collaboration_2": "Genauso bei uns: Die Arbeit wird aufgeteilt, zum Beispiel entwickelt eine Person das Schiessen und eine andere die Asteroiden.",
+    "collaboration_3": "Wie man sieht, arbeitet jede Person in ihrem eigenen Tunnel. Spater werden die Anderungen wieder zusammengefuhrt.",
+    "collaboration_merge": "Dafur klicken wir unten rechts auf Merge, wahlen die gewunschten Versionen aus und bestatigen.",
+    "collaboration_result": "Danach entsteht eine neue Version mit allen zusammengefuhrten Anderungen.",
+    "revert": "Zuruckgehen, wenn etwas schiefgeht",
+    "revert_text": "Manchmal muss man zu einer alteren Version zuruck, zum Beispiel bei Fehlern oder Experimenten, die nicht funktioniert haben. Dazu die gewunschte Version in Snap! offnen und von dort weiterarbeiten.",
+    "kanban": "Kanban-Board",
+    "kanban_text": "Gruppenarbeit braucht Kommunikation. Dafur bietet Smerge ein Kanban-Board, das uber den Button oben rechts unter den Einstellungen geoffnet wird. Karten lassen sich anlegen, bearbeiten, einfärben und zwischen Spalten verschieben.",
+    "kanban_columns": "Das Spaltenlayout kann uber den Button oben links angepasst werden: Spalten hinzufugen, entfernen, umbenennen oder verschieben. Maximal sind funf Spalten moglich.",
+    "for_teachers": "Fur Lehrkrafte und Unterricht gemacht",
+    "for_teachers_text": "Was bietet Smerge und wie kann es beim Unterrichten helfen?",
+    "teacher_benefit_1": "ermoglicht Zusammenarbeit in projektbasiertem Lernen mit Snap!",
+    "teacher_benefit_2": "alle Daten sind verfugbar und automatisch gesichert",
+    "teacher_benefit_3": "Vorlagen als Code-Skelette bereitstellen und per Drag-and-drop erweitern",
+    "teacher_benefit_4": "Entwicklungsverlauf ist fur Lernende und Lehrkrafte sichtbar",
+    "teacher_benefit_5": "Versionshistorie ermoglicht sicheres Ausprobieren und Zurucksetzen",
+    "login": "Login und Nutzerverwaltung",
+    "login_text": "Fur normale Nutzende gibt es bewusst keine klassische Kontenverwaltung. Zur Projektsicherung gibt es beim Erstellen eine PIN und optional ein Passwort.",
+    "teacher_view": "Projektverwaltung fur Lehrkrafte",
+    "teacher_view_intro": "Fur die Teacher View zur Verwaltung von Schulerprojekten ist ein eigenes Konto mit Login erforderlich.",
+    "teacher_view_1": "In der Teacher View lassen sich alle Schulerprojekte zentral verwalten.",
+    "teacher_view_2": "Projekte konnen Klassen zugeordnet, neu erstellt oder importiert werden.",
+    "teacher_view_3": "Projekte lassen sich duplizieren, um eine gemeinsame Ausgangsbasis fur die Klasse bereitzustellen.",
+    "teacher_view_more": "Mehr erfahren oder Hilfe benotigt?"
+  },
+  "impressum": {
+    "about_title": "About Smerge",
+    "about_p1": "Smerge ist ein Versionskontrollsystem fur die blockbasierte Sprache Snap!, das Zusammenarbeit und Tinkern im Klassenzimmer ermoglicht. Es ist auf Anfangerinnen und Anfanger zugeschnitten und daher fur Lehrpersonen sowie Schulerinnen und Schuler einfach zu bedienen.",
+    "about_p2a": "Entwickelt wurde Smerge von",
+    "about_p2b": "und Karol Bakas.",
+    "about_p3a": "Das Logo wurde gestaltet von",
+    "about_p3b": ".",
+    "title": "Impressum",
+    "section_5tmg": "Angaben gemaß § 5 TMG",
+    "address": "Verantwortlich fur den Inhalt nach § 55 Abs. 2 RStV\nProfessur fur Didaktik der Informatik\nFreie Universitat Berlin\nKonigin-Luise-Str. 4-26\n14195 Berlin\nTelefon: +49 30 838 75045\nE-Mail: franziska.scherg@fu-berlin.de",
+    "section_terms": "Nutzungsbedingungen",
+    "terms_p1": "Texte, Bilder, Grafiken sowie die Gestaltung dieser Internetseiten konnen dem Urheberrecht unterliegen.",
+    "terms_p2": "Nicht urheberrechtlich geschutzt sind nach § 5 UrhG insbesondere Gesetze, Verordnungen und amtliche Bekanntmachungen. Urheberrechtlich geschutztes Material darf nur im Rahmen der gesetzlichen Vorgaben oder mit Einwilligung der Verantwortlichen vervielfaltigt und veroffentlicht werden.",
+    "terms_p3": "Texte, Bilder, Grafiken und sonstige Dateien konnen ganz oder teilweise dem Urheberrecht Dritter unterliegen.",
+    "section_disclaimer": "Haftungsausschluss",
+    "disclaimer_p1": "Alle bereitgestellten Informationen wurden mit Sorgfalt erstellt und gepruft. Eine Gewahr fur Aktualitat, Richtigkeit, Vollstandigkeit und Verfugbarkeit kann jedoch nicht ubernommen werden.",
+    "disclaimer_p2": "Als Diensteanbieter sind wir fur eigene Inhalte verantwortlich, jedoch nicht verpflichtet, ubermittelte oder gespeicherte fremde Informationen ohne konkreten Anlass zu uberwachen. Bei Bekanntwerden von Rechtsverletzungen werden Inhalte unverzuglich entfernt.",
+    "section_links": "Haftung fur Links",
+    "links_p1": "Unser Angebot enthalt Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Fur diese Inhalte kann keine Gewahr ubernommen werden. Bei Bekanntwerden von Rechtsverletzungen werden entsprechende Links umgehend entfernt."
+  },
+  "open_project": {
+    "title": "Projekt öffnen",
+    "pin": "PIN",
+    "password_optional": "Passwort (optional)",
+    "forgot": "Ich habe mein Passwort oder meine PIN vergessen",
+    "submit": "Absenden",
+    "error_generic": "Projekt konnte nicht geöffnet werden."
+  },
+  "create_project": {
+    "title": "Neues Projekt erstellen",
+    "name": "Name",
+    "description_optional": "Beschreibung (optional)",
+    "password_optional": "Passwort (optional)",
+    "email_optional": "E-Mail (optional), zur Wiederherstellung von Passwort und PIN",
+    "optional_start_file": "Optional individuelle Snap!-Startdatei",
+    "start_description_optional": "Beschreibung (optional)",
+    "file_optional": "Datei (optional)",
+    "no_file": "Keine Datei ausgewählt",
+    "start_file_help_1": "Wenn du keine Datei hochlädst, wird ein Standard-Blanko-Snap!-Projekt als Startpunkt verwendet.",
+    "start_file_help_2": "Willst du an deinem Projekt in Smerge weiterarbeiten oder deinen Schülerinnen und Schülern eine Vorlage geben? Lade hier deine Startdatei hoch.",
+    "start_file_help_3": "Weitere Startknoten kannst du danach per Drag-and-drop hinzufügen.",
+    "submit": "Absenden",
+    "error_generic": "Projekt konnte nicht erstellt werden.",
+    "created_with_password": "Dies sind deine PIN und dein Passwort, die du zum Öffnen deines Smerge-Projekts brauchst. Es ist eine gute Idee, beides sicher aufzubewahren.",
+    "created_without_password": "Dies ist deine PIN, die du zum Öffnen deines Smerge-Projekts brauchst. Es ist eine gute Idee, sie sicher aufzubewahren. Ein Passwort kannst du später ergänzen.",
+    "pin_label": "PIN:",
+    "password_label": "Passwort:"
+  },
+  "restore_info": {
+    "title": "Passwort oder PIN wiederherstellen",
+    "description": "Gib deine E-Mail-Adresse ein, um alle Passwörter oder PINs deiner Projekte wiederherzustellen",
+    "email": "E-Mail",
+    "back": "Zurück",
+    "submit": "Absenden",
+    "success": "E-Mail versendet! Weiterleitung...",
+    "error_generic": "Etwas ist schiefgelaufen, bitte versuche es erneut oder kontaktiere uns."
+  },
+  "reset_password": {
+    "title": "Passwort zurücksetzen",
+    "description": "Setze ein neues Passwort für dein Projekt.",
+    "checking_token": "Token wird geprüft...",
+    "invalid_token": "Ungültiger oder abgelaufener Token. Bitte fordere einen neuen Link an.",
+    "new_password": "Neues Passwort",
+    "new_password_repeated": "Neues Passwort wiederholen",
+    "fill_both": "Bitte beide Felder ausfüllen.",
+    "passwords_no_match": "Passwörter stimmen nicht überein.",
+    "submit": "Absenden",
+    "back": "Zurück",
+    "success": "Passwort geändert! Weiterleitung...",
+    "error_generic": "Etwas ist schiefgelaufen, bitte versuche es erneut."
+  },
+  "error_404": {
+    "title": "Hier hat noch nie ein Dachs gegraben!",
+    "description": "Deine Seite konnte nicht gefunden werden. Das kann mehrere Gründe haben:",
+    "reason_1": "Deine Seite existiert nicht oder",
+    "reason_2": "deine Seite wurde verschoben oder",
+    "reason_3": "deine Seite wurde gelöscht",
+    "help_text": "Vielleicht helfen dir diese Links:",
+    "home": "Startseite",
+    "open_existing": "Projekt öffnen",
+    "create_new": "Projekt erstellen",
+    "back": "Zurück"
   },
   "SettingsModal": {
     "old_title": "Projekt Einstellungen",
@@ -18,7 +157,6 @@
     "change": "Ändern",
     "change_project_name": "Projektnamen ändern:",
     "change_project_desc": "Projektbeschreibung ändern:",
-    "language": "Sprache:",
     "delete_project": "Projekt löschen"
   },
   "NewSettingControls": {
@@ -26,7 +164,6 @@
     "save_current_layout": "Aktuelles Layout speichern (in Datei)",
     "load_layout": "Layout aus Datei laden",
     "layout": "Layout",
-    "old_projectview": "Alte Projektansicht",
     "breadthfirst": "Breite zuerst",
     "concentric": "Konzentrisch",
     "dagre": "Dagre",
@@ -35,7 +172,7 @@
     "cose": "Kraft (Cose)",
     "grid": "Gitter",
     "random": "Zufällig",
-    "save_graph_pos_tooltip": "Aktuelles Layout auf dem Server speichern (als \"Servergespeichert\" Layout)",
+    "save_graph_pos_tooltip": "Aktuelles Layout auf dem Server speichern (als \"Servergespeichertes\" Layout)",
     "save_current_layout_tooltip": "Laden Sie den aktuellen Graph in einer JSON-Datei herunter",
     "load_layout_tooltip": "Laden Sie das zuvor gespeicherte Diagramm (.json) in das aktuelle Panel (klicken Sie auf \"Graphposition speichern\", wenn Sie möchten, dass das geladene Diagramm als Serverlayout gespeichert wird).",
     "scroll_speed": "Zoomgeschwindigkeit ändern:",
@@ -94,7 +231,7 @@
     "page2": {
       "item0": {
         "header": "Knoten mergen",
-        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Smerge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden.\n -ACHTUNG: Wenn Sie ein Projekt verwenden, welches vor dem 18.04.24 erstellt wurde, nutzen Sie nur den originalen Merger bis alle zu Mergenden Knoten mindestens einmal neu \"Commited\" wurden. Andernfalls wird der Merger nicht richtig funktionieren!"
+        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Merge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden.\n -ACHTUNG: Wenn Sie ein Projekt verwenden, welches vor dem 18.04.24 erstellt wurde, nutzen Sie nur den originalen Merger bis alle zu Mergenden Knoten mindestens einmal neu \"Commited\" wurden. Andernfalls wird der Merger nicht richtig funktionieren!"
       },
       "item1": {
         "header": "Mergekonflikte",
@@ -110,7 +247,7 @@
       "header": "Einstellungen",
       "item1": {
         "header": "Grapheinstellungen",
-        "footer": "**__Grapheinstellungsoptionen:\n -Graphposition speichern: speichert das aktuelle Layout und aktualisiert es für alle Benutzer (bei Verwendung der Option \"Servergespeichertes Layout\").\n -Layout: ändert das Graphlayout. Optionen beinhalten:\n  -Dagre: traditionelles hierarchisches Layout; Standardoption. \n  -Servergespeichert: die benutzerdefinierte Option die auf dem Server gespeichert wurde. \n  -Zufällig: platziert die Knoten nach dem Zufallsprinzip.\n  -Gitter: zeigt alle Knoten im Diagramm in einem Gitter an.\n  -Kreis: ordnet die Knoten in einem Kreis an.\n  -Konzentrisch: ordnet die Knoten in konzentrischen Kreisen an.\n  -Breite zuerst: ordnet die Knoten in Ebenen an, entsprechend den Ebenen, die durch eine Breitensuche im Graphen erzeugt werden.\n  -Kraft (Kose): sortiert die Knoten nach einer Implementierung des CoSE-Algorithmus.\n -Zoomgeschwindigkeit ändern: aktualisiert die Zoomgeschwindigkeit.\n -Projektfarben ändern: Ermöglicht die Aktualisierung des Farbschemas für normale Knoten, als Favoriten markierte Knoten und Knoten mit Mergekonflikten.\n -Alte Projektansicht: schaltet auf die alte Smerge-Projekt-Einstellungsansicht um."
+        "footer": "**__Grapheinstellungsoptionen:\n -Graphposition speichern: speichert das aktuelle Layout und aktualisiert es für alle Benutzer (bei Verwendung der Option \"Servergespeichertes Layout\").\n -Layout: ändert das Graphlayout. Optionen beinhalten:\n  -Dagre: traditionelles hierarchisches Layout; Standardoption. \n  -Servergespeichert: die benutzerdefinierte Option die auf dem Server gespeichert wurde. \n  -Zufällig: platziert die Knoten nach dem Zufallsprinzip.\n  -Gitter: zeigt alle Knoten im Diagramm in einem Gitter an.\n  -Kreis: ordnet die Knoten in einem Kreis an.\n  -Konzentrisch: ordnet die Knoten in konzentrischen Kreisen an.\n  -Breite zuerst: ordnet die Knoten in Ebenen an, entsprechend den Ebenen, die durch eine Breitensuche im Graphen erzeugt werden.\n  -Kraft (Kose): sortiert die Knoten nach einer Implementierung des CoSE-Algorithmus.\n -Zoomgeschwindigkeit ändern: aktualisiert die Zoomgeschwindigkeit.\n -Projektfarben ändern: Ermöglicht die Aktualisierung des Farbschemas für normale Knoten, als Favoriten markierte Knoten und Knoten mit Mergekonflikten."
       },
       "item2": {
         "header": "Layouts speichern und laden",
@@ -129,6 +266,55 @@
     "cancel": "Abbrechen",
     "confirm": "Ändern"
   },
+  "ProjectCard": {
+    "pin": "PIN",
+    "show_pin": "PIN anzeigen",
+    "hide_pin": "PIN verbergen",
+    "copy_pin": "PIN kopieren",
+    "pin_copied": "PIN kopiert!",
+    "open_project": "Projekt öffnen",
+    "view_stats": "Statistiken anzeigen",
+    "commits": "Commits",
+    "last_commit": "Letzter Commit",
+    "open": "Offen",
+    "closed": "Geschlossen"
+  },
+  "ProjectCardContextMenu": {
+    "duplicate": "Duplizieren",
+    "delete": "Löschen",
+    "delete_project_title": "Projekt löschen",
+    "delete_project_description": "Bitte gib das Projekt-Passwort ein, um das Projekt dauerhaft zu löschen. Lasse das Feld leer, wenn kein Passwort gesetzt ist.",
+    "password_label": "Passwort",
+    "delete_button": "Löschen"
+  },
+  "AddProjectDialog": {
+    "tooltip": "Neues Projekt hinzufügen",
+    "title": "Neues Projekt erstellen",
+    "description": "Gib einen Namen für das neue Projekt ein.",
+    "name_label": "Name",
+    "description_optional": "Beschreibung (optional)",
+    "start_description_optional": "Beschreibung der Startdatei (optional)",
+    "file_optional": "Datei (optional)",
+    "no_file": "Keine Datei ausgewählt",
+    "start_file_help_1": "Wenn du keine Datei hochlädst, wird ein Standard-Blanko-Snap!-Projekt als Startpunkt verwendet.",
+    "start_file_help_2": "Willst du an deinem Projekt in Smerge weiterarbeiten oder deinen Schülerinnen und Schülern eine Vorlage geben? Lade hier deine Startdatei hoch.",
+    "cancel": "Abbrechen",
+    "create": "Erstellen"
+  },
+  "ImportProjectDialog": {
+    "tooltip": "Projekt importieren",
+    "title": "Bestehendes Projekt importieren",
+    "description": "Gib die Projekt-ID oder PIN ein, um ein Projekt zu importieren.",
+    "project_id_label": "Projekt-ID oder PIN",
+    "cancel": "Abbrechen",
+    "import": "Importieren"
+  },
+  "AddSchoolclassDialog": {
+    "title": "Neue Klasse erstellen",
+    "description": "Gib einen Namen für die neue Klasse ein",
+    "cancel": "Abbrechen",
+    "create": "Erstellen"
+  },
   "CsfrMissing": {
     "missingText": "Bitte öffnen Sie das Projekt über die Hauptseite und nicht über eine direkte URL.",
     "buttonText": "Zur Hauptseite",
@@ -143,7 +329,7 @@
     "progress": "Hochladen ist zu {{val}} % abgeschlossen"
   },
   "MergeButtons": {
-    "selectOnlyTwo": "Mit dem neuen Merger können jeweils nur zwei Knoten gleichzeitig zusammengeführt werden!",
+    "selectOnlyTwo": "Es können nur jeweils zwei Knoten gleichzeitig zusammengeführt werden!",
     "noConflictNodes": "Konfliktknoten können nicht zusammengeführt werden!",
     "selectMinTwo": "Bitte wählen Sie weitere Knoten aus."
   },
@@ -184,5 +370,175 @@
     "cancel": "Abbrechen",
     "deleteColumn": "Spalte Löschen",
     "save": "Speichern"
+  },
+  "TeacherView": {
+    "restartTutorial": "Tutorial neu starten",
+    "loading": "Lädt...",
+    "noSchoolclasses": "Du hast noch keine Klassen. Erstelle eine unten rechts!",
+    "loadError": "Daten konnten nicht geladen werden!",
+    "renameFailed": "Klassenname konnte nicht aktualisiert werden.",
+    "renameSuccess": "Klasse umbenannt.",
+    "deleteFailed": "Klasse konnte nicht gelöscht werden.",
+    "deleteSuccess": "Klasse gelöscht.",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "deleteDialog": {
+      "title": "Klasse löschen",
+      "text": "Möchtest du die Klasse \"{{name}}\" wirklich löschen? Dadurch werden {{count}} Projekt(e) dieser Klasse entfernt.",
+      "confirm": "Bitte gebe als Bestätigung den Namen der Klasse ein (\"{{name}}\"):",
+      "label": "Klassenname"
+    },
+    "classStats": {
+      "totalProjects": "Gesamtanzahl der Projekte in dieser Klasse",
+      "projects": "Projekte",
+      "lastActivity": "Letzte Aktivität",
+      "lastActivityTooltip": "Letzter Commit über alle Projekte",
+      "noActivity": "Noch keine Aktivität"
+    }
+  },
+  "ProjectStatsPage": {
+    "loading": "Statistiken werden geladen...",
+    "loadError": "Projektstatistiken konnten nicht geladen werden.",
+    "notFound": "Projekt nicht gefunden.",
+    "back": "Zurück",
+    "title": "Projekt Statistiken — {{name}}",
+    "commits": "Commits",
+    "lastCommit": "Letzter Commit",
+    "openCards": "Offene Karten",
+    "closedCards": "Geschlossene Karten",
+    "cardsPerAuthor": "Kanban Karten pro Autor",
+    "author": "Autor",
+    "total": "Gesamt",
+    "sprites": "Anzahl von Sprites",
+    "heatmapTitle": "Commit-Aktivität",
+    "noKanbanData": "Keine Kanban-Daten verfügbar."
+  },
+  "tutorial": {
+    "step": "Schritt",
+    "back": "Zurück",
+    "next": "Weiter",
+    "done_continue": "Fertig, Tutorial fortsetzen",
+    "finish": "Fertig",
+    "skip": "Tutorial überspringen",
+    "start": "Tutorial starten",
+    "name": "Smerge Tutorial",
+    "error": "Ein Fehler ist aufgetreten.",
+    "failedLoad": "Das Tutorial konnte nicht geladen werden.",
+    "homepage1": "Bitte versuche es später erneut oder gehe zurück zur ",
+    "homepage2": "Startseite",
+    "student_steps": {
+      "welcome": {
+        "title": "Willkommen zum interaktiven Smerge Tutorial!",
+        "description": "Lerne, wie du Smerge kollaborativ arbeiten kannst."
+      },
+      "overview": {
+        "title": "Die Projektübersicht",
+        "description": "Hier kannst du kannst sehen, wie sich dein Projekt im Laufe der Zeit entwickelt hat."
+      },
+      "open_snap": {
+        "title": "Öffne dein Projekt in Snap!",
+        "description": "Um das Projekt zu bearbeiten, klicke doppelt auf den blauen Kreis. Dein wird dann in Snap! geöffnet."
+      },
+      "activate_js": {
+        "title": "Aktiviere JavaScript in Snap!",
+        "description": "Klicke auf das Zahnrad-Symbol ⚙️ oben rechts in Snap!, um die Einstellungen zu öffnen. Aktiviere dort die Option 'JavaScript extensions'."
+      },
+      "import_data": {
+        "title": "Importiere deine Daten",
+        "description": "Klicke doppelt auf den Block 'Activate JS and Import Data' um das Projekt zu laden."
+      },
+      "edit_snap": {
+        "title": "Bearbeite dein Projekt",
+        "description": "Jetzt kannst du dein Projekt in Snap! bearbeiten. Füge neue Blöcke hinzu, ändere bestehende oder experimentiere mit neuen Ideen. Es ist dein Projekt, also lass deiner Kreativität freien Lauf!"
+      },
+      "post_to_smerge": {
+        "title": "Poste deine Änderungen zu Smerge!",
+        "description": "Jetzt ist es Zeit, deine Änderungen zu speichern. Öffne den Tab 'Variables' und klicke ganz unten auf Block 'Post to Smerge...'. Vergiss nicht, eine kurze Beschreibung deiner Änderungen einzugeben."
+      },
+      "back_to_project": {
+        "title": "Zurück zum Projekt",
+        "description": "Deine Änderungen werden nun im Projekt angezeigt. Klicke auf weiter, um die neue Version zu sehen, die du gerade erstellt hast!"
+      },
+      "view_new_node": {
+        "title": "Deine Änderungen sind hier",
+        "description": "Deine Änderungen sind auf Smerge angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
+      },
+      "merge_intro": {
+        "title": "Lass uns mergen!",
+        "description": "Mergen ist der Prozess, bei dem zwei Versionen eines Projekts kombiniert werden, um eine neue Version zu erstellen. Es ist ein wichtiger Teil der Zusammenarbeit in Smerge."
+      },
+      "merge_select": {
+        "title": "Versionen auswählen",
+        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, welche die Änderungen von beiden enthält.\n Halte Shift gedrückt und wähle die beiden Versionen aus, die du zusammenführen möchtest. Klicke zur Auswahl auf den blauen Kreis."
+      },
+      "merge_click": {
+        "title": "Merge durchführen",
+        "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen. Bestätige deine Auswahl mit dem grünen Haken."
+      },
+      "completion": {
+        "title": "Fertig!",
+        "description": "Du hast erfolgreich zwei Versionen zu einer neuen gemeinsamen Version zusammengeführt und kennst damit die Grundlagen von Smerge! Viel Spaß bei deinen eigenen Projekten!"
+      }
+    },
+
+    "teacher_view": {
+      "name": "Lehrkraft-Tutorial",
+      "welcome": {
+        "title": "Willkommen in der Lehrkraft-Ansicht",
+        "description": "Hier verwaltest du Klassen und Projekte deiner Lernenden."
+      },
+      "add_class_button": {
+        "title": "Neue Klasse anlegen",
+        "description": "Über diesen Plus-Button unten rechts erstellst du eine neue Klasse. Gib der Klasse einen Namen und bestätige mit 'Erstellen'."
+      },
+      "add_project": {
+        "title": "Projekt hinzufügen",
+        "description": "Klicke auf den Plus-Button, um ein neues Projekt zu erstellen."
+      },
+      "add_project_details": {
+        "title": "Projektdetails eingeben",
+        "description": "Gib einen Namen für das Projekt ein und lade optional eine Startdatei hoch, um deinen Lernenden eine Vorlage zu geben. Bestätige mit 'Erstellen'."
+      },
+      "manage_projects": {
+        "title": "Projekte verwalten",
+        "description": "In der Lehrkraft-Ansicht kannst du alle Projekte deiner Klasse zentral verwalten. Du kannst Projekte duplizieren, um eine Ausgangsbasis für verschiedene Gruppen zu schaffen, oder Projekte löschen, wenn sie nicht mehr benötigt werden."
+      },
+      "project_pin_explainer": {
+        "title": "Projekte an Lernende weitergeben",
+        "description": "Jedes Projekt hat eine eindeutige PIN, die du an deine Lernenden weitergeben kannst, damit sie auf das Projekt zugreifen können. Klicke auf 'PIN anzeigen', um die PIN sichtbar zu machen, oder kopiere die PIN direkt in die Zwischenablage."
+      },
+      "teacher_completion": {
+        "title": "Fertig!",
+        "description": "Du bist jetzt bereit, Smerge in deinem Unterricht einzusetzen! Viel Spaß beim Unterrichten und bei der Zusammenarbeit mit deinen Lernenden!"
+      }
+    }
+  },
+  "toast": {
+    "http": {
+      "success": "{{endpoint}} erfolgreich ({{status}})",
+      "error": "{{endpoint}} fehlgeschlagen ({{status}})"
+    },
+    "upload": {
+      "progress": "Hochladen: {{val}}%",
+      "fileUploadSuccess": "Datei erfolgreich hochgeladen",
+      "fileUploadFail": "Datei-Upload fehlgeschlagen"
+    },
+    "project": {
+      "unhideSuccess": "Alle Knoten sichtbar gemacht",
+      "creationSuccess": "Projekt erfolgreich erstellt",
+      "creationError": "Projekterstellung fehlgeschlagen",
+      "importSuccess": "Projekt erfolgreich importiert",
+      "importError": "Projektimport fehlgeschlagen",
+      "deleteSuccess": "Projekt gelöscht",
+      "deleteError": "Projektlöschung fehlgeschlagen",
+      "wrongPassword": "Falsches Passwort",
+      "passwordChangeSuccess": "Passwort geändert",
+      "projectUpdateSuccess": "Projekt aktualisiert",
+      "kanbanUpdateError": "Kanban-Board konnte nicht aktualisiert werden",
+      "colorsChangeSuccess": "Farben geändert",
+      "labelChangeSuccess": "Beschriftung geändert",
+      "projectNameUpdateSuccess": "Projektname aktualisiert",
+      "projectNameUpdateError": "Projektname konnte nicht aktualisiert werden"
+    }
   }
 }

@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import httpService from "../services/HttpService";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,16 +18,21 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 // import "./SettingsModal.css";
 
+import type cytoscape from "cytoscape";
+
 interface MergeButtonsProps {
-  cyRef: React.MutableRefObject<cytoscape.Core | undefined>;
+  cyRef: React.RefObject<cytoscape.Core | undefined>;
   refresh: () => void;
   projectId: string;
+  // Tutorial-Interceptor:
+  onMergeConfirmed?: () => void;
 }
 
 const MergeButtons: React.FC<MergeButtonsProps> = ({
   cyRef,
   refresh,
   projectId,
+  onMergeConfirmed,
 }) => {
   const fabStyle = {
     position: "absolute",
@@ -108,6 +113,10 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
       }
     }
 
+    // Klick an Tutorial weitergeben
+    if (onMergeConfirmed) {
+      onMergeConfirmed();
+    }
     if (mergeFabColor == "primary") {
       mergeNew(selected);
     } else {
@@ -117,7 +126,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
   };
 
   const mergeNew = (selected: { id: string }[]) => {
-    const url = `new_merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
+    const url = `/action/new_merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
     httpService.get(
       url,
       (req) => {
@@ -153,7 +162,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
 
   const mergeOld = (selected: { id: string }[]) => {
     const fileParams = selected.map((item) => `file=${item.id}`).join("&");
-    const url = `merge/${projectId}?${fileParams}`;
+    const url = `/action/merge/${projectId}?${fileParams}`;
 
     httpService.get(
       url,
@@ -228,6 +237,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
 
       <Tooltip title={mergeTooltip}>
         <Fab
+          id="mergeButton"
           disabled={mergeButtonDisabled}
           sx={fabStyle}
           size="large"

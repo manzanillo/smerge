@@ -6,14 +6,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { getProjectData, getProjectDataWithPin, importProjectToSchoolclass } from '../services/ProjectService';
 import SchoolclassDto from './models/SchoolclassDto';
 import ProjectDto from './models/ProjectDto';
+import { useTranslation } from 'react-i18next';
 
 const ImportProjectDialog = (props: {schoolClass: SchoolclassDto; addProjectToState: (arg0:ProjectDto) => void}) => {
   const [open, setOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,7 +27,9 @@ const ImportProjectDialog = (props: {schoolClass: SchoolclassDto; addProjectToSt
 
   return (
     <React.Fragment>
-      <IconButton onClick={handleClickOpen}><SystemUpdateAltIcon></SystemUpdateAltIcon></IconButton>
+      <Tooltip title={t('ImportProjectDialog.tooltip')}>
+        <IconButton onClick={handleClickOpen}><SystemUpdateAltIcon /></IconButton>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -62,15 +66,14 @@ const ImportProjectDialog = (props: {schoolClass: SchoolclassDto; addProjectToSt
                 else return null;
               });
             }
-            console.log(projectId);
             handleClose();
           },
         }}
       >
-        <DialogTitle>Import existing Project</DialogTitle>
+        <DialogTitle>{t('ImportProjectDialog.title')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To Import a Project, input its ProjectId here.
+            {t('ImportProjectDialog.description')}
           </DialogContentText>
           <TextField
             autoFocus
@@ -78,15 +81,15 @@ const ImportProjectDialog = (props: {schoolClass: SchoolclassDto; addProjectToSt
             margin="dense"
             id="projectid"
             name="projectId"
-            label="Project ID or PIN"
+            label={t('ImportProjectDialog.project_id_label')}
             type="string"
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Import</Button>
+          <Button onClick={handleClose}>{t('ImportProjectDialog.cancel')}</Button>
+          <Button type="submit">{t('ImportProjectDialog.import')}</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

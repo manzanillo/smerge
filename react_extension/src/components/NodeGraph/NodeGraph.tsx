@@ -26,19 +26,24 @@ import ProjectDto from "../models/ProjectDto";
 import ProjectStats from "../ProjectStats";
 import NameDialog from "../shared/NameDialog";
 import { putLabelChange } from "../../services/ProjectService";
+import type cytoscape from "cytoscape";
+// @ts-expect-error the packe does not provide valid type definitions
 import nodeHtmlLabel from "cytoscape-node-html-label";
 Cytoscape.use(nodeHtmlLabel);
-import { Stack, Typography, Button } from '@mui/material';
 import "./CommitMessage.css";
 
 // TODO this file is way to convoluted => needs refactoring
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodeGraphProps {
-  // projectId: string;
   projectData: ProjectDto;
   setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
   gatherProjectData: () => Promise<void>;
+  projectId?: string;
+  // Interceptors für Tutorial
+  embedded?: boolean;
+  onNodeDoubleClick?: (nodeId: string) => void;
+  onSelectedNodesChange?: (nodeIds: string[]) => void;
+  onMergeConfirmed?: () => void;
 }
 
 Cytoscape.use(dagre);
@@ -47,15 +52,20 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   projectData,
   setProjectData,
   gatherProjectData,
+  projectId: propProjectId,
+  embedded = false,
+  onNodeDoubleClick,
+  onSelectedNodesChange,
+  onMergeConfirmed,
 }) => {
-  const { projectId } = useParams();
+  const { projectId: paramProjectId } = useParams();
+  const resolvedProjectId = propProjectId || paramProjectId;
   const queryClient = useQueryClient();
 
-  const cy = useRef<Cytoscape.Core>();
+  const cy = useRef<Cytoscape.Core>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutate: positionMutate } = useUpdateNodePosition(
-    projectId ?? "",
+    resolvedProjectId ?? "",
     queryClient
   );
 
@@ -88,7 +98,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   // keeps track for eventListener...
   const layoutRef = useRef(layout);
 
-  const { data, error, isLoading, refresh } = useFiles(String(projectId));
+  const { data, error, isLoading, refresh } = useFiles(String(resolvedProjectId ?? ""));
   if (error) console.log("error: ", error);
 
   const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
@@ -195,12 +205,19 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     nodeRef.current = [];
   };
 
-  const handleFileOpen = (evt: Cytoscape.EventObject) => {
+  const handleFileOpen = useCallback((evt: Cytoscape.EventObject) => {
     const node = evt.target;
+    const nodeId = node.data("id");
+
+    // Tutorial: Klick auf Node erkennen und zum nächsten Schritt gehen.
+    if (embedded && onNodeDoubleClick) {
+      onNodeDoubleClick(nodeId);
+      return;
+    }
 
     if (node.data("file_url").includes(".conflict")) {
       openTab(
-        `${window.location.origin}/ext/merge/${node
+        `${window.location.origin}/merge/${node
           .data("file_url")
           .replace("/media/", "")
           .replace(".conflict", "")}`
@@ -208,15 +225,34 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     } else {
       // Open a new tab with a set link
       openTab(
-        `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` +
+        `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}/action/blockerXML/` +
           node.data("file_url").replace("/media/", "")
       );
     }
-  };
+  }, [embedded, onNodeDoubleClick]);
+
+  // Tracker für Node Selections
+  // Wird aktuell nur benötigt, um das Auswählen von Nodes im Tutorial zu tracken
+  useEffect(() => {
+    if (cy.current && onSelectedNodesChange) {
+      const handleSelectionChange = () => {
+        const selectedNodes = cy.current?.$("node:selected");
+        const selectedNodeIds = selectedNodes?.toArray().map((node) => node.data("id")) ?? [];
+        onSelectedNodesChange(selectedNodeIds);
+      };
+
+      cy.current.on("select unselect", handleSelectionChange);
+
+      return () => {
+        cy.current?.removeListener("select unselect", handleSelectionChange);
+      };
+    }
+  }, [onSelectedNodesChange]);
 
   const ranFirstAgain = useRef(false);
   // changed by eventUpdate if whole layout was pushed by others
   const resize = useRef(false);
+
   useEffect(() => {
     if (cy.current) {
       // the HTML label that is used to display the commit message when hovering over it
@@ -239,7 +275,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         enablePointerEvents: true
       });
     }
-    if (cy.current && !isLoading) {
+    if (cy.current && !isLoading && data) {
       setElements([...(nodes ?? []), ...(edges ?? [])]);
 
       cy.current?.on("dblclick", "node", handleFileOpen);
@@ -284,14 +320,13 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       }
 
       return () => {
-        // console.log("removeListener");
         cy.current?.removeListener("dblclick", "node");
         cy.current?.removeListener("dragfree", "node");
         cy.current?.removeListener("taphold", "node");
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, layout]);
+  }, [data, layout, isLoading, embedded, handleFileOpen]);
 
   // const getSelectedNodes = () => {
   //     const selectedNodes = cy.current?.$('node:selected');
@@ -335,8 +370,9 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         ) {
           // "load-balancing" :P
           setTimeout(() => {
-            // console.log("Reloading data...");
             refresh();
+            // New files might cause a resize to be necessary
+            resize.current = true;
           }, timeout);
         }
       }
@@ -345,18 +381,17 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   );
 
   useEffectInit(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    pushService.open(projectId ?? "empty", handleMessage);
+    pushService.open(resolvedProjectId ?? "empty", handleMessage);
 
     // init context menu
     Cytoscape.use(cxtmenu);
 
     return () => {
-      pushService.close(projectId ?? "empty");
+      pushService.close(resolvedProjectId ?? "empty");
     };
   }, []);
 
-  const editNodeRef = useRef<CytoscapeContextElement>();
+  const editNodeRef = useRef<CytoscapeContextElement>(null);
   const handleNodeEdit = (ele: CytoscapeContextElement) => {
     editNodeRef.current = ele;
     setNameDefaultValue(ele.data("label") ?? "");
@@ -368,7 +403,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const menu = cy.current?.cxtmenu(
-      generateContextMenuSettings(projectId ?? "", refresh, handleNodeEdit)
+      generateContextMenuSettings(resolvedProjectId ?? "", refresh, handleNodeEdit)
     );
 
     // const canvasMenu = cy.current?.cxtmenu(
@@ -414,6 +449,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   };
 
   const changeLayout = (layoutName: string) => {
+
     // save selected layout in storage for next loading
     localStorage.setItem(savedLayoutKey, layoutName);
     savedLayout.current = layoutName;
@@ -489,10 +525,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       />
 
       <SettingsModal
-        projectDto={projectData ?? ""}
+        projectDto={projectData}
         changeLayout={changeLayout}
         initLayout={savedLayout.current}
-        cy={cy}
+        cy={cy as unknown as any}
         saveGraphPositions={saveGraphPositions}
         projectData={projectData}
         setProjectData={setProjectData}
@@ -504,15 +540,22 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         projectData={projectData}
         setProjectData={setProjectData}
       />
-      <MergeButtons cyRef={cy} refresh={refresh} projectId={projectId ?? ""} />
+      <MergeButtons
+        cyRef={cy}
+        refresh={refresh}
+        projectId={resolvedProjectId ?? ""}
+        onMergeConfirmed={onMergeConfirmed}
+      />
       <NameDialog
         open={nameDialogOpen}
         setOpen={setNameDialogOpen}
-        onClose={(res) => {
-          //   console.log("Input: ", res);
-          //   console.log("And node ref is: ", editNodeRef.current?.data("label")); //label
-          res = res.trim().substring(0, 200);
-          putLabelChange(editNodeRef.current?.data("id"), res);
+        onClose={(newLabel) => {
+          newLabel = newLabel.trim().substring(0, 200);
+          putLabelChange(editNodeRef.current?.data("id"), newLabel).then(r => {
+            if (r) {
+              editNodeRef.current?.data("label", newLabel);
+            }
+          });
         }}
         def={nameDefaultValue}
       ></NameDialog>

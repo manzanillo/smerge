@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 from django.conf import settings
-from home.dataImportHelper import generateDataImportXML, generateSyncBlockXML
-
+#from home.dataImportHelper import generateDataImportXML, generateSyncBlockXML
+from .dataImportHelper import generateDataImportXML, generateSyncBlockXML
 from pathlib import Path
 from django.utils import autoreload
 

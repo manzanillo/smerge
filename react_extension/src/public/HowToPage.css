@@ -1,0 +1,29 @@
+.howto-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.howto-image-wrap {
+  margin: 1rem 0;
+}
+
+.howto-video-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.howto-video-wrap iframe {
+  border: 0;
+  max-width: 100%;
+}
+
+.howto-list {
+  padding-left: 30px;
+  list-style-type: disc;
+}
+
+.howto-list li {
+  margin-bottom: 0.5rem;
+}
+

@@ -14,7 +14,6 @@ interface ExtendedCollectionStyle extends CollectionStyle {
   map(e: unknown): unknown;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const generateContextMenuSettings: any = (
   projectId: string,
   refresh: () => void,
@@ -59,7 +58,7 @@ const generateContextMenuSettings: any = (
         fillColor: "rgba(200, 200, 200, 0.75)",
         content: `<img src="${colorIcon}" alt="Edit" />`,
         select: function (ele: CytoscapeContextElement) {
-          const toggle_color_url = "toggle_color/" + projectId + "/" + ele.id();
+          const toggle_color_url = "/action/toggle_color/" + projectId + "/" + ele.id();
           // console.log(httpService.baseURL);
           httpService.get(
             toggle_color_url,
@@ -92,7 +91,6 @@ const generateContextMenuSettings: any = (
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const generateCanvasContextMenuSettings: any = (
   openUpload: (x: number, y: number) => void
 ) => {

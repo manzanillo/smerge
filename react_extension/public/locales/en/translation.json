@@ -4,7 +4,146 @@
     "nav_back": "Back",
     "nav_impressum": "Impressum",
     "nav_howto": "How To Smerge",
-    "nav_teacherlogin": "Teacher-Login"
+    "nav_teacherlogin": "Teacher-Login",
+    "nav_teacher_view": "Teacher-View",
+    "nav_logout": "Logout"
+  },
+  "home": {
+    "open_existing": "Open existing",
+    "create_new": "Create new",
+    "start_tutorial": "Start Tutorial"
+  },
+  "footer": {
+    "github": "GitHub",
+    "contact": "Contact"
+  },
+  "howto": {
+    "title": "How to Smerge...",
+    "intro1": "Smerge is a version control system for the block-based language Snap!",
+    "intro2": "which enables collaboration and tinkering in the classroom.",
+    "intro3": "It is tailored to novice programmers and therefore easy to use for teachers and students.",
+    "intro4": "What we wanted to avoid was making a feature-overloaded git clone.",
+    "video_intro": "The use of Smerge is also explained in this video (English subtitles available) in addition to the following instructions",
+    "attention": "Attention!",
+    "attention_text": "For Smerge to work, JavaScript extensions must be enabled in Snap! To do this, simply click once on the gear in Snap! the first time you open a Smerge project, and check the appropriate box!",
+    "badgers_sett": "Our Badger's sett",
+    "badgers_sett_1": "A Badger works on his sett, containing a lot of tunnels and chambers, with all his family members and is gradually expanding it over years.",
+    "badgers_sett_2": "We proceed in exactly the same way while programming: our progress and the further development of the program from version to version we can also present as a 'badger's sett'.",
+    "badgers_sett_3": "In this example, we are developing asteroids, the game in which you have to destroy all asteroids with your starship before they hit the ship.",
+    "badgers_how_1": "But how do we come to such a 'badger's burrow'?",
+    "badgers_how_2": "We can open any of the versions directly in Snap! with a double click. Then we can work on our project, as we are used to.",
+    "badgers_save_1": "To save the changes in Snap!, we have to 'post' them to our badgers sett.",
+    "badgers_save_2": "This is done via the corresponding block post to 'smerge...' under Variables. We can summarize what we have done; this way, we will find this particular version of your project later again.",
+    "badgers_save_3": "Then we can find them in our badgers sett on smerge.org.",
+    "collaboration": "Working alone is boring...",
+    "collaboration_1": "A badger does not work alone on his construction, but with the whole family. Everyone digs their own tunnel.",
+    "collaboration_2": "It is the same with us when we work collaboratively. We split the work: You work on making the spaceship able to shoot, while a friend or team member handles the asteroids flying through space.",
+    "collaboration_3": "As you see, everyone is working in his own tunnels! At a certain point the badger wants to meet up with his family members. In the same way, we want to merge our changes to the project.",
+    "collaboration_merge": "Therefore we simply click the merge button in the bottom right, tick all the versions we would like to merge, and click yes to confirm.",
+    "collaboration_result": "Now we will find a new version, with all changes merged.",
+    "revert": "Go back if you made a mistake",
+    "revert_text": "Sometimes we have to go back to an older version, for example because we made mistakes or tried something that did not work out. Open the version you want to revert to in Snap! and continue from there. This way, you get a new tunnel.",
+    "kanban": "Kanban board",
+    "kanban_text": "Group work requires communication between participants; for this purpose Smerge provides a Kanban board. It can be opened with a button on the top right below the settings button. Cards can be added, edited, recolored, and dragged between columns.",
+    "kanban_columns": "To change the column layout, first press the button at the top left and then add, remove, rename or drag columns. You can have up to five columns in total.",
+    "for_teachers": "Built for teachers and the classroom",
+    "for_teachers_text": "What does Smerge offer you and how can it help with teaching?",
+    "teacher_benefit_1": "enabling collaboration for project-based learning with Snap!",
+    "teacher_benefit_2": "all the data is always available and automatically backed up",
+    "teacher_benefit_3": "set up templates as code skeletons and add further templates via drag and drop",
+    "teacher_benefit_4": "the development process is always visible for students and teachers",
+    "teacher_benefit_5": "version history enables reverting changes and risk-free tinkering",
+    "login": "Login and User Management",
+    "login_text": "We deliberately have no dedicated user accounts for average users. To secure projects, you get a PIN at creation time and can set a password.",
+    "teacher_view": "Project Management View for teachers",
+    "teacher_view_intro": "To access the Teacher View for managing your students' projects, you need to create an account and log in.",
+    "teacher_view_1": "The teacher view allows you to collect all your students' projects in one place.",
+    "teacher_view_2": "You can include projects into classes by creating new projects or importing existing ones.",
+    "teacher_view_3": "You can duplicate projects to share the same starting point with the whole class.",
+    "teacher_view_more": "Want to know more or need help?"
+  },
+  "impressum": {
+    "about_title": "About Smerge",
+    "about_p1": "Smerge is a version control system for the block-based language Snap! that enables collaboration and tinkering in the classroom. It is tailored to novice programmers and therefore easy to use for teachers and students.",
+    "about_p2a": "Smerge was developed by",
+    "about_p2b": "and Karol Bakas.",
+    "about_p3a": "The logo was designed by",
+    "about_p3b": ".",
+    "title": "Impressum",
+    "section_5tmg": "Information according to section 5 TMG",
+    "address": "Responsible for content according to section 55 para. 2 RStV\nProfessorship for Didactics of Computer Science\nFreie Universitat Berlin\nKonigin-Luise-Str. 4-26\n14195 Berlin\nPhone: +49 30 838 75045\nE-mail: franziska.scherg@fu-berlin.de",
+    "section_terms": "Terms of Use",
+    "terms_p1": "Texts, images, graphics and the design of these web pages may be protected by copyright.",
+    "terms_p2": "Material that is not protected by copyright according to section 5 UrhG includes laws, regulations and official notices. Protected material may only be reproduced or published with permission from the responsible parties.",
+    "terms_p3": "Texts, images, graphics and other files may also be subject to third-party rights.",
+    "section_disclaimer": "Disclaimer",
+    "disclaimer_p1": "All information on this website was prepared with due care. However, we cannot guarantee that it is always up to date, correct, complete and available.",
+    "disclaimer_p2": "We are responsible for our own content according to applicable law, but not obliged to monitor transmitted or stored third-party information without concrete indication of legal violations.",
+    "section_links": "Liability for Links",
+    "links_p1": "Our website contains links to external third-party websites. We have no influence on their content and therefore cannot assume liability for that content. If we become aware of legal violations, we will remove such links immediately."
+  },
+  "open_project": {
+    "title": "Open an existing project",
+    "pin": "PIN",
+    "password_optional": "Password (optional)",
+    "forgot": "I forgot my Password or PIN",
+    "submit": "Submit",
+    "error_generic": "Could not open project."
+  },
+  "create_project": {
+    "title": "Create a new Project",
+    "name": "Name",
+    "description_optional": "Description (optional)",
+    "password_optional": "Password (optional)",
+    "email_optional": "Email (optional), for restoring password and PIN",
+    "optional_start_file": "Optional individual starting Snap! File",
+    "start_description_optional": "Description (optional)",
+    "file_optional": "File (optional)",
+    "no_file": "No file selected",
+    "start_file_help_1": "If you do not upload a file, a standard blank Snap! project will be your starting point.",
+    "start_file_help_2": "Want to continue working on your project in Smerge or provide your students with a template? Upload your starting file here.",
+    "start_file_help_3": "You can add further initial nodes via drag and drop afterwards.",
+    "submit": "Submit",
+    "error_generic": "Could not create project.",
+    "created_with_password": "This are your PIN and password, which you need to open your Smerge-project. It might be a good idea to keep them somewhere, so you wont forget them!",
+    "created_without_password": "This is your PIN, which you need to open your smerge-project. It might be a good idea to keep it somewhere, so you wont forget it! If you want to have a password as well, you can change this later on.",
+    "pin_label": "PIN:",
+    "password_label": "Password:"
+  },
+  "restore_info": {
+    "title": "Restore Password or PIN",
+    "description": "Enter your email to restore all your projects' passwords or PINs",
+    "email": "Email",
+    "back": "Back",
+    "submit": "Submit",
+    "success": "Mail sent! Redirecting...",
+    "error_generic": "Something went wrong, please try again or contact us."
+  },
+  "reset_password": {
+    "title": "Reset password",
+    "description": "Set a new password for your project.",
+    "checking_token": "Checking token...",
+    "invalid_token": "Invalid or expired token. Please request a new link.",
+    "new_password": "New password",
+    "new_password_repeated": "Repeat new password",
+    "fill_both": "Please fill in both fields.",
+    "passwords_no_match": "Passwords do not match.",
+    "submit": "Submit",
+    "back": "Back",
+    "success": "Password changed! Redirecting...",
+    "error_generic": "Something went wrong, please try again."
+  },
+  "error_404": {
+    "title": "No badger has ever dug here!",
+    "description": "Your page could not be found. This can have several reasons:",
+    "reason_1": "Your page doesn't exist or",
+    "reason_2": "your page has moved or",
+    "reason_3": "your page was deleted",
+    "help_text": "Maybe these links will help you:",
+    "home": "Home",
+    "open_existing": "Open existing",
+    "create_new": "Create new",
+    "back": "Back"
   },
   "SettingsModal": {
     "old_title": "Project Settings",
@@ -18,7 +157,6 @@
     "change": "Change",
     "change_project_name": "Change Project Name:",
     "change_project_desc": "Change Project Description:",
-    "language": "Language:",
     "delete_project": "Delete Project"
   },
   "NewSettingControls": {
@@ -38,7 +176,6 @@
       "text": "Be careful! This setting will RELOAD the page and is SAVED on the pc. (Default is 1)",
       "button": "Open"
     },
-    "old_projectview": "Old Project View",
     "scroll_speed": "Change Scroll Speed:",
     "save_graph_pos_tooltip": "Save the current layout on the server (as \"Server-Saved\" layout)",
     "save_current_layout_tooltip": "Download the current graph, as is into a json file",
@@ -129,6 +266,55 @@
     "cancel": "Cancel",
     "confirm": "Change"
   },
+  "ProjectCard": {
+    "pin": "PIN",
+    "show_pin": "Show PIN",
+    "hide_pin": "Hide PIN",
+    "copy_pin": "Copy PIN",
+    "pin_copied": "PIN copied!",
+    "open_project": "Open project",
+    "view_stats": "View statistics",
+    "commits": "Commits",
+    "last_commit": "Last Commit",
+    "open": "Open",
+    "closed": "Closed"
+  },
+  "ProjectCardContextMenu": {
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "delete_project_title": "Delete project",
+    "delete_project_description": "Please enter the project password to permanently delete the project. Keep this empty if no password was set during creation.",
+    "password_label": "Password",
+    "delete_button": "Delete"
+  },
+  "AddProjectDialog": {
+    "tooltip": "Add new project",
+    "title": "Create a new project",
+    "description": "Enter a name for the new project.",
+    "name_label": "Name",
+    "description_optional": "Description (optional)",
+    "start_description_optional": "Start file description (optional)",
+    "file_optional": "File (optional)",
+    "no_file": "No file selected",
+    "start_file_help_1": "If you do not upload a file, a standard blank Snap! project will be your starting point.",
+    "start_file_help_2": "Want to continue working on your project in Smerge or provide your students with a template? Upload your starting file here.",
+    "cancel": "Cancel",
+    "create": "Create"
+  },
+  "ImportProjectDialog": {
+    "tooltip": "Import project",
+    "title": "Import existing project",
+    "description": "Enter a project ID or PIN to import a project.",
+    "project_id_label": "Project ID or PIN",
+    "cancel": "Cancel",
+    "import": "Import"
+  },
+  "AddSchoolclassDialog": {
+    "title": "Create new schoolclass",
+    "description": "Enter a name for the new schoolclass",
+    "cancel": "Cancel",
+    "create": "Create"
+  },
   "UploadZone": {
     "dropText": "Upload Snap! file as new node.",
     "fileUploadSuccess": "Snap! File Added",
@@ -143,7 +329,7 @@
     "missingTextHeader": "Missing Token:"
   },
   "MergeButtons": {
-    "selectOnlyTwo": "Only two nodes can be merged at a time with the new merger!",
+    "selectOnlyTwo": "Only two nodes can be merged at a time!",
     "noConflictNodes": "Conflict nodes can't be merged!",
     "selectMinTwo": "Please select more nodes."
   },
@@ -184,5 +370,175 @@
     "cancel": "Cancel",
     "deleteColumn": "Delete Column",
     "save": "Save"
+  },
+  "TeacherView": {
+    "restartTutorial": "Restart Tutorial",
+    "loading": "Loading...",
+    "noSchoolclasses": "You do not have any schoolclasses yet, create one on the bottom right!",
+    "loadError": "Could not load data!",
+    "renameFailed": "Failed to update schoolclass name.",
+    "renameSuccess": "Schoolclass renamed.",
+    "deleteFailed": "Failed to delete schoolclass.",
+    "deleteSuccess": "Schoolclass deleted.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteDialog": {
+      "title": "Delete schoolclass",
+      "text": "Are you sure you want to delete the schoolclass \"{{name}}\"? This will remove {{count}} project(s) associated with this class.",
+      "confirm": "To confirm, please enter the name of the schoolclass (\"{{name}}\"):",
+      "label": "Schoolclass name"
+    },
+    "classStats": {
+      "totalProjects": "Total number of projects in this class",
+      "projects": "Projects",
+      "lastActivity": "Last activity",
+      "lastActivityTooltip": "Most recent commit across all projects",
+      "noActivity": "No activity yet"
+    }
+  },
+  "ProjectStatsPage": {
+    "loading": "Loading statistics...",
+    "loadError": "Could not load project statistics.",
+    "notFound": "Project not found.",
+    "back": "Back",
+    "title": "Project Statistics — {{name}}",
+    "commits": "Commits",
+    "lastCommit": "Last Commit",
+    "openCards": "Open Cards",
+    "closedCards": "Closed Cards",
+    "cardsPerAuthor": "Kanban Cards per Author",
+    "author": "Author",
+    "total": "Total",
+    "sprites": "Number of Sprites",
+    "heatmapTitle": "Commit Activity",
+    "noKanbanData": "No kanban data available."
+  },
+  "tutorial": {
+    "step": "Step",
+    "back": "Back",
+    "next": "Next",
+    "done_continue": "Done, Continue Tutorial",
+    "finish": "Finish",
+    "skip": "Skip Tutorial",
+    "start": "Start Tutorial",
+    "name": "Smerge Tutorial",
+    "error": "An error occurred.",
+    "failedLoad": "Failed to load tutorial",
+    "homepage1": "Please try again or return to the ",
+    "homepage2": "homepage",
+    "student_steps": {
+      "welcome": {
+        "title": "Welcome to the interactive Smerge Tutorial!",
+        "description": "You will learn how to collaboratively work in Smerge."
+      },
+      "overview": {
+        "title": "The project overview",
+        "description": "You can see how you project has evolved over time."
+      },
+      "open_snap": {
+        "title": "Open your project in Snap!",
+        "description": "To work on the project, double-click the blue circle. It will then open your Snap! project."
+      },
+      "activate_js": {
+        "title": "Activate JavaScript extensions in Snap!",
+        "description": "Click on on the gear symbol ⚙️ in the top right of Snap! to open the settings menu. Activate 'JavaScript extensions' there."
+      },
+      "import_data": {
+        "title": "Import your data",
+        "description": "Click on the block 'Activate JS and Import Data' to import your data into Snap!."
+      },
+      "edit_snap": {
+        "title": "Edit your project",
+        "description": "Now you can edit your project in Snap!.  Add new blocks, modify existing ones, or experiment with new ideas. It’s your project, so let your creativity run wild!"
+      },
+      "post_to_smerge": {
+        "title": "Post your changes to Smerge",
+        "description": "Now its time to save your changes.  Open the “Variables” tab and click the “Post to Smerge...” button at the very bottom. Don't forget to enter a brief description of your changes."
+      },
+      "back_to_project": {
+        "title": "Back to the project",
+        "description": "Your changes are now visible in the project. Click next to see the new version you just created."
+      },
+      "view_new_node": {
+        "title": "View your new changes",
+        "description": "Your changes have been received by smerge. From here, you can continue working on the project at any time."
+      },
+      "merge_intro": {
+        "title": "Let's merge!",
+        "description": "Merging is the process of combining two versions of a project to create a new version. It is an important part of collaboration in Smerge."
+      },
+      "merge_select": {
+        "title": "Select versions to merge",
+        "description": "Another person has been working on the project and created a new version. Let's merge these two versions to create a new version that includes changes from both.\n Hold shift and select the two versions you want to merge. Click on the blue circle to select a version."
+      },
+      "merge_click": {
+        "title": "Click the merge button",
+        "description": "Now click the merge button in the bottom right corner to start the merge process. Confirm the merge with the checkbox button."
+      },
+      "completion": {
+        "title": "Done!",
+        "description": "You have successfully merged two versions into a new common version and thus know the basics of Smerge! Have fun with your own projects!"
+      }
+    },
+    "teacher_view": {
+      "name": "Teacher View Tutorial",
+      "welcome": {
+        "title": "Welcome to the teacher view",
+        "description": "Here you can manage classes and student projects."
+      },
+      "add_class_button": {
+        "title": "Create a new class",
+        "description": "Use this plus button in the bottom right corner to add a new class. Give it a name and click create."
+      },
+      "add_project": {
+        "title": "Add a project to the class",
+        "description": "Click on the plus button to add a new project to the class."
+      },
+      "add_project_details": {
+        "title": "Enter project details",
+        "description": "Enter a name for the project and optionally upload a starting file to provide your students with a template. Confirm with 'Create'."
+      },
+      "manage_projects": {
+        "title": "Manage projects",
+        "description": "The project will now be visible in the class overview. Click on the three dots to open the project context menu. Here you can duplicate the project to create a copy of it, which can be useful to provide all students with the same starting point. You can also delete the project if it is no longer needed."
+      },
+      "project_pin_explainer": {
+        "title": "Share projects with students",
+        "description": "Each project has a unique PIN, which you can share with your students to allow them to access the project. Click on 'Show PIN' to make the PIN visible or copy the PIN directly to the clipboard."
+      },
+      "teacher_completion": {
+        "name": "Completed!",
+        "description": "You have successfully created a class and added a project to it. You are now ready to use Smerge in your teaching! Have fun teaching and allowing collaborating between your students!"
+      }
+    }
+  },
+  "toast": {
+    "http": {
+      "success": "{{endpoint}} succeeded ({{status}})",
+      "error": "{{endpoint}} failed ({{status}})"
+    },
+    "upload": {
+      "progress": "Uploading: {{val}}%",
+      "fileUploadSuccess": "File uploaded successfully",
+      "fileUploadFail": "File upload failed"
+    },
+    "project": {
+      "unhideSuccess": "All nodes made visible",
+      "creationSuccess": "Project created successfully",
+      "creationError": "Project creation failed",
+      "importSuccess": "Project imported successfully",
+      "importError": "Project import failed",
+      "deleteSuccess": "Project deleted",
+      "deleteError": "Project deletion failed",
+      "wrongPassword": "Wrong password",
+      "passwordChangeSuccess": "Password changed",
+      "projectUpdateSuccess": "Project updated",
+      "kanbanUpdateError": "Failed to update Kanban board",
+      "colorsChangeSuccess": "Colors changed",
+      "labelChangeSuccess": "Label changed",
+      "projectNameUpdateSuccess": "Project name updated",
+      "projectNameUpdateError": "Failed to update project name"
+    }
   }
 }
+

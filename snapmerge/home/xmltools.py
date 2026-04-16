@@ -287,7 +287,7 @@ def include_sync_button(file, proj_id, me):
         sync_file = f.read()
         sync_file = sync_file.replace(
             "{{url}}",
-            settings.POST_BACK_URL + "/sync/" + str(proj_id) + "?ancestor=" + str(me),
+            settings.POST_BACK_URL + "/action/sync/" + str(proj_id) + "?ancestor=" + str(me),
         )
         sync_button = ET.fromstring(sync_file)
 

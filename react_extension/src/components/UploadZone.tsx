@@ -49,8 +49,7 @@ function UploadZone(props: UploadZoneProps) {
     borderColor: "green",
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const toastId = useRef<any>();
+  const toastId = useRef<any>(null);
 
   const uploadFile = (files: File[]) => {
     setModalOpen(false);
@@ -72,7 +71,7 @@ function UploadZone(props: UploadZoneProps) {
     const formData = new FormData();
     formData.append("file", files[0]);
     const xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/add/" + projectId, true);
+    xhttp.open("POST", "/action/add/" + projectId, true);
     xhttp.setRequestHeader("X-CSRFToken", httpService.csrftoken);
 
     xhttp.upload.addEventListener(
@@ -98,7 +97,7 @@ function UploadZone(props: UploadZoneProps) {
             position: "top-right",
             autoClose: 2000,
             isLoading: false,
-            type: toast.TYPE.SUCCESS,
+            type: 'success',
             hideProgressBar: false,
           });
         }
@@ -109,7 +108,7 @@ function UploadZone(props: UploadZoneProps) {
             position: "top-right",
             autoClose: 2000,
             isLoading: false,
-            type: toast.TYPE.ERROR,
+            type: 'error',
             hideProgressBar: false,
           });
         }

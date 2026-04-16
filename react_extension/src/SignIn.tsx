@@ -59,6 +59,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  // TODO missing forgot password functionality
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -81,13 +82,21 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     });
     TeacherAuthService.login(String(username), String(password)).then(
       (response) => {
-        console.log(response.message);
-        //navigate("/ext/teacher_view/");
-        location.href = "/ext/teacher_view/";
+        console.log(response?.message);
+        //navigate("/teacher_view/");
+        location.href = "/teacher_view/";
       },
       (error) => {
         console.log(error);
-        toast.error(error, {
+        const responseData = error?.response?.data;
+
+        let errorMessage = 'Login failed';
+        const nonFieldErrors = responseData?.non_field_errors;
+        if (Array.isArray(nonFieldErrors) && nonFieldErrors.length > 0) {
+            errorMessage = nonFieldErrors[0];
+        }
+
+        toast.error(errorMessage, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -203,7 +212,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               Don&apos;t have an account?{' '}
               <span>
                 <Link
-                  href="/ext/teacher_signup/"
+                  href="/teacher_signup/"
                   variant="body2"
                   sx={{ alignSelf: 'center' }}
                 >

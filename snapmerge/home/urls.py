@@ -21,12 +21,37 @@ def setup_token_invalidator_job():
 def run_token_invalidator():
     management.call_command("resettokencleanup", W=1)
 
+def setup_tutorial_cleanup_job():
+    scheduler = BackgroundScheduler()
+    # Execute the job immediately
+    scheduler.add_job(run_tutorial_cleanup)
+    # Execute the job every 24 hours
+    scheduler.add_job(run_tutorial_cleanup, "interval", hours=24)
+    scheduler.start()
+
+def run_tutorial_cleanup():
+    # Delete tutorial projects older than 24 hours
+    management.call_command("tutorialcleanup")
+
 router = routers.DefaultRouter()
 
 urlpatterns = [
+    # Tutorial
+    path("api/tutorial/create", api_views.CreateTutorialProjectView.as_view()),
+    path("api/tutorial/project/<str:project_id>/add_merge_node", api_views.AddTutorialMergeNodeView.as_view()),
+    path("api/tutorial/project/<str:project_id>/cleanup", api_views.CleanupTutorialProjectView.as_view()),
+
+    path("api/public/settings", api_views.SettingsView.as_view()),
+    path("api/auth/csrf", api_views.CsrfCookieView.as_view()),
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
     path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),
+    path("api/teacher/tutorial-status", api_views.TeacherTutorialStatusView.as_view()),
+    path("api/public/open_project", api_views.PublicProjectOpenView.as_view()),
+    path("api/public/create_project", api_views.PublicProjectCreateView.as_view()),
+    path("api/public/restore_info", api_views.PublicRestoreInfoView.as_view()),
+    path("api/public/reset_password/<str:token>", api_views.PublicResetPasswordView.as_view(), name="reset_passwd"),
     path("api/schoolclasses", api_views.SchoolClassesView.as_view()),
+    path("api/schoolclasses/<str:id>", api_views.SchoolClassUpdateView.as_view()),
     path("api/teachers/<str:id>/schoolclasses", api_views.SchoolClassesForTeacherView.as_view()),
     path("api/schoolclasses/<str:id>/projects", api_views.ProjectsForSchoolClassesView.as_view()),
     path("api/projects", api_views.ProjectCreationFromTeacherView.as_view()),
@@ -47,76 +72,54 @@ urlpatterns = [
     path("api/file/<int:id>/position", api_views.SnapFilePositionView.as_view()),
     path("api/file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     path("file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
+    re_path(r"^admin/test/event/", views.index, name="index"),
+    re_path(r"^action/merge/(?P<proj_id>[-\w]+)$", views.MergeView.as_view(), name="merge"),
+    re_path(r"^action/sync/(?P<proj_id>[-\w]+)$", views.SyncView.as_view(), name="sync"),
     re_path(
-        r"^redirect/(?P<proj_id>[-\w]*)$",
-        views.RedirectView.as_view(),
-        name="redirect_ext",
-    ),
-    re_path(r"^test/event/", views.index, name="index"),
-    re_path(r"^$", views.HomeView.as_view(), name="home"),
-    re_path(r"^nav/$", views.NavView.as_view(), name="nav"),
-    re_path(r"^impressum/$", views.ImpressumView.as_view(), name="impressum"),
-    re_path(r"^teacher_login/$", views.OpenTeacherLogin.as_view(), name="teacher-login"),
-    re_path(r"^open_project/$", views.OpenProjectView.as_view(), name="open_proj"),
-    re_path(r"^restore_info/$", views.RestoreInfoView.as_view(), name="restore_info"),
-    path(
-        "reset_password/<str:token>",
-        views.ResetPasswordView.as_view(),
-        name="reset_passwd",
-    ),
-    re_path(r"^howto/$", views.HowToView.as_view(), name="howto"),
-    re_path(
-        r"^create_project/$", views.CreateProjectView.as_view(), name="create_proj"
-    ),
-    re_path(r"^(?P<proj_id>[-\w]+)$", views.ProjectView.as_view(), name="proj"),
-    re_path(r"^merge/(?P<proj_id>[-\w]+)$", views.MergeView.as_view(), name="merge"),
-    re_path(r"^sync/(?P<proj_id>[-\w]+)$", views.SyncView.as_view(), name="sync"),
-    re_path(
-        r"add/(?P<proj_id>[-\w]+)$", views.AddFileToProjectView.as_view(), name="add"
+        r"^action/add/(?P<proj_id>[-\w]+)$", views.AddFileToProjectView.as_view(), name="add"
     ),
     re_path(
-        r"change_name/(?P<proj_id>[-\w]+)$",
+        r"^action/change_name/(?P<proj_id>[-\w]+)$",
         views.ChangeNameView.as_view(),
         name="change_name",
     ),
     re_path(
-        r"change_description/(?P<proj_id>[-\w]+)$",
+        r"^action/change_description/(?P<proj_id>[-\w]+)$",
         views.ChangeDescriptionView.as_view(),
         name="change_description",
     ),
     re_path(
-        r"delete_proj/(?P<proj_id>[-\w]+)$",
+        r"^action/delete_proj/(?P<proj_id>[-\w]+)$",
         views.DeleteProjectView.as_view(),
         name="delete_proj",
     ),
     re_path(
-        r"^toggle_color/(?P<proj_id>[-\w]+)/(?P<file_id>[-\w]+)$",
+        r"^action/toggle_color/(?P<proj_id>[-\w]+)/(?P<file_id>[-\w]+)$",
         views.ToggleColorView.as_view(),
         name="toggle_color",
     ),
-    re_path(r"^merge_conf/*", views.ReactMergeView.as_view(), name="react_merge_conf"),
     re_path(
-        r"^getConflict/(?P<proj_id>[-\w]+)$",
+        r"^action/getConflict/(?P<proj_id>[-\w]+)$",
         views.GetConflictsView.as_view(),
         name="get_confs",
     ),
     re_path(
-        r"^new_merge/(?P<proj_id>[-\w]+)$",
+        r"^action/new_merge/(?P<proj_id>[-\w]+)$",
         views.NewMergeView.as_view(),
         name="new_merge",
     ),
     re_path(
-        r"^res_hunk/(?P<proj_id>[-\w]+)$",
+        r"^action/res_hunk/(?P<proj_id>[-\w]+)$",
         views.ResolveHunkView.as_view(),
         name="res_hunk",
     ),
     re_path(
-        r"^collapse_node/(?P<node_id>[-\w]+)$",
+        r"^action/collapse_node/(?P<node_id>[-\w]+)$",
         views.ToggleCollapseView.as_view(),
         name="collapse_node",
     ),
     re_path(
-        r"blockerXML/(?P<file_name>[-./\w]+)$",
+        r"^action/blockerXML/(?P<file_name>[-./\w]+)$",
         views.GetBlockerXMLView.as_view(),
         name="getBlockXML",
     ),
@@ -131,3 +134,10 @@ if (
     or not settings.DISABLE_TOKEN_INVALIDATION
 ):
     setup_token_invalidator_job()
+
+# schedule a job that deletes tutorial projects older than 24 hours
+if (
+    not hasattr(settings, "DISABLE_TUTORIAL_CLEANUP")
+    or not settings.DISABLE_TUTORIAL_CLEANUP
+):
+    setup_tutorial_cleanup_job()

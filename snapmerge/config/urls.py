@@ -19,19 +19,14 @@ from django.conf.urls import include, handler404, handler500
 from django.conf.urls.static import static
 from django.views.static import serve
 from django.conf import settings
-from . import error_handler
 
 urlpatterns = [
     re_path('admin/', admin.site.urls),
     re_path(r'', include('home.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
-    path('api-auth/', include('rest_framework.urls')),
+    path('api/auth/', include('rest_framework.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-handler404 = error_handler.error_404
-handler500 = error_handler.error_500
 
 
 

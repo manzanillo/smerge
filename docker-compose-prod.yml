@@ -1,4 +1,3 @@
-version: "3.7"
 services:
   django:
     container_name: smerge_daphne
@@ -13,12 +12,12 @@ services:
       - ./snapmerge/database:/app/snapmerge/database
     expose:
       - "8000"
-  react_ext:
-    container_name: smerge_ext
+  react_client:
+    container_name: react_client
     build:
       context: .
       dockerfile: Dockerfile.react.ext.depl
-    image: react_ext_docker
+    image: react_client_docker
     stdin_open: true
     tty: true
     expose:

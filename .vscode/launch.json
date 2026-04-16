@@ -22,7 +22,7 @@
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
-            "url": "https://<your-domain>/ext/project_view/<some-project-id>/",
+            "url": "https://<your-domain>/project_view/<some-project-id>/",
             "webRoot": "${workspaceFolder}/react_extension/src/"
         },
 

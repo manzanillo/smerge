@@ -1,18 +1,16 @@
 FROM python:3.11.9
-RUN apt-get update || : && apt-get install nodejs npm make -y
+RUN apt-get update || : && apt-get install nodejs npm sqlite3 make -y
 
 RUN mkdir /app
 WORKDIR /app
 
 COPY /requirements.txt /app
 RUN mkdir -p /app/snapmerge
-COPY /package.json /app/snapmerge/
 
 RUN pip install -r requirements.txt
 
 
 WORKDIR /app/snapmerge
-RUN npm install
 
 COPY ./secrets /app/secrets/
 

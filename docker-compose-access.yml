@@ -1,4 +1,3 @@
-version: "3.7"
 services:
   django:
     container_name: smerge_server_access

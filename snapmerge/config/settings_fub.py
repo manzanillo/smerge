@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     "faui20s.informatik.uni-erlangen.de",
     "smerge.org",
     "smerge.imp.fu-berlin.de",
+    "smerge.me",
 ]
 
 DEBUG = False
