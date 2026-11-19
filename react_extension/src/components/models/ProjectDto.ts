@@ -7,5 +7,6 @@ export default interface ProjectDto {
     favor_color: string,
     conflict_color: string,
     kanban_board: string,
-    schoolclass: string | null
+    schoolclass: string | null,
+    is_tutorial?: boolean,
 }

@@ -13,7 +13,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'name', 'description', 'pin','default_color', 'favor_color', 'conflict_color',
-            'kanban_board', 'schoolclass')
+            'kanban_board', 'schoolclass', 'is_tutorial')
 
 
 class SnapFileSerializer(serializers.ModelSerializer):

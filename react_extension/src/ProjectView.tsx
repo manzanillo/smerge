@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import "./components/NodeGraph/NodeGraph";
 import NodeGraph from "./components/NodeGraph/NodeGraph";
@@ -9,23 +9,45 @@ import HelpDisplay from "./components/HelpMenu/HelpDisplay";
 import UploadZone from "./components/UploadZone";
 import useFileHover from "./shared/useFileHover";
 
-const ProjectView: React.FC = () => {
-  const { projectId } = useParams();
+interface ProjectViewProps {
+  projectId?: string;
+  fileId?: number;
+  // Interceptors für Tutorial:
+  embedded?: boolean;
+  onNodeDoubleClick?: (nodeId: string) => void;
+  onSelectedNodesChange?: (nodeIds: string[]) => void;
+  onMergeConfirmed?: () => void;
+}
+
+const ProjectView: React.FC<ProjectViewProps> = ({
+  projectId: propProjectId,
+  fileId: propFileId,
+  embedded = false,
+  onNodeDoubleClick,
+  onSelectedNodesChange,
+  onMergeConfirmed,
+}) => {
+  const { projectId: paramProjectId } = useParams();
+  // Tutorial nutzt props statt param um die id zu übergeben.
+  const resolvedProjectId = propProjectId || paramProjectId;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const [projectData, setProjectData] = useState<ProjectDto>(null);
 
   const gatherProjectData = useCallback(async () => {
-    const res = await getProjectData(projectId ?? "");
+    if (!resolvedProjectId) {
+      return;
+    }
+    const res = await getProjectData(resolvedProjectId);
     if (res) {
       setProjectData(res);
     }
-  }, [projectId]);
+  }, [resolvedProjectId]);
 
   useEffect(() => {
     gatherProjectData();
-  }, [gatherProjectData, projectId]);
+  }, [gatherProjectData, resolvedProjectId]);
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -33,7 +55,6 @@ const ProjectView: React.FC = () => {
 
   useEffect(() => {
     setModalOpen(isFileHovered);
-    // console.log("Changed file hover");
   }, [isFileHovered]);
 
   return (
@@ -42,13 +63,22 @@ const ProjectView: React.FC = () => {
         projectData={projectData}
         setProjectData={setProjectData}
         gatherProjectData={gatherProjectData}
+        projectId={resolvedProjectId}
+        embedded={embedded}
+        onNodeDoubleClick={onNodeDoubleClick}
+        onSelectedNodesChange={onSelectedNodesChange}
+        onMergeConfirmed={onMergeConfirmed}
       />
-      <UploadZone
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
-        projectId={projectId}
-      />
-      <HelpDisplay></HelpDisplay>
+      {!embedded && (
+        <>
+          <UploadZone
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+            projectId={resolvedProjectId}
+          />
+          <HelpDisplay></HelpDisplay>
+        </>
+      )}
     </>
   );
 };

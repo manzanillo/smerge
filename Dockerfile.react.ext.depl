@@ -2,13 +2,15 @@
 # The first stage installs dependencies and builds the React app
 # The second stage copies the built React app into an Nginx container
 
-FROM node:21-alpine as build-stage
+FROM node:22-alpine AS build-stage
 WORKDIR /app
 COPY react_extension/package.json /app/
-RUN npm install
 
 COPY react_extension/ /app/
 
+# Material Icons dependency causes issues due to react 19.
+# We need to use --legacy-peer-deps to bypass the peer dependency conflict.
+RUN npm install --legacy-peer-deps
 RUN npx vite build
 
 

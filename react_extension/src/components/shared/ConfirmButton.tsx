@@ -5,7 +5,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import {ReactNode, useState} from "react";
 import { OverridableStringUnion } from "@mui/types";
 import React from "react";
 
@@ -71,15 +71,13 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   children,
   currentOpen,
 }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     // console.log(event.currentTarget);
-    if(currentOpen) {
-      if(currentOpen) {
-        handleCancel();
-        return;
-      }
+    if (currentOpen) {
+      handleCancel();
+      return;
     }
     setAnchorEl(event.currentTarget);
   };
@@ -94,9 +92,10 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   return (
     <>
       {children ? (
-        React.Children.map(children, (child) => {
-          return React.cloneElement(child, {
-            onChange: handleClick,
+        React.Children.map(children, (child: ReactNode) => {
+          if (!React.isValidElement(child)) return child;
+          return React.cloneElement(child as React.ReactElement<any>, {
+            onClick: handleClick,
           });
         })
       ) : (

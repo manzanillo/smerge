@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ca6572b-0d3a-4b77-8845-54e7b7e7a9f7" name="Changes" comment="">
+    <list default="true" id="3ca6572b-0d3a-4b77-8845-54e7b7e7a9f7" name="Changes" comment="import ProjectStatsPage.tsx and translations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Access_Portal/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/Access_Portal/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nginx_access/ext_nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/data/nginx_access/ext_nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nginx_deploy/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/data/nginx_deploy/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nginx_deploy/nginx.fub.conf" beforeDir="false" afterPath="$PROJECT_DIR$/data/nginx_deploy/nginx.fub.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nginx_deploy/nginx_ext.conf" beforeDir="false" afterPath="$PROJECT_DIR$/data/nginx_deploy/nginx_ext.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose-new.fub.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose-new.fub.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose-prod.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pycharm.run/Run Django Server.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pycharm.run/Run Django Server.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/react_extension/public/locales/de/translation.json" beforeDir="false" afterPath="$PROJECT_DIR$/react_extension/public/locales/de/translation.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/react_extension/public/locales/en/translation.json" beforeDir="false" afterPath="$PROJECT_DIR$/react_extension/public/locales/en/translation.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/react_extension/src/public/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/react_extension/src/public/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/react_extension/src/services/HttpService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/react_extension/src/services/HttpService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/react_extension/src/services/ProjectService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/react_extension/src/services/ProjectService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/config/settings_local.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/config/settings_local.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/home/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/home/api/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/home/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/home/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/home/dataImportHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/home/dataImportHelper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/static/js/code.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/static/js/cookie.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/static/js/drag-n-drop.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/static/js/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/static/js/nav-slide.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/static/js/right-click-menu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/static/js/websocket.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/ferielsliti/Documents/IDP/smerge" value="2XiHnMCdbgST4iZ38KrOFeYWNB2" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="chat-panel" value="Claude Opus 4.6" />
+      <entry key="agent-panel" value="Claude Opus 4.6" />
+    </selectedModels>
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -26,17 +72,43 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHELLCHECK.PATH": "I do mind",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "IDPS-8-TreePosition",
+    "ai.playground.ignore.import.keys.banner.in.settings": "true",
+    "git-widget-placeholder": "Merging branch__master__copy",
+    "last_opened_file_path": "/Users/ferielsliti/Documents/IDP/smerge",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.django.DjangoModulesConfigurable",
+    "settings.editor.selected.configurable": "com.intellij.python.django.customization.DjangoModulesConfigurable",
+    "ts.external.directory.path": "/Users/ferielsliti/Documents/IDP/smerge/react_extension/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/react_extension/public" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.30387.127" />
+        <option value="bundled-python-sdk-3944b0c99280-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.127" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -47,10 +119,327 @@
       <updated>1699105146427</updated>
       <workItem from="1699105147536" duration="230000" />
       <workItem from="1699194800308" duration="247000" />
+      <workItem from="1772972433621" duration="15616000" />
+      <workItem from="1773245040273" duration="78662000" />
+      <workItem from="1774190152482" duration="57216000" />
+      <workItem from="1774475768283" duration="6588000" />
+      <workItem from="1774514537841" duration="8951000" />
+      <workItem from="1775827934875" duration="74000" />
+      <workItem from="1775828020980" duration="63457000" />
+      <workItem from="1776185222860" duration="25259000" />
     </task>
+    <task id="LOCAL-00001" summary="fix alignment and add author field">
+      <option name="closed" value="true" />
+      <created>1774517523294</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1774517523294</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add author field header">
+      <option name="closed" value="true" />
+      <created>1774518674656</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1774518674656</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add predefined priority tags">
+      <option name="closed" value="true" />
+      <created>1774519192351</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1774519192351</updated>
+    </task>
+    <task id="LOCAL-00004" summary="sort board column by priority">
+      <option name="closed" value="true" />
+      <created>1774519467747</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1774519467747</updated>
+    </task>
+    <task id="LOCAL-00005" summary="add custom animal icons">
+      <option name="closed" value="true" />
+      <created>1774520992412</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1774520992412</updated>
+    </task>
+    <task id="LOCAL-00006" summary="add custom animal icons button">
+      <option name="closed" value="true" />
+      <created>1774521542975</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1774521542975</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add default unknown icon">
+      <option name="closed" value="true" />
+      <created>1774521813480</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1774521813480</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add default unknown author">
+      <option name="closed" value="true" />
+      <created>1776021705089</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1776021705089</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add priority medium as default for new card">
+      <option name="closed" value="true" />
+      <created>1776021769014</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1776021769014</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add dynamic author list">
+      <option name="closed" value="true" />
+      <created>1776028959618</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1776028959618</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add authors dropdown menu">
+      <option name="closed" value="true" />
+      <created>1776029025261</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1776029025261</updated>
+    </task>
+    <task id="LOCAL-00012" summary="improve delete and focus when typing a new author">
+      <option name="closed" value="true" />
+      <created>1776032251702</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1776032251702</updated>
+    </task>
+    <task id="LOCAL-00013" summary="refactor project card into an interface with commitCount">
+      <option name="closed" value="true" />
+      <created>1776040365507</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1776040365507</updated>
+    </task>
+    <task id="LOCAL-00014" summary="add Commits to project card">
+      <option name="closed" value="true" />
+      <created>1776040412354</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1776040412354</updated>
+    </task>
+    <task id="LOCAL-00015" summary="add getCommitCount function in service layer">
+      <option name="closed" value="true" />
+      <created>1776040456740</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1776040456740</updated>
+    </task>
+    <task id="LOCAL-00016" summary="load commit count in teacher view">
+      <option name="closed" value="true" />
+      <created>1776040514937</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1776040514937</updated>
+    </task>
+    <task id="LOCAL-00017" summary="load commit count in teacher view">
+      <option name="closed" value="true" />
+      <created>1776040542945</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1776040542945</updated>
+    </task>
+    <task id="LOCAL-00018" summary="change accordion state to expanded and allow toggling">
+      <option name="closed" value="true" />
+      <created>1776041582064</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1776041582064</updated>
+    </task>
+    <task id="LOCAL-00019" summary="add last commit date in teacher view">
+      <option name="closed" value="true" />
+      <created>1776043215685</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1776043215685</updated>
+    </task>
+    <task id="LOCAL-00020" summary="add helper service to extract latest commit date">
+      <option name="closed" value="true" />
+      <created>1776043256226</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1776043256226</updated>
+    </task>
+    <task id="LOCAL-00021" summary="update project card with last commit date">
+      <option name="closed" value="true" />
+      <created>1776043346982</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1776043346982</updated>
+    </task>
+    <task id="LOCAL-00022" summary="add icons for stats">
+      <option name="closed" value="true" />
+      <created>1776046611406</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1776046611406</updated>
+    </task>
+    <task id="LOCAL-00023" summary="add icons for stats in project cards">
+      <option name="closed" value="true" />
+      <created>1776046687967</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1776046687967</updated>
+    </task>
+    <task id="LOCAL-00024" summary="adjust layout of project cards">
+      <option name="closed" value="true" />
+      <created>1776046719844</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1776046719844</updated>
+    </task>
+    <task id="LOCAL-00025" summary="change date in european format">
+      <option name="closed" value="true" />
+      <created>1776047215321</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1776047215321</updated>
+    </task>
+    <task id="LOCAL-00026" summary="add icons for project card">
+      <option name="closed" value="true" />
+      <created>1776207018916</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1776207018916</updated>
+    </task>
+    <task id="LOCAL-00027" summary="add getkanbancardcount service">
+      <option name="closed" value="true" />
+      <created>1776207075787</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1776207075787</updated>
+    </task>
+    <task id="LOCAL-00028" summary="add opencardcount and closedcard count to project card">
+      <option name="closed" value="true" />
+      <created>1776207274428</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1776207274428</updated>
+    </task>
+    <task id="LOCAL-00029" summary="add opencardcount and closedcard count to teacher view">
+      <option name="closed" value="true" />
+      <created>1776207322434</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1776207322434</updated>
+    </task>
+    <task id="LOCAL-00030" summary="add author-icon map and fix dropdown">
+      <option name="closed" value="true" />
+      <created>1776212619058</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1776212619058</updated>
+    </task>
+    <task id="LOCAL-00031" summary="add statistics button to project card">
+      <option name="closed" value="true" />
+      <created>1776218755429</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1776218755429</updated>
+    </task>
+    <task id="LOCAL-00032" summary="add css file for ProjectStatsPage">
+      <option name="closed" value="true" />
+      <created>1776218790910</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1776218790910</updated>
+    </task>
+    <task id="LOCAL-00033" summary="add ProjectStatsPage.tsx">
+      <option name="closed" value="true" />
+      <created>1776218824219</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1776218824219</updated>
+    </task>
+    <task id="LOCAL-00034" summary="import ProjectStatsPage.tsx and translations">
+      <option name="closed" value="true" />
+      <created>1776218896324</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1776218896324</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add priority medium as default for new card" />
+    <MESSAGE value="add dynamic author list" />
+    <MESSAGE value="add authors dropdown menu" />
+    <MESSAGE value="improve delete and focus when typing a new author" />
+    <MESSAGE value="refactor project card into an interface with commitCount" />
+    <MESSAGE value="add Commits to project card" />
+    <MESSAGE value="add getCommitCount function in service layer" />
+    <MESSAGE value="load commit count in teacher view" />
+    <MESSAGE value="change accordion state to expanded and allow toggling" />
+    <MESSAGE value="add last commit date in teacher view" />
+    <MESSAGE value="add helper service to extract latest commit date" />
+    <MESSAGE value="update project card with last commit date" />
+    <MESSAGE value="add icons for stats" />
+    <MESSAGE value="add icons for stats in project cards" />
+    <MESSAGE value="adjust layout of project cards" />
+    <MESSAGE value="change date in european format" />
+    <MESSAGE value="add icons for project card" />
+    <MESSAGE value="add getkanbancardcount service" />
+    <MESSAGE value="add opencardcount and closedcard count to project card" />
+    <MESSAGE value="add opencardcount and closedcard count to teacher view" />
+    <MESSAGE value="add author-icon map and fix dropdown" />
+    <MESSAGE value="add statistics button to project card" />
+    <MESSAGE value="add css file for ProjectStatsPage" />
+    <MESSAGE value="add ProjectStatsPage.tsx" />
+    <MESSAGE value="import ProjectStatsPage.tsx and translations" />
+    <option name="LAST_COMMIT_MESSAGE" value="import ProjectStatsPage.tsx and translations" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>

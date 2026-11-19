@@ -9,7 +9,6 @@ import { Page0, Page1, Page2, Page3 } from "./Pages";
 
 export const HelpDisplay = () => {
   const [carouselOpen, setCarouselOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation();
 
   const checkClickAway = (ev: React.MouseEvent<HTMLElement>) => {

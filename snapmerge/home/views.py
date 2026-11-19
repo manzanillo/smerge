@@ -37,11 +37,6 @@ from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
-from django.core.mail import send_mail
-from email_validator import validate_email, EmailNotValidError
-from shutil import copyfile
-import random
-import string
 import os
 from .ancestors import gca
 from asgiref.sync import async_to_sync
@@ -89,66 +84,6 @@ baseContext = {
     "devAdd": " (DEV)" if settings.DEBUG else " (BETA)" if settings.BETA else "",
     "inBeta": settings.BETA,
 }
-
-
-# Create your views here.
-class HomeView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-            "notification_visible": Settings.objects.get(
-                name="info_header_visible"
-            ).value
-            == "true",
-            "notification_text": Settings.objects.get(name="info_header_text").value,
-        }
-        return render(request, "home.html", context)
-
-
-class NavView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "nav.html", context)
-
-
-class HowToView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "how_to.html", context)
-
-
-class ImpressumView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "impressum.html", context)
-
-
-class ProjectView(View):
-    def get(self, request, proj_id):
-        try:
-            proj = Project.objects.get(id=proj_id)
-        except Project.DoesNotExist:
-            raise Http404
-        files = [obj.as_dict() for obj in SnapFile.objects.filter(project=proj_id)]
-        context = {
-            **baseContext,
-            "proj_name": proj.name,
-            "proj_description": proj.description,
-            "proj_id": proj.id,
-            "proj_pin": proj.pin,
-            "files": files,
-        }
-        return render(request, "proj.html", context)
-
-class OpenTeacherLogin(View):
-    def get(self, request):
-        return redirect(f"/ext/teacher_login/")
 
 class MergeView(View):
     def get(self, request, proj_id):
@@ -241,177 +176,6 @@ class SyncView(View):
 
         new_url = settings.POST_BACK_URL + new_file.get_media_path()
         return JsonResponse({"message": _("OK"), "url": new_url})
-
-
-class CreateProjectView(View):
-
-    def get(self, request):
-        file_form = SnapFileForm(prefix="snap_form")
-        proj_form = ProjectForm(prefix="proj_form")
-        context = {
-            **baseContext,
-            "file_form": file_form,
-            "proj_form": proj_form,
-        }
-        return render(request, "create_proj.html", context)
-
-    def post(self, request):
-        snap_form = SnapFileForm(request.POST, request.FILES, prefix="snap_form")
-        proj_form = ProjectForm(request.POST, request.FILES, prefix="proj_form")
-
-        if snap_form.is_valid() and proj_form.is_valid():
-
-            proj_instance = proj_form.save(commit=False)
-            proj_instance.pin = generate_unique_PIN()
-            unhashed_pw = proj_instance.password
-            proj_instance.password = hashPassword(proj_instance.password)
-
-            proj_instance.save()
-
-            # verify xml if a snap file is given, else insert blank snap file
-            if request.FILES:
-
-                snap_file = request.FILES["snap_form-file"]
-                snap_description = request.POST["snap_form-description"]
-
-                try:
-                    ET.fromstring(snap_file.read())
-
-                except ET.ParseError:
-                    messages.warning(request, _("No valid xml."))
-                    return HttpResponseRedirect(reverse("create_proj"))
-
-                snap_file = SnapFile.create_and_save(
-                    file=snap_file, project=proj_instance, description=snap_description
-                )
-
-            # blank snap file
-            else:
-                snap_description = "blank project"
-                snap_file = SnapFile.create_and_save(
-                    project=proj_instance, description=snap_description, file=""
-                )
-                snap_file.file = str(uuid4()) + ".xml"
-                copyfile(
-                    settings.BASE_DIR + "/static/snap/blank_proj.xml",
-                    settings.BASE_DIR + snap_file.get_media_path(),
-                )
-                snap_file.save()
-
-            snap_file.xml_job()
-
-            if unhashed_pw == "":
-                context = {
-                    **baseContext,
-                    "proj_pin": proj_instance.pin,
-                    "proj_id": proj_instance.id,
-                }
-            else:
-                context = {
-                    **baseContext,
-                    "proj_pin": proj_instance.pin,
-                    "proj_password": unhashed_pw,
-                    "proj_id": proj_instance.id,
-                }
-            return render(request, "info_proj.html", context)
-
-        else:
-            messages.warning(request, _("Invalid Data."))
-            return HttpResponseRedirect(reverse("create_proj"))
-
-class OpenProjectView(View):
-    def get(self, request):
-        form = OpenProjectForm()
-        context = {
-            **baseContext,
-            "form": form,
-        }
-        return render(request, "open_proj.html", context)
-
-    def post(self, request):
-        form = OpenProjectForm(request.POST)
-        if form.is_valid():
-            proj_pin = request.POST["pin"]
-            proj_password = request.POST["password"]
-
-            try:
-                proj = Project.objects.get(pin=proj_pin)
-
-            except Project.DoesNotExist:
-                messages.warning(request, _("No such project or wrong password"))
-                return HttpResponseRedirect(reverse("open_proj"))
-
-            if proj.password and not check_password(proj_password, proj.password):
-                messages.warning(request, _("No such project or wrong password"))
-            else:
-                return redirect(f"/ext/project_view/{proj.id}")
-        else:
-            messages.warning(request, _("Invalid Data."))
-
-        return HttpResponseRedirect(reverse("open_proj"))
-
-
-class RestoreInfoView(View):
-    def get(self, request):
-        form = RestoreInfoForm()
-        context = {
-            **baseContext,
-            "form": form,
-        }
-        return render(request, "restore_info.html", context)
-
-    def post(self, request):
-
-        base_url = request.scheme + "://" + request.get_host()
-
-        form = RestoreInfoForm(request.POST)
-        email = request.POST["email"]
-
-        try:
-            emailinfo = validate_email(email, check_deliverability=False)
-            email = emailinfo.normalized
-
-        except EmailNotValidError as e:
-            messages.warning(request, _("Invalid Email." + str(e)))
-            return HttpResponseRedirect(reverse("restore_info"))
-
-        if form.is_valid():
-            projects = Project.objects.filter(email=email)
-
-            for project in projects:
-                token = secrets.token_urlsafe(None)
-                # create Passwortreset token for each project
-                PasswordResetToken.objects.create(project=project, token=token)
-                project.reset_url = base_url + "/reset_password/" + token
-
-            content_text = render_to_string("mail/mail.txt", {"projects": projects})
-            content_html = render_to_string("mail/mail.html", {"projects": projects})
-
-            try:
-                send_mail(
-                    _("Your smerge.org projects"),
-                    content_text,
-                    # 'noreply@smerge.org',
-                    settings.EMAIL_SENDER,
-                    [email],
-                    fail_silently=False,
-                    html_message=content_html,
-                )
-
-            except Exception as e:
-                print(e)
-                messages.warning(
-                    request, _("Something went wrong, please try again or contact us")
-                )
-                return HttpResponseRedirect(reverse("restore_info"))
-
-            messages.success(request, _("Mail sent"))
-            return HttpResponseRedirect(reverse("open_proj"))
-
-        else:
-            messages.warning(request, _("Invalid Data."))
-
-        return HttpResponseRedirect(reverse("restore_info"))
 
 
 class AddFileToProjectView(View):
@@ -537,14 +301,6 @@ class ToggleColorView(View):
         file.save()
         send_event(proj_id, "message", {"text": "update"})
         return HttpResponse(new_color)
-
-
-class ReactMergeView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "merge_react.html", context)
 
 
 class GetConflictsView(View):
@@ -731,6 +487,8 @@ def mergeExt(request, proj_id, resolutions):
                         )
                         right.save()
                     else:
+                        dataLeft = conf.leftElement if isinstance(conf.leftElement, str) else conf.leftElement.get("customData")
+                        dataRight = conf.rightElement if isinstance(conf.rightElement, str) else conf.rightElement.get("customData")
                         # Store conflict files in database
                         left = models.ConflictFile.create_and_save(
                             project=proj,
@@ -738,7 +496,7 @@ def mergeExt(request, proj_id, resolutions):
                             cx=conf.cxl,
                             cy=conf.cyl,
                             description=file1.description,
-                            tag_id=conf.leftElement.get("customData")
+                            tag_id=dataLeft
                         )
                         left.save()
                         right = models.ConflictFile.create_and_save(
@@ -747,7 +505,7 @@ def mergeExt(request, proj_id, resolutions):
                             cx=conf.cxr,
                             cy=conf.cyr,
                             description=file2.description,
-                            tag_id=conf.rightElement.get("customData")
+                            tag_id=dataRight
                         )
                         right.save()
 
@@ -782,15 +540,15 @@ def mergeExt(request, proj_id, resolutions):
                 new_file.save()
 
                 send_event(str(proj_id), "message", {"text": "Update_added_resize"})
-                # response = HttpResponseRedirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+                # response = HttpResponseRedirect(f"http://127.0.0.1/merge/{merge_conflict.id}")
                 # response.status_code = 303
                 # return response
                 return HttpResponse(
-                    f"{request._current_scheme_host}/ext/merge/{merge_conflict.id}",
+                    f"{request._current_scheme_host}/merge/{merge_conflict.id}",
                     status=303,
                 )
-                # return HttpResponseRedirect(f'/ext/merge/{merge_conflict.id}')
-                # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+                # return HttpResponseRedirect(f'/merge/{merge_conflict.id}')
+                # return redirect(f"http://127.0.0.1/merge/{merge_conflict.id}")
 
             new_file.xml_job()
             # print(new_file.as_dict())
@@ -941,98 +699,3 @@ class SendEventPing(View):
 
 def index(request):
     return render(request, "sse.html")
-
-
-def sanitize_token(token):
-    # check if token was really base64 encoded to prevent injections
-    try:
-        sanitized_token = (
-            base64.urlsafe_b64encode(base64.urlsafe_b64decode(token + "=="))
-            .strip(b"=")
-            .decode("utf-8")
-        )
-        if str(sanitized_token) != token:
-            logging.log(
-                logging.WARNING, f"Received token is not base64 encoded: {token}"
-            )
-            return None
-    except Exception as e:
-        logging.log(logging.INFO, f"Invalid token: {e}")
-        return None
-    return sanitized_token
-
-
-class ResetPasswordView(View):
-    def get(self, request, token):
-        # check if token was really base64 encoded to prevent injections
-        sanitized_token = sanitize_token(token)
-        if sanitized_token is None:
-            return HttpResponseBadRequest("Invalid token")
-
-        form = ResetPasswordForm()
-        context = {**baseContext, "form": form, "token": sanitized_token}
-        return render(request, "reset_password.html", context)
-
-    def post(self, request, token):
-        base_url = request.scheme + "://" + request.get_host()
-
-        sanitized_token = sanitize_token(token)
-        if sanitized_token is None:
-            messages.warning(request, _("Invalid token"))
-            return HttpResponseRedirect(reverse("reset_passwd", args=[token]))
-        if not request.POST.get("new_password") or not request.POST.get(
-            "new_password_repeated"
-        ):
-            messages.warning(request, _("Please fill in both fields"))
-            return HttpResponseRedirect(reverse("reset_passwd", args=[token]))
-
-        if request.POST.get("new_password") != request.POST.get(
-            "new_password_repeated"
-        ):
-            messages.warning(request, _("Passwords do not match"))
-            return HttpResponseRedirect(reverse("reset_passwd", args=[token]))
-
-        try:
-            token_object = PasswordResetToken.objects.get(token=sanitized_token)
-        except PasswordResetToken.DoesNotExist:
-            messages.warning(
-                request,
-                _("Invalid token, token does not exist please request a new one!"),
-            )
-            return HttpResponseRedirect("/restore_info/")
-        except Exception as e:
-            messages.warning(request, _("Something went wrong."))
-            logging.log(logging.WARNING, f"Something went wrong retrieving token: {e}")
-            return HttpResponseRedirect(reverse("reset_passwd", args=token))
-
-        proj = token_object.project
-        token_object.delete()
-        proj.password = hashPassword(request.POST.get("new_password"))
-        proj.save()
-        messages.success(request, _("Password changed"))
-        return HttpResponseRedirect(f"/ext/project_view/{proj.id}")
-
-
-class RedirectView(View):
-    def get(self, request, proj_id):
-        # only allow react /ext/ redirects
-        project = Project.objects.get(id=proj_id)
-        if project:
-            if check_password("", project.password):
-                return render(
-                    request,
-                    "redirect.html",
-                    {
-                        "project_id": proj_id,
-                    },
-                )
-            else:
-                form = OpenProjectForm(initial={"pin": project.pin})
-                context = {
-                    **baseContext,
-                    "form": form,
-                }
-                return render(request, "open_proj.html", context)
-        else:
-            # return django 404
-            raise Http404

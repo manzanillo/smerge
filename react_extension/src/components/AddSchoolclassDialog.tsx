@@ -9,8 +9,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { createSchoolclass } from '../services/SchoolclassService';
+import ISchoolclass from "./models/SchoolclassDto.ts";
+import { useTranslation } from 'react-i18next';
 
-const AddSchoolclassDialog = (props: { setState: (arg0: any[]) => void; state: any; }) => {
+interface AddSchoolclassDialogProps {
+  setState: (arg0: any[]) => void;
+  state: any;
+  // Tutorial Interceptor
+  onSchoolClassCreated?: (schoolclass: ISchoolclass) => void;
+}
+
+const AddSchoolclassDialog = (props: AddSchoolclassDialogProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -29,7 +39,7 @@ const AddSchoolclassDialog = (props: { setState: (arg0: any[]) => void; state: a
 
   return (
     <React.Fragment>
-      <Fab sx={fabStyle} onClick={handleClickOpen}><AddIcon></AddIcon></Fab>
+      <Fab id="add-schoolclass-fab" sx={fabStyle} onClick={handleClickOpen}><AddIcon></AddIcon></Fab>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -42,17 +52,20 @@ const AddSchoolclassDialog = (props: { setState: (arg0: any[]) => void; state: a
             const name = formJson.name;
             console.log(name);
             const schoolclass = createSchoolclass(name).then((res) => {
-              props.setState([...props.state, {'schoolclass':res, 'projects' : []}])
+              props.setState([...props.state, {'schoolclass':res, 'projects' : []}]);
+              if (props.onSchoolClassCreated) {
+                props.onSchoolClassCreated(res);
+              }
               return res
             });
             handleClose();
           },
         }}
       >
-        <DialogTitle>Create new Schoolclass</DialogTitle>
+        <DialogTitle>{t('AddSchoolclassDialog.title')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Enter a name for the new Schoolclass
+            {t('AddSchoolclassDialog.description')}
           </DialogContentText>
           <TextField
             autoFocus
@@ -67,8 +80,8 @@ const AddSchoolclassDialog = (props: { setState: (arg0: any[]) => void; state: a
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button onClick={handleClose}>{t('AddSchoolclassDialog.cancel')}</Button>
+          <Button type="submit">{t('AddSchoolclassDialog.create')}</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -83,7 +83,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
 
   const loadData = () => {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", `/getConflict/${code}`, true);
+    xhttp.open("GET", `/action/getConflict/${code}`, true);
     const csrftoken = getCookie("csrftoken");
     xhttp.setRequestHeader("X-CSRFToken", csrftoken ?? "");
     xhttp.send();
@@ -113,7 +113,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   };
 
   const sendChoices = () => {
-    const url = `/new_merge/${projectId.current}?file=${leftId.current}&file=${rightId.current}`;
+    const url = `/action/new_merge/${projectId.current}?file=${leftId.current}&file=${rightId.current}`;
     // return url;
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", url, true);
@@ -135,27 +135,29 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
           autoClose: 2000,
           hideProgressBar: false,
         });
-      } else {
-        if (xhttp.readyState === 4 && xhttp.status >= 400) {
-          console.log(`Conflict ${code} not found.`);
-          if (xhttp.status == 410) {
-            toast.warning(t("ConflictStepper.alreadyResolvedToast"), {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-            });
-            setLoadingConflictText(t("ConflictStepper.alreadyResolved"));
-            setTimeout(() => {
-              window.close();
-            }, 10000);
-          } else {
-            toast.warning(`Merge ${code} failed.`, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-            });
-          }
+      } else if (xhttp.readyState === 4 && xhttp.status >= 400) {
+        console.log(`Conflict ${code} not found.`);
+        if (xhttp.status == 410) {
+          toast.warning(t("ConflictStepper.alreadyResolvedToast"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+          });
+          setLoadingConflictText(t("ConflictStepper.alreadyResolved"));
+          setTimeout(() => {
+            window.close();
+          }, 10000);
+        } else {
+          toast.warning(`Merge ${code} failed.`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+          });
         }
+      } else if (xhttp.readyState === 4 && xhttp.status === 303) {
+        // Redirect to next conflict
+        const newLocation = xhttp.responseText;
+        window.location.href = newLocation;
       }
     };
   };
@@ -226,29 +228,29 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   };
 
   const scripts = [
-    "/ext/csnap/morphic.js",
-    "/ext/csnap/symbols.js",
-    "/ext/csnap/widgets.js",
-    "/ext/csnap/blocks.js",
-    "/ext/csnap/threads.js",
-    "/ext/csnap/objects.js",
-    "/ext/csnap/scenes.js",
-    "/ext/csnap/gui.js",
-    "/ext/csnap/paint.js",
-    "/ext/csnap/lists.js",
-    "/ext/csnap/byob.js",
-    "/ext/csnap/tables.js",
-    "/ext/csnap/sketch.js",
-    "/ext/csnap/video.js",
-    "/ext/csnap/maps.js",
-    "/ext/csnap/extensions.js",
-    "/ext/csnap/xml.js",
-    "/ext/csnap/store.js",
-    "/ext/csnap/locale.js",
-    "/ext/csnap/cloud.js",
-    "/ext/csnap/api.js",
-    "/ext/csnap/sha512.js",
-    "/ext/csnap/FileSaver.min.js",
+    "/csnap/morphic.js",
+    "/csnap/symbols.js",
+    "/csnap/widgets.js",
+    "/csnap/blocks.js",
+    "/csnap/threads.js",
+    "/csnap/objects.js",
+    "/csnap/scenes.js",
+    "/csnap/gui.js",
+    "/csnap/paint.js",
+    "/csnap/lists.js",
+    "/csnap/byob.js",
+    "/csnap/tables.js",
+    "/csnap/sketch.js",
+    "/csnap/video.js",
+    "/csnap/maps.js",
+    "/csnap/extensions.js",
+    "/csnap/xml.js",
+    "/csnap/store.js",
+    "/csnap/locale.js",
+    "/csnap/cloud.js",
+    "/csnap/api.js",
+    "/csnap/sha512.js",
+    "/csnap/FileSaver.min.js",
   ];
 
   const [error, scriptsLoaded] = useScriptLoader(scripts);

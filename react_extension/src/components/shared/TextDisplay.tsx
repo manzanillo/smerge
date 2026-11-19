@@ -47,7 +47,6 @@ const TextDisplay: React.FC<TextDisplayProps> = ({ text }) => {
     return [ret.join("\n"), other.join("\n")];
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const convertTextToHtml: any = (text: string | null, level: number = 0) => {
     if (!text) {
       return;

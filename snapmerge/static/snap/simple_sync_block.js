@@ -53,4 +53,4 @@ new DialogBoxMorph(
   }
   },
   this
-).prompt("commit message", "", window.world, null);
+).prompt("Enter Commit Message", "", window.world, null);

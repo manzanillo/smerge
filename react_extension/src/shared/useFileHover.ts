@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useFileHover() {
   const [isHovered, setIsHovered] = useState(false);
 

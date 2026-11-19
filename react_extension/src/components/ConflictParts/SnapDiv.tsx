@@ -1,11 +1,15 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import { useEffect, useRef } from "react";
 import "./MergeConflictView.css";
 import Split from "react-split";
-import {debounce, sum} from "lodash";
-import {Typography} from "@mui/material";
-import {useTranslation} from "react-i18next";
+import { debounce, sum } from "lodash";
+import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 import * as React from "react";
+
+// Globals provided by Snap runtime (declare for TypeScript)
+declare const WorldMorph: any;
+declare const IDE_Morph: any;
 
 interface SnapDivProps {
     linkLeft: string;
@@ -16,8 +20,8 @@ interface SnapDivProps {
     tagId: string;
 }
 
-const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, linkWorkCopy, tagId}) => {
-    const {t} = useTranslation();
+const SnapDiv: React.FC<SnapDivProps> = ({ linkLeft, linkRight, desc1, desc2, linkWorkCopy, tagId }) => {
+    const { t } = useTranslation();
 
     // const xml1 = useRef<string>("");
     // const xml2 = useRef<string>("");
@@ -90,12 +94,12 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         //document.body.appendChild(script);
     }
 
-    var world;
-    var world2;
-    var ide;
-    var ide2;
-    var world_merge;
-    var ide_merge;
+    let world;
+    let world2;
+    let ide;
+    let ide2;
+    let world_merge;
+    let ide_merge;
     let xmlLeft;
     let xmlRight;
     let xmlWorkCopy;
@@ -112,12 +116,18 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
             return;
         }
 
-        leRef.current.width = lRec.current?.offsetWidth;
-        riRef.current.width = rRec.current?.offsetWidth;
-        leRef.current.height = lRec.current?.offsetHeight;
-        riRef.current.height = rRec.current?.offsetHeight;
-        ceRef.current.width = ceRef.current?.offsetWidth;
-        ceRef.current.height = ceRef.current?.offsetHeight;
+        if (leRef.current && lRec.current) {
+            leRef.current.width = lRec.current.offsetWidth ?? 0;
+            leRef.current.height = lRec.current.offsetHeight ?? 0;
+        }
+        if (riRef.current && rRec.current) {
+            riRef.current.width = rRec.current.offsetWidth ?? 0;
+            riRef.current.height = rRec.current.offsetHeight ?? 0;
+        }
+        if (ceRef.current && cRec.current) {
+            ceRef.current.width = cRec.current.offsetWidth ?? 0;
+            ceRef.current.height = cRec.current.offsetHeight ?? 0;
+        }
         //const arr = ['#leftEditor', '#rightEditor'];
 
         // use Split to display world1, world2 and world_merge side by side and allow resizing
@@ -228,9 +238,9 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         // requestAnimationFrame(loop);
         // requestAnimationFrame(loop2);
         //Split(arr, { sizes: [50, 50] });
-        let le = document.getElementById("leftEditor");
-        let re = document.getElementById("rightEditor");
-        let ce = document.getElementById("centerEditor");
+        const le = document.getElementById("leftEditor");
+        const re = document.getElementById("rightEditor");
+        const ce = document.getElementById("centerEditor");
         le.style.position = "unset";
         re.style.position = "unset";
         ce.style.position = "unset";
@@ -257,7 +267,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         if (lpane) lRec.current?.removeChild(lpane);
 
         const canvas = document.createElement("canvas");
-        canvas.ref = leRef;
+        (canvas as any).ref = leRef;
         canvas.style.height = "100%";
         canvas.style.width = "100%";
         canvas.className = "leftSplitPane";
@@ -269,7 +279,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         if (rpane) rRec.current?.removeChild(rpane);
 
         const canvas2 = document.createElement("canvas");
-        canvas2.ref = riRef;
+        (canvas2 as any).ref = riRef;
         canvas2.style.height = "100%";
         canvas2.style.width = "100%";
         canvas2.className = "rightSplitPane";
@@ -281,7 +291,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         if (cpane) cRec.current?.removeChild(cpane);
 
         const canvas_center = document.createElement("canvas");
-        canvas_center.ref = ceRef;
+        (canvas_center as any).ref = ceRef;
         canvas_center.style.height = "100%";
         canvas_center.style.width = "100%";
         canvas_center.className = "centerSplitPane";
@@ -290,11 +300,9 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         cRec.current?.appendChild(canvas_center);
     };
 
-    const pane = useRef<HTMLDivElement>(null);
-
-    const leRef = useRef<HTMLCanvasElement>(null);
-    const riRef = useRef<HTMLCanvasElement>(null);
-    const ceRef = useRef<HTMLCanvasElement>(null);
+    const leRef = useRef<HTMLCanvasElement | null>(null);
+    const riRef = useRef<HTMLCanvasElement | null>(null);
+    const ceRef = useRef<HTMLCanvasElement | null>(null);
 
     window.addEventListener(
         "resize",
@@ -308,9 +316,9 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
 
     // const lRec = useRef<DOMRect>();
     // const rRec = useRef<DOMRect>();
-    const lRec = useRef();
-    const rRec = useRef();
-    const cRec = useRef();
+    const lRec = useRef<HTMLDivElement | null>(null);
+    const rRec = useRef<HTMLDivElement | null>(null);
+    const cRec = useRef<HTMLDivElement | null>(null);
 
     const updateIdeSizes = () => {
         // console.log("addEventListener - resize");
@@ -333,15 +341,6 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
             debouncedUpdateSize.cancel();
         };
     }, [debouncedUpdateSize]);
-
-    const updateSizeRef = () => {
-        // console.log("Stuff");
-        try {
-            // console.log(world.bounds ?? "nope");
-        } catch (_) {
-            _;
-        }
-    };
 
     // Script for periodically flashing and unflashing the conflict blocks
     const highlightScript = (hlght_ide, hlght_xml) => {
@@ -404,16 +403,16 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
 
         // Find conlfict root and check if it's a sprite or a stage
         let conflictRoot = conflictScript.parentNode.parentNode;
-        if (conflictRoot.tagName == "sprite") {
+        if ((conflictRoot as Element).tagName == "sprite") {
             // Case 1: Tag is in a Sprite in a Script
             // => Set scene selector accordingly
             // => Set stage selector accordingly
             // => Set scripts selector accordingly
 
-            const spriteId = conflictRoot.getAttribute("idx");
-            conflictRoot.parentNode.setAttribute("select", spriteId);
+            const spriteId = (conflictRoot as Element).getAttribute("idx");
+            (conflictRoot.parentNode as Element).setAttribute("select", spriteId as any);
             conflictRoot = conflictRoot.parentNode.parentNode;
-        } else if (conflictRoot.tagName == "stage") {
+        } else if ((conflictRoot as Element).tagName == "stage") {
             // Case 2: Tag is in a stage in a script
             // => Set scene selector accordingly
             // => Set stage selector accordingly
@@ -425,8 +424,8 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         }
 
         // Find correct scene and set scene selector
-        const sceneId = Array.from(conflictRoot.parentNode.parentNode.children).indexOf(conflictRoot.parentNode) + 1;
-        conflictRoot.parentNode.parentNode.setAttribute("select", sceneId);
+        const sceneId = Array.from(((conflictRoot.parentNode?.parentNode) as Element).children).indexOf(conflictRoot.parentNode as Element) + 1;
+        ((conflictRoot.parentNode?.parentNode) as Element).setAttribute("select", String(sceneId));
 
         return new XMLSerializer().serializeToString(snapDom);
     }
@@ -436,13 +435,13 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
         //     <div ref={pane} className='merge_main_pane'>
         <>
             <Split
-                onDragEnd={(_) => {
-                    debouncedUpdateSize();
-                }}
+                onDragEnd={() => {
+                     debouncedUpdateSize();
+                 }}
                 className="split"
                 gutterAlign="center"
                 // sizes={[49.5, 50.5]}
-                style={{height: "600px"}}
+                style={{ height: "600px" }}
             >
                 <div ref={lRec} style={{
                     width: "100%",
@@ -456,7 +455,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
                     </Typography>
                     <canvas
                         ref={leRef}
-                        style={{height: "100%", width: "100%"}}
+                        style={{ height: "100%", width: "100%" }}
                         className="leftSplitPane"
                         id="leftEditor"
                         tabIndex={1}
@@ -474,7 +473,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
                     </Typography>
                     <canvas
                         ref={ceRef}
-                        style={{height: "100%", width: "100%"}}
+                        style={{ height: "100%", width: "100%" }}
                         id="centerEditor"
                         tabIndex={1}
                     ></canvas>
@@ -491,7 +490,7 @@ const SnapDiv: React.FC<SnapDivProps> = ({linkLeft, linkRight, desc1, desc2, lin
                     </Typography>
                     <canvas
                         ref={riRef}
-                        style={{height: "100%", width: "100%"}}
+                        style={{ height: "100%", width: "100%" }}
                         className="rightSplitPane"
                         id="rightEditor"
                         tabIndex={2}

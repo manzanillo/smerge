@@ -11,8 +11,6 @@ export default defineConfig({
       transformIndexHtml(html) {
         return (
           html
-            // .replace(/<title>(.*?)<\/title>/, `<title>SMERGE (BETA)</title>`)
-            .replace(/<title>(.*?)<\/title>/, `<title>SMERGE</title>`)
             .replace(/_dev.svg/, `.svg`)
             .replace(/_dev.png/, `.png`)
             .replace(/_dev.webmanifest/, `.webmanifest`)
@@ -22,7 +20,10 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
   ],
-  base: "/ext/",
+  build: {
+    sourcemap: true
+  },
+  base: "/",
   server: {
     port: 5069,
     strictPort: true,

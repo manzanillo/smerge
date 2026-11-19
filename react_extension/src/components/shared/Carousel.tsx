@@ -6,7 +6,6 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Grid from "@mui/material/Unstable_Grid2";
 
 interface CarouselProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
   timeout: number;
 }
